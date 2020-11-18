@@ -1,2 +1,2 @@
-# university_project_selector
+# WahlfachApp
 University project to create/choose projects based on React, MySQL und Python
