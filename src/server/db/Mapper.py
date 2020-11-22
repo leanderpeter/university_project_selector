@@ -2,39 +2,64 @@
 #-*- coding: utf-8 -*-
 import mysql.connector as connector
 import os
-from contextlib import AbstractAsyncContextManager
+from contextlib import AbstractContextManager
 from abc import ABC, abstractmethod
 
-class Mapper(AbstractAsyncContextManager, ABC):
+class Mapper(AbstractContextManager, ABC):
     """Abstrakte Basisklasse für alle weiteren Mapper-Klassen"""
-"""
+
     def __init__(self):
         self._connection = None
 
-
     def __enter__(self, ):
-        pass
 
-    def __exit__(self, ):
-        pass
+        if os.getenv('GAE_ENV', '').startswith('standard'):
+            """Landen wir in diesem Zweig, so haben wir festgestellt, dass der Code in der Cloud abläuft.
+            Die App befindet sich somit im **Production Mode** und zwar im *Standard Environment*.
+            Hierbei handelt es sich also um die Verbindung zwischen Google App Engine und Cloud SQL."""
+
+            self._connection = connector.connect(user='demo', password='demo',
+                                          unix_socket='/cloudsql/python-bankprojekt-thies:europe-west3:bank-db-thies',
+                                          database='bankproject')
+        else:
+            """Wenn wir hier ankommen, dann handelt sich offenbar um die Ausführung des Codes in einer lokalen Umgebung,
+            also auf einem Local Development Server. Hierbei stellen wir eine einfache Verbindung zu einer lokal
+            installierten mySQL-Datenbank her."""
+
+            self._connection = connector.connect(user='leander', password='P@s$w0rd123!',
+                                  host='127.0.0.1',
+                                  database='electivApp')
+
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+
+        """In order to close the connection we use the following statement. For example we quit working with the mapper class for now"""
+        self._connection.close()
+
+    """The following functions should be inherited by all Mapper-Subclasses"""
 
     @abstractmethod
     def find_all(self):
+        """Reads all tuple and returns them as an object"""
         pass
 
     @abstractmethod 
     def find_by_key(self):
+        """Reads a tuple with a given ID"""
         pass
 
     @abstractmethod
     def insert(self):
+        """Add the given object to the database"""
         pass
     
     @abstractmethod
     def update(self):
+        """Update an already given object in the DB"""
         pass
     
     @abstractmethod
     def delete(self):
+        """Delete an object from the DB"""
         pass
-"""

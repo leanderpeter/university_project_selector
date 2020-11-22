@@ -1,2 +1,1 @@
-#test
-#test-von-jannik
+print("db package (Mapper) wird initialisiert...")
