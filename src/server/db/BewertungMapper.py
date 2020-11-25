@@ -3,5 +3,5 @@
 
 from server.db.Mapper import Mapper
 
-class Bewertung_Mapper(Mapper):
+class BewertungMapper(Mapper):
     pass

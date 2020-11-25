@@ -4,10 +4,10 @@ import argparse
 
 from .bo.Person import Person
 
-from .db.Person_Mapper import Person_Mapper
+from .db.PersonMapper import PersonMapper
 
 
-class Projekt_Administration (object):
+class ProjektAdministration (object):
 	def __init__(self):
 		pass
 
@@ -20,7 +20,7 @@ class Projekt_Administration (object):
 		user.set_google_user_id(google_user_id)
 		user.set_id(1)
 
-		with Person_Mapper() as mapper:
+		with PersonMapper() as mapper:
 			return mapper.insert(user)
 
 	def get_user_by_name(self, ):

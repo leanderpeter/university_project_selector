@@ -1,5 +1,5 @@
 
-from server.Projekt_Administration import Projekt_Administration
+from server.ProjektAdministration import ProjektAdministration
 import argparse
 
 
@@ -15,7 +15,7 @@ args = parser.parse_args()
 
 try:
 
-	pm = Projekt_Administration()
+	pm = ProjektAdministration()
 	pm.create_user(args.name, args.email, args.user_id)
 	print("User created succesfully")
 

@@ -3,5 +3,5 @@
 
 from server.db.Mapper import Mapper
 
-class Projekt_Mapper(Mapper):
+class SemesterMapper(Mapper):
     pass

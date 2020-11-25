@@ -4,7 +4,7 @@
 from server.db.Mapper import Mapper
 from server.bo.Person import Person
 
-class Person_Mapper (Mapper):
+class PersonMapper (Mapper):
 	'''bidriectional functions for manipulating db-structures or objects'''
 
 	def __init__(self):
@@ -115,7 +115,7 @@ class Person_Mapper (Mapper):
 '''Only for testing purpose'''
 
 if (__name__ == "__main__"):
-	with Person_Mapper() as mapper:
+	with PersonMapper() as mapper:
 		result = mapper.find_all()
 		for user in result:
 			print(user)

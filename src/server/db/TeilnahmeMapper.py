@@ -3,5 +3,5 @@
 
 from server.db.Mapper import Mapper
 
-class Teilnahme_Mapper(Mapper):
+class TeilnahmeMapper(Mapper):
     pass

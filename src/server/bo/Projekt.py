@@ -19,7 +19,7 @@ class Projekt(NamedBusinessObject, Automat):
         self.__sprache = None
         self.__dozent = []
         self.__belegung = []
-        self.__modulname = None
+        self.__modulname = []
         self.__art = None
         self.__halbjahr = []
 

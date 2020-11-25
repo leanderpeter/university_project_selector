@@ -26,7 +26,7 @@ class Mapper(AbstractContextManager, ABC):
             also auf einem Local Development Server. Hierbei stellen wir eine einfache Verbindung zu einer lokal
             installierten mySQL-Datenbank her."""
 
-            self._connection = connector.connect(user='leander', password='P@s$w0rd123!',
+            self._connection = connector.connect(user='root', password='170519',
                                   host='127.0.0.1',
                                   database='electivApp')
 

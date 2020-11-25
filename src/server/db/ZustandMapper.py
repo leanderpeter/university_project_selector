@@ -3,5 +3,5 @@
 
 from server.db.Mapper import Mapper
 
-class Modul_Mapper(Mapper):
+class ZustandMapper(Mapper):
     pass
