@@ -6,7 +6,7 @@ from flask_cors import CORS
 from flask_restx import Api, Resource, fields
 
 #Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
-from server.Projekt_Administration import Projekt_Administration
+from server.ProjektAdministration import ProjektAdministration
 
 #..weitere Imports notwendig z.B. BO-Klassen und SecurityDecorator
 
