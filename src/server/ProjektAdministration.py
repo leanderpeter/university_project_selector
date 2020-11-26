@@ -32,14 +32,18 @@ class ProjektAdministration (object):
 	def get_user_by_email(self, ):
 		pass
 
-	def get_user_by_google_user_id(self, ):
-		pass
+	def get_user_by_google_user_id(self, id):
+		'''read and return user with specific user id'''
+		with PersonMapper() as mapper:
+			return mapper.find_by_google_user_id(id)
 
 	def get_all_users(self, ):
 		pass
 
-	def save_user(self, ):
-		pass
+	def save_user(self, user):
+		'''save given user'''
+		with PersonMapper() as mapper:
+			mapper.update(user)
 
 	def delete_user(self, ):
 		pass

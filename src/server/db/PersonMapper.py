@@ -50,8 +50,31 @@ class PersonMapper (Mapper):
 	def find_by_email(self):
 		pass
 
-	def find_by_google_user_id(self, ):
-		pass
+	def find_by_google_user_id(self, google_user_id):
+		result = None
+
+		cursor = self._connection.cursor()
+		command = "SELECT id, name, email, google_user_id FROM users WHERE google_user_id='{}'".format(google_user_id)
+		cursor.execute(command)
+		tuples = cursor.fetchall()
+
+		try:
+			(id, name, email, google_user_id) = tuples[0]
+			u = Person()
+			u.set_id(id)
+			u.set_name(name)
+			u.set_email(email)
+			u.set_user_id(google_user_id)
+			result = u
+		except IndexError:
+			"""Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+			keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+			result = None
+
+		self._connection.commit()
+		cursor.close()
+
+		return result
 
 	def insert(self, user):
 			"""Insert a user object in the DB

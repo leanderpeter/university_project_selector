@@ -7,34 +7,38 @@ from flask_restx import Api, Resource, fields
 
 #Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.ProjektAdministration import ProjektAdministration
+from server.bo.Person import Person
+from SecurityDecorator import secured
 
 #..weitere Imports notwendig z.B. BO-Klassen und SecurityDecorator
 
 """Flask wird hiermit instanziert"""
 app = Flask(__name__)
 
-"""
-Was hier noch fehlt:
+CORS(app, resources=r'/*')
+api = Api(app, version='1.0', title='electivApp API', description='Web App for choosing electiv subjects for the university')
+electivApp = api.namespace('electivApp', description='Functions of electivApp')
 
-CORS(app, resources= ...)
+bo = api.model('BusinessObject', {
+    'id': fields.Integer(attribute='_id', description='Unique identifier from every BO'),
+    })
 
-api= Api(app, version= ...)
+user = api.inherit('Person', bo, {
+    'name': fields.String(attribute='_name', description='Name of user'),
+    'email': fields.String(attribute='_email', description='Email of user'),
+    'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID of user')
+    })
 
-namespace
 
-BO als Basisklasse -> api.model
-
-alle BOs die verwendet werden -> api.inherit
-
-"""
-
+@electivApp.route('/About')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 
 class ProjektOperationen(Resource):
-    def __init__(self):
-        pass
+    @secured
 
-    def get(self, projekt_id):
-        pass
+
+    def get(self):
+        return print("Hat das geklappt?")
 
     def delete(self, projekt_id):
         pass
