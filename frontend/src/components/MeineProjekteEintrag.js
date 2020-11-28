@@ -19,7 +19,7 @@ import Select from '@material-ui/core/Select';
 
 const StyledTableCell = withStyles((theme) => ({
     head: {
-      backgroundColor: theme.palette.common.black,
+      backgroundColor: theme.palette.primary.main,
       color: theme.palette.common.white,
     },
     body: {
