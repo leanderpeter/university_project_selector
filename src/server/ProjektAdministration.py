@@ -5,6 +5,8 @@ import argparse
 from .bo.Person import Person
 
 from .db.PersonMapper import PersonMapper
+from .db.TeilnahmeMapper import TeilnahmeMapper
+from .db.ProjektMapper import ProjektMapper
 
 
 class ProjektAdministration (object):
@@ -84,8 +86,15 @@ class ProjektAdministration (object):
 	def create_teilnahme(self, ):
 		pass
 
-	def get_teilnahme(self, ):
-		pass
+	def get_teilnahmen_von_user(self, user): 
+		""" Alle Teilnamen des Users auslesen"""
+		with TeilnahmeMapper() as mapper:
+			return mapper.find_by_user_id(user.get_id())
+	
+	def get_projekt_von_teilnahme(self, teilnahme):
+		with ProjektMapper() as mapper:
+			return mapper.find_by_teilnahme_id(teilnahme.get_id())
+		
 
 	def delete_teilnahme(self, ):
 		pass
