@@ -22,3 +22,31 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `projects`
+--
+
+DROP TABLE IF EXISTS `projects`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `projects` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `description` varchar(100) NOT NULL DEFAULT '',
+  `instructor` varchar(100) NOT NULL DEFAULT '',
+  `date` varchar(100) NOT NULL DEFAULT '',
+  `max_subscriber` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `projects`
+--
+
+LOCK TABLES `projects` WRITE;
+/*!40000 ALTER TABLE `customers` DISABLE KEYS */;
+INSERT INTO `projects` VALUES (1,'','Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität, um dies zu bewerkstelligen werden die Prinzipien (beispielsweise die Abstraktion und Modularisierung, Methoden (Softwareentwurfsmethoden) und Werkzeugen (Softwareentwicklungsumgebungen (SEU), CASE) bereitgestellt.','Prof. Dr. Peter Thies','13.02.2021', 50),(10000,' ','Internal');
+/*!40000 ALTER TABLE `customers` ENABLE KEYS */;
+UNLOCK TABLES;
