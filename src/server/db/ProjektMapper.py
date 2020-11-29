@@ -44,6 +44,18 @@ class ProjektMapper(Mapper):
 
 		return results
 
+	def find_by_key(self):
+		pass
+	
+	def insert(self):
+		pass
+	
+	def update(self):
+		pass
+	
+	def delete(self):
+		pass
+
 if (__name__ == "__main__"):
     with ProjektMapper() as mapper:
         result = mapper.find_all()
