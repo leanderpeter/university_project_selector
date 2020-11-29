@@ -32,10 +32,10 @@ class Header extends Component {
       <Paper variant='outlined' >
         <ProfileDropDown user={user} />
         <Typography variant='h3' component='h1' align='center'>
-          HdM ElectivApp
+          HdM Wahlfach App
         </Typography>
-        <Typography variant='h4' component='h2' align='center'>
-          Stay safe, study well!
+        <Typography variant='h5' component='h2' align='center'>
+        STUDIEREN. WISSEN. MACHEN.
         </Typography>
         {
           user ?

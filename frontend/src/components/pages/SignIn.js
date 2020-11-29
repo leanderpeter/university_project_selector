@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Grid, Typography, withStyles } from '@material-ui/core';
+import { Button, Grid, Typography, withStyles, Paper} from '@material-ui/core';
 
 class SignIn extends Component {
 
@@ -14,16 +14,18 @@ class SignIn extends Component {
 		const { classes } = this.props;
 		console.log("Render!")
 		return <div>
-				<Typography className={classes.root} align='center' variant='h6'>Welcome to the official Hdm ElectivApp</Typography>
-				<Typography className={classes.root} align='center'>It appears, that you are not signed in.</Typography>
-				<Typography className={classes.root} align='center'>To use the services of the HdM electivApp</Typography>
+				<Paper>
+				<img style={{margin:"auto",display: "flex",marginTop:"2%",width:"80%" }} src="https://www.hdm-stuttgart.de/news/news20200414121003/thumbstart"/>
+				<Typography className={classes.root} align='center' variant='h6'>Willkommen zur HDM Wahlfach App</Typography>
+				<Typography className={classes.root} align='center'>Für die Nutzung der weiteren Funktionen müssen Sie sich authentifizieren..</Typography>
 				<Grid container justify='center'>
 					<Grid item>
-						<Button variant='contained' color='primary' onClick={this.handleSignInButtonClicked}>
-							Sign in with Go00ogle
+						<Button style={{marginBottom:"5%"}}variant='contained' color='primary' onClick={this.handleSignInButtonClicked}>
+							Sign in with Google
       			</Button>
 					</Grid>
 				</Grid>
+				</Paper>
 			</div>
 
 	}
