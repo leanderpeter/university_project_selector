@@ -1,60 +1,51 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
-from server.db.Mapper import Mapper
 from server.bo.Projekt import Projekt
+from server.db.Mapper import Mapper
 
 class ProjektMapper(Mapper):
-    def __init__(self):
-        super().__init__()
 
+	def __init__(self):
+		super().__init__()
 
-    def find_all(self):
-        """Reads all tuple and returns them as an object"""
-        pass
+	def find_all(self):
 
-    def find_by_teilnahme_id(self, teilnahme_id):
-        """ Findet alle Teilnahmen für eine bestimmte user_id"""
-        result = []
-        cursor = self._connection.cursor()
-        command = "SELECT id, teilnahme FROM projekte WHERE teilnahme={}".format(teilnahme_id) 
-        cursor.execute(command)
-        tuples = cursor.fetchall()
+		results = []
+		cursor = self._connection.cursor()
+		cursor.execute("SELECT * from projekte")
+		tuples = cursor.fetchall()
 
-        for (id, teilnahme) in tuples:
-            projekt = Projekt()
-            projekt.set_id(id)
-            projekt.set_belegung(teilnahme) 
-            """ Belegung ist bescheuert, teilnahme währe besser, aber Klassendiagramme... """
-            result.append(projekt)
+		for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, moduloption, dozent, teilnahmen, halbjahr, art, aktueller_zustand ) in tuples:
+			projekt = Projekt()
+			projekt.set_id(id)
+			projekt.set_max_teilnehmer(max_teilnehmer)
+			projekt.set_name(name)
+			projekt.set_projektbeschreibung(beschreibung)
+			projekt.set_betreuer(betreuer)
+			projekt.set_externer_partner(externer_partner)
+			projekt.set_woechentlich(woechentlich)
+			projekt.set_anzahl_block_vor(anzahl_block_vor)
+			projekt.set_anzahl_block_in(anzahl_block_in)
+			projekt.set_praeferierte_block(praeferierte_block)
+			projekt.set_bes_raum(bes_raum)
+			projekt.set_raum(raum)
+			projekt.set_sprache(sprache)
+			projekt.set_moduloption(moduloption)
+			projekt.set_dozent(dozent)
+			projekt.set_belegung(teilnahmen)
+			projekt.set_halbjahr(halbjahr)
+			projekt.set_art(art)
+			""" projekt.set_aktueller_zustand(aktueller_zustand) """
+		
+			
+		self._connection.commit()
+		cursor.close()
 
-
-        self._connection.commit()
-        cursor.close()
-
-        return result
-
-    def find_by_key(self):
-        """Reads a tuple with a given ID"""
-        pass
-
-    def insert(self):
-        """Add the given object to the database"""
-        pass
-
-    def update(self):
-        """Update an already given object in the DB"""
-        pass
-
-    def delete(self):
-        """Delete an object from the DB"""
-        pass
-
-
-'''Nur zum testen'''
+		return results
 
 if (__name__ == "__main__"):
-	with ProjektMapper() as mapper:
-		result = mapper.find_all()
-		for p in result:
-			print(p)
+    with ProjektMapper() as mapper:
+        result = mapper.find_all()
+        for p in result:
+            print(p)

@@ -60,10 +60,29 @@ CREATE TABLE `projekte` (
  /*  vielleicht ist es hier auch besser mit int */
   `aktueller_zustand` varchar(128) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
   FOREIGN KEY (`dozent`) REFERENCES `personen` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table-Struktur für table `teilnahmen`
+--
+
+DROP TABLE IF EXISTS `teilnahmen`;
+CREATE TABLE `teilnahmen` (
+  `id` int(11) NOT NULL DEFAULT '0',
+
+  /* FREMDSCHLÜSSEL */
+  `lehrangebot` int(20) DEFAULT NULL,
+  `anrechnung` int(20) DEFAULT NULL,
+  `teilnehmer` int(20) DEFAULT NULL,
+  `resultat` int(20) DEFAULT NULL,
+
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`lehrangebot`) REFERENCES `projekte` (`id`),
+  FOREIGN KEY (`teilnehmer`) REFERENCES `personen` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `projects`
