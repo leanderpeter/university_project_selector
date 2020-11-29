@@ -19,7 +19,7 @@ class Projekt(NamedBusinessObject, Automat):
         self.__sprache = None
         self.__dozent = []
         self.__belegung = []
-        self.__modulname = []
+        self.__moduloption = []
         self.__art = None
         self.__halbjahr = []
 
@@ -113,10 +113,10 @@ class Projekt(NamedBusinessObject, Automat):
     def set_belegung(self, teilnahmen):
         pass
 
-    def get_modulname(self, ):
+    def get_moduloption(self, ):
         pass
 
-    def set_modulname(self, modul):
+    def set_moduloption(self, modul):
         pass
 
     def get_dozent(self, ):
