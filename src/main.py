@@ -42,19 +42,14 @@ projekt = api.inherit('Projekt', bo, {
     'praeferierte_block': fields.String(attribute='_ praeferierte_block', description=' Praeferierte Blocktage'),
     'bes_raum': fields.Boolean(attribute='_bes_raum', description='Bool ob ein besonderer Raum notwendig ist'),
     'raum': fields.String(attribute='_raum', description='Raum des Projekts'),
-    'sprache': fields.String(attribute='_sprache', description='Sprache des Projekts'),
-    'moduloption': fields.String(attribute='_moduloption', description='Moduloptionen des Projekts'),
-    'dozent': fields.String(attribute='_dozent', description='Dozent Name'),
-    'belegung': fields.String(attribute='_belegung', description='Teilnahmen des Projekts'),
-    'halbjahr': fields.String(attribute='_halbjahr', description='Semester, in welchem das Projekt stattfindet'),
-    'art': fields.Integer(attribute='art', description='Projektart')
+    'sprache': fields.String(attribute='_sprache', description='Sprache des Projekts')
 })
 
 
 @electivApp.route('/projekte')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 
-class ProjectListOperations(Resource):
+class ProjektListeOperationen(Resource):
     @electivApp.marshal_list_with(projekt)
     
     def get(self):

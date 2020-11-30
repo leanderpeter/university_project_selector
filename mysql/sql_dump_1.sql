@@ -1,80 +1,66 @@
 CREATE DATABASE  IF NOT EXISTS `electivApp` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `electivApp`;
 
--- mysql dump 1 created on Ubuntu 18.04 on 22.11.2020
 
--- Host 127.0.0.1        Database: electivApp
-
--- ------------------------------------------------------------------
-
---
--- Table-Struktur für table 'Personen'
--- 
-
-DROP TABLE IF EXISTS `personen`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `personen` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(128) NOT NULL DEFAULT '',
-  `google_user_id` varchar(128) NOT NULL DEFAULT '',
-  `rolle` int(1) NOT NULL DEFAULT '0',
-  `mat_nr` int(10) DEFAULT NULL,
-  `kuerzel` varchar(128) NOT NULL DEFAULT '',
-  `veranstaltung` varchar(128) NOT NULL DEFAULT '',
-  `partizipation` int(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table-Struktur für table `projekte`
---
-
-DROP TABLE IF EXISTS `projekte`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `projekte` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(100) NOT NULL DEFAULT '',
-  `max_teilnehmer` int(10) NOT NULL DEFAULT 30,
-  `beschreibung` varchar(100) NOT NULL DEFAULT '',
-  `betreuer` varchar(100) NOT NULL DEFAULT '',
-  `externer_partner` varchar(100) NOT NULL DEFAULT '',
-  `woechentlich` BOOLEAN DEFAULT NULL,
-  `anzahl_block_vor` int(10) DEFAULT NULL, 
-  `anzahl_block_in` int(10) DEFAULT NULL, 
-  `praeferierte_block` varchar(128) NOT NULL DEFAULT '',
-  `bes_raum` BOOLEAN DEFAULT 0,
-  `raum` varchar(128) NOT NULL DEFAULT '',
-  `sprache` varchar(128) NOT NULL DEFAULT '',
-  `moduloption` int(20) DEFAULT NULL,
-  `dozent` int(20) DEFAULT NULL,
-  `belegung` int(20) DEFAULT NULL,
-  `halbjahr` int(10) DEFAULT NULL,
-  `art` int(10) DEFAULT NULL,
-  `aktueller_zustand` int(10) DEFAULT NULL,
-
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 
---
--- Table-Struktur für table `teilnahmen`
---
+-- -----------------------------------------------------
+-- Table `electivapp`.`personen`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `electivapp`.`personen` (
+  `id` INT NOT NULL DEFAULT '0',
+  `name` VARCHAR(128) NOT NULL DEFAULT '',
+  `google_user_id` VARCHAR(128) NOT NULL DEFAULT '',
+  `rolle` INT NOT NULL DEFAULT '0',
+  `mat_nr` INT NULL DEFAULT NULL,
+  `kuerzel` VARCHAR(128) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
-DROP TABLE IF EXISTS `teilnahmen`;
-CREATE TABLE `teilnahmen` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `lehrangebot` int(20) DEFAULT NULL,
-  `anrechnung` int(20) DEFAULT NULL,
-  `teilnehmer` int(20) DEFAULT NULL,
-  `resultat` int(20) DEFAULT NULL,
 
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- -----------------------------------------------------
+-- Table `electivapp`.`projekte`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `electivapp`.`projekte` (
+  `id` INT NOT NULL DEFAULT '0',
+  `name` VARCHAR(100) NOT NULL DEFAULT '',
+  `max_teilnehmer` INT NOT NULL DEFAULT '30',
+  `beschreibung` VARCHAR(100) NOT NULL DEFAULT '',
+  `betreuer` VARCHAR(100) NOT NULL DEFAULT '',
+  `externer_partner` VARCHAR(100) NOT NULL DEFAULT '',
+  `woechentlich` TINYINT(1) NULL DEFAULT NULL,
+  `anzahl_block_vor` INT NULL DEFAULT NULL,
+  `anzahl_block_in` INT NULL DEFAULT NULL,
+  `praeferierte_block` VARCHAR(128) NOT NULL DEFAULT '',
+  `bes_raum` TINYINT(1) NULL DEFAULT '0',
+  `raum` VARCHAR(128) NOT NULL DEFAULT '',
+  `sprache` VARCHAR(128) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
---
--- Dumping data for table `projects`
---
+
+-- -----------------------------------------------------
+-- Table `electivapp`.`teilnahmen`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `electivapp`.`teilnahmen` (
+  `id` INT NOT NULL DEFAULT '0',
+  `lehrangebot` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_teilnahmen_projekte_idx` (`lehrangebot` ASC) VISIBLE,
+  CONSTRAINT `fk_teilnahmen_projekte`
+    FOREIGN KEY (`lehrangebot`)
+    REFERENCES `electivapp`.`projekte` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
