@@ -16,8 +16,8 @@ args = parser.parse_args()
 try:
 
 	pm = ProjektAdministration()
-	pm.create_user(args.name, args.email, args.user_id)
-	print("User created succesfully")
+	pm.get_all_projects()
+	print(pm)
 
 except:
 

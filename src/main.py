@@ -8,6 +8,7 @@ from flask_restx import Api, Resource, fields
 #Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.ProjektAdministration import ProjektAdministration
 from server.bo.Person import Person
+from server.bo.Project import Projekt
 from SecurityDecorator import secured
 
 #..weitere Imports notwendig z.B. BO-Klassen und SecurityDecorator
@@ -15,7 +16,8 @@ from SecurityDecorator import secured
 """Flask wird hiermit instanziert"""
 app = Flask(__name__)
 
-CORS(app, resources=r'/*')
+CORS(app, resources=r'/electivApp/*')
+
 api = Api(app, version='1.0', title='electivApp API', description='Web App for choosing electiv subjects for the university')
 electivApp = api.namespace('electivApp', description='Functions of electivApp')
 
@@ -29,16 +31,26 @@ user = api.inherit('Person', bo, {
     'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID of user')
     })
 
+project = api.inherit('Project', bo, {
+    'name': fields.String(attribute='_name', description='Name des Projekts'),
+    'description': fields.String(attribute='_projektbeschreibung', description='Kurzbeschreibung des Projekts'),
+    'instructor': fields.String(attribute='_betreuer', description='Dozent Name'),
+    'date': fields.String(attribute='_start', description='Start Datum'),
+    'max_subscriber': fields.String(attribute='_max_teilnehmer', description='Maximale Anzal an teilnehmern')
+})
 
-@electivApp.route('/About')
+
+@electivApp.route('/Projekte')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 
-class ProjektOperationen(Resource):
+class ProjectListOperations(Resource):
+    @electivApp.marshal_list_with(project)
     @secured
 
-
     def get(self):
-        return print("Hat das geklappt?")
+        adm = ProjektAdministration()
+        projects = adm.get_all_projects()
+        return projects
 
     def delete(self, projekt_id):
         pass
@@ -46,13 +58,13 @@ class ProjektOperationen(Resource):
     def put(self, project_id):
         pass
 
-
+@electivApp.route('/Person')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonOperationen(Resource):
-    def __init__(self):
-        pass
 
     def get(self, person_id):
-        pass
+        adm = ProjektAdministration()
+        # personen = adm.
 
     def delete(self, person_id):
         pass

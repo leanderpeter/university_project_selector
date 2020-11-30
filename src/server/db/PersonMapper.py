@@ -64,7 +64,7 @@ class PersonMapper (Mapper):
 			u.set_id(id)
 			u.set_name(name)
 			u.set_email(email)
-			u.set_user_id(google_user_id)
+			u.set_google_user_id(google_user_id)
 			result = u
 		except IndexError:
 			"""Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
@@ -101,6 +101,7 @@ class PersonMapper (Mapper):
 
 			command = "INSERT INTO users (id, name, email, google_user_id) VALUES (%s,%s,%s,%s)"
 			data = (user.get_id(), user.get_name(), user.get_email(), user.get_google_user_id())
+			print(data)
 			cursor.execute(command, data)
 
 			self._connection.commit()
@@ -116,7 +117,7 @@ class PersonMapper (Mapper):
 		cursor = self._connection.cursor()
 
 		command = "UPDATE users " + "SET name=%s, email=%s WHERE google_user_id=%s"
-		data = (user.get_name(), user.get_email(), user.get_user_id())
+		data = (user.get_name(), user.get_email(), user.get_google_user_id())
 		cursor.execute(command, data)
 
 		self._connection.commit()
