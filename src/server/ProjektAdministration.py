@@ -94,6 +94,7 @@ class ProjektAdministration (object):
 		""" Alle Teilnamen des Users auslesen"""
 		with TeilnahmeMapper() as mapper:
 			return mapper.find_by_user_id(person.get_id())
+
 	
 	def get_projekt_von_teilnahme(self, teilnahme):
 		with ProjektMapper() as mapper:

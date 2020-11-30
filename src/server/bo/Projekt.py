@@ -23,7 +23,7 @@ class Projekt(NamedBusinessObject, Automat):
         self._moduloption = []
         self._art = None
         self._halbjahr = []
- 
+
     def get_max_teilnehmer(self):
         return self._max_teilnehmer
 
