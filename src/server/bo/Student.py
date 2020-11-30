@@ -5,9 +5,9 @@ from server.bo.Person import Person
 
 class Student(Person):
     def __init__(self):
-        self.__mat_nr = None
-        self.__kuerzel = None
-        self.__partizipation = []
+        self._mat_nr = None
+        self._kuerzel = None
+        self._partizipation = []
 
     def get_mat_nr(self, ):
         pass

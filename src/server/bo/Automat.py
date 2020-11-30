@@ -3,13 +3,15 @@
 
 class Automat:
     def __init__(self):
-        self.__aktueller_zustand = None
+        self._aktueller_zustand = None
 
-    def get_zustand(self, ):
-        pass
+       
+    def get_zustand(self):
+        return self._aktueller_zustand
 
     def set_zustand(self, zustand):
-        pass
+        self._aktueller_zustand = zustand
+
 
     def __str__(self, ):
         pass

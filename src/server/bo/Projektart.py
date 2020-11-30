@@ -5,9 +5,9 @@ from server.bo.NamedBusinessObject import NamedBusinessObject
 
 class Projektart(NamedBusinessObject):
     def __init__(self):
-        self.__sws = None
-        self.__ects = None
-        self.__projektliste = []
+        self._sws = None
+        self._ects = None
+        self._projektliste = []
 
     def get_sws(self, ):
         pass

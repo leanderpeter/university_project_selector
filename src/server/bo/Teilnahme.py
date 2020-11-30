@@ -5,10 +5,10 @@ from server.bo.BusinessObject import BusinessObject
 
 class Teilnahme(BusinessObject):
     def __init__(self):
-        self.__teilnehmer = None
-        self.__resultat = None
-        self.__lehrangebot = None
-        self.__anrechnung = None
+        self._teilnehmer = None
+        self._resultat = None
+        self._lehrangebot = None
+        self._anrechnung = None
 
     def get_lehrangebot(self, ):
         pass

@@ -5,7 +5,7 @@ from server.bo.NamedBusinessObject import NamedBusinessObject
 
 class Semester(NamedBusinessObject):
     def __init__(self):
-        self.__inhalt = []
+        self._inhalt = []
 
     def get_inhalt(self, ):
         pass
