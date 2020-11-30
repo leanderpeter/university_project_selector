@@ -13,12 +13,12 @@ export default class ElectivAPI {
 	#ElectivServerBaseURL = '/electivApp';
 
 	//Projekte anzeigen fuer Student
-	#getProjekteURL = () => `${this.#ElectivServerBaseURL}/Projekte`;
-	#addProjektURL = () => `${this.#ElectivServerBaseURL}/Projekte`;
-	#getProjektURL = (id) => `${this.#ElectivServerBaseURL}/Projekte/${id}`;
+	#getProjekteURL = () => `${this.#ElectivServerBaseURL}/projekte`;
+	#addProjektURL = () => `${this.#ElectivServerBaseURL}/projekte`;
+	#getProjektURL = (id) => `${this.#ElectivServerBaseURL}/projekte/${id}`;
 	//update 
 	//delete
-	#searchProjektURL = (projektname) => `${this.#ElectivServerBaseURL}/Projekte_by_name/${projektname}`;
+	#searchProjektURL = (projektname) => `${this.#ElectivServerBaseURL}/projekte_by_name/${projektname}`;
 
 	/*
 	Singleton/Einzelstuck instanz erhalten

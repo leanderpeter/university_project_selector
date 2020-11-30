@@ -6,8 +6,8 @@ export default class BusinessObject {
 	/*
 	Null constructor
 	*/
-	constructor(){
-		this.id = 0;
+	constructor(id=0){
+		this.id = id;
 	}
 
 	/*

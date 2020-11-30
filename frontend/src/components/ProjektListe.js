@@ -46,13 +46,13 @@ class ProjektListe extends Component {
 					projekte: projekteBOs,					
 					filteredProjekte: [...projekteBOs],		//speicher eine kopie
 					loadingInProgress: false,				// deaktiviere ladeindikator
-					error: null
+          error: null,
 				})).catch(e =>
 					this.setState({
 						projekte: [],
 						loadingInProgress: false,
 						error: e
-					}));
+          }));
 		// setze laden auf wahr
 		this.setState({
 			loadingInProgress: true,
