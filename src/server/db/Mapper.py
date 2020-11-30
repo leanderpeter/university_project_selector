@@ -11,7 +11,7 @@ class Mapper(AbstractContextManager, ABC):
     def __init__(self):
         self._connection = None
 
-    def __enter__(self, ):
+    def __enter__(self):
 
         if os.getenv('GAE_ENV', '').startswith('standard'):
             """Landen wir in diesem Zweig, so haben wir festgestellt, dass der Code in der Cloud abläuft.
