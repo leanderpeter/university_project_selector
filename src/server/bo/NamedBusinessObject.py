@@ -5,11 +5,11 @@ from server.bo.BusinessObject import BusinessObject
 
 class NamedBusinessObject(BusinessObject):
     def __init__(self):
-        self.__name = None
+        self._name = None
 
-    def get_name(self, ):
-        pass
+    def get_name(self):
+        return self._name
 
     def set_name(self, name):
-        pass
+        self._name = name
 

@@ -3,8 +3,8 @@
 
 class Zustand:
     def __init__(self):
-        self.__name = None
-        self.__zugewiesene_projekte = []
+        self._name = None
+        self._zugewiesene_projekte = []
 
     def get_zugewiesene_projekte(self, ):
         pass

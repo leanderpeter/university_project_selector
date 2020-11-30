@@ -5,8 +5,8 @@ from server.bo.BusinessObject import BusinessObject
 
 class Bewertung(BusinessObject):
     def __init__(self):
-        self.__note = None
-        self.__leistung = None
+        self._note = None
+        self._leistung = None
 
     def get_note(self, ):
         pass

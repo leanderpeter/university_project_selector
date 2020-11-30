@@ -3,7 +3,7 @@
 import argparse
 
 from .bo.Person import Person
-from .bo.Project import Projekt
+from .bo.Projekt import Projekt
 
 from .db.PersonMapper import PersonMapper
 from .db.TeilnahmeMapper import TeilnahmeMapper
@@ -90,10 +90,11 @@ class ProjektAdministration (object):
 	def create_teilnahme(self, ):
 		pass
 
-	def get_teilnahmen_von_user(self, user): 
+	def get_teilnahmen_von_user(self, person): 
 		""" Alle Teilnamen des Users auslesen"""
 		with TeilnahmeMapper() as mapper:
-			return mapper.find_by_user_id(user.get_id())
+			return mapper.find_by_user_id(person.get_id())
+
 	
 	def get_projekt_von_teilnahme(self, teilnahme):
 		with ProjektMapper() as mapper:

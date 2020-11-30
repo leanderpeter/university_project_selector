@@ -13,10 +13,11 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 CREATE TABLE IF NOT EXISTS `electivapp`.`personen` (
   `id` INT NOT NULL DEFAULT '0',
   `name` VARCHAR(128) NOT NULL DEFAULT '',
-  `google_user_id` VARCHAR(128) NOT NULL DEFAULT '',
-  `rolle` INT NOT NULL DEFAULT '0',
-  `mat_nr` INT NULL DEFAULT NULL,
-  `kuerzel` VARCHAR(128) NOT NULL DEFAULT '',
+  `email` VARCHAR(128) DEFAULT '',
+  `google_user_id` VARCHAR(128) DEFAULT '',
+  `rolle` INT(5) DEFAULT '0',
+  `mat_nr` INT(10) NULL DEFAULT NULL,
+  `kuerzel` VARCHAR(128) DEFAULT '',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -31,14 +32,14 @@ CREATE TABLE IF NOT EXISTS `electivapp`.`projekte` (
   `max_teilnehmer` INT NOT NULL DEFAULT '30',
   `beschreibung` VARCHAR(100) NOT NULL DEFAULT '',
   `betreuer` VARCHAR(100) NOT NULL DEFAULT '',
-  `externer_partner` VARCHAR(100) NOT NULL DEFAULT '',
+  `externer_partner` VARCHAR(100) DEFAULT '',
   `woechentlich` TINYINT(1) NULL DEFAULT NULL,
   `anzahl_block_vor` INT NULL DEFAULT NULL,
   `anzahl_block_in` INT NULL DEFAULT NULL,
-  `praeferierte_block` VARCHAR(128) NOT NULL DEFAULT '',
+  `praeferierte_block` VARCHAR(128) DEFAULT '',
   `bes_raum` TINYINT(1) NULL DEFAULT '0',
-  `raum` VARCHAR(128) NOT NULL DEFAULT '',
-  `sprache` VARCHAR(128) NOT NULL DEFAULT '',
+  `raum` VARCHAR(128) DEFAULT '',
+  `sprache` VARCHAR(128) DEFAULT '',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -87,6 +88,12 @@ CREATE TABLE IF NOT EXISTS `electivapp`.`personen_hat_projekte` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+LOCK TABLES `projekte` WRITE;
+/*!40000 ALTER TABLE `projekte` DISABLE KEYS */;
+INSERT INTO `projekte` VALUES (1232,'Sofware for Monkeys', 30, 'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch');
+/*!40000 ALTER TABLE `projekte` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

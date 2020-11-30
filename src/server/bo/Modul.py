@@ -5,9 +5,9 @@ from server.bo.NamedBusinessObject import NamedBusinessObject
 
 class Modul(NamedBusinessObject):
     def __init__(self):
-        self.__edv_nr = None
-        self.__bestandteil = []
-        self.__zugewiesene_teilnahme = []
+        self._edv_nr = None
+        self._bestandteil = []
+        self._zugewiesene_teilnahme = []
 
     def get_edv_nr(self, ):
         pass
