@@ -23,7 +23,7 @@ CREATE TABLE `personen` (
   `kuerzel` varchar(128) NOT NULL DEFAULT '',
   `veranstaltung` varchar(128) NOT NULL DEFAULT '',
   `partizipation` int(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -53,9 +53,11 @@ CREATE TABLE `projekte` (
   `halbjahr` varchar(10) NOT NULL DEFAULT '',
   `art` varchar(128) NOT NULL DEFAULT '',
   `aktueller_zustand` varchar(128) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`),
+
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Table-Struktur für table `teilnahmen`
@@ -68,15 +70,16 @@ CREATE TABLE `teilnahmen` (
   `anrechnung` int(20) DEFAULT NULL,
   `teilnehmer` int(20) DEFAULT NULL,
   `resultat` int(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `projects`
 --
 
---LOCK TABLES `projekte` WRITE;
+LOCK TABLES `projekte` WRITE;
 /*!40000 ALTER TABLE `customers` DISABLE KEYS */;
 --INSERT INTO `projekte` VALUES (1,'','Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität, um dies zu bewerkstelligen werden die Prinzipien (beispielsweise die Abstraktion und Modularisierung, Methoden (Softwareentwurfsmethoden) und Werkzeugen (Softwareentwicklungsumgebungen (SEU), CASE) bereitgestellt.','Prof. Dr. Peter Thies','13.02.2021', 50),(10000,' ','Internal');
 /*!40000 ALTER TABLE `customers` ENABLE KEYS */;
---UNLOCK TABLES;
+UNLOCK TABLES;

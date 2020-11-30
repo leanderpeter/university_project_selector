@@ -11,12 +11,12 @@ class ProjektMapper(Mapper):
 
 	def find_all(self):
 
-		results = []
+		result = []
 		cursor = self._connection.cursor()
-		cursor.execute("SELECT * from projekte")
+		cursor.execute("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, moduloption, dozent, teilnahmen, halbjahr, art from projekte")
 		tuples = cursor.fetchall()
 
-		for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, moduloption, dozent, teilnahmen, halbjahr, art, aktueller_zustand ) in tuples:
+		for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, moduloption, dozent, teilnahmen, halbjahr, art) in tuples:
 			projekt = Projekt()
 			projekt.set_id(id)
 			projekt.set_max_teilnehmer(max_teilnehmer)
@@ -37,12 +37,12 @@ class ProjektMapper(Mapper):
 			projekt.set_halbjahr(halbjahr)
 			projekt.set_art(art)
 			""" projekt.set_aktueller_zustand(aktueller_zustand) """
-		
+			result.append(projekt)
 			
 		self._connection.commit()
 		cursor.close()
 
-		return results
+		return result
 
 	def find_by_key(self):
 		pass
