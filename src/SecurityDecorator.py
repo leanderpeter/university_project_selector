@@ -73,7 +73,7 @@ def secured(function):
 				'''
 				If checks failed (token expired etc this exception will be raised)
 				'''
-				error_messag = str(exc)
+				error_message = str(exc)
 				return exc, 401 # UNAUTHORIZED
 		return '', 401 # UNAUTHORIZED
 	return wrapper
