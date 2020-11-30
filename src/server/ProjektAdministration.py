@@ -6,7 +6,8 @@ from .bo.Person import Person
 from .bo.Project import Projekt
 
 from .db.PersonMapper import PersonMapper
-from .db.ProjectMapper import ProjektMapper
+from .db.TeilnahmeMapper import TeilnahmeMapper
+from .db.ProjektMapper import ProjektMapper
 
 
 class ProjektAdministration (object):
@@ -56,10 +57,11 @@ class ProjektAdministration (object):
 	def get_projekt_by_id(self, ):
 		pass
 
-	def get_all_projects(self):
-		'''return all projects in DB'''
+	def get_alle_projekte(self, ):
+		"""return alle Projekte """
 		with ProjektMapper() as mapper:
 			return mapper.find_all()
+		
 
 	def get_projekt_teilnehmer(self, ):
 		pass
@@ -88,8 +90,15 @@ class ProjektAdministration (object):
 	def create_teilnahme(self, ):
 		pass
 
-	def get_teilnahme(self, ):
-		pass
+	def get_teilnahmen_von_user(self, user): 
+		""" Alle Teilnamen des Users auslesen"""
+		with TeilnahmeMapper() as mapper:
+			return mapper.find_by_user_id(user.get_id())
+	
+	def get_projekt_von_teilnahme(self, teilnahme):
+		with ProjektMapper() as mapper:
+			return mapper.find_by_teilnahme_id(teilnahme.get_id())
+		
 
 	def delete_teilnahme(self, ):
 		pass

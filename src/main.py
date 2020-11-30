@@ -8,7 +8,7 @@ from flask_restx import Api, Resource, fields
 #Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.ProjektAdministration import ProjektAdministration
 from server.bo.Person import Person
-from server.bo.Project import Projekt
+from server.bo.Projekt import Projekt
 from SecurityDecorator import secured
 
 #..weitere Imports notwendig z.B. BO-Klassen und SecurityDecorator
@@ -25,26 +25,46 @@ bo = api.model('BusinessObject', {
     'id': fields.Integer(attribute='_id', description='Unique identifier from every BO'),
     })
 
-user = api.inherit('Person', bo, {
-    'name': fields.String(attribute='_name', description='Name of user'),
-    'email': fields.String(attribute='_email', description='Email of user'),
-    'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID of user')
+person = api.inherit('Person', bo, {
+    'name': fields.String(attribute='_name', description='Name der Person'),
+    'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID der Person')
     })
 
-project = api.inherit('Project', bo, {
+projekt = api.inherit('Projekt', bo, {
+    'id': fields.Integer(attribute='_id', description='ID'),
     'name': fields.String(attribute='_name', description='Name des Projekts'),
-    'description': fields.String(attribute='_projektbeschreibung', description='Kurzbeschreibung des Projekts'),
-    'instructor': fields.String(attribute='_betreuer', description='Dozent Name'),
-    'date': fields.String(attribute='_start', description='Start Datum'),
-    'max_subscriber': fields.String(attribute='_max_teilnehmer', description='Maximale Anzal an teilnehmern')
+    'max_teilnehmer': fields.Integer(attribute='_max_teilnehmer', description='Maximale Anzahl an teilnehmern'),
+    'beschreibung': fields.String(attribute='_beschreibung', description='Kurzbeschreibung des Projekts'),
+    'betreuer': fields.String(attribute='_betreuer', description='Name des Betreuers'),
+    'externer_partner': fields.String(attribute='_externer_partner', description='Name des externen Partners'),
+    'woechentlich': fields.Boolean(attribute='_wochentlich', description='Bool ob das Projekt oeffentlich stattfindet'),
+    'anzahl_block_vor': fields.Integer(attribute='_anzahl_block_vor', description='Anzahl Blocktage vor der Vorlesungszeit'),
+    'anzahl_block_in': fields.Integer(attribute='_anzahl_block_in', description='Anzahl Blocktage in der Vorlesungszeit'),
+    'praeferierte_block': fields.String(attribute='_ praeferierte_block', description=' Praeferierte Blocktage'),
+    'bes_raum': fields.Boolean(attribute='_bes_raum', description='Bool ob ein besonderer Raum notwendig ist'),
+    'raum': fields.String(attribute='_raum', description='Raum des Projekts'),
+    'sprache': fields.String(attribute='_sprache', description='Sprache des Projekts')
 })
 
 
-@electivApp.route('/Projekte')
+@electivApp.route('/projekte')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 
-class ProjectListOperations(Resource):
-    @electivApp.marshal_list_with(project)
+class ProjektListeOperationen(Resource):
+    @electivApp.marshal_list_with(projekt)
+    
+    def get(self):
+        adm = ProjektAdministration()
+        projekte = adm.get_alle_projekte()
+        return projekte
+
+    def delete(self, projekt_id):
+        pass
+
+    def put(self, project_id):
+        pass
+
+class ProjektOperationen(Resource):
     @secured
 
     def get(self):

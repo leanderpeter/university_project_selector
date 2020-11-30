@@ -19,18 +19,17 @@ class PersonMapper (Mapper):
 		result = None
 
 		cursor = self._connection.cursor()
-		command = "SELECT id, name, email, google_user_id FROM users WHERE email={}".format(mail_address)
+		command = "SELECT id, name, google_user_id  FROM personen"
 		cursor.execute(command)
 		tuples = cursor.fetchall()
 
 		try:
-			(id, name, email, google_user_id) = tuples[0]
-			user = Person()
-			user.set_id(id)
-			user.set_name(name)
-			user.set_email(email)
-			user.set_google_user_id(google_user_id)
-			result = user
+			(id, name, google_user_id) = tuples[0]
+			person = Person()
+			person.set_id(id)
+			person.set_name(name)
+			person.set_google_user_id(google_user_id)
+			result = person
 
 		except IndexError:
 			"""empty sequence"""
@@ -54,18 +53,16 @@ class PersonMapper (Mapper):
 		result = None
 
 		cursor = self._connection.cursor()
-		command = "SELECT id, name, email, google_user_id FROM users WHERE google_user_id='{}'".format(google_user_id)
+		command = "SELECT id, name FROM personen WHERE google_user_id='{}'".format(google_user_id)
 		cursor.execute(command)
 		tuples = cursor.fetchall()
 
 		try:
-			(id, name, email, google_user_id) = tuples[0]
-			u = Person()
-			u.set_id(id)
-			u.set_name(name)
-			u.set_email(email)
-			u.set_google_user_id(google_user_id)
-			result = u
+			(id, name) = tuples[0]
+			person = Person()
+			person.set_id(id)
+			person.set_name(name)
+			result = person
 		except IndexError:
 			"""Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
 			keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
@@ -76,7 +73,7 @@ class PersonMapper (Mapper):
 
 		return result
 
-	def insert(self, user):
+	def insert(self, person):
 			"""Insert a user object in the DB
 
 			Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
@@ -86,50 +83,49 @@ class PersonMapper (Mapper):
 			:return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
 			"""
 			cursor = self._connection.cursor()
-			cursor.execute("SELECT MAX(id) AS maxid FROM users ")
+			cursor.execute("SELECT MAX(id) AS maxid FROM personen ")
 			tuples = cursor.fetchall()
 
 			for (maxid) in tuples:
 				if maxid[0] is not None:
 					"""Wenn wir eine maximale ID festellen konnten, zählen wir diese
 					um 1 hoch und weisen diesen Wert als ID dem User-Objekt zu."""
-					user.set_id(maxid[0] + 1)
+					person.set_id(maxid[0] + 1)
 				else:
 					"""Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
 					davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
-					user.set_id(1)
+					person.set_id(1)
 
 			command = "INSERT INTO users (id, name, email, google_user_id) VALUES (%s,%s,%s,%s)"
-			data = (user.get_id(), user.get_name(), user.get_email(), user.get_google_user_id())
-			print(data)
+			data = (person.get_id(), person.get_name(), person.get_email(), person.get_google_user_id())
 			cursor.execute(command, data)
 
 			self._connection.commit()
 			cursor.close()
 
-			return user
+			return person
 
-	def update(self, user):
+	def update(self, person):
 		'''
 		function to rewrite in the DB 
 
 		'''
 		cursor = self._connection.cursor()
 
-		command = "UPDATE users " + "SET name=%s, email=%s WHERE google_user_id=%s"
-		data = (user.get_name(), user.get_email(), user.get_google_user_id())
+		command = "UPDATE personen " + "SET name=%s, SET rolle=%s, SET mat_nr=%s, SET kuerzel=%s, WHERE google_user_id=%s"
+		data = (person.get_name(), person.get_rolle(), person.get_mat_nr(), person.get_kuerzel(), person.get_google_user_id())
 		cursor.execute(command, data)
 
 		self._connection.commit()
 		cursor.close()
 
-	def delete(self, user):
+	def delete(self, person):
 		'''
 		delete an object from the database
 		'''
 		cursor = self._connection.cursor()
 
-		command = "DELETE FROM users WHERE id={}".format(user.get_id())
+		command = "DELETE FROM personen WHERE id={}".format(person.get_id())
 		cursor.execute(command)
 
 		self._connection.commit()
@@ -141,5 +137,5 @@ class PersonMapper (Mapper):
 if (__name__ == "__main__"):
 	with PersonMapper() as mapper:
 		result = mapper.find_all()
-		for user in result:
-			print(user)
+		for person in result:
+			print(person)

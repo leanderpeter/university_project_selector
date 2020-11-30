@@ -9,6 +9,7 @@ import ProjektListe from './components/ProjektListe';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
+import MeineProjekteEintrag from './components/MeineProjekteEintrag';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
@@ -107,6 +108,9 @@ class App extends React.Component {
                     <ProjektListe />
                   </Route>
                   <Route path='/about' component={About} />
+
+                  <Route path='/meineprojekte' component={MeineProjekteEintrag}>
+                  </Route>
                 </>
                 :
                 // if not signed in show sign in page
