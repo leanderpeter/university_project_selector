@@ -19,15 +19,16 @@ class PersonMapper (Mapper):
 		result = None
 
 		cursor = self._connection.cursor()
-		command = "SELECT id, name, google_user_id  FROM personen"
+		command = "SELECT id, name, email, google_user_id  FROM personen"
 		cursor.execute(command)
 		tuples = cursor.fetchall()
 
 		try:
-			(id, name, google_user_id) = tuples[0]
+			(id, name, email, google_user_id) = tuples[0]
 			person = Person()
 			person.set_id(id)
 			person.set_name(name)
+			person.set_email(email)
 			person.set_google_user_id(google_user_id)
 			result = person
 
@@ -96,7 +97,7 @@ class PersonMapper (Mapper):
 					davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
 					person.set_id(1)
 
-			command = "INSERT INTO users (id, name, email, google_user_id) VALUES (%s,%s,%s,%s)"
+			command = "INSERT INTO personen (id, name, email, google_user_id) VALUES (%s,%s,%s,%s)"
 			data = (person.get_id(), person.get_name(), person.get_email(), person.get_google_user_id())
 			cursor.execute(command, data)
 
@@ -111,8 +112,8 @@ class PersonMapper (Mapper):
 
 		'''
 		cursor = self._connection.cursor()
-		command = "UPDATE personen " + "SET name=%s, SET rolle=%s, SET mat_nr=%s, SET kuerzel=%s, WHERE google_user_id=%s"
-		data = (person.get_name(), person.get_rolle(), person.get_mat_nr(), person.get_kuerzel(), person.get_google_user_id())
+		command = "UPDATE personen " + "SET name=%s, email=%s, rolle=%s WHERE google_user_id=%s"
+		data = (person.get_name(),person.get_email(), person.get_rolle(), person.get_google_user_id())
 		cursor.execute(command, data)
 
 		self._connection.commit()
