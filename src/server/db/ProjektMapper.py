@@ -13,14 +13,14 @@ class ProjektMapper(Mapper):
 
 		result = []
 		cursor = self._connection.cursor()
-		cursor.execute("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, moduloption, dozent, teilnahmen, halbjahr, art from projekte")
+		cursor.execute("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, moduloption, dozent, belegung, halbjahr, art from projekte")
 		tuples = cursor.fetchall()
 
-		for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, moduloption, dozent, teilnahmen, halbjahr, art) in tuples:
+		for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, moduloption, dozent, belegung, halbjahr, art) in tuples:
 			projekt = Projekt()
 			projekt.set_id(id)
-			projekt.set_max_teilnehmer(max_teilnehmer)
 			projekt.set_name(name)
+			projekt.set_max_teilnehmer(max_teilnehmer)
 			projekt.set_projektbeschreibung(beschreibung)
 			projekt.set_betreuer(betreuer)
 			projekt.set_externer_partner(externer_partner)
@@ -33,7 +33,7 @@ class ProjektMapper(Mapper):
 			projekt.set_sprache(sprache)
 			projekt.set_moduloption(moduloption)
 			projekt.set_dozent(dozent)
-			projekt.set_belegung(teilnahmen)
+			projekt.set_belegung(belegung)
 			projekt.set_halbjahr(halbjahr)
 			projekt.set_art(art)
 			""" projekt.set_aktueller_zustand(aktueller_zustand) """

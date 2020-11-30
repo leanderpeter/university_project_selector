@@ -37,6 +37,7 @@ DROP TABLE IF EXISTS `projekte`;
 CREATE TABLE `projekte` (
   `id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(100) NOT NULL DEFAULT '',
+  `max_teilnehmer` int(10) NOT NULL DEFAULT 30,
   `beschreibung` varchar(100) NOT NULL DEFAULT '',
   `betreuer` varchar(100) NOT NULL DEFAULT '',
   `externer_partner` varchar(100) NOT NULL DEFAULT '',
@@ -49,10 +50,10 @@ CREATE TABLE `projekte` (
   `sprache` varchar(128) NOT NULL DEFAULT '',
   `moduloption` int(20) DEFAULT NULL,
   `dozent` int(20) DEFAULT NULL,
-  `teilnahmen` int(20) DEFAULT NULL,
-  `halbjahr` varchar(10) NOT NULL DEFAULT '',
-  `art` varchar(128) NOT NULL DEFAULT '',
-  `aktueller_zustand` varchar(128) NOT NULL DEFAULT '',
+  `belegung` int(20) DEFAULT NULL,
+  `halbjahr` int(10) DEFAULT NULL,
+  `art` int(10) DEFAULT NULL,
+  `aktueller_zustand` int(10) DEFAULT NULL,
 
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -77,9 +78,3 @@ CREATE TABLE `teilnahmen` (
 --
 -- Dumping data for table `projects`
 --
-
-LOCK TABLES `projekte` WRITE;
-/*!40000 ALTER TABLE `customers` DISABLE KEYS */;
---INSERT INTO `projekte` VALUES (1,'','Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität, um dies zu bewerkstelligen werden die Prinzipien (beispielsweise die Abstraktion und Modularisierung, Methoden (Softwareentwurfsmethoden) und Werkzeugen (Softwareentwicklungsumgebungen (SEU), CASE) bereitgestellt.','Prof. Dr. Peter Thies','13.02.2021', 50),(10000,' ','Internal');
-/*!40000 ALTER TABLE `customers` ENABLE KEYS */;
-UNLOCK TABLES;
