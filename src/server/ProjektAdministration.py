@@ -58,8 +58,8 @@ class ProjektAdministration (object):
 
 	def get_all_projects(self):
 		'''return all projects in DB'''
-		with ProjectMapper() as mapper:
-			mapper.find_all()
+		with ProjektMapper() as mapper:
+			return mapper.find_all()
 
 	def get_projekt_teilnehmer(self, ):
 		pass

@@ -32,6 +32,6 @@ export default class BusinessObject {
 		for (var prop in this) {
 			result += prop + ': ' +this[prop] + ' ';
 		}
-		return results;
+		return result;
 	}
 }

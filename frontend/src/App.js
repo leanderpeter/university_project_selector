@@ -4,7 +4,7 @@ import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import firebase from 'firebase/app'; //Firebase module
 import 'firebase/auth'; //Firebase module
 import Header from './components/layout/Header';
-// import ProjectList from '/components/ProjectList';
+import ProjektListe from './components/ProjektListe';
 // import Electivs from '/components/Electivs';
 import About from './components/pages/About';
 import Theme from './Theme';
@@ -104,7 +104,7 @@ class App extends React.Component {
                 <>
                   <Redirect from='/' to='projects' />
                   <Route exact path='/projects'>
-                    <ProjectList />
+                    <ProjektListe />
                   </Route>
                   <Route path='/about' component={About} />
                 </>

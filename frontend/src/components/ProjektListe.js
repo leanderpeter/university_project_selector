@@ -41,10 +41,10 @@ class ProjektListe extends Component {
 	//hole alle Projekte vom Backend
 	getProjekte = () => {
 		ElectivAPI.getAPI().getProjekte()
-			.then(projektBOs => 
+      .then(projekteBOs => 
 				this.setState({								//neuer status wenn fetch komplett
-					projekte: projektBOs,					
-					filteredProjekte: [...projektBOs],		//speicher eine kopie
+					projekte: projekteBOs,					
+					filteredProjekte: [...projekteBOs],		//speicher eine kopie
 					loadingInProgress: false,				// deaktiviere ladeindikator
 					error: null
 				})).catch(e =>
@@ -69,23 +69,23 @@ class ProjektListe extends Component {
 	/** Renders the component */
 	render() {
     const { classes } = this.props;
-    const { filteredCustomers, customerFilter, expandedCustomerID, loadingInProgress, error, showCustomerForm } = this.state;
+    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm } = this.state;
 
     return (
       <div className={classes.root}>
-        <Grid className={classes.customerFilter} container spacing={1} justify='flex-start' alignItems='center'>
+        <Grid className={classes.projektFilter} container spacing={1} justify='flex-start' alignItems='center'>
           <Grid item>
             <Typography>
-              Filter customer list by name:
+              Filter Projekliste nach Namen:
               </Typography>
           </Grid>
           <Grid item xs={4}>
             <TextField
               autoFocus
               fullWidth
-              id='customerFilter'
+              id='projektFilter'
               type='text'
-              value={customerFilter}
+              value={projektFilter}
               onChange={this.filterFieldValueChange}
               InputProps={{
                 endAdornment: <InputAdornment position='end'>
@@ -99,22 +99,23 @@ class ProjektListe extends Component {
           <Grid item xs />
           <Grid item>
             <Button variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.addCustomerButtonClicked}>
-              Add Customer
+              Projekt hinzufugen
           </Button>
           </Grid>
         </Grid>
         { 
-          // Show the list of CustomerListEntry components
-          // Do not use strict comparison, since expandedCustomerID maybe a string if given from the URL parameters
-          filteredCustomers.map(customer =>
-            <CustomerListEntry key={customer.getID()} customer={customer} expandedState={expandedCustomerID === customer.getID()}
+          // Show the list of ProjektListeEintrag components
+          // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters
+          
+          filteredProjekte.map(projekt =>
+            <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange}
               onCustomerDeleted={this.customerDeleted}
-            />)
+            />) 
         }
         <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`The list of customers could not be loaded.`} onReload={this.getCustomers} />
-        <CustomerForm show={showCustomerForm} onClose={this.customerFormClosed} />
+        <ContextErrorMessage error={error} contextErrorMsg={`The list of customers could not be loaded.`} onReload={this.getProjekte} />
+        
       </div>
     );
   }
@@ -125,20 +126,19 @@ const styles = theme => ({
   root: {
     width: '100%',
   },
-  customerFilter: {
+  projektFilter: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1),
   }
 });
 
 /** PropTypes */
-CustomerList.propTypes = {
+ProjektListe.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   /** @ignore */
   location: PropTypes.object.isRequired,
 }
 
-export default withRouter(withStyles(styles)(CustomerList));
-	}
-}
+export default withRouter(withStyles(styles)(ProjektListe));
+	

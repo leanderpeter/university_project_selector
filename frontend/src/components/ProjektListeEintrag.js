@@ -9,16 +9,23 @@ import CustomerDeleteDialog from './dialogs/CustomerDeleteDialog';
 import AccountList from './AccountList';
 */
 
-class ProjektListEntry extends Component {
+//Muss noch geschrieben werden!
+
+var InfoList = null;
+var ProjektForm = null;
+var ProjektDeleteDialog = null;
+
+
+class ProjektListeEintrag extends Component {
 
 	constructor(props) {
 		super(props);
 
 		// Status initalisieren
 		this.state = {
-			projekt: props.projekt;
-			showProjektForm: false;
-			showProjektDeleteDialog: false;
+			projekt: props.projekt,
+			showProjektForm: false,
+			showProjektDeleteDialog: false
 
 		};
 	}
@@ -66,7 +73,7 @@ class ProjektListEntry extends Component {
   render() {
     const { classes, expandedState } = this.props;
     // Use the states projekt
-    const { projekt, showProjektForm, showProjektDeleteDialog } = this.state;
+    const { projekt } = this.state;
 
     // console.log(this.state);
     return (
@@ -78,31 +85,13 @@ class ProjektListEntry extends Component {
           >
             <Grid container spacing={1} justify='flex-start' alignItems='center'>
               <Grid item>
-                <Typography variant='body1' className={classes.heading}>{projekt.get_name()}, {}
+                <Typography variant='body1' className={classes.heading}>{projekt.getname()}
                 </Typography>
-              </Grid>
-              <Grid item>
-                <ButtonGroup variant='text' size='small'>
-                  <Button color='primary' onClick={this.editProjektButtonClicked}>
-                    edit
-                  </Button>
-                  <Button color='secondary' onClick={this.deleteProjektButtonClicked}>
-                    delete
-                  </Button>
-                </ButtonGroup>
-              </Grid>
-              <Grid item xs />
-              <Grid item>
-                <Typography variant='body2' color={'textSecondary'}>List of Infos</Typography>
               </Grid>
             </Grid>
           </AccordionSummary>
-          <AccordionDetails>
-            <InfoList show={expandedState} projekt={projekt} />
-          </AccordionDetails>
         </Accordion>
-        <ProjektForm show={showProjektForm} projekt={projekt} onClose={this.projektFormClosed} />
-        <ProjektDeleteDialog show={showProjektDeleteDialog} projekt={projekt} onClose={this.deleteProjektDialogClosed} />
+              
       </div>
     );
   }
@@ -116,14 +105,14 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-CustomerListEntry.propTypes = {
+ProjektListeEintrag.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   /** The CustomerBO to be rendered */
   customer: PropTypes.object.isRequired,
-  /** The state of this CustomerListEntry. If true the customer is shown with its accounts */
+  /** The state of this ProjektListeEintrag. If true the customer is shown with its accounts */
   expandedState: PropTypes.bool.isRequired,
-  /** The handler responsible for handle expanded state changes (exanding/collapsing) of this CustomerListEntry 
+  /** The handler responsible for handle expanded state changes (exanding/collapsing) of this ProjektListeEintrag 
    * 
    * Signature: onExpandedStateChange(CustomerBO customer)
    */
@@ -136,4 +125,4 @@ CustomerListEntry.propTypes = {
   onCustomerDeleted: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(CustomerListEntry);
+export default withStyles(styles)(ProjektListeEintrag);

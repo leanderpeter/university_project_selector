@@ -26,6 +26,7 @@ def secured(function):
 		Here firebase receives the token that the frontend has 'sendet'/saved in cookies
 		'''
 		id_token = request.cookies.get("token")
+		# print(id_token)
 		error_message = None
 		claims = None
 		objects = None
@@ -43,11 +44,12 @@ def secured(function):
 				if claims is not None:
 					adm = ProjektAdministration()
 
-					google_user_id = claims.get("google_user_id")
+					google_user_id = claims.get("user_id")
+					# print(google_user_id)
 					email = claims.get("email")
 					name = claims.get("name")
 
-					user = amd.get_user_by_google_id(google_user_id)
+					user = adm.get_user_by_google_user_id(google_user_id)
 					if user is not None:
 						''' 
 						User is already in the system but some variation in the variables have occured.

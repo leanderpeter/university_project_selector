@@ -13,17 +13,17 @@ export default class ElectivAPI {
 	#ElectivServerBaseURL = '/electivApp';
 
 	//Projekte anzeigen fuer Student
-	#getProjekteURL = () => '${this.#ElectivServerBaseURL}/Projekte';
-	#addProjektURL = () => '${this.#ElectivServerBaseURL}/Projekte';
-	#getProjektURL = (id) => '${this.#ElectivServerBaseURL}/Projekte/${id}';
+	#getProjekteURL = () => `${this.#ElectivServerBaseURL}/Projekte`;
+	#addProjektURL = () => `${this.#ElectivServerBaseURL}/Projekte`;
+	#getProjektURL = (id) => `${this.#ElectivServerBaseURL}/Projekte/${id}`;
 	//update 
 	//delete
-	#searchProjektURL = (projektname) => '${this.#ElectivServerBaseURL}/Projekte_by_name/${projektname}';
+	#searchProjektURL = (projektname) => `${this.#ElectivServerBaseURL}/Projekte_by_name/${projektname}`;
 
 	/*
 	Singleton/Einzelstuck instanz erhalten
 	*/
-	static getAPI(){
+	static getAPI() {
 		if (this.#api == null) {
 			this.#api = new ElectivAPI();
 		} 
@@ -38,6 +38,7 @@ export default class ElectivAPI {
 			//fetch() gibt keine Errors wie 404 oder 500 zuruck
 			if (!res.ok) {
 				throw Error(`${res.status} ${res.statusText}`);
+				//throw Error(`Fail`);
 			}
 			return res.json();
 		})
@@ -47,6 +48,7 @@ export default class ElectivAPI {
 	getProjekte() {
 		return this.#fetchAdvanced(this.#getProjekteURL()).then((responseJSON) => {
 			let projektBOs = ProjektBO.fromJSON(responseJSON);
+			console.info(projektBOs)
 			return new Promise(function (resolve){
 				resolve(projektBOs);
 			})

@@ -17,6 +17,7 @@ from SecurityDecorator import secured
 app = Flask(__name__)
 
 CORS(app, resources=r'/electivApp/*')
+
 api = Api(app, version='1.0', title='electivApp API', description='Web App for choosing electiv subjects for the university')
 electivApp = api.namespace('electivApp', description='Functions of electivApp')
 
@@ -32,18 +33,18 @@ user = api.inherit('Person', bo, {
 
 project = api.inherit('Project', bo, {
     'name': fields.String(attribute='_name', description='Name des Projekts'),
-    'description': fields.String(attribute='_description', description='Kurzbeschreibung des Projekts'),
-    'instructor': fields.String(attribute='_instructor', description='Dozent Name'),
-    'date': fields.String(attribute='_date', description='Start Datum'),
-    'max_subscriber': fields.String(attribute='_max_subscriber', description='Maximale Anzal an teilnehmern')
+    'description': fields.String(attribute='_projektbeschreibung', description='Kurzbeschreibung des Projekts'),
+    'instructor': fields.String(attribute='_betreuer', description='Dozent Name'),
+    'date': fields.String(attribute='_start', description='Start Datum'),
+    'max_subscriber': fields.String(attribute='_max_teilnehmer', description='Maximale Anzal an teilnehmern')
 })
 
 
-@electivApp.route('/Projects')
+@electivApp.route('/Projekte')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 
 class ProjectListOperations(Resource):
-    @electivApp.marshall_list_with(project)
+    @electivApp.marshal_list_with(project)
     @secured
 
     def get(self):
@@ -57,13 +58,13 @@ class ProjectListOperations(Resource):
     def put(self, project_id):
         pass
 
-
+@electivApp.route('/Person')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonOperationen(Resource):
-    def __init__(self):
-        pass
 
     def get(self, person_id):
-        pass
+        adm = ProjektAdministration()
+        # personen = adm.
 
     def delete(self, person_id):
         pass

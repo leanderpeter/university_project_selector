@@ -33,7 +33,7 @@ DROP TABLE IF EXISTS `projects`;
 CREATE TABLE `projects` (
   `id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(100) NOT NULL DEFAULT '',
-  `description` varchar(100) NOT NULL DEFAULT '',
+  `description` varchar(512) NOT NULL DEFAULT '',
   `instructor` varchar(100) NOT NULL DEFAULT '',
   `date` varchar(100) NOT NULL DEFAULT '',
   `max_subscriber` int(11) NOT NULL DEFAULT '0',
@@ -46,7 +46,7 @@ CREATE TABLE `projects` (
 --
 
 LOCK TABLES `projects` WRITE;
-/*!40000 ALTER TABLE `customers` DISABLE KEYS */;
-INSERT INTO `projects` VALUES (1,'','Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität, um dies zu bewerkstelligen werden die Prinzipien (beispielsweise die Abstraktion und Modularisierung, Methoden (Softwareentwurfsmethoden) und Werkzeugen (Softwareentwicklungsumgebungen (SEU), CASE) bereitgestellt.','Prof. Dr. Peter Thies','13.02.2021', 50),(10000,' ','Internal');
-/*!40000 ALTER TABLE `customers` ENABLE KEYS */;
+/*!40000 ALTER TABLE `projects` DISABLE KEYS */;
+INSERT INTO `projects` VALUES (1,'Sofware for Monkeys','Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','13.02.2021', 50);
+/*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;

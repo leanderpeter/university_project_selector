@@ -13,13 +13,13 @@ export default class ProjektBO extends BusinessObject {
   `date` varchar(100) NOT NULL DEFAULT '',
   `max_subscriber` int(11) NOT NULL DEFAULT '0',
 	*/
-	constructor(_name, _description, _instructor, _date, _max_subscriber) {
+	constructor(aname, aprojektbeschreibung, abetreuer, astart, amax_teilnehmer) {
 		super();
-		this.name = _name;
-		this.description = _description;
-		this.instructor = _instructor;
-		this.date = _date;
-		this.max_subscriber = _max_subscriber;
+		this.name = aname;
+		this.description = aprojektbeschreibung;
+		this.instructor = abetreuer;
+		this.date = astart;
+		this.max_subscriber = amax_teilnehmer;
 	}
 
 	/*
@@ -32,8 +32,8 @@ export default class ProjektBO extends BusinessObject {
 	/*
 	Setze 
 	*/
-	setname(_name){
-		this.name = _name;  
+	setname(aname){
+		this.name = aname;  
 	}
 
 		/*
@@ -46,8 +46,8 @@ export default class ProjektBO extends BusinessObject {
 	/*
 	Setze description
 	*/
-	setdescription(_description){
-		this.description = _description;  
+	setdescription(aprojektbeschreibung){
+		this.description = aprojektbeschreibung;  
 	}
 
 		/*
@@ -60,8 +60,8 @@ export default class ProjektBO extends BusinessObject {
 	/*
 	Setze instructor
 	*/
-	setinstructor(_instructor){
-		this.instructor = _instructor;  
+	setinstructor(abetreuer){
+		this.instructor = abetreuer;  
 	}
 
 		/*
@@ -74,8 +74,8 @@ export default class ProjektBO extends BusinessObject {
 	/*
 	Setze date
 	*/
-	setdate(_date){
-		this.date = _date;  
+	setdate(astart){
+		this.date = astart;  
 	}
 
 		/*
@@ -88,8 +88,8 @@ export default class ProjektBO extends BusinessObject {
 	/*
 	Setze max_subscriber
 	*/
-	setmax_subscriber(_max_subscriber){
-		this.max_subscriber = _max_subscriber;  
+	setmax_subscriber(amax_teilnehmer){
+		this.max_subscriber = amax_teilnehmer;  
 	}
 	
 	/*
