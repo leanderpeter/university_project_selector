@@ -22,17 +22,19 @@ api = Api(app, version='1.0', title='electivApp API', description='Web App for c
 electivApp = api.namespace('electivApp', description='Functions of electivApp')
 
 bo = api.model('BusinessObject', {
-    'id': fields.Integer(attribute='_id', description='Unique identifier from every BO'),
+    'id': fields.Integer(attribute='_id', description='ID des BOs'),
     })
 
-person = api.inherit('Person', bo, {
-    'name': fields.String(attribute='_name', description='Name der Person'),
+nbo = api.inherit('NamedBusinessObject', bo, {
+    'name': fields.String(attribute='_name', description='Name des BOs'),
+    })
+
+person = api.inherit('Person', nbo, {
     'email': fields.String(attribute='_email', description='Email der Person'),
     'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID der Person')
     })
 
-projekt = api.inherit('Projekt', bo, {
-    'name': fields.String(attribute='_name', description='Name des Projekts'),
+projekt = api.inherit('Projekt', nbo, {
     'max_teilnehmer': fields.Integer(attribute='_max_teilnehmer', description='Maximale Anzahl an teilnehmern'),
     'beschreibung': fields.String(attribute='_beschreibung', description='Kurzbeschreibung des Projekts'),
     'betreuer': fields.String(attribute='_betreuer', description='Name des Betreuers'),
