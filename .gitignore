@@ -13,3 +13,6 @@ src/server/db/__pycache__/
 src/server/db/.ds_store
 frontend/http-fake-backend/
 node_modules
+
+.Settings.json
+.vscode\settings.json
