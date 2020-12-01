@@ -91,7 +91,7 @@ DEFAULT CHARACTER SET = utf8;
 
 LOCK TABLES `projekte` WRITE;
 /*!40000 ALTER TABLE `projekte` DISABLE KEYS */;
-INSERT INTO `projekte` VALUES (1232,'Sofware for Monkeys', 30, 'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch');
+INSERT INTO `projekte` VALUES (2,'Sofware for Monkeys', 30, 'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch'), (3,'Marketing for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch');
 /*!40000 ALTER TABLE `projekte` ENABLE KEYS */;
 UNLOCK TABLES;
 

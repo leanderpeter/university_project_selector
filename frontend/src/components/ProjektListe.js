@@ -64,6 +64,25 @@ class ProjektListe extends Component {
 		this.getProjekte();
 	}
 
+  onExpandedStateChange = projekt => {
+    //  Zum anfang Projekt Eintrag = null
+    let newID = null;
+
+    // Falls ein Objekt geclicket wird, collapse
+    if (projekt.getID() !== this.state.expandedProjektID) {
+      // Oeffnen mit neuer Projekt ID
+      newID = projekt.getID()
+    }
+    this.setState({
+      expandedProjektID: newID,
+    });
+
+  }
+
+  teilnahmeButtonClicked = event => {
+    //Logik fuer Teilnahme Button
+  }
+
 
 
 	/** Renders the component */
@@ -98,9 +117,7 @@ class ProjektListe extends Component {
           </Grid>
           <Grid item xs />
           <Grid item>
-            <Button variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.addCustomerButtonClicked}>
-              Projekt hinzufugen
-          </Button>
+            
           </Grid>
         </Grid>
         { 

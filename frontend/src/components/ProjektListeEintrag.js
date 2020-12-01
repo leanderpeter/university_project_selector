@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
 import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import AddIcon from '@material-ui/icons/Add';
 /*
 import CustomerForm from './dialogs/CustomerForm';
 import CustomerDeleteDialog from './dialogs/CustomerDeleteDialog';
@@ -69,6 +70,22 @@ class ProjektListeEintrag extends Component {
 		// MORE CODE!
 	}
 
+	teilnahmeButtonClicked = event => {
+    	//Logik fuer Teilnahme Button
+    	    var count = 1;
+	    	function setColor(btn, color) {
+		        var property = document.getElementById(btn);
+		        if (count == 0) {
+		            property.style.backgroundColor = "#FFFFFF"
+		            count = 1;        
+		        }
+		        else {
+		            property.style.backgroundColor = "#7FFF00"
+		            count = 0;
+		        }
+    }
+	}
+
 	/** Renders the component */
   render() {
     const { classes, expandedState } = this.props;
@@ -85,11 +102,26 @@ class ProjektListeEintrag extends Component {
           >
             <Grid container spacing={1} justify='flex-start' alignItems='center'>
               <Grid item>
-                <Typography variant='body1' className={classes.heading}>{projekt.getname()}
+                <Typography variant='body1' className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()} </Typography> <Typography variant='body1' color={'success.main'}> {projekt.getmax_teilnehmer()}/0 Plätze besetzt
                 </Typography>
               </Grid>
+              <Grid item xs />
+              <Grid item>
+              	<Typography variant='body2' color={'textSecondary'}>Details</Typography>
+            	</Grid>
             </Grid>
           </AccordionSummary>
+          <AccordionDetails>
+            <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
+            <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
+            
+          </AccordionDetails>
+          <AccordionDetails>
+          <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked}>
+          Teilnahme
+        </Button>
+            
+          </AccordionDetails>
         </Accordion>
               
       </div>
@@ -101,6 +133,11 @@ class ProjektListeEintrag extends Component {
 const styles = theme => ({
   root: {
     width: '100%',
+  },
+  teilnahmeButton: {
+    position: 'absolute',
+    right: theme.spacing(3),
+    bottom: theme.spacing(0),
   }
 });
 
