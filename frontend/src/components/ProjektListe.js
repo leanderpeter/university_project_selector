@@ -79,9 +79,7 @@ class ProjektListe extends Component {
 
   }
 
-  teilnahmeButtonClicked = event => {
-    //Logik fuer Teilnahme Button
-  }
+
 
 
 
