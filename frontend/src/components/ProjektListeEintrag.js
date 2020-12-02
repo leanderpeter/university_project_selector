@@ -4,6 +4,7 @@ import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, 
 import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
+import { ElectivAPI } from '../api';
 /*
 import CustomerForm from './dialogs/CustomerForm';
 import CustomerDeleteDialog from './dialogs/CustomerDeleteDialog';
@@ -68,6 +69,21 @@ class ProjektListeEintrag extends Component {
 	// Handles Close event of Projektdeletedialog
 	deleteProjektDialogClosed = (projekt) => {
 		// MORE CODE!
+	}
+	setTeilnahmeAnProjekt = () => {
+		ElectivAPI.getAPI().getProjekte()
+      .then(projekteBOs =>
+				this.setState({								//neuer status wenn fetch komplett
+					projekte: projekteBOs,
+					filteredProjekte: [...projekteBOs],		//speicher eine kopie
+					loadingInProgress: false,				// deaktiviere ladeindikator
+          error: null,
+				})).catch(e =>
+					this.setState({
+						projekte: [],
+						loadingInProgress: false,
+						error: e
+          }));
 	}
 
 	teilnahmeButtonClicked = event => {

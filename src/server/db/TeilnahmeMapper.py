@@ -75,9 +75,30 @@ class TeilnahmeMapper(Mapper):
         """Reads a tuple with a given ID"""
         pass
 
-    def insert(self):
-        """Add the given object to the database"""
-        pass
+    def insert(self, teilnahme):
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT MAX(id) AS maxid FROM teilnahmen ")
+        tuples = cursor.fetchall()
+        """TODO User autoincrement"""
+        for (maxid) in tuples:
+            if maxid[0] is not None:
+                """Wenn wir eine maximale ID festellen konnten, zählen wir diese
+                um 1 hoch und weisen diesen Wert als ID dem User-Objekt zu."""
+                teilnahme.set_id(maxid[0] + 1)
+            else:
+                """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
+                davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
+                teilnahme.set_id(1)
+
+        command = "INSERT INTO teilnahmen (id, lehrangebot, teilnehmer) VALUES (%s,%s,%s)"
+
+        data = (teilnahme.get_id(), teilnahme.get_lehrangebot(), teilnahme.get_teilnehmer())
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+        return teilnahme
 
     def update(self):
         """Update an already given object in the DB"""
