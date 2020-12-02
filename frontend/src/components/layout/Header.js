@@ -5,8 +5,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import ProfileDropDown from '../dialogs/ProfileDropDown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCog} from '@fortawesome/free-solid-svg-icons';
-import SettingsIcon from '@material-ui/icons/Settings';
-
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 
 class Header extends Component {
@@ -57,7 +56,7 @@ class Header extends Component {
               <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'} />
               <Tab label='Projektverwaltung' component={RouterLink} to={`/projektverwaltung`} />
               <Tab label='Über Uns' component={RouterLink} to={`/about`} />
-              <Tab icon={<SettingsIcon/>}component={RouterLink} to={`/berechtigung`}/>
+              <Tab icon={<ExitToAppIcon/>}component={RouterLink} to={`/rolesignin`}/>
               
             </Tabs>
             : null

@@ -9,6 +9,7 @@ import ProjektListe from './components/ProjektListe';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
+import RoleSignIn from './components/pages/RoleSignIn';
 import Berechtigung from './components/pages/Berechtigung';
 import MeineProjekteEintrag from './components/MeineProjekteEintrag';
 import LoadingProgress from './components/dialogs/LoadingProgress';
@@ -106,7 +107,10 @@ class App extends React.Component {
               // is the user signed in?
               currentUser ?
                 <>
-                  <Redirect from='/' to='projekte' />
+                  <Redirect from='/' to='rolesignin' />
+                  <Route path='/rolesignin' component ={RoleSignIn}>
+                    <RoleSignIn />
+                  </Route>
                   <Route path='/projekte' component ={ProjektListe}>
                     <ProjektListe />
                   </Route>

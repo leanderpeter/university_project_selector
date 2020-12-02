@@ -1,7 +1,8 @@
-{/*
 import React from 'react'
-import {TextField,InputLabel, FormControl,Select, MenuItem,Tab,makeStyles, Paper, Typography, Link, Grid, Card, CardMedia, CardContent, Collapse, CardHeader, Button, } from '@material-ui/core';
+import {withStyles,TextField,InputLabel, FormControl,Select, MenuItem,Tab,makeStyles, Paper, Typography, Link, Grid, Card, CardMedia, CardContent, Collapse, CardHeader, Button, } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';  
+import PropTypes from 'prop-types';
+import { Component } from 'react';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,12 +27,13 @@ const rolle=[{value:"Student"},{value:"Dozent"}, {value:"Admin"},];
 
 
 
-function Berechtigung() {
 
-  const classes = useStyles();
+function RoleSignIn() {
 
-  return (
-    <Paper elevation={0} className={classes.root} style={{display:"flex",align:'center',margin:'auto'}}>
+	const classes = useStyles();
+  
+	return (
+				<Paper elevation={0} className={classes.root} style={{display:"flex",align:'center',margin:'auto'}}>
       <div className={classes.content}>
       <div >
                 <img style={{width: '80%'}}
@@ -71,8 +73,12 @@ function Berechtigung() {
       
       </div>
     </Paper>
-  )
-}
+		)
+	}
 
-export default Berechtigung;
-*/}
+
+
+
+
+
+export default RoleSignIn
