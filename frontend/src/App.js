@@ -120,8 +120,8 @@ class App extends React.Component {
                 </>
             }
             <LoadingProgress show={authLoading} />
-            <ContextErrorMessage error={authError} contextErrorMsg={`Something went wrong during sighn in process.`} onReload={this.handleSignIn} />
-            <ContextErrorMessage error={appError} contextErrorMsg={`Something went wrong inside the app. Please reload the page.`} />
+            <ContextErrorMessage error={authError} contextErrorMsg={`Something went wrong during signIn process.`} onReload={this.handleSignIn} />
+            <ContextErrorMessage error={appError} contextErrorMsg={`Doh! Something went wrong inside the app. Please reload the page.`} />
           </Container>
         </Router>
       </ThemeProvider>

@@ -54,7 +54,7 @@ projekt = api.inherit('Projekt', nbo, {
 
 class ProjektListeOperationen(Resource):
     @electivApp.marshal_list_with(projekt)
-    @secured
+    # @secured
 
     def get(self):
         adm = ProjektAdministration()
