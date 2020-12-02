@@ -71,25 +71,14 @@ class ProjektListeEintrag extends Component {
 		// MORE CODE!
 	}
 	setTeilnahmeAnProjekt = () => {
-		ElectivAPI.getAPI().getProjekte()
-      .then(projekteBOs =>
-				this.setState({								//neuer status wenn fetch komplett
-					projekte: projekteBOs,
-					filteredProjekte: [...projekteBOs],		//speicher eine kopie
-					loadingInProgress: false,				// deaktiviere ladeindikator
-          error: null,
-				})).catch(e =>
-					this.setState({
-						projekte: [],
-						loadingInProgress: false,
-						error: e
-          }));
+
 	}
 
 	teilnahmeButtonClicked = event => {
     	//Logik fuer Teilnahme Button
     	console.log("Teilnehmen!!");
     	console.log(this.props.projekt.id);
+    	ElectivAPI.getAPI().setTeilnahme();
 	}
 
 	/** Renders the component */

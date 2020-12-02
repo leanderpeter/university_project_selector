@@ -24,6 +24,8 @@ export default class ElectivAPI {
 	//meine Projekte anzeigen
 	#getMeineProjekteURL = (id) => `${this.#ElectivServerBaseURL}/meineprojekte/${id}`;
 
+    #putTeilnahmeURL = (lehrangebotId,teilnehmerId) => `${this.#ElectivServerBaseURL}/teilnahme?lehrangebotId=${lehrangebotId}&teilnehmerId=${teilnehmerId}`;
+
 	/*
 	Singleton/Einzelstuck instanz erhalten
 	*/
@@ -50,7 +52,7 @@ export default class ElectivAPI {
 	Gebe alle Projekt BO's zuruck
 	*/
 	getProjekte() {
-		return this.#fetchAdvanced(this.#getProjekteURL()).then((responseJSON) => {
+		return this.#fetchAdvanced(this.#getProjekteURL(),{method: 'GET'}).then((responseJSON) => {
 			let projektBOs = ProjektBO.fromJSON(responseJSON);
 			console.info(projektBOs)
 			return new Promise(function (resolve){
@@ -65,6 +67,17 @@ export default class ElectivAPI {
 
 	deleteProjekt(){
 		//USW
+	}
+
+	setTeilnahme(){
+
+         return this.#fetchAdvanced(this.#putTeilnahmeURL("3","1"),{method: 'PUT'}).then((responseJSON) => {
+
+		})
+
+
+
+
 	}
 
 
