@@ -134,8 +134,8 @@ class TeilnahmeOperationen(Resource):
     def put(self):
         lehrangebotId = request.args.get("lehrangebotId")
         teilnehmerId= request.args.get("teilnehmerId")
-        teilNahmeAdministration = TeilnahmeAdministration()
-        teilNahmeAdministration.create_teilnahme(lehrangebotId,teilnehmerId)
+        teilnahmeAdministration = TeilnahmeAdministration()
+        teilnahmeAdministration.create_teilnahme(lehrangebotId,teilnehmerId)
 
 
 class BewertungOperationen(Resource):

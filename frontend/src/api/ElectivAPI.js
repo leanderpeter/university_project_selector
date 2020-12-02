@@ -69,9 +69,9 @@ export default class ElectivAPI {
 		//USW
 	}
 
-	setTeilnahme(){
-
-         return this.#fetchAdvanced(this.#putTeilnahmeURL("3","1"),{method: 'PUT'}).then((responseJSON) => {
+	setTeilnahme(lehrangebotId){
+        //TODO Set User ID
+         return this.#fetchAdvanced(this.#putTeilnahmeURL(lehrangebotId,"1"),{method: 'PUT'}).then((responseJSON) => {
 
 		})
 

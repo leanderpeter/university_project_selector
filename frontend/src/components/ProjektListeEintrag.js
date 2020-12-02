@@ -76,9 +76,7 @@ class ProjektListeEintrag extends Component {
 
 	teilnahmeButtonClicked = event => {
     	//Logik fuer Teilnahme Button
-    	console.log("Teilnehmen!!");
-    	console.log(this.props.projekt.id);
-    	ElectivAPI.getAPI().setTeilnahme();
+    	ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id);
 	}
 
 	/** Renders the component */
