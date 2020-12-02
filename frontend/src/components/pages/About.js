@@ -28,19 +28,7 @@ function About() {
       <div className={classes.content}>
 
       
-      <Typography variant='h4' style={{textAlign: "center"}}>Hochschule der Medien
-      </Typography>
-    <Card className={classes.root}>
       
-      <img style={{margin:"auto",display: "flex",marginTop:"0%",width:"80%" }}src="https://www.hdm-stuttgart.de/news/news20200414121003/thumbstart" />
-    
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-        Die Hochschule der Medien (HdM) ist eine staatliche Fachhochschule mit Sitz in Stuttgart. Fast 30 akkreditierte Bachelor- und Masterstudiengänge stehen zur Auswahl: vom Druck über audiovisuelle Medien, Informationsmanagement und Informatik, Werbung oder Medienproduktion bis hin zur Medienwirtschaft und Verpackungstechnik.
-        </Typography>
-      </CardContent>
-      <Button style={{margin:"auto", display:"flex",backgroundColor:"red"}} variant="contained" color="secondary"> <a style={{color:"white"}}href="https://www.hdm-stuttgart.de/">Visit Website</a></Button>
-      </Card>
 
       <Paper>
       <Typography variant='h4' style={{textAlign: "center", marginBottom:"3%", marginTop:"5%"}}>Unser Team
@@ -174,11 +162,25 @@ function About() {
         <Button style={{backgroundColor:"#cfdc00",display: "flex", margin:"auto",marginBottom:"5%"}} variant="contained" > <a style={{color:"#026466"}}href="https://www.xing.com/profile/Pascal_Gienger2/cv">Xing Profile</a></Button>
       
       </Card>
+      
       </Paper>
       </Grid>
       
       </React.Fragment>
       </Grid>
+      <Typography variant='h4' style={{textAlign: "center"}}>Unsere Bildungseinrichtung
+      </Typography>
+    <Card className={classes.root}>
+      
+      <img style={{margin:"auto",display: "flex",marginTop:"0%",width:"80%" }}src="https://www.hdm-stuttgart.de/news/news20200414121003/thumbstart" />
+    
+      <CardContent>
+        <Typography variant="body2" color="textSecondary" component="p">
+        Die Hochschule der Medien (HdM) ist eine staatliche Fachhochschule mit Sitz in Stuttgart. Fast 30 akkreditierte Bachelor- und Masterstudiengänge stehen zur Auswahl: vom Druck über audiovisuelle Medien, Informationsmanagement und Informatik, Werbung oder Medienproduktion bis hin zur Medienwirtschaft und Verpackungstechnik.
+        </Typography>
+      </CardContent>
+      <Button style={{margin:"auto", display:"flex",backgroundColor:"red"}} variant="contained" color="secondary"> <a style={{color:"white"}}href="https://www.hdm-stuttgart.de/">Visit Website</a></Button>
+      </Card>
       </Paper>
 
       

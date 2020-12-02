@@ -9,10 +9,13 @@ import ProjektListe from './components/ProjektListe';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
+import Berechtigung from './components/pages/Berechtigung';
 import MeineProjekteEintrag from './components/MeineProjekteEintrag';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
+
+
 
 /*
 Main page of the electivApp. First firebase to verify users. Then routing to the pages via react-router-dom
@@ -111,6 +114,7 @@ class App extends React.Component {
 
                   <Route path='/meineprojekte' component={MeineProjekteEintrag}>
                   </Route>
+                  <Route path='/Berechtigung' component={Berechtigung} />
                 </>
                 :
                 // if not signed in show sign in page
