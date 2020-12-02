@@ -67,5 +67,15 @@ export default class ElectivAPI {
 		//USW
 	}
 
+	
+	getMeineProjekte(studentID){
+		return this.#fetchAdvanced(this.#getMeineProjekteURL(studentID)).then((responseJSON) => {
+			let projektBOs = ProjektBO.fromJSON(responseJSON);
+			console.info(projektBOs)
+			return new Promise(function (resolve){
+				resolve(projektBOs)
+			})
+		})
+	}
 
 }

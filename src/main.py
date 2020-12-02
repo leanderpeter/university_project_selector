@@ -80,6 +80,7 @@ class ProjektListeOperationen(Resource):
 
 class MeineProjektListeOperationen(Resource):
     @electivApp.marshal_list_with(projekt)
+    @secured
 
     def get(self, id):
         adm = ProjektAdministration()
