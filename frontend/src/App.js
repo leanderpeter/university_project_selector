@@ -107,10 +107,7 @@ class App extends React.Component {
               // is the user signed in?
               currentUser ?
                 <>
-                  <Redirect from='/' to='rolesignin' />
-                  <Route path='/rolesignin' component ={RoleSignIn}>
-                    <RoleSignIn />
-                  </Route>
+                  
                   <Route path='/projekte' component ={ProjektListe}>
                     <ProjektListe />
                   </Route>
@@ -125,6 +122,7 @@ class App extends React.Component {
                 <>
                   <Redirect to='/index.html' />
                   <SignIn onSignIn={this.handleSignIn} />
+                  
                 </>
             }
             <LoadingProgress show={authLoading} />

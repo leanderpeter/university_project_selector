@@ -56,7 +56,10 @@ class Header extends Component {
               <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'} />
               <Tab label='Projektverwaltung' component={RouterLink} to={`/projektverwaltung`} />
               <Tab label='Über Uns' component={RouterLink} to={`/about`} />
+
+              {/*Das folgende wäre eine Zurückfunktion zum Logout zu den Rollen
               <Tab icon={<ExitToAppIcon/>}component={RouterLink} to={`/rolesignin`}/>
+              */}
               
             </Tabs>
             : null
