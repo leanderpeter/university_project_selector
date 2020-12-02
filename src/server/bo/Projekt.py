@@ -130,6 +130,25 @@ class Projekt(NamedBusinessObject, Automat):
         '''Create and return simple string of the BO'''
         return "Projekt: {},{},{},{},{},{},{},{},{},{},{},{},{}".format(self.get_id(), self.get_name(),self._max_teilnehmer, self._projektbeschreibung, self._betreuer, self._externer_partner, self._woechentlich, self._anzahl_block_vor, self._anzahl_block_in, self._praeferierte_block, self._bes_raum, self._raum,self._sprache )
 
+    def to_dict(self):
+        """Umwandeln Projekt() in ein Python dict()"""
+        result = {
+            "id": self.get_id(),
+            "name": self.get_name(),
+            "max_teilnehmer": self.get_max_teilnehmer(),
+            "beschreibung": self.get_projektbeschreibung(),
+            "betreuer": self.get_betreuer(),
+            "externer_partner": self.get_externer_partner(),
+            "woechentlich": self.get_woechentlich(),
+            "anzahl_block_vor": self.get_anzahl_block_vor(),
+            "anzahl_block_in": self.get_anzahl_block_in(),
+            "praeferierte_block": self.get_praeferierte_block(),
+            "bes_raum": self.get_bes_raum(),
+            "raum": self.get_raum(),
+            "sprache": self.get_sprache()
+        }
+        return result
+
     @staticmethod
     def from_dict(dictionary=dict()):
         '''dict() -> projekt'''
@@ -148,3 +167,4 @@ class Projekt(NamedBusinessObject, Automat):
         obj.set_raum(dictionary["raum"])
         obj.set_sprache(dictionary["sprache"])
         return obj
+
