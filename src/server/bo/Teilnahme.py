@@ -10,11 +10,11 @@ class Teilnahme(BusinessObject):
         self._lehrangebot = None
         self._anrechnung = None
 
-    def get_lehrangebot(self, ):
-        pass
+    def get_lehrangebot(self):
+        return self._lehrangebot
 
-    def set_lehrangebot(self, projekt):
-        pass
+    def set_lehrangebot(self, lehrangebot):
+        self._lehrangebot = lehrangebot
 
     def get_teilnehmer(self, ):
         pass

@@ -5,25 +5,19 @@ from server.bo.Person import Person
 
 class Student(Person):
     def __init__(self):
+        super().__init__()
         self._mat_nr = None
         self._kuerzel = None
-        self._partizipation = []
 
-    def get_mat_nr(self, ):
-        pass
+    def get_mat_nr(self):
+        return self._mat_nr
 
     def set_mat_nr(self, matnr):
-        pass
+        self._mat_nr = matnr
 
-    def get_kuerzel(self, ):
-        pass
+    def get_kuerzel(self):
+        return self._kuerzel
 
     def set_kuerzel(self, kuerzel):
-        pass
-
-    def get_partizipation(self, ):
-        pass
-
-    def set_partizipation(self, teilnahmen):
-        pass
+        self._kuerzel = kuerzel
 
