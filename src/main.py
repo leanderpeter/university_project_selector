@@ -42,10 +42,10 @@ student = api.inherit('Student', person, {
 
 projekt = api.inherit('Projekt', nbo, {
     'max_teilnehmer': fields.Integer(attribute='_max_teilnehmer', description='Maximale Anzahl an teilnehmern'),
-    'beschreibung': fields.String(attribute='_beschreibung', description='Kurzbeschreibung des Projekts'),
+    'beschreibung': fields.String(attribute='_projektbeschreibung', description='Kurzbeschreibung des Projekts'),
     'betreuer': fields.String(attribute='_betreuer', description='Name des Betreuers'),
     'externer_partner': fields.String(attribute='_externer_partner', description='Name des externen Partners'),
-    'woechentlich': fields.Boolean(attribute='_wochentlich', description='Bool ob das Projekt oeffentlich stattfindet'),
+    'woechentlich': fields.Boolean(attribute='_woechentlich', description='Bool ob das Projekt oeffentlich stattfindet'),
     'anzahl_block_vor': fields.Integer(attribute='_anzahl_block_vor', description='Anzahl Blocktage vor der Vorlesungszeit'),
     'anzahl_block_in': fields.Integer(attribute='_anzahl_block_in', description='Anzahl Blocktage in der Vorlesungszeit'),
     'praeferierte_block': fields.String(attribute='_ praeferierte_block', description=' Praeferierte Blocktage'),
