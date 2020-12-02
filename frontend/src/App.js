@@ -40,18 +40,6 @@ class App extends React.Component {
   }
   
 
-  //Mail des eingeloggten Users in userMail speichern
-  getUserMail = () => {
-        var currentUser = firebase.auth().currentUser;
-        currentUser.providerData.forEach(function (profile) {
-          var mail = profile.email;
-          this.setState({
-            userMail: mail
-          });
-          console.log('MAIL2:',profile.email)
-        });
-      }
-
   // handles all user login states with firebase
   handleAuthStateChange = user => {
     if (user) {
@@ -86,7 +74,6 @@ class App extends React.Component {
         authLoading: false
       });
     }
-    this.getUserMail();
   }
 
  
@@ -126,7 +113,7 @@ class App extends React.Component {
                   </Route>
                   <Route path='/about' component={About} />
 
-                  <Route path='/meineprojekte' component={MeineProjekte} userMail={userMail}>
+                  <Route path='/meineprojekte' component={MeineProjekte}>
                   </Route>
                 </>
                 :
