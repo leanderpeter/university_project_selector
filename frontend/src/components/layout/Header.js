@@ -52,7 +52,8 @@ class Header extends Component {
                         alt="Hdm Logo"
                         align="left"
                     />
-              <Tab label='Projects' component={RouterLink} to={``} />
+              
+              <Tab label='Projekte' component={RouterLink} to={`/projekte`} />
               <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'} />
               <Tab label='Projektverwaltung' component={RouterLink} to={`/projektverwaltung`} />
               <Tab label='Über Uns' component={RouterLink} to={`/about`} />
