@@ -49,20 +49,20 @@ def secured(function):
 					email = claims.get("email")
 					name = claims.get("name")
 
-					user = adm.get_user_by_google_user_id(google_user_id)
-					if user is not None:
+					student = adm.get_student_by_google_user_id(google_user_id)
+					if student is not None:
 						''' 
 						User is already in the system but some variation in the variables have occured.
 						To prevent corrupt data or errors we update the data from the user.
 						'''
-						user.set_name(name)
-						user.set_email(email)
-						adm.save_user(user)
+						student.set_name(name)
+						student.set_email(email)
+						adm.save_student(student)
 					else:
 						'''
 						System dont know the user -> user object is created and saved into the DB
 						'''
-						user = adm.create_user(name, email, google_user_id)
+						student = adm.create_student(name, email, google_user_id)
 					print(request.method, request.path, 'asked by:', name, email)
 
 					objects = function(*args, **kwargs)

@@ -13,10 +13,10 @@ class ProjektMapper(Mapper):
 
 		result = []
 		cursor = self._connection.cursor()
-		cursor.execute("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache from projekte")
+		cursor.execute("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent from projekte")
 		tuples = cursor.fetchall()
 
-		for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache) in tuples:
+		for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) in tuples:
 			projekt = Projekt()
 			projekt.set_id(id)
 			projekt.set_name(name)
@@ -31,6 +31,7 @@ class ProjektMapper(Mapper):
 			projekt.set_bes_raum(bes_raum)
 			projekt.set_raum(raum)
 			projekt.set_sprache(sprache)
+			projekt.set_dozent(dozent)
 			result.append(projekt)
 			
 		self._connection.commit()
@@ -43,11 +44,11 @@ class ProjektMapper(Mapper):
 	
 		cursor = self._connection.cursor()
 
-		command = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache FROM projekte WHERE id={}").format(id)
+		command = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent FROM projekte WHERE id={}").format(id)
 		cursor.execute(command)
 		tuples = cursor.fetchall()
 
-		for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache) in tuples:
+		for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) in tuples:
 			projekt = Projekt()
 			projekt.set_id(id)
 			projekt.set_name(name)
@@ -62,6 +63,7 @@ class ProjektMapper(Mapper):
 			projekt.set_bes_raum(bes_raum)
 			projekt.set_raum(raum)
 			projekt.set_sprache(sprache)
+			projekt.set_dozent(dozent)
 
 		self._connection.commit()
 		cursor.close()

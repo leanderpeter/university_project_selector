@@ -31,11 +31,11 @@ class TeilnahmeMapper(Mapper):
         return result
         
 
-    def find_by_user_id(self, user_id):
+    def find_by_student_id(self, student_id):
         """ Findet alle Teilnahmen für eine bestimmte user_id"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id,lehrangebot, teilnehmer FROM teilnahmen WHERE teilnehmer={}".format(user_id) 
+        command = "SELECT id,lehrangebot, teilnehmer FROM teilnahmen WHERE teilnehmer={}".format(student_id) 
         cursor.execute(command)
         tuples = cursor.fetchall()
 

@@ -8,6 +8,7 @@ from flask_restx import Api, Resource, fields
 #Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.ProjektAdministration import ProjektAdministration
 from server.bo.Person import Person
+from server.bo.Student import Student
 from server.bo.Projekt import Projekt
 from SecurityDecorator import secured
 
@@ -34,6 +35,11 @@ person = api.inherit('Person', nbo, {
     'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID der Person')
     })
 
+student = api.inherit('Student', person, {
+    'mat_nr': fields.Integer(attribute='_mat_nr', description='Die Matrikelnummer des Studenten'),
+    'kuerzel': fields.String(attribute='_kuerzel', description='Kuerzel des Studenten')
+    })
+
 projekt = api.inherit('Projekt', nbo, {
     'max_teilnehmer': fields.Integer(attribute='_max_teilnehmer', description='Maximale Anzahl an teilnehmern'),
     'beschreibung': fields.String(attribute='_beschreibung', description='Kurzbeschreibung des Projekts'),
@@ -45,7 +51,8 @@ projekt = api.inherit('Projekt', nbo, {
     'praeferierte_block': fields.String(attribute='_ praeferierte_block', description=' Praeferierte Blocktage'),
     'bes_raum': fields.Boolean(attribute='_bes_raum', description='Bool ob ein besonderer Raum notwendig ist'),
     'raum': fields.String(attribute='_raum', description='Raum des Projekts'),
-    'sprache': fields.String(attribute='_sprache', description='Sprache des Projekts')
+    'sprache': fields.String(attribute='_sprache', description='Sprache des Projekts'),
+    'dozent': fields.Integer(attribute= '_dozent', description='Der Dozent des Projekts')
 })
 
 
@@ -76,7 +83,7 @@ class MeineProjektListeOperationen(Resource):
 
     def get(self, id):
         adm = ProjektAdministration()
-        teilnahmen = adm.get_teilnahmen_von_person(id)
+        teilnahmen = adm.get_teilnahmen_von_student(id)
         projekte = adm.get_projekte_von_teilnahmen(teilnahmen)
         return projekte
         
