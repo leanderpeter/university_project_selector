@@ -20,6 +20,10 @@ export default class ElectivAPI {
 	//delete
 	#searchProjektURL = (projektname) => `${this.#ElectivServerBaseURL}/projekte_by_name/${projektname}`;
 
+
+	//meine Projekte anzeigen
+	#getMeineProjekteURL = (id) => `${this.#ElectivServerBaseURL}/meineprojekte/${id}`;
+
 	/*
 	Singleton/Einzelstuck instanz erhalten
 	*/
