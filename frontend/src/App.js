@@ -9,8 +9,6 @@ import ProjektListe from './components/ProjektListe';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
-import RoleSignIn from './components/pages/RoleSignIn';
-import Berechtigung from './components/pages/Berechtigung';
 import MeineProjekteEintrag from './components/MeineProjekteEintrag';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
@@ -107,6 +105,7 @@ class App extends React.Component {
               // is the user signed in?
               currentUser ?
                 <>
+                  <Redirect from='/' to='projekte' />
                   
                   <Route path='/projekte' component ={ProjektListe}>
                     <ProjektListe />
@@ -115,7 +114,6 @@ class App extends React.Component {
 
                   <Route path='/meineprojekte' component={MeineProjekteEintrag}>
                   </Route>
-                  <Route path='/Berechtigung' component={Berechtigung} />
                 </>
                 :
                 // if not signed in show sign in page

@@ -80,12 +80,13 @@ class SignIn extends Component {
                         />      
 				<Grid container justify='center'>
 					<Grid item>
-					<Button style={{marginTop:"15%",marginBottom:"3%"}}variant='contained' color='primary' onClick={this.handleSignInButtonClicked}>
+					<Button style={{marginTop:"15%",marginBottom:"-9%"}}variant='contained' color='primary' onClick={this.handleSignInButtonClicked}>
 							Sign in with Google
       				</Button>
 					</Grid>
 				</Grid>         
                 </CardContent>
+			
 
             </Card>
 			</div>
