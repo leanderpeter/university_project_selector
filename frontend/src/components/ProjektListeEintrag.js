@@ -28,7 +28,6 @@ class ProjektListeEintrag extends Component {
 			projekt: props.projekt,
 			showProjektForm: false,
 			showProjektDeleteDialog: false
-
 		};
 	}
 
@@ -76,7 +75,7 @@ class ProjektListeEintrag extends Component {
 
 	teilnahmeButtonClicked = event => {
     	//Logik fuer Teilnahme Button
-    	ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id);
+    	ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
 	}
 
 	/** Renders the component */

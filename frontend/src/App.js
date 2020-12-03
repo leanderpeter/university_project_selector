@@ -12,6 +12,7 @@ import SignIn from './components/pages/SignIn';
 import MeineProjekte from './components/MeineProjekte';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
+import ElectivAPI from './api/ElectivAPI';
 import firebaseConfig from './firebaseconfig';
 
 /*
@@ -29,6 +30,7 @@ class App extends React.Component {
       appError: null,
       authError: null,
       authLoading: false,
+      currentStudent: null,
     };
   }
   // creating error boundry. receiving all errors below the component tree
@@ -41,6 +43,7 @@ class App extends React.Component {
   // handles all user login states with firebase
   handleAuthStateChange = user => {
     if (user) {
+      console.log('ich werde aufgerufen')
       this.setState({
         authLoading: true, 
       });
@@ -55,7 +58,8 @@ class App extends React.Component {
           currentUser: user,
           authError: null,
           authLoading: false
-        });
+        })}).then(() => {
+        this.getStudent()
       }).catch(e => {
         this.setState({
           authError: e,
@@ -83,6 +87,30 @@ class App extends React.Component {
     firebase.auth().signInWithRedirect(provider);
   }
 
+    //aktuell eingeloggten Student vom Backend abfragen
+  getStudent = () => {
+    ElectivAPI.getAPI().getStudent(this.state.currentUser.uid)
+        .then(studentBO =>
+            this.setState({
+                currentStudent: studentBO,
+                error: null,
+                loadingInProgress: false,
+            })
+            ).catch(e =>
+                this.setState({
+                    student: null,
+                    error: e,
+                    loadingInProgress: false,
+                }));
+        this.setState({
+            error: null,
+            loadingInProgress: true
+        });
+    }  
+
+
+
+
   // lifecycle method
   componentDidMount() {
     firebase.initializeApp(firebaseConfig);
@@ -91,7 +119,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { currentUser, appError, authError, authLoading } = this.state;
+    const { currentUser, appError, authError, authLoading, currentStudent } = this.state;
 
     return (
       <ThemeProvider theme={Theme}>
@@ -106,12 +134,12 @@ class App extends React.Component {
                 <>
                   <Redirect from='/' to='projekte' />
                   <Route path='/projekte' component ={ProjektListe}>
-                    <ProjektListe />
+                    <ProjektListe currentStudent={currentStudent}/>
                   </Route>
                   <Route path='/about' component={About} />
 
                   <Route path='/meineprojekte' component={MeineProjekte}>
-                    <MeineProjekte currentUser={currentUser}/>
+                    <MeineProjekte currentStudent={currentStudent}/>
                   </Route>
                 </>
                 :

@@ -61,34 +61,11 @@ class MeineProjekte extends Component {
             expandedProjektID: expandedID,
         };
     }
-    
-    //aktuell eingeloggten Student vom Backend abfragen
-    getProjekteVonStudent = () => {
-        ElectivAPI.getAPI().getStudent(this.props.currentUser.uid)
-            .then(studentBO =>
-                this.setState({
-                    student: studentBO,
-                    error: null,
-                    loadingInProgress: false,
-                })).then(() =>
-                   this.getMeineProjekte()
-                ).catch(e =>
-                    this.setState({
-                        student: null,
-                        error: e,
-                        loadingInProgress: false,
-                    }));
-            this.setState({
-                error: null,
-                loadingInProgress: true
-            });
-    }
-
 
 
     // API Anbindung um Projekte vom Backend zu bekommen 
     getMeineProjekte = () => {
-            ElectivAPI.getAPI().getMeineProjekte(this.state.student.getID())
+            ElectivAPI.getAPI().getMeineProjekte(this.props.currentStudent.id)
             .then(projekteBOs =>
                 this.setState({
                     projekte: projekteBOs,
@@ -107,7 +84,7 @@ class MeineProjekte extends Component {
     }
 
     componentDidMount() {
-        this.getProjekteVonStudent();
+        this.getMeineProjekte();
     }
 
     onExpandedStateChange = projekt => {
@@ -127,11 +104,12 @@ class MeineProjekte extends Component {
 
     render(){
 
-        const { classes } = this.props;
-        const { projekte, student, expandedProjektID, error, loadingInProgress} = this.state;
+        const { classes, currentStudent } = this.props;
+        const { projekte, expandedProjektID, error, loadingInProgress} = this.state;
         
         return(
             <div className={classes.root}>
+                <Typography>Projekte von {currentStudent.getname()}, Matrikelnummer: {currentStudent.getmat_nr()}</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="customized table">
                         <TableHead>
