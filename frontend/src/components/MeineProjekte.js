@@ -45,8 +45,7 @@ class MeineProjekte extends Component {
 
     constructor(props){
         super(props);
-    
-        console.log(props,'Das sind die props von Meineprojekte')
+
         let expandedID = null;
 
         if (this.props.location.expandProjekt){
@@ -56,17 +55,40 @@ class MeineProjekte extends Component {
 
         this.state = {
             projekte : [],
+            student: null,
             error: null,
             loadingInProgress: false, 
             expandedProjektID: expandedID,
         };
-    }   
+    }
+    
+    //aktuell eingeloggten Student vom Backend abfragen
+    getProjekteVonStudent = () => {
+        ElectivAPI.getAPI().getStudent(this.props.currentUser.uid)
+            .then(studentBO =>
+                this.setState({
+                    student: studentBO,
+                    error: null,
+                    loadingInProgress: false,
+                })).then(() =>
+                   this.getMeineProjekte()
+                ).catch(e =>
+                    this.setState({
+                        student: null,
+                        error: e,
+                        loadingInProgress: false,
+                    }));
+            this.setState({
+                error: null,
+                loadingInProgress: true
+            });
+    }
+
 
 
     // API Anbindung um Projekte vom Backend zu bekommen 
     getMeineProjekte = () => {
-        console.log(this.props.user, 'hier ist getmeineprojekte()')
-        ElectivAPI.getAPI().getMeineProjekte(2)
+            ElectivAPI.getAPI().getMeineProjekte(this.state.student.getID())
             .then(projekteBOs =>
                 this.setState({
                     projekte: projekteBOs,
@@ -85,7 +107,7 @@ class MeineProjekte extends Component {
     }
 
     componentDidMount() {
-        this.getMeineProjekte();
+        this.getProjekteVonStudent();
     }
 
     onExpandedStateChange = projekt => {
@@ -106,7 +128,7 @@ class MeineProjekte extends Component {
     render(){
 
         const { classes } = this.props;
-        const { projekte, expandedProjektID, error, loadingInProgress} = this.state;
+        const { projekte, student, expandedProjektID, error, loadingInProgress} = this.state;
         
         return(
             <div className={classes.root}>
@@ -114,8 +136,8 @@ class MeineProjekte extends Component {
                     <Table className={classes.table} aria-label="customized table">
                         <TableHead>
                             <StyledTableRow>
-                                <StyledTableCell>Projekt</StyledTableCell>
-                                <StyledTableCell align="center">Dozent,</StyledTableCell>
+                                <StyledTableCell>Projekte</StyledTableCell>
+                                <StyledTableCell align="center">Dozent</StyledTableCell>
                                 <StyledTableCell align="center">Note</StyledTableCell>
                                 <StyledTableCell align="center">Modulzuweisung</StyledTableCell>
                             </StyledTableRow>

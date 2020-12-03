@@ -28,8 +28,9 @@ export default class StudentBO extends PersonBO{
     }
 
     static fromJSON(studenten) {
-		let results = [];
+		let results = null;
 		if (Array.isArray(studenten)) {
+			results = [];
 			studenten.forEach((c) => {
 				Object.setPrototypeOf(c, StudentBO.prototype);
 				results.push(c);
@@ -38,7 +39,7 @@ export default class StudentBO extends PersonBO{
 			// Es gibt wohl nur ein Objekt
 			let c = studenten;
 			Object.setPrototypeOf(c, StudentBO.prototype);
-			results.push(c);
+			results = c;
 		}
 		return results;
 	}

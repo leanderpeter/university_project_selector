@@ -74,7 +74,6 @@ class App extends React.Component {
     }
   }
 
- 
   // handles the sign in component with firebase.auth()
   handleSignIn = () => {
     this.setState({
@@ -112,7 +111,7 @@ class App extends React.Component {
                   <Route path='/about' component={About} />
 
                   <Route path='/meineprojekte' component={MeineProjekte}>
-                    <MeineProjekte user={currentUser}/>
+                    <MeineProjekte currentUser={currentUser}/>
                   </Route>
                 </>
                 :

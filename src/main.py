@@ -32,7 +32,7 @@ nbo = api.inherit('NamedBusinessObject', bo, {
 
 person = api.inherit('Person', nbo, {
     'email': fields.String(attribute='_email', description='Email der Person'),
-    'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID der Person')
+    'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID der Person'),
     'rolle': fields.Integer(attribute='_rolle', description='Rolle der Person')
     })
 
@@ -114,6 +114,7 @@ class PersonOperationen(Resource):
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class StudentByGoogleIDOperationen(Resource):
     @electivApp.marshal_list_with(student)
+    @secured
 
     def get(self, google_user_id):
         adm = ProjektAdministration()

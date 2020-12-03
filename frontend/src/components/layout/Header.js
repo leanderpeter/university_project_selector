@@ -29,7 +29,6 @@ class Header extends Component {
 	// Render component
 	render() {
     const { user } = this.props;
-    console.log(user, 'HEADER')
 		return (
       <Paper variant='outlined' >
         <ProfileDropDown user={user} />
