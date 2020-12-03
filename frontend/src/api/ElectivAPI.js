@@ -1,4 +1,5 @@
 import ProjektBO from './ProjektBO';
+import StudentBO from './StudentBO';
 
 /*
 Singleton Abstarktion des backend REST interfaces. Es handelt sich um eine access methode
@@ -23,6 +24,9 @@ export default class ElectivAPI {
 
 	//meine Projekte anzeigen
 	#getMeineProjekteURL = (id) => `${this.#ElectivServerBaseURL}/meineprojekte/${id}`;
+
+	//getStudent: google_user_id
+	#getStudentURL = (google_user_id) => `${this.#ElectivServerBaseURL}/student/${google_user_id}`;
 
 	/*
 	Singleton/Einzelstuck instanz erhalten
@@ -74,6 +78,16 @@ export default class ElectivAPI {
 			console.info(projektBOs)
 			return new Promise(function (resolve){
 				resolve(projektBOs)
+			})
+		})
+	}
+
+	getStudent(google_user_id){
+		return this.#fetchAdvanced(this.#getStudentURL(google_user_id)).then((responseJSON) => {
+			let studentBO = StudentBO.fromJSON(responseJSON);
+			console.info(studentBO)
+			return new Promise(function (resolve){
+				resolve(studentBO)
 			})
 		})
 	}
