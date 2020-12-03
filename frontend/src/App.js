@@ -9,7 +9,7 @@ import ProjektListe from './components/ProjektListe';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
-import MeineProjekteEintrag from './components/MeineProjekteEintrag';
+import MeineProjekte from './components/MeineProjekte';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
@@ -28,7 +28,7 @@ class App extends React.Component {
       currentUser: null,
       appError: null,
       authError: null,
-      authLoading: false
+      authLoading: false,
     };
   }
   // creating error boundry. receiving all errors below the component tree
@@ -37,12 +37,12 @@ class App extends React.Component {
     // update state for fallback UI
     return { appError: error };
   }
-
+  
   // handles all user login states with firebase
   handleAuthStateChange = user => {
     if (user) {
       this.setState({
-        authLoading: true
+        authLoading: true, 
       });
       // user signed in
       user.getIdToken().then(token => {
@@ -50,7 +50,6 @@ class App extends React.Component {
         // Server (backend) can then read out that cookie
         // only token information, safety risk!
         document.cookie = `token=${token};path=/`;
-
         // set user when token arrives
         this.setState({
           currentUser: user,
@@ -58,7 +57,7 @@ class App extends React.Component {
           authLoading: false
         });
       }).catch(e => {
-        this.SetState({
+        this.setState({
           authError: e,
           authLoading: false
         });
@@ -74,6 +73,7 @@ class App extends React.Component {
       });
     }
   }
+
   // handles the sign in component with firebase.auth()
   handleSignIn = () => {
     this.setState({
@@ -82,6 +82,7 @@ class App extends React.Component {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithRedirect(provider);
   }
+
   // lifecycle method
   componentDidMount() {
     firebase.initializeApp(firebaseConfig);
@@ -98,7 +99,7 @@ class App extends React.Component {
         <CssBaseline />
         <Router basename={process.env.PUBLIC_URL}>
           <Container maxWidth='md'>
-            <Header user={currentUser} />
+            <Header user={currentUser}/> 
             {
               // is the user signed in?
               currentUser ?
@@ -109,7 +110,8 @@ class App extends React.Component {
                   </Route>
                   <Route path='/about' component={About} />
 
-                  <Route path='/meineprojekte' component={MeineProjekteEintrag}>
+                  <Route path='/meineprojekte' component={MeineProjekte}>
+                    <MeineProjekte currentUser={currentUser}/>
                   </Route>
                 </>
                 :

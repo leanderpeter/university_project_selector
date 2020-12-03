@@ -1,4 +1,5 @@
 import ProjektBO from './ProjektBO';
+import StudentBO from './StudentBO';
 
 /*
 Singleton Abstarktion des backend REST interfaces. Es handelt sich um eine access methode
@@ -23,8 +24,12 @@ export default class ElectivAPI {
 
 	//meine Projekte anzeigen
 	#getMeineProjekteURL = (id) => `${this.#ElectivServerBaseURL}/meineprojekte/${id}`;
+  
+  //BESCHREIBUNG FEHLT...
+  #putTeilnahmeURL = (lehrangebotId,teilnehmerId) => `${this.#ElectivServerBaseURL}/teilnahme?lehrangebotId=${lehrangebotId}&teilnehmerId=${teilnehmerId}`;
 
-    #putTeilnahmeURL = (lehrangebotId,teilnehmerId) => `${this.#ElectivServerBaseURL}/teilnahme?lehrangebotId=${lehrangebotId}&teilnehmerId=${teilnehmerId}`;
+	//getStudent: google_user_id
+	#getStudentURL = (google_user_id) => `${this.#ElectivServerBaseURL}/student/${google_user_id}`;
 
 	/*
 	Singleton/Einzelstuck instanz erhalten
@@ -69,16 +74,32 @@ export default class ElectivAPI {
 		//USW
 	}
 
+	
+	getMeineProjekte(studentID){
+		return this.#fetchAdvanced(this.#getMeineProjekteURL(studentID)).then((responseJSON) => {
+			let projektBOs = ProjektBO.fromJSON(responseJSON);
+			console.info(projektBOs)
+			return new Promise(function (resolve){
+				resolve(projektBOs)
+			})
+		})
+	}
+
+	getStudent(google_user_id){
+		return this.#fetchAdvanced(this.#getStudentURL(google_user_id)).then((responseJSON) => {
+			let studentBO = StudentBO.fromJSON(responseJSON);
+			console.info(studentBO)
+			return new Promise(function (resolve){
+				resolve(studentBO)
+			})
+		})
+	}
+
 	setTeilnahme(lehrangebotId){
         //TODO Set User ID
          return this.#fetchAdvanced(this.#putTeilnahmeURL(lehrangebotId,"1"),{method: 'PUT'}).then((responseJSON) => {
 
 		})
 
-
-
-
 	}
-
-
 }
