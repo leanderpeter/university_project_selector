@@ -45,7 +45,8 @@ class MeineProjekte extends Component {
 
     constructor(props){
         super(props);
-
+    
+        console.log(props,'Das sind die props von Meineprojekte')
         let expandedID = null;
 
         if (this.props.location.expandProjekt){
@@ -58,14 +59,13 @@ class MeineProjekte extends Component {
             error: null,
             loadingInProgress: false, 
             expandedProjektID: expandedID,
-            userMail: this.props.userMail
         };
     }   
 
 
     // API Anbindung um Projekte vom Backend zu bekommen 
     getMeineProjekte = () => {
-        console.log(this.props.userMail, 'HALLOOO')
+        console.log(this.props.user, 'hier ist getmeineprojekte()')
         ElectivAPI.getAPI().getMeineProjekte(2)
             .then(projekteBOs =>
                 this.setState({
@@ -115,7 +115,7 @@ class MeineProjekte extends Component {
                         <TableHead>
                             <StyledTableRow>
                                 <StyledTableCell>Projekt</StyledTableCell>
-                                <StyledTableCell align="center">Dozent</StyledTableCell>
+                                <StyledTableCell align="center">Dozent,</StyledTableCell>
                                 <StyledTableCell align="center">Note</StyledTableCell>
                                 <StyledTableCell align="center">Modulzuweisung</StyledTableCell>
                             </StyledTableRow>
@@ -161,7 +161,10 @@ MeineProjekte.propTypes = {
     classes: PropTypes.object.isRequired,
     /** @ignore */
     location: PropTypes.object.isRequired,
-  }
+	// logged in Firebase user/person
+	user: PropTypes.object,
+}
+
 
 
 export default withRouter(withStyles(styles)(MeineProjekte));

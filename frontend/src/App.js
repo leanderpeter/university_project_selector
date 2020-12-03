@@ -29,7 +29,6 @@ class App extends React.Component {
       appError: null,
       authError: null,
       authLoading: false,
-      userMail: null
     };
   }
   // creating error boundry. receiving all errors below the component tree
@@ -39,7 +38,6 @@ class App extends React.Component {
     return { appError: error };
   }
   
-
   // handles all user login states with firebase
   handleAuthStateChange = user => {
     if (user) {
@@ -59,7 +57,7 @@ class App extends React.Component {
           authLoading: false
         });
       }).catch(e => {
-        this.SetState({
+        this.setState({
           authError: e,
           authLoading: false
         });
@@ -94,7 +92,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { currentUser, appError, authError, authLoading, userMail } = this.state;
+    const { currentUser, appError, authError, authLoading } = this.state;
 
     return (
       <ThemeProvider theme={Theme}>
@@ -102,7 +100,7 @@ class App extends React.Component {
         <CssBaseline />
         <Router basename={process.env.PUBLIC_URL}>
           <Container maxWidth='md'>
-            <Header user={currentUser}/>
+            <Header user={currentUser}/> 
             {
               // is the user signed in?
               currentUser ?
@@ -114,6 +112,7 @@ class App extends React.Component {
                   <Route path='/about' component={About} />
 
                   <Route path='/meineprojekte' component={MeineProjekte}>
+                    <MeineProjekte user={currentUser}/>
                   </Route>
                 </>
                 :
