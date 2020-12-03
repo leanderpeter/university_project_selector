@@ -4,9 +4,11 @@ from flask import Flask
 from flask_cors import CORS
 #Des Weiteren wird das auf Flask aufbauende Flask-RestX verwendet
 from flask_restx import Api, Resource, fields
+from flask import request
 
 #Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.ProjektAdministration import ProjektAdministration
+from server.TeilnahmeAdministration import TeilnahmeAdministration
 from server.bo.Person import Person
 from server.bo.Student import Student
 from server.bo.Projekt import Projekt
@@ -59,7 +61,6 @@ projekt = api.inherit('Projekt', nbo, {
 
 @electivApp.route('/projekte')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-
 class ProjektListeOperationen(Resource):
     @electivApp.marshal_list_with(projekt)
     @secured
@@ -78,7 +79,6 @@ class ProjektListeOperationen(Resource):
 
 @electivApp.route('/meineprojekte/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-
 class MeineProjektListeOperationen(Resource):
     @electivApp.marshal_list_with(projekt)
     @secured
@@ -127,19 +127,20 @@ class StudentByGoogleIDOperationen(Resource):
     def put(self, student_id):
         pass
     
-
+@electivApp.route('/teilnahme')
+@electivApp.response(500, 'Something went wrong')
 class TeilnahmeOperationen(Resource):
-    def __init__(self):
-        pass
-
     def get(self, teilname_id):
         pass
 
     def delete(self, teilnahme_id):
         pass
 
-    def put(self, teilnahme_id):
-        pass
+    def put(self):
+        lehrangebotId = request.args.get("lehrangebotId")
+        teilnehmerId= request.args.get("teilnehmerId")
+        teilnahmeAdministration = TeilnahmeAdministration()
+        teilnahmeAdministration.create_teilnahme(lehrangebotId,teilnehmerId)
 
 
 class BewertungOperationen(Resource):
