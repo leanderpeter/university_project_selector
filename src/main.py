@@ -33,6 +33,7 @@ nbo = api.inherit('NamedBusinessObject', bo, {
 person = api.inherit('Person', nbo, {
     'email': fields.String(attribute='_email', description='Email der Person'),
     'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID der Person')
+    'rolle': fields.Integer(attribute='_rolle', description='Rolle der Person')
     })
 
 student = api.inherit('Student', person, {
