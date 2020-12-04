@@ -1,8 +1,9 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from server.bo.NamedBusinessObject import NamedBusinessObject
 from server.bo.Automat import Automat
+
 
 class Projekt(NamedBusinessObject, Automat):
     def __init__(self):
@@ -128,7 +129,12 @@ class Projekt(NamedBusinessObject, Automat):
 
     def _str_(self, ):
         '''Create and return simple string of the BO'''
-        return "Projekt: {},{},{},{},{},{},{},{},{},{},{},{},{}".format(self.get_id(), self.get_name(),self._max_teilnehmer, self._projektbeschreibung, self._betreuer, self._externer_partner, self._woechentlich, self._anzahl_block_vor, self._anzahl_block_in, self._praeferierte_block, self._bes_raum, self._raum,self._sprache )
+        return "Projekt: {},{},{},{},{},{},{},{},{},{},{},{},{}".format(self.get_id(), self.get_name(),
+                                                                        self._max_teilnehmer, self._projektbeschreibung,
+                                                                        self._betreuer, self._externer_partner,
+                                                                        self._woechentlich, self._anzahl_block_vor,
+                                                                        self._anzahl_block_in, self._praeferierte_block,
+                                                                        self._bes_raum, self._raum, self._sprache)
 
     def to_dict(self):
         """Umwandeln Projekt() in ein Python dict()"""
@@ -153,7 +159,7 @@ class Projekt(NamedBusinessObject, Automat):
     def from_dict(dictionary=dict()):
         '''dict() -> projekt'''
         obj = Projekt()
-        obj.set_id(dictionary["id"]) # from BO
+        obj.set_id(dictionary["id"])  # from BO
         obj.set_name(dictionary["name"])
         obj.set_max_teilnehmer(dictionary["max_teilnehmer"])
         obj.set_projektbeschreibung(dictionary["beschreibung"])
@@ -167,4 +173,3 @@ class Projekt(NamedBusinessObject, Automat):
         obj.set_raum(dictionary["raum"])
         obj.set_sprache(dictionary["sprache"])
         return obj
-

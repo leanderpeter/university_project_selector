@@ -1,7 +1,8 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from server.bo.BusinessObject import BusinessObject
+
 
 class Teilnahme(BusinessObject):
     def __init__(self):

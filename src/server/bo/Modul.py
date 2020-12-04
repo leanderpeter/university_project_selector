@@ -1,7 +1,8 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from server.bo.NamedBusinessObject import NamedBusinessObject
+
 
 class Modul(NamedBusinessObject):
     def __init__(self):
@@ -29,4 +30,3 @@ class Modul(NamedBusinessObject):
 
     def __str__(self, ):
         pass
-
