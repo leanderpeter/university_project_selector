@@ -125,7 +125,6 @@ class MeineProjekte extends Component {
                                 projekte.map(projekt => 
                                     <MeineProjekteEintrag key={projekt.getID()} projekt = {projekt} expandedState={expandedProjektID === projekt.getID()}
                                     onExpandedStateChange={this.onExpandedStateChange}
-                                    onCustomerDeleted={this.onCustomerDeleted}
                                 />) 
                             }
                         </TableBody>
