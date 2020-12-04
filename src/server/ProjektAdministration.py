@@ -10,6 +10,7 @@ from .db.PersonMapper import PersonMapper
 from .db.StudentMapper import StudentMapper
 from .db.TeilnahmeMapper import TeilnahmeMapper
 from .db.ProjektMapper import ProjektMapper
+from .bo.Teilnahme import Teilnahme
 
 
 class ProjektAdministration (object):
@@ -136,4 +137,15 @@ class ProjektAdministration (object):
 
 	def delete_teilnahme(self, ):
 		pass
+
+
+	def create_teilnahme(self, lehrangebotId, teilnehmerId):
+		'''creat person'''
+
+		teilnahme = Teilnahme()
+		teilnahme.set_teilnehmer(teilnehmerId)
+		teilnahme.set_lehrangebot(lehrangebotId)
+
+		with TeilnahmeMapper() as mapper:
+			return mapper.insert(teilnahme)
 
