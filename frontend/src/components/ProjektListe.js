@@ -85,7 +85,7 @@ class ProjektListe extends Component {
 
 	/** Renders the component */
 	render() {
-    const { classes } = this.props;
+    const { classes , currentStudent } = this.props;
     const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm } = this.state;
 
     return (
@@ -126,6 +126,7 @@ class ProjektListe extends Component {
             <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange}
               onCustomerDeleted={this.customerDeleted}
+              currentStudent={currentStudent}
             />) 
         }
         <LoadingProgress show={loadingInProgress} />

@@ -9,9 +9,10 @@ import ProjektListe from './components/ProjektListe';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
-import MeineProjekteEintrag from './components/MeineProjekteEintrag';
+import MeineProjekte from './components/MeineProjekte';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
+import ElectivAPI from './api/ElectivAPI';
 import firebaseConfig from './firebaseconfig';
 
 /*
@@ -28,7 +29,8 @@ class App extends React.Component {
       currentUser: null,
       appError: null,
       authError: null,
-      authLoading: false
+      authLoading: false,
+      currentStudent: null,
     };
   }
   // creating error boundry. receiving all errors below the component tree
@@ -37,12 +39,13 @@ class App extends React.Component {
     // update state for fallback UI
     return { appError: error };
   }
-
+  
   // handles all user login states with firebase
   handleAuthStateChange = user => {
     if (user) {
+      console.log('ich werde aufgerufen')
       this.setState({
-        authLoading: true
+        authLoading: true, 
       });
       // user signed in
       user.getIdToken().then(token => {
@@ -50,15 +53,15 @@ class App extends React.Component {
         // Server (backend) can then read out that cookie
         // only token information, safety risk!
         document.cookie = `token=${token};path=/`;
-
         // set user when token arrives
         this.setState({
           currentUser: user,
           authError: null,
           authLoading: false
-        });
+        })}).then(() => {
+        this.getStudent()
       }).catch(e => {
-        this.SetState({
+        this.setState({
           authError: e,
           authLoading: false
         });
@@ -74,6 +77,7 @@ class App extends React.Component {
       });
     }
   }
+
   // handles the sign in component with firebase.auth()
   handleSignIn = () => {
     this.setState({
@@ -82,6 +86,31 @@ class App extends React.Component {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithRedirect(provider);
   }
+
+    //aktuell eingeloggten Student vom Backend abfragen
+  getStudent = () => {
+    ElectivAPI.getAPI().getStudent(this.state.currentUser.uid)
+        .then(studentBO =>
+            this.setState({
+                currentStudent: studentBO,
+                error: null,
+                loadingInProgress: false,
+            })
+            ).catch(e =>
+                this.setState({
+                    student: null,
+                    error: e,
+                    loadingInProgress: false,
+                }));
+        this.setState({
+            error: null,
+            loadingInProgress: true
+        });
+    }  
+
+
+
+
   // lifecycle method
   componentDidMount() {
     firebase.initializeApp(firebaseConfig);
@@ -90,7 +119,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { currentUser, appError, authError, authLoading } = this.state;
+    const { currentUser, appError, authError, authLoading, currentStudent } = this.state;
 
     return (
       <ThemeProvider theme={Theme}>
@@ -98,18 +127,19 @@ class App extends React.Component {
         <CssBaseline />
         <Router basename={process.env.PUBLIC_URL}>
           <Container maxWidth='md'>
-            <Header user={currentUser} />
+            <Header user={currentUser}/> 
             {
               // is the user signed in?
               currentUser ?
                 <>
                   <Redirect from='/' to='projekte' />
                   <Route path='/projekte' component ={ProjektListe}>
-                    <ProjektListe />
+                    <ProjektListe currentStudent={currentStudent}/>
                   </Route>
                   <Route path='/about' component={About} />
 
-                  <Route path='/meineprojekte' component={MeineProjekteEintrag}>
+                  <Route path='/meineprojekte' component={MeineProjekte}>
+                    <MeineProjekte currentStudent={currentStudent}/>
                   </Route>
                 </>
                 :

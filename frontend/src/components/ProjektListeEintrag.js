@@ -4,6 +4,7 @@ import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, 
 import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
+import { ElectivAPI } from '../api';
 /*
 import CustomerForm from './dialogs/CustomerForm';
 import CustomerDeleteDialog from './dialogs/CustomerDeleteDialog';
@@ -27,7 +28,6 @@ class ProjektListeEintrag extends Component {
 			projekt: props.projekt,
 			showProjektForm: false,
 			showProjektDeleteDialog: false
-
 		};
 	}
 
@@ -69,21 +69,13 @@ class ProjektListeEintrag extends Component {
 	deleteProjektDialogClosed = (projekt) => {
 		// MORE CODE!
 	}
+	setTeilnahmeAnProjekt = () => {
+
+	}
 
 	teilnahmeButtonClicked = event => {
     	//Logik fuer Teilnahme Button
-    	    var count = 1;
-	    	function setColor(btn, color) {
-		        var property = document.getElementById(btn);
-		        if (count == 0) {
-		            property.style.backgroundColor = "#FFFFFF"
-		            count = 1;        
-		        }
-		        else {
-		            property.style.backgroundColor = "#7FFF00"
-		            count = 0;
-		        }
-    }
+    	ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
 	}
 
 	/** Renders the component */

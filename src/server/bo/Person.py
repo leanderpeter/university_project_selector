@@ -12,8 +12,7 @@ class Person (NamedBusinessObject):
         super().__init__()
         self._email = ""
         self._google_user_id = None
-        self._role = 0
-        self._veranstaltung = []
+        self._rolle = 0
 
 
     def get_email(self):
@@ -33,17 +32,11 @@ class Person (NamedBusinessObject):
         self._google_user_id = value
 
     
-    def get_rolle(self, ):
-        pass
+    def get_rolle(self):
+        return self._rolle
 
     def set_rolle(self, rolle):
-        pass
-
-    def get_veranstaltung(self, ):
-        pass
-
-    def set_veranstaltung(self, projekte):
-        pass
+        self._rolle = rolle
 
     def __str__(self):
         '''Simple textual user instance'''

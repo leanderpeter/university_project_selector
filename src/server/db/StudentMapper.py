@@ -57,15 +57,20 @@ class StudentMapper(Mapper):
 		result = None
 
 		cursor = self._connection.cursor()
-		command = "SELECT id, name FROM studenten WHERE google_user_id='{}'".format(google_user_id)
+		command = "SELECT id, name, email, google_user_id, rolle, mat_nr, kuerzel FROM studenten WHERE google_user_id='{}'".format(google_user_id)
 		cursor.execute(command)
 		tuples = cursor.fetchall()
 
 		try:
-			(id, name) = tuples[0]
+			(id, name, email, google_user_id, rolle, mat_nr, kuerzel) = tuples[0]
 			student = Student()
 			student.set_id(id)
 			student.set_name(name)
+			student.set_email(email)
+			student.set_google_user_id(google_user_id)
+			student.set_rolle(rolle)
+			student.set_mat_nr(mat_nr)
+			student.set_kuerzel(kuerzel)
 			result = student
 		except IndexError:
 			"""Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
