@@ -34,7 +34,7 @@ class ProjektMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = (
-        "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent FROM projekte WHERE id={}").format(
+            "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent FROM projekte WHERE id={}").format(
             id)
         cursor.execute(command)
         tuples = cursor.fetchall()
@@ -69,6 +69,7 @@ class ProjektMapper(Mapper):
         projekt.set_sprache(sprache)
         projekt.set_dozent(dozent)
         projekt.set_anzahlTeilnehmer(self.count_teilnehmer_by_projekt(id))
+        projekt.set_teilnehmerListe(self.get_teilnehmerId_by_projekt(id))
         return projekt
 
     def find_by_key(self):
@@ -91,6 +92,19 @@ class ProjektMapper(Mapper):
         self._connection.commit()
         cursor.close()
         return countRow[0]
+
+    def get_teilnehmerId_by_projekt(self, projektID):
+        result = []
+        cursor = self._connection.cursor()
+        command = "SELECT teilnehmer FROM teilnahmen WHERE lehrangebot={}".format(projektID)
+        cursor.execute(command)
+        rows = cursor.fetchall()
+        for teilnehmer in rows:
+            result.append(teilnehmer[0])
+        self._connection.commit()
+        cursor.close()
+        return result
+
 
 if (__name__ == "__main__"):
     with ProjektMapper() as mapper:

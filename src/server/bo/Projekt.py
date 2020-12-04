@@ -25,6 +25,7 @@ class Projekt(NamedBusinessObject, Automat):
         self._art = None
         self._halbjahr = []
         self._anzahlTeilnehmer = None
+        self._teilnehmerListe = []
 
     def get_max_teilnehmer(self):
         return self._max_teilnehmer
@@ -132,16 +133,27 @@ class Projekt(NamedBusinessObject, Automat):
         return self._anzahlTeilnehmer
 
     def set_anzahlTeilnehmer(self, anzahlTeilnehmer):
-         self._anzahlTeilnehmer = anzahlTeilnehmer
+        self._anzahlTeilnehmer = anzahlTeilnehmer
+
+    def get_teilnehmerListe(self):
+        return self._teilnehmerListe
+
+    def set_teilnehmerListe(self, teilnehmerListe):
+        self._teilnehmerListe = teilnehmerListe
 
     def _str_(self, ):
         '''Create and return simple string of the BO'''
-        return "Projekt: {},{},{},{},{},{},{},{},{},{},{},{},{},{}".format(self.get_id(), self.get_name(),
-                                                                        self._max_teilnehmer, self._projektbeschreibung,
-                                                                        self._betreuer, self._externer_partner,
-                                                                        self._woechentlich, self._anzahl_block_vor,
-                                                                        self._anzahl_block_in, self._praeferierte_block,
-                                                                        self._bes_raum, self._raum, self._sprache, self._anzahlTeilnehmer)
+        return "Projekt: {},{},{},{},{},{},{},{},{},{},{},{},{},{},{}".format(self.get_id(), self.get_name(),
+                                                                              self._max_teilnehmer,
+                                                                              self._projektbeschreibung,
+                                                                              self._betreuer, self._externer_partner,
+                                                                              self._woechentlich,
+                                                                              self._anzahl_block_vor,
+                                                                              self._anzahl_block_in,
+                                                                              self._praeferierte_block,
+                                                                              self._bes_raum, self._raum, self._sprache,
+                                                                              self._anzahlTeilnehmer,
+                                                                              self._teilnehmerListe)
 
     def to_dict(self):
         """Umwandeln Projekt() in ein Python dict()"""
@@ -159,7 +171,8 @@ class Projekt(NamedBusinessObject, Automat):
             "bes_raum": self.get_bes_raum(),
             "raum": self.get_raum(),
             "sprache": self.get_sprache(),
-            "anzahlTeilnehmer": self._anzahlTeilnehmer
+            "anzahlTeilnehmer": self.get_anzahlTeilnehmer(),
+            "teilnehmerListe": self.get_teilnehmerListe()
         }
         return result
 
@@ -181,4 +194,5 @@ class Projekt(NamedBusinessObject, Automat):
         obj.set_raum(dictionary["raum"])
         obj.set_sprache(dictionary["sprache"])
         obj.set_anzahlTeilnehmer(dictionary["anzahlTeilnehmer"])
+        obj.set_teilnehmerListe(dictionary["teilnehmerListe"])
         return obj

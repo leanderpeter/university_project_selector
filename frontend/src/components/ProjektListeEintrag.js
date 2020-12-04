@@ -34,6 +34,11 @@ class ProjektListeEintrag extends Component {
 	// Handles events wenn sich der status der oeffnung aendert
 	expansionPanelStateChanged = () => {
 		this.props.onExpandedStateChange(this.props.projekt);
+
+		// Teilnahme Button deaktivieren, sofern Teilnehmer bereits in Projekt eingeschrieben
+		if( this.props.projekt.teilnehmerListe.indexOf(1)> -1){
+		    this.setState({teilnahmeButtonDisabled:true});
+		}
 	}
 
 	// Kummert sich um das loschen des Projekts
@@ -75,7 +80,7 @@ class ProjektListeEintrag extends Component {
 
 	teilnahmeButtonClicked = event => {
     	//Logik fuer Teilnahme Button
-    	this.setState({savedisabled:true});
+    	this.setState({teilnahmeButtonDisabled:true});
     	ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
 	}
 
@@ -110,7 +115,7 @@ class ProjektListeEintrag extends Component {
             
           </AccordionDetails>
           <AccordionDetails>
-          <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.savedisabled}>
+          <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
           Teilnahme
         </Button>
             

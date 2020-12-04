@@ -59,7 +59,8 @@ projekt = api.inherit('Projekt', nbo, {
     'raum': fields.String(attribute='_raum', description='Raum des Projekts'),
     'sprache': fields.String(attribute='_sprache', description='Sprache des Projekts'),
     'dozent': fields.Integer(attribute='_dozent', description='Der Dozent des Projekts'),
-    'anzahlTeilnehmer': fields.Integer(attribute='_anzahlTeilnehmer', description='Der Dozent des Projekts')
+    'anzahlTeilnehmer': fields.Integer(attribute='_anzahlTeilnehmer', description='Die Anzahl der angemeldeten Teilnehmer'),
+    'teilnehmerListe': fields.String(attribute='_teilnehmerListe', description='Liste mit IDs der Teilnehmer')
 })
 
 
