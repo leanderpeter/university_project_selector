@@ -36,7 +36,7 @@ class ProjektListeEintrag extends Component {
 		this.props.onExpandedStateChange(this.props.projekt);
 
 		// Teilnahme Button deaktivieren, sofern Teilnehmer bereits in Projekt eingeschrieben
-		if( this.props.projekt.teilnehmerListe.indexOf(1)> -1){
+		if( this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
 		    this.setState({teilnahmeButtonDisabled:true});
 		}
 	}
