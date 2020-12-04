@@ -17,21 +17,9 @@ class ProjektMapper(Mapper):
 		tuples = cursor.fetchall()
 
 		for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) in tuples:
-			projekt = Projekt()
-			projekt.set_id(id)
-			projekt.set_name(name)
-			projekt.set_max_teilnehmer(max_teilnehmer)
-			projekt.set_projektbeschreibung(beschreibung)
-			projekt.set_betreuer(betreuer)
-			projekt.set_externer_partner(externer_partner)
-			projekt.set_woechentlich(woechentlich)
-			projekt.set_anzahl_block_vor(anzahl_block_vor)
-			projekt.set_anzahl_block_in(anzahl_block_in)
-			projekt.set_praeferierte_block(praeferierte_block)
-			projekt.set_bes_raum(bes_raum)
-			projekt.set_raum(raum)
-			projekt.set_sprache(sprache)
-			projekt.set_dozent(dozent)
+			projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
+										  woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
+										  raum, sprache, dozent)
 			result.append(projekt)
 			
 		self._connection.commit()
@@ -46,30 +34,36 @@ class ProjektMapper(Mapper):
 
 		command = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent FROM projekte WHERE id={}").format(id)
 		cursor.execute(command)
-		tuples = cursor.fetchall()
+		tuples = cursor.fetchone()
 
+		"""TODO Wieso eine for Schleife.. ID = eindeutig"""
 		for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) in tuples:
-			projekt = Projekt()
-			projekt.set_id(id)
-			projekt.set_name(name)
-			projekt.set_max_teilnehmer(max_teilnehmer)
-			projekt.set_projektbeschreibung(beschreibung)
-			projekt.set_betreuer(betreuer)
-			projekt.set_externer_partner(externer_partner)
-			projekt.set_woechentlich(woechentlich)
-			projekt.set_anzahl_block_vor(anzahl_block_vor)
-			projekt.set_anzahl_block_in(anzahl_block_in)
-			projekt.set_praeferierte_block(praeferierte_block)
-			projekt.set_bes_raum(bes_raum)
-			projekt.set_raum(raum)
-			projekt.set_sprache(sprache)
-			projekt.set_dozent(dozent)
+			projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent)
 
 		self._connection.commit()
 		cursor.close()
 
 		return projekt
 
+
+	def create_projekt(self, id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent):
+		projekt = Projekt()
+		projekt.set_id(id)
+		projekt.set_name(name)
+		projekt.set_max_teilnehmer(max_teilnehmer)
+		projekt.set_projektbeschreibung(beschreibung)
+		projekt.set_betreuer(betreuer)
+		projekt.set_externer_partner(externer_partner)
+		projekt.set_woechentlich(woechentlich)
+		projekt.set_anzahl_block_vor(anzahl_block_vor)
+		projekt.set_anzahl_block_in(anzahl_block_in)
+		projekt.set_praeferierte_block(praeferierte_block)
+		projekt.set_bes_raum(bes_raum)
+		projekt.set_raum(raum)
+		projekt.set_sprache(sprache)
+		projekt.set_dozent(dozent)
+
+		return projekt
 
 	def find_by_key(self):
 		pass

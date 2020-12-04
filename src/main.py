@@ -8,7 +8,6 @@ from flask import request
 
 #Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.ProjektAdministration import ProjektAdministration
-from server.TeilnahmeAdministration import TeilnahmeAdministration
 from server.bo.Person import Person
 from server.bo.Student import Student
 from server.bo.Projekt import Projekt
@@ -139,8 +138,8 @@ class TeilnahmeOperationen(Resource):
     def put(self):
         lehrangebotId = request.args.get("lehrangebotId")
         teilnehmerId= request.args.get("teilnehmerId")
-        teilnahmeAdministration = TeilnahmeAdministration()
-        teilnahmeAdministration.create_teilnahme(lehrangebotId,teilnehmerId)
+        projektAdministration = ProjektAdministration()
+        projektAdministration.create_teilnahme(lehrangebotId,teilnehmerId)
 
 
 class BewertungOperationen(Resource):
