@@ -72,6 +72,7 @@ class TeilnahmeMapper(Mapper):
         """Reads a tuple with a given ID"""
         pass
 
+
     def insert(self, teilnahme):
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM teilnahmen ")

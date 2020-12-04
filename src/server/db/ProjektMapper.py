@@ -68,7 +68,7 @@ class ProjektMapper(Mapper):
         projekt.set_raum(raum)
         projekt.set_sprache(sprache)
         projekt.set_dozent(dozent)
-
+        projekt.set_anzahlTeilnehmer(self.count_teilnehmer_by_projekt(id))
         return projekt
 
     def find_by_key(self):
@@ -83,6 +83,14 @@ class ProjektMapper(Mapper):
     def delete(self):
         pass
 
+    def count_teilnehmer_by_projekt(self, projektID):
+        cursor = self._connection.cursor()
+        command = "SELECT COUNT(*) FROM teilnahmen WHERE lehrangebot={}".format(projektID)
+        cursor.execute(command)
+        countRow = cursor.fetchone()
+        self._connection.commit()
+        cursor.close()
+        return countRow[0]
 
 if (__name__ == "__main__"):
     with ProjektMapper() as mapper:
