@@ -67,7 +67,7 @@ class MeineProjekte extends Component {
 
     // API Anbindung um Projekte vom Backend zu bekommen 
     getTeilnahmen = () => {
-            ElectivAPI.getAPI().getTeihnahmen(this.props.currentStudent.id)
+            ElectivAPI.getAPI().getTeilnahmen(this.props.currentStudent.id)
             .then(teilnahmeBOs =>
                 this.setState({
                     teilnahmen: teilnahmeBOs,
@@ -82,7 +82,7 @@ class MeineProjekte extends Component {
             this.setState({
                 error: null,
                 loadingInProgress: true,
-                loadingProjektError: null
+                loadingTeilnahmeError: null
             });
     }
 

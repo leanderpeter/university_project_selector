@@ -1,6 +1,7 @@
 import ProjektBO from './ProjektBO';
 import StudentBO from './StudentBO';
 import PersonBO from './PersonBO';
+import TeilnahmeBO from './TeilnahmeBO';
 
 /*
 Singleton Abstarktion des backend REST interfaces. Es handelt sich um eine access methode
@@ -16,11 +17,14 @@ export default class ElectivAPI {
 
 	//Projekte anzeigen fuer Student
 	#getProjekteURL = () => `${this.#ElectivServerBaseURL}/projekte`;
-	#addProjektURL = () => `${this.#ElectivServerBaseURL}/projekte`;
-	#getProjektURL = (id) => `${this.#ElectivServerBaseURL}/projekte/${id}`;
+	#addProjekteURL = () => `${this.#ElectivServerBaseURL}/projekte`;
+	#getProjekteByIDURL = (id) => `${this.#ElectivServerBaseURL}/projekte/${id}`;
 	//update 
 	//delete
 	#searchProjektURL = (projektname) => `${this.#ElectivServerBaseURL}/projekte_by_name/${projektname}`;
+
+	//Projekt nach ID bekommen
+	#getProjektURL = (id) => `${this.#ElectivServerBaseURL}/projekt/${id}`;
 
 	//alle Teilnahmen eines Students anzeigen
 	#getTeilnahmenURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/${id}`;
@@ -68,6 +72,16 @@ export default class ElectivAPI {
 			console.info(projektBOs)
 			return new Promise(function (resolve){
 				resolve(projektBOs);
+			})
+		})
+	}
+
+	getProjekt(id){
+		return this.#fetchAdvanced(this.#getProjektURL(id)).then((responseJSON) => {
+			let projektBO = ProjektBO.fromJSON(responseJSON);
+			console.info(projektBO)
+			return new Promise(function (resolve){
+				resolve(projektBO)
 			})
 		})
 	}

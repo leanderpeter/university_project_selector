@@ -44,15 +44,45 @@ class MeineProjekteEintrag extends Component {
         super(props);
 
         this.state = {
+            projekt: null,
+            projektID: null,
+            projektName: null,
             dozentName: null,
             loadingInProgress: false,
             error: null
         };
-    }   
+    }
+
+    getProjekt = () => {
+      ElectivAPI.getAPI().getProjekt(this.props.teilnahme.lehrangebot)
+      .then(projektBO =>
+          this.setState({
+            projekt: projektBO[0],
+            projektID: projektBO[0].id,
+            projektName: projektBO[0].name,
+            loadingInProgress: false,
+            error: null,
+          })).then(()=>{
+            this.getPerson()
+          })
+          .catch(e =>
+              this.setState({
+                projekt: null,
+                projektID: null,
+                projektName: null,
+                loadingInProgress: false,
+                error: e,
+              }));
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }
+
 
     getPerson = () => {
-      console.log(this.props.projekt.dozent, "noch mal Test oben");
-      ElectivAPI.getAPI().getPerson(this.props.projekt.dozent)
+      console.log(this.state.projekt,'affaf')
+      ElectivAPI.getAPI().getPerson(this.state.projekt.dozent)
       .then(personBO =>
           this.setState({
               dozentName: personBO.getname(),
@@ -72,23 +102,23 @@ class MeineProjekteEintrag extends Component {
     }
 
     componentDidMount() {
-      this.getPerson();
+      this.getProjekt();
     }
 
     componentDidUpdate(prevProps){
       if((this.props.show) && (this.props.show !== prevProps.show)) {
-        this.getPerson();
+        this.getProjekt();
       }
     }
 
 
     render(){
-        const {classes, expandedState, projekt} = this.props;
-        const {  loadingInProgress, dozentName, error } = this.state;
+        const {classes, expandedState} = this.props;
+        const {   projektID, projektName, dozentName, loadingInProgress, error } = this.state;
 
         return(
-              <StyledTableRow key={projekt.getID()}>
-                <StyledTableCell component="th" scope="row">{projekt.getname()}</StyledTableCell>
+              <StyledTableRow key={projektID}>
+                <StyledTableCell component="th" scope="row">{projektName}</StyledTableCell>
                 <StyledTableCell align="center">{dozentName}</StyledTableCell> 
                 <StyledTableCell align="center">Note fehlt noch</StyledTableCell> 
                 <StyledTableCell align="center">

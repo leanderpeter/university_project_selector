@@ -1,6 +1,6 @@
 import BusinessObject from "./BusinessObject";
 
-export default class NamedBusinessObject extends BusinessObject{
+export default class TeilnahmeBO extends BusinessObject{
 
 	constructor(ateilnehmer, alehrangebot){
         super();
