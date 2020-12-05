@@ -16,106 +16,59 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 
-
 const StyledTableCell = withStyles((theme) => ({
-    head: {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white,
-    },
-    body: {
-      fontSize: 14,
-    },
-  }))(TableCell);
+  head: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
-    root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
-      },
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
     },
-  }))(TableRow);
+  },
+}))(TableRow);
 
-const handleChange = (event) => {
-    /* setAge(event.target.value); */
-    };
-
-const handleClose = () => {
-/*     setOpen(false); */
-    };
-
-const handleOpen = () => {
-/*     setOpen(true); */
-    };
-  
-function createData(name, dozent, note, modul) {
-    return { name, dozent, note, modul };
-  }
-  
-const rows = [
-    createData('Marketing', 'Stingel', 1.0, null),
-    createData('IT', 'This', 4.0, null),
-    createData('BWL', 'Stingel', 1.3, null),
-];
- 
 class MeineProjekteEintrag extends Component {
 
     constructor(props){
         super(props);
 
         this.state = {
-            projekt : props.projekt,
+            projekt : props.projekt
         };
     }   
 
 
     render(){
 
-        
-        /* const {projekt} = this.state; */
-        const {classes} = this.props;
-      /*   const [modul, setModul] = React.useState('');
-        const [open, setOpen] = React.useState(false); */
+        const {classes, expandedState} = this.props;
+        const { projekt } = this.state;
 
         return(
-            <div>
-                <TableContainer component={Paper}>
-                    <Table className={classes.table} aria-label="customized table">
-                        <TableHead>
-                            <StyledTableRow>
-                            <StyledTableCell>Projekt</StyledTableCell>
-                            <StyledTableCell align="center">Dozent</StyledTableCell>
-                            <StyledTableCell align="center">Note</StyledTableCell>
-                            <StyledTableCell align="center">Modulzuweisung</StyledTableCell>
-                            </StyledTableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows.map((row) => (
-                            <StyledTableRow key={row.name}>
-                                <StyledTableCell component="th" scope="row">
-                                {row.name}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">{row.dozent}</StyledTableCell>
-                                <StyledTableCell align="center">{row.note}</StyledTableCell>
-                                <StyledTableCell align="center">
-                                    <FormControl className={classes.formControl}>
-                                        <InputLabel id="demo-controlled-open-select-label">EDV-Nummer</InputLabel>
-                                            <Select>
-                                                <MenuItem value=""><em>None</em></MenuItem>
-                                                <MenuItem value={10}>335123</MenuItem>
-                                                <MenuItem value={20}>222134</MenuItem>
-                                                <MenuItem value={30}>212324</MenuItem>
-                                            </Select>
-                                    </FormControl>
-                                </StyledTableCell>
-                            </StyledTableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <Button variant="contained" color="primary" size="medium" className={classes.button}startIcon={<SaveIcon />}>
-                    Semesterbericht
-                </Button>
-            </div>
+              <StyledTableRow key={projekt.getID()}>
+                <StyledTableCell component="th" scope="row">
+                {projekt.getname()}
+                </StyledTableCell>
+                <StyledTableCell align="center">Dozent fehlt noch</StyledTableCell> 
+                <StyledTableCell align="center">Note fehlt noch</StyledTableCell> 
+                <StyledTableCell align="center">
+                    <FormControl className={classes.formControl}>
+                        <InputLabel id="demo-controlled-open-select-label">EDV-Nummer</InputLabel>
+                            <Select>
+                                <MenuItem value=""><em>None</em></MenuItem>
+                                <MenuItem value={10}>335123</MenuItem>
+                                <MenuItem value={20}>222134</MenuItem>
+                                <MenuItem value={30}>212324</MenuItem>
+                            </Select>
+                    </FormControl>
+                </StyledTableCell>
+              </StyledTableRow>
         );
     }
 }
@@ -141,5 +94,29 @@ const styles = theme => ({
         },
     });
 
+/** PropTypes */
+MeineProjekteEintrag.propTypes = {
+    /** @ignore */
+    classes: PropTypes.object.isRequired,
+    /** The CustomerBO to be rendered */
+    customer: PropTypes.object.isRequired,
+    /** The state of this ProjektListeEintrag. If true the customer is shown with its accounts */
+    expandedState: PropTypes.bool.isRequired,
+    /** The handler responsible for handle expanded state changes (exanding/collapsing) of this ProjektListeEintrag 
+     * 
+     * Signature: onExpandedStateChange(CustomerBO customer)
+     */
+    onExpandedStateChange: PropTypes.func.isRequired,
+    /** 
+     *  Event Handler function which is called after a sucessfull delete of this customer.
+     * 
+     * Signature: onCustomerDelete(CustomerBO customer)
+     */
+    onCustomerDeleted: PropTypes.func.isRequired
+  }
+  
+
+
 export default withStyles(styles)(MeineProjekteEintrag);
+
 

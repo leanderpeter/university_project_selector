@@ -11,7 +11,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 class Header extends Component {
 	constructor(props) {
-		super(props);
+    super(props);
+  
 
 		//init empty state
 		this.state = {
@@ -26,7 +27,7 @@ class Header extends Component {
 	};
 	// Render component
 	render() {
-		const { user } = this.props;
+    const { user } = this.props;
 		return (
       <Paper variant='outlined' >
       <ProfileDropDown user={user} />
@@ -42,23 +43,11 @@ class Header extends Component {
         </Typography>
         {
           user ?
-            <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange} >
-            <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/HdM_Logo.svg/1200px-HdM_Logo.svg.png"
-                        width="50"
-                        align="left"
-                        display="flex"
-                        margin="auto"
-                        alt="Hdm Logo"
-                        align="left"
-                    />
-              
+            <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
               <Tab label='Projekte' component={RouterLink} to={`/projekte`} />
-              <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'} />
-              <Tab label='Projektverwaltung' component={RouterLink} to={`/projektverwaltung`} />
-              <Tab label='Über Uns' component={RouterLink} to={`/about`} />
-              <Tab icon={<SettingsIcon/>}component={RouterLink} to={`/berechtigung`}/>
-              
+              <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'}/>
+              <Tab label='Settings' component={RouterLink} to={``} />
+              <Tab label='About' component={RouterLink} to={`/about`} />
             </Tabs>
             : null
         }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear'
 import { withRouter } from 'react-router-dom';
 import { ElectivAPI } from '../api';
@@ -85,7 +84,7 @@ class ProjektListe extends Component {
 
 	/** Renders the component */
 	render() {
-    const { classes } = this.props;
+    const { classes , currentStudent } = this.props;
     const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm } = this.state;
 
     return (
@@ -124,12 +123,11 @@ class ProjektListe extends Component {
           
           filteredProjekte.map(projekt =>
             <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
-              onExpandedStateChange={this.onExpandedStateChange}
-              onCustomerDeleted={this.customerDeleted}
+              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent}
             />) 
         }
         <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`The list of customers could not be loaded.`} onReload={this.getProjekte} />
+        <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`} onReload={this.getProjekte} />
         
       </div>
     );
