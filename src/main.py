@@ -99,13 +99,16 @@ class MeineProjektListeOperationen(Resource):
     def put(self, ):
         pass
 
-
-@electivApp.route('/person')
+@electivApp.route('/person/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonOperationen(Resource):
-    def get(self, person_id):
+    @electivApp.marshal_list_with(person)
+    @secured
+
+    def get(self, id):
         adm = ProjektAdministration()
-        # personen = adm.
+        person = adm.get_person_by_id(id)
+        return person
 
     def delete(self, person_id):
         pass
