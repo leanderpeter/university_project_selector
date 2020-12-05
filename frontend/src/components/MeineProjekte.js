@@ -49,33 +49,33 @@ class MeineProjekte extends Component {
 
         let expandedID = null;
 
-        if (this.props.location.expandProjekt){
-            expandedID = this.props.location.expandProjekt.getID();
+        if (this.props.location.expandTeilnahme){
+            expandedID = this.props.location.expandTeilnahme.getID();
         }
 
 
         this.state = {
-            projekte : [],
+            teilnahmen : [],
             currentStudentName: null,
             currentStudentmat_nr: null,
             error: null,
             loadingInProgress: false, 
-            expandedProjektID: expandedID,
+            expandedTeilnahmeID: expandedID,
         };
     }
 
 
     // API Anbindung um Projekte vom Backend zu bekommen 
-    getMeineProjekte = () => {
-            ElectivAPI.getAPI().getMeineProjekte(this.props.currentStudent.id)
-            .then(projekteBOs =>
+    getTeilnahmen = () => {
+            ElectivAPI.getAPI().getTeihnahmen(this.props.currentStudent.id)
+            .then(teilnahmeBOs =>
                 this.setState({
-                    projekte: projekteBOs,
+                    teilnahmen: teilnahmeBOs,
                     error: null,
                     loadingInProgress: false,
                 })).catch(e =>
                     this.setState({
-                        projekte: [],
+                        teilnahme: [],
                         error: e,
                         loadingInProgress: false,
                     }));
@@ -87,24 +87,24 @@ class MeineProjekte extends Component {
     }
 
     componentDidMount() {
-        this.getMeineProjekte();
+        this.getTeilnahmen();
         this.setState({
             currentStudentName: this.props.currentStudent.getname(),
             currentStudentmat_nr: this.props.currentStudent.getmat_nr(),
         })
     }
 
-    onExpandedStateChange = projekt => {
-        //  Zum anfang Projekt Eintrag = null
+    onExpandedStateChange = teilnahme => {
+        //  Zum anfang Teilnahme Eintrag = null
         let newID = null;
     
         // Falls ein Objekt geclicket wird, collapse
-        if (projekt.getID() !== this.state.expandedProjektID) {
-          // Oeffnen mit neuer Projekt ID
-          newID = projekt.getID()
+        if (teilnahme.getID() !== this.state.expandedTeilnahmeID) {
+          // Oeffnen mit neuer Teilnahme ID
+          newID = teilnahme.getID()
         }
         this.setState({
-          expandedProjektID: newID,
+          expandedTeilnahmeID: newID,
         });
     
       }
@@ -112,7 +112,7 @@ class MeineProjekte extends Component {
     render(){
 
         const { classes } = this.props;
-        const { projekte, currentStudentName, currentStudentmat_nr, expandedProjektID, error, loadingInProgress} = this.state;
+        const { teilnahmen, currentStudentName, currentStudentmat_nr, expandedTeilnahmeID, error, loadingInProgress} = this.state;
         
         return(
             <div className={classes.root}>
@@ -129,8 +129,8 @@ class MeineProjekte extends Component {
                         </TableHead>
                         <TableBody>
                             {
-                                projekte.map(projekt => 
-                                    <MeineProjekteEintrag key={projekt.getID()} projekt = {projekt} expandedState={expandedProjektID === projekt.getID()}
+                                teilnahmen.map(teilnahme => 
+                                    <MeineProjekteEintrag key={teilnahme.getID()} teilnahme = {teilnahme} expandedState={expandedTeilnahmeID === teilnahme.getID()}
                                     onExpandedStateChange={this.onExpandedStateChange}
                                     onCustomerDeleted={this.onCustomerDeleted}
                                     show={this.props.show}
@@ -139,7 +139,7 @@ class MeineProjekte extends Component {
                         </TableBody>
                     </Table>
                     <LoadingProgress show={loadingInProgress} />
-                    <ContextErrorMessage error={error} contextErrorMsg = {'Meine Projekte konnten nicht geladen werden'} onReload={this.getProjekte} /> 
+                    <ContextErrorMessage error={error} contextErrorMsg = {'Meine Projekte konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
                 </TableContainer>
                 <Button variant="contained" color="primary" size="medium" className={classes.button}startIcon={<SaveIcon />}>
                     Semesterbericht

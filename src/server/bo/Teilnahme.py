@@ -6,6 +6,7 @@ from server.bo.BusinessObject import BusinessObject
 
 class Teilnahme(BusinessObject):
     def __init__(self):
+        super().__init__()
         self._teilnehmer = None
         self._lehrangebot = None
 

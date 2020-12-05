@@ -22,8 +22,8 @@ export default class ElectivAPI {
 	//delete
 	#searchProjektURL = (projektname) => `${this.#ElectivServerBaseURL}/projekte_by_name/${projektname}`;
 
-	//meine Projekte anzeigen
-	#getMeineProjekteURL = (id) => `${this.#ElectivServerBaseURL}/meineprojekte/${id}`;
+	//alle Teilnahmen eines Students anzeigen
+	#getTeilnahmenURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/${id}`;
   
 	//Teilnahme wählen
 	#putTeilnahmeURL = (lehrangebotId,teilnehmerId) => `${this.#ElectivServerBaseURL}/teilnahme?lehrangebotId=${lehrangebotId}&teilnehmerId=${teilnehmerId}`;
@@ -90,12 +90,12 @@ export default class ElectivAPI {
 		})
 	}
 	
-	getMeineProjekte(studentID){
-		return this.#fetchAdvanced(this.#getMeineProjekteURL(studentID)).then((responseJSON) => {
-			let projektBOs = ProjektBO.fromJSON(responseJSON);
-			console.info(projektBOs)
+	getTeilnahmen(studentID){
+		return this.#fetchAdvanced(this.#getTeilnahmenURL(studentID)).then((responseJSON) => {
+			let teilnahmeBOs = TeilnahmeBO.fromJSON(responseJSON);
+			console.info(teilnahmeBOs)
 			return new Promise(function (resolve){
-				resolve(projektBOs)
+				resolve(teilnahmeBOs)
 			})
 		})
 	}

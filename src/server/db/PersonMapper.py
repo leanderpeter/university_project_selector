@@ -52,9 +52,10 @@ class PersonMapper(Mapper):
         pass
 
 	def find_by_id(self, id):
-		result = None
-
-		cursor = self._connection.cursor()
+        
+        result = None
+		
+        cursor = self._connection.cursor()
 		command = "SELECT id, name, email, google_user_id, rolle FROM personen WHERE id='{}'".format(id)
 		cursor.execute(command)
 		tuples = cursor.fetchall()
@@ -68,6 +69,7 @@ class PersonMapper(Mapper):
 			person.set_google_user_id(google_user_id)
 			person.set_rolle(rolle)
 			result = person
+            
 		except IndexError:
 			"""Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
 			keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
