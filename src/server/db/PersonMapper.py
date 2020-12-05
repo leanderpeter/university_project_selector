@@ -51,57 +51,54 @@ class PersonMapper(Mapper):
     def find_by_key(self):
         pass
 
-	def find_by_id(self, id):
-        
+    def find_by_id(self, id):
         result = None
-		
         cursor = self._connection.cursor()
-		command = "SELECT id, name, email, google_user_id, rolle FROM personen WHERE id='{}'".format(id)
-		cursor.execute(command)
-		tuples = cursor.fetchall()
+        command = "SELECT id, name, email, google_user_id, rolle FROM personen WHERE id='{}'".format(id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
 
-		try:
-			(id, name, email, google_user_id, rolle) = tuples[0]
-			person = Person()
-			person.set_id(id)
-			person.set_name(name)
-			person.set_email(email)
-			person.set_google_user_id(google_user_id)
-			person.set_rolle(rolle)
-			result = person
-            
-		except IndexError:
-			"""Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+        try:
+            (id, name, email, google_user_id, rolle) = tuples[0]
+            person = Person()
+            person.set_id(id)
+            person.set_name(name)
+            person.set_email(email)
+            person.set_google_user_id(google_user_id)
+            person.set_rolle(rolle)
+            result = person
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
 			keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-			result = None
+            result = None
 
-		self._connection.commit()
-		cursor.close()
+        self._connection.commit()
+        cursor.close()
+        return result
 
-		return result
-		
+    def find_by_google_user_id(self, google_user_id):
+        result = None
 
-	def find_by_google_user_id(self, google_user_id):
-		result = None
+        cursor = self._connection.cursor()
+        command = "SELECT id, name, email, google_user_id, rolle FROM personen WHERE google_user_id='{}'".format(
+                google_user_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
 
-		cursor = self._connection.cursor()
-		command = "SELECT id, name, email, google_user_id, rolle FROM personen WHERE google_user_id='{}'".format(google_user_id)
-		cursor.execute(command)
-		tuples = cursor.fetchall()
-
-		try:
-			(id, name, email, google_user_id, rolle) = tuples[0]
-			person = Person()
-			person.set_id(id)
-			person.set_name(name)
-			person.set_email(email)
-			person.set_google_user_id(google_user_id)
-			person.set_rolle(rolle)
-			result = person
-		except IndexError:
-			"""Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-			keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-			result = None
+        try:
+            (id, name, email, google_user_id, rolle) = tuples[0]
+            person = Person()
+            person.set_id(id)
+            person.set_name(name)
+            person.set_email(email)
+            person.set_google_user_id(google_user_id)
+            person.set_rolle(rolle)
+            result = person
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
 
     def insert(self, person):
         """Insert a user object in the DB
