@@ -21,6 +21,11 @@ export default class ElectivAPI {
 	//delete
 	#searchProjektURL = (projektname) => `${this.#ElectivServerBaseURL}/projekte_by_name/${projektname}`;
 
+	// ------------------------Projekte bearbeiten/hinzufugen---------------------------
+
+
+	// ---------------------------------------------------------------------------------
+
 
 	//meine Projekte anzeigen
 	#getMeineProjekteURL = (id) => `${this.#ElectivServerBaseURL}/meineprojekte/${id}`;
@@ -62,6 +67,23 @@ export default class ElectivAPI {
 			console.info(projektBOs)
 			return new Promise(function (resolve){
 				resolve(projektBOs);
+			})
+		})
+	}
+
+	addProjekt(ProjektBO) {
+		return this.#fetchAdvanced(this.#addProjektURL(), {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(ProjektBO)
+		}).then((responseJSON) => {
+			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
+			let responseProjektBO = ProjektBO.fromJSON(responseJSON)[0];
+			return new Promise(function (resolve) {
+				resolve(responseProjektBO);
 			})
 		})
 	}

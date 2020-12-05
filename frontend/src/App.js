@@ -5,6 +5,7 @@ import firebase from 'firebase/app'; //Firebase module
 import 'firebase/auth'; //Firebase module
 import Header from './components/layout/Header';
 import ProjektListe from './components/ProjektListe';
+import ProjektDozentListe from './components/ProjektDozentListe';
 // import Electivs from '/components/Electivs';
 import About from './components/pages/About';
 import Theme from './Theme';
@@ -14,6 +15,7 @@ import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import ElectivAPI from './api/ElectivAPI';
 import firebaseConfig from './firebaseconfig';
+
 
 /*
 Main page of the electivApp. First firebase to verify users. Then routing to the pages via react-router-dom
@@ -137,6 +139,10 @@ class App extends React.Component {
                     <ProjektListe currentStudent={currentStudent}/>
                   </Route>
                   <Route path='/about' component={About} />
+
+                  <Route path='/projekteDozent' component={ProjektDozentListe}>
+                    <ProjektDozentListe currentStudent={currentStudent}/>
+                  </Route>
 
                   <Route path='/meineprojekte' component={MeineProjekte}>
                     <MeineProjekte currentStudent={currentStudent}/>

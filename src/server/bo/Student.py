@@ -1,7 +1,8 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from server.bo.Person import Person
+
 
 class Student(Person):
     def __init__(self):
@@ -20,4 +21,3 @@ class Student(Person):
 
     def set_kuerzel(self, kuerzel):
         self._kuerzel = kuerzel
-

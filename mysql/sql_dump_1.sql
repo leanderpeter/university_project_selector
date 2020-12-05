@@ -21,6 +21,27 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`personen` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+-- -----------------------------------------------------
+-- Table `electivApp`.`projekte_ausstehend`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `electivApp`.`projekte_ausstehend` (
+  `id` INT(11) NOT NULL DEFAULT '0',
+  `name` VARCHAR(100) NOT NULL DEFAULT '',
+  `max_teilnehmer` INT(11) NOT NULL DEFAULT '30',
+  `beschreibung` VARCHAR(100) NOT NULL DEFAULT '',
+  `betreuer` VARCHAR(100) NOT NULL DEFAULT '',
+  `externer_partner` VARCHAR(100) NULL DEFAULT '',
+  `woechentlich` TINYINT(1) NULL DEFAULT NULL,
+  `anzahl_block_vor` INT(11) NULL DEFAULT NULL,
+  `anzahl_block_in` INT(11) NULL DEFAULT NULL,
+  `praeferierte_block` VARCHAR(128) NULL DEFAULT '',
+  `bes_raum` TINYINT(1) NULL DEFAULT '0',
+  `raum` VARCHAR(128) NULL DEFAULT '',
+  `sprache` VARCHAR(128) NULL DEFAULT '',
+  `dozent` INT(11) DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
 -- Table `electivApp`.`projekte`

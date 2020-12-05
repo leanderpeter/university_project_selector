@@ -5,8 +5,8 @@ import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import { ElectivAPI } from '../api';
+import ProjektForm from './dialogs/ProjektForm';
 /*
-import CustomerForm from './dialogs/CustomerForm';
 import CustomerDeleteDialog from './dialogs/CustomerDeleteDialog';
 import AccountList from './AccountList';
 */
@@ -14,11 +14,10 @@ import AccountList from './AccountList';
 //Muss noch geschrieben werden!
 
 var InfoList = null;
-var ProjektForm = null;
 var ProjektDeleteDialog = null;
 
 
-class ProjektListeEintrag extends Component {
+class ProjektDozentListeEintrag extends Component {
 
 	constructor(props) {
 		super(props);
@@ -88,7 +87,7 @@ class ProjektListeEintrag extends Component {
   render() {
     const { classes, expandedState } = this.props;
     // Use the states projekt
-    const { projekt } = this.state;
+    const { projekt, showProjektForm} = this.state;
 
     // console.log(this.state);
     return (
@@ -121,7 +120,8 @@ class ProjektListeEintrag extends Component {
             
           </AccordionDetails>
         </Accordion>
-              
+        <ProjektForm show={showProjektForm} projekt={projekt} onClose={this.projektFormClosed} />
+
       </div>
     );
   }
@@ -140,24 +140,24 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-ProjektListeEintrag.propTypes = {
+ProjektDozentListeEintrag.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
-  /** The CustomerBO to be rendered */
-  customer: PropTypes.object.isRequired,
-  /** The state of this ProjektListeEintrag. If true the customer is shown with its accounts */
+  /** The ProjektBO to be rendered */
+  projekt: PropTypes.object.isRequired,
+  /** The state of this ProjektDozentListeEintrag. If true the projekt is shown with its accounts */
   expandedState: PropTypes.bool.isRequired,
-  /** The handler responsible for handle expanded state changes (exanding/collapsing) of this ProjektListeEintrag 
+  /** The handler responsible for handle expanded state changes (exanding/collapsing) of this ProjektDozentListeEintrag 
    * 
-   * Signature: onExpandedStateChange(CustomerBO customer)
+   * Signature: onExpandedStateChange(projektBo projekt)
    */
   onExpandedStateChange: PropTypes.func.isRequired,
   /** 
    *  Event Handler function which is called after a sucessfull delete of this customer.
    * 
-   * Signature: onCustomerDelete(CustomerBO customer)
+   * Signature: onProjektDelete(projektBO projekt)
    */
-  onCustomerDeleted: PropTypes.func.isRequired
+  onProjektDeleted: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(ProjektListeEintrag);
+export default withStyles(styles)(ProjektDozentListeEintrag);
