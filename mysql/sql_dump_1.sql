@@ -74,6 +74,8 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`teilnahmen` (
   `id` INT(11) NOT NULL DEFAULT '0',
   `lehrangebot` INT(11) NOT NULL,
   `teilnehmer` INT(11) NOT NULL,
+  `anrechnung` INT(11),
+  `resultat` INT(11),
   PRIMARY KEY (`id`),
   INDEX `fk_teilnahmen_projekte_idx` (`lehrangebot` ASC) VISIBLE,
   INDEX `fk_teilnahmen_studenten1_idx` (`teilnehmer` ASC) VISIBLE,

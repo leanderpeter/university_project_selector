@@ -30,26 +30,25 @@ class ProjektMapper(Mapper):
         return result
 
     def find_projekt_by_id(self, id):
+        result = None
 
         cursor = self._connection.cursor()
-
-        command = (
-            "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent FROM projekte WHERE id={}").format(
-            id)
+        command = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent FROM projekte WHERE id={}").format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        """TODO Wieso eine for Schleife.. ID = eindeutig"""
-        for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
-             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) in tuples:
-            projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
-                                          woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
-                                          raum, sprache, dozent)
+        try:
+            (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) = tuples[0]
+            result = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent)
+        
+        except IndexError:
+            result = None
+
 
         self._connection.commit()
         cursor.close()
 
-        return projekt
+        return result
 
     def create_projekt(self, id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich,
                        anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent):

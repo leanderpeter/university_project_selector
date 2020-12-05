@@ -34,15 +34,17 @@ class TeilnahmeMapper(Mapper):
         """ Findet alle Teilnahmen für eine bestimmte user_id"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id,lehrangebot, teilnehmer FROM teilnahmen WHERE teilnehmer={}".format(student_id)
+        command = "SELECT id, lehrangebot, teilnehmer, anrechnung, resultat FROM teilnahmen WHERE teilnehmer={}".format(student_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, lehrangebot, teilnehmer) in tuples:
+        for (id, lehrangebot, teilnehmer, anrechnung, resultat) in tuples:
             teilnahme = Teilnahme()
             teilnahme.set_id(id)
             teilnahme.set_lehrangebot(lehrangebot)
             teilnahme.set_teilnehmer(teilnehmer)
+            teilnahme.set_anrechnung(anrechnung)
+            teilnahme.set_resultat(resultat)
             result.append(teilnahme)
 
         self._connection.commit()

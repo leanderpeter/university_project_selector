@@ -63,6 +63,12 @@ projekt = api.inherit('Projekt', nbo, {
     'teilnehmerListe': fields.String(attribute='_teilnehmerListe', description='Liste mit IDs der Teilnehmer')
 })
 
+teilnahme = api.inherit('Teilnahme', bo, {
+    'teilnehmer': fields.Integer(attribute='_teilnehmer', description='Die ID des Studenten der Teilnahme'),
+    'lehrangebot': fields.Integer(attribute='_lehrangebot', description='Die ID des Projekts der Teilnahme'),
+    'anrechnung': fields.Integer(attribute='_anrechnung', description='Das Modul auf das die Teilnahme angerechnet wurde'),
+    'resultat': fields.Integer(attribute='_resultat', description='Das Ergebnis der Teilnahme')
+})
 
 @electivApp.route('/projekte')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -80,18 +86,35 @@ class ProjektListeOperationen(Resource):
     def put(self, projekt_id):
         pass
 
-
-@electivApp.route('/meineprojekte/<int:id>')
+@electivApp.route('/projekt/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class MeineProjektListeOperationen(Resource):
+class ProjektOperationen(Resource):
     @electivApp.marshal_list_with(projekt)
     @secured
+
+    def get(self, id):
+        adm = ProjektAdministration()
+        projekt = adm.get_projekt_by_id(id)
+        return projekt
+
+    def delete(self, projekt_id):
+        pass
+
+    def put(self, projekt_id):
+        pass
+
+
+@electivApp.route('/teilnahmen/<int:id>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class TeilnahmeListeOperationen(Resource):
+    @electivApp.marshal_list_with(teilnahme)
+    @secured
+ 
     def get(self, id):
         adm = ProjektAdministration()
         """TODO 1 SQL Abfrage machen"""
         teilnahmen = adm.get_teilnahmen_von_student(id)
-        projekte = adm.get_projekte_von_teilnahmen(teilnahmen)
-        return projekte
+        return teilnahmen
 
     def delete(self, ):
         pass
@@ -148,6 +171,8 @@ class TeilnahmeOperationen(Resource):
         teilnehmerId = request.args.get("teilnehmerId")
         projektAdministration = ProjektAdministration()
         projektAdministration.create_teilnahme(lehrangebotId, teilnehmerId)
+
+
 
 
 class BewertungOperationen(Resource):

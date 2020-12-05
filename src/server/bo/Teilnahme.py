@@ -9,6 +9,8 @@ class Teilnahme(BusinessObject):
         super().__init__()
         self._teilnehmer = None
         self._lehrangebot = None
+        self._anrechnung = None
+        self._resultat = None
 
     def get_lehrangebot(self):
         return self._lehrangebot
@@ -21,3 +23,15 @@ class Teilnahme(BusinessObject):
 
     def set_teilnehmer(self, teilnehmer):
         self._teilnehmer = teilnehmer
+    
+    def get_anrechnung(self ):
+        return self._teilnehmer
+
+    def set_anrechnung(self, anrechnung):
+        self._anrechnung = anrechnung
+    
+    def get_resultat(self ):
+        return self._resultat
+
+    def set_resultat(self, resultat):
+        self._resultat = resultat

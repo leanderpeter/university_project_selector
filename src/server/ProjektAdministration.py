@@ -80,8 +80,9 @@ class ProjektAdministration(object):
     def create_projekt(self, ):
         pass
 
-    def get_projekt_by_id(self, ):
-        pass
+    def get_projekt_by_id(self, projekt_id):
+        with ProjektMapper() as mapper:
+            return mapper.find_projekt_by_id(projekt_id)
 
     def get_alle_projekte(self, ):
         """return alle Projekte """
@@ -112,24 +113,11 @@ class ProjektAdministration(object):
     def delete_bewertung(self, ):
         pass
 
-    def create_teilnahme(self, ):
-        pass
 
     def get_teilnahmen_von_student(self, id):
         """ Alle Teilnamen des Users auslesen"""
         with TeilnahmeMapper() as mapper:
             return mapper.find_by_student_id(id)
-
-    def get_projekte_von_teilnahmen(self, teilnahmen):
-        result = []
-
-        for a in teilnahmen:
-            projekt_id = a.get_lehrangebot()
-            with ProjektMapper() as mapper:
-                projekt = mapper.find_projekt_by_id(projekt_id)
-            result.append(projekt)
-
-        return result
 
     def delete_teilnahme(self, ):
         pass
