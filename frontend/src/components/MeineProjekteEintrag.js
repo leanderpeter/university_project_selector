@@ -18,6 +18,7 @@ import Select from '@material-ui/core/Select';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import TableFooter from '@material-ui/core/TableFooter';
+import BewertungBO from '../api/BewertungBO';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -48,6 +49,7 @@ class MeineProjekteEintrag extends Component {
             projektID: null,
             projektName: null,
             dozentName: null,
+            note: null,
             loadingInProgress: false,
             error: null
         };
@@ -67,6 +69,7 @@ class MeineProjekteEintrag extends Component {
             error: null,
           })).then(()=>{
             this.getPerson()
+            this.getBewertung()
           })
           .catch(e =>
               this.setState({
@@ -82,9 +85,28 @@ class MeineProjekteEintrag extends Component {
       });
     }
 
+    getBewertung = () => {
+      ElectivAPI.getAPI().getBewertung(this.props.teilnahme.resultat)
+      .then(bewertungBO =>
+          this.setState({
+              note: bewertungBO.getnote(),
+              error: null,
+              loadingInProgress: false,
+          }))
+          .catch(e =>
+              this.setState({
+                  note: null,
+                  error: null,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true
+      });
+    }
+
 
     getPerson = () => {
-      console.log(this.state.projekt,'affaf')
       ElectivAPI.getAPI().getPerson(this.state.projekt.dozent)
       .then(personBO =>
           this.setState({
@@ -117,13 +139,13 @@ class MeineProjekteEintrag extends Component {
 
     render(){
         const {classes, expandedState} = this.props;
-        const {   projektID, projektName, dozentName, loadingInProgress, error } = this.state;
+        const {   projektID, projektName, dozentName, note, loadingInProgress, error } = this.state;
 
         return(
               <StyledTableRow key={projektID}>
                 <StyledTableCell component="th" scope="row">{projektName}</StyledTableCell>
                 <StyledTableCell align="center">{dozentName}</StyledTableCell> 
-                <StyledTableCell align="center">Note fehlt noch</StyledTableCell> 
+                <StyledTableCell align="center">{note}</StyledTableCell> 
                 <StyledTableCell align="center">
                     <FormControl className={classes.formControl}>
                         <InputLabel id="demo-controlled-open-select-label">EDV-Nummer</InputLabel>

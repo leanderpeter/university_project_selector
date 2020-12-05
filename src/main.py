@@ -8,9 +8,6 @@ from flask import request
 
 # Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.ProjektAdministration import ProjektAdministration
-from server.bo.Person import Person
-from server.bo.Student import Student
-from server.bo.Projekt import Projekt
 from SecurityDecorator import secured
 
 # ..weitere Imports notwendig z.B. BO-Klassen und SecurityDecorator
@@ -67,7 +64,11 @@ teilnahme = api.inherit('Teilnahme', bo, {
     'teilnehmer': fields.Integer(attribute='_teilnehmer', description='Die ID des Studenten der Teilnahme'),
     'lehrangebot': fields.Integer(attribute='_lehrangebot', description='Die ID des Projekts der Teilnahme'),
     'anrechnung': fields.Integer(attribute='_anrechnung', description='Das Modul auf das die Teilnahme angerechnet wurde'),
-    'resultat': fields.Integer(attribute='_resultat', description='Das Ergebnis der Teilnahme')
+    'resultat': fields.Integer(attribute='_resultat', description='Die ID der Note einer Teilnahme')
+})
+
+bewertung = api.inherit('Bewertung', bo, {
+    'note': fields.Float(attribute='_note', description='Die Note der Teilnahme'),
 })
 
 @electivApp.route('/projekte')
@@ -172,15 +173,16 @@ class TeilnahmeOperationen(Resource):
         projektAdministration = ProjektAdministration()
         projektAdministration.create_teilnahme(lehrangebotId, teilnehmerId)
 
-
-
-
+@electivApp.route('/bewertung/<int:id>')
+@electivApp.response(500, 'Something went wrong')
 class BewertungOperationen(Resource):
-    def __init__(self):
-        pass
-
-    def get(self, bewertung_id):
-        pass
+    @electivApp.marshal_list_with(bewertung)
+    @secured
+    
+    def get(self, id):
+        adm = ProjektAdministration()
+        bewertung = adm.get_bewertung_by_id(id)
+        return bewertung
 
     def delete(self, bewertung_id):
         pass

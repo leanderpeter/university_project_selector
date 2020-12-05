@@ -9,6 +9,7 @@ from .bo.Projekt import Projekt
 from .db.PersonMapper import PersonMapper
 from .db.StudentMapper import StudentMapper
 from .db.TeilnahmeMapper import TeilnahmeMapper
+from .db.BewertungMapper import BewertungMapper
 from .db.ProjektMapper import ProjektMapper
 from .bo.Teilnahme import Teilnahme
 
@@ -107,8 +108,9 @@ class ProjektAdministration(object):
     def create_bewertung(self, ):
         pass
 
-    def get_bewertung(self, ):
-        pass
+    def get_bewertung_by_id(self, id):
+        with BewertungMapper() as mapper:
+            return mapper.find_by_id(id)
 
     def delete_bewertung(self, ):
         pass

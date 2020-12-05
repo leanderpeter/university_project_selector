@@ -66,29 +66,42 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`studenten` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-
 -- -----------------------------------------------------
--- Table `electivapp`.`teilnahmen`
+-- Table `electivApp`.`teilnahmen`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `electivApp`.`teilnahmen` (
-  `id` INT(11) NOT NULL DEFAULT '0',
-  `lehrangebot` INT(11) NOT NULL,
-  `teilnehmer` INT(11) NOT NULL,
-  `anrechnung` INT(11),
-  `resultat` INT(11),
+  `id` INT NOT NULL DEFAULT '0',
+  `lehrangebot` INT NOT NULL,
+  `teilnehmer` INT NOT NULL,
+  `anrechnung` INT NULL DEFAULT NULL,
+  `resultat` INT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_teilnahmen_projekte_idx` (`lehrangebot` ASC) VISIBLE,
   INDEX `fk_teilnahmen_studenten1_idx` (`teilnehmer` ASC) VISIBLE,
+  INDEX `fk_teilnahmen_bewertungen1_idx` (`resultat` ASC) VISIBLE,
   CONSTRAINT `fk_teilnahmen_projekte`
     FOREIGN KEY (`lehrangebot`)
-    REFERENCES `electivApp`.`projekte` (`id`),
+    REFERENCES `electivapp`.`projekte` (`id`),
   CONSTRAINT `fk_teilnahmen_studenten1`
     FOREIGN KEY (`teilnehmer`)
-    REFERENCES `electivApp`.`studenten` (`id`)
+    REFERENCES `electivapp`.`studenten` (`id`),
+  CONSTRAINT `fk_teilnahmen_bewertungen1`
+    FOREIGN KEY (`resultat`)
+    REFERENCES `electivapp`.`bewertungen` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `electivApp`.`bewertungen`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `electivApp`.`bewertungen` (
+  `id` INT NOT NULL,
+  `note` DECIMAL(2,1) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
 
 
 LOCK TABLES `projekte` WRITE;
@@ -99,15 +112,22 @@ UNLOCK TABLES;
 
 LOCK TABLES `teilnahmen` WRITE;
 /*!40000 ALTER TABLE `teilnahmen` DISABLE KEYS */;
-INSERT INTO `electivapp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`) VALUES ('1', '1232', '1');
+INSERT INTO `electivApp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`,`anrechnung`, `resultat`) VALUES ('1', '1232', '1', NULL, 1);
 /*!40000 ALTER TABLE `teilnahmen` ENABLE KEYS */;
 UNLOCK TABLES;
 
 LOCK TABLES `personen` WRITE;
 /*!40000 ALTER TABLE `personen` DISABLE KEYS */;
-INSERT INTO `electivapp`.`personen` (`id`, `name`, `email`, `rolle`) VALUES ('1', 'Prof. Dr. Thies', 'thies@hdm.de', '1');
-INSERT INTO `electivapp`.`personen` (`id`, `name`, `email`, `rolle`) VALUES ('2', 'Prof. Dr. Kunz', 'kunz@mail.de', '1');
+INSERT INTO `electivApp`.`personen` (`id`, `name`, `email`, `rolle`) VALUES ('1', 'Prof. Dr. Thies', 'thies@hdm.de', '1');
+INSERT INTO `electivApp`.`personen` (`id`, `name`, `email`, `rolle`) VALUES ('2', 'Prof. Dr. Kunz', 'kunz@mail.de', '1');
 /*!40000 ALTER TABLE `personen` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `bewertungen` WRITE;
+/*!40000 ALTER TABLE `bewertungen` DISABLE KEYS */;
+INSERT INTO `electivApp`.`bewertungen` (`id`, `note`) VALUES ('1', '1.0');
+INSERT INTO `electivApp`.`bewertungen` (`id`, `note`) VALUES ('2', '3.0');
+/*!40000 ALTER TABLE `bewertungen` ENABLE KEYS */;
 UNLOCK TABLES;
 
 

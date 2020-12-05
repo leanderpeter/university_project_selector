@@ -9,11 +9,11 @@ class Bewertung(BusinessObject):
         self._note = None
         self._leistung = None
 
-    def get_note(self, ):
-        pass
+    def get_note(self):
+        return self._note
 
-    def set_note(self, ):
-        pass
+    def set_note(self, note):
+        self._note = note
 
     def get_leistung(self, ):
         pass
