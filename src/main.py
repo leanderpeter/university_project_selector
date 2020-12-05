@@ -100,6 +100,7 @@ class MeineProjektListeOperationen(Resource):
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonOperationen(Resource):
     @electivApp.marshal_list_with(person)
+    @secured
 
     def get(self, id):
         adm = ProjektAdministration()
