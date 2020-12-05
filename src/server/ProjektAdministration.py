@@ -44,9 +44,8 @@ class ProjektAdministration(object):
     def get_user_by_name(self, ):
         pass
 
-	def get_person_by_id(self, id):
-		with PersonMapper() as mapper:
-			return mapper.find_by_id(id)
+    def get_user_by_id(self, ):
+        pass
 
     def get_user_by_email(self, ):
         pass

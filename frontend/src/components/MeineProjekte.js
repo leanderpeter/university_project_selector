@@ -17,7 +17,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import TableFooter from '@material-ui/core/TableFooter';
 
 //import MeineProjekteEintrag
 import MeineProjekteEintrag from './MeineProjekteEintrag';
@@ -56,8 +55,7 @@ class MeineProjekte extends Component {
 
         this.state = {
             projekte : [],
-            currentStudentName: null,
-            currentStudentmat_nr: null,
+            student: null,
             error: null,
             loadingInProgress: false, 
             expandedProjektID: expandedID,
@@ -81,17 +79,12 @@ class MeineProjekte extends Component {
                     }));
             this.setState({
                 error: null,
-                loadingInProgress: true,
-                loadingProjektError: null
+                loadingInProgress: true
             });
     }
 
     componentDidMount() {
         this.getMeineProjekte();
-        this.setState({
-            currentStudentName: this.props.currentStudent.getname(),
-            currentStudentmat_nr: this.props.currentStudent.getmat_nr(),
-        })
     }
 
     onExpandedStateChange = projekt => {
@@ -111,12 +104,12 @@ class MeineProjekte extends Component {
 
     render(){
 
-        const { classes } = this.props;
-        const { projekte, currentStudentName, currentStudentmat_nr, expandedProjektID, error, loadingInProgress} = this.state;
+        const { classes, currentStudent } = this.props;
+        const { projekte, expandedProjektID, error, loadingInProgress} = this.state;
         
         return(
             <div className={classes.root}>
-                <Typography>Projekte von {currentStudentName}, Matrikelnummer: {currentStudentmat_nr}</Typography>
+                <Typography>Projekte von {currentStudent.getname()}, Matrikelnummer: {currentStudent.getmat_nr()}</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="customized table">
                         <TableHead>
@@ -132,18 +125,17 @@ class MeineProjekte extends Component {
                                 projekte.map(projekt => 
                                     <MeineProjekteEintrag key={projekt.getID()} projekt = {projekt} expandedState={expandedProjektID === projekt.getID()}
                                     onExpandedStateChange={this.onExpandedStateChange}
-                                    onCustomerDeleted={this.onCustomerDeleted}
-                                    show={this.props.show}
                                 />) 
                             }
                         </TableBody>
                     </Table>
-                    <LoadingProgress show={loadingInProgress} />
-                    <ContextErrorMessage error={error} contextErrorMsg = {'Meine Projekte konnten nicht geladen werden'} onReload={this.getProjekte} /> 
                 </TableContainer>
                 <Button variant="contained" color="primary" size="medium" className={classes.button}startIcon={<SaveIcon />}>
                     Semesterbericht
                 </Button>
+                <LoadingProgress show={loadingInProgress} />
+                <ContextErrorMessage error={error} contextErrorMsg = {'Meine Projekte konnten nicht geladen werden'} onReload={this.getProjekte} />
+                
             </div>
         )
     }
@@ -169,7 +161,7 @@ MeineProjekte.propTypes = {
     /** @ignore */
     location: PropTypes.object.isRequired,
 	// logged in Firebase user/person
-    show: PropTypes.bool.isRequired
+	user: PropTypes.object,
 }
 
 
