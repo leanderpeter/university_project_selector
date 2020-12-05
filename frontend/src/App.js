@@ -143,7 +143,7 @@ class App extends React.Component {
                   <Route path='/meineprojekte' component={MeineProjekte}>
                     <MeineProjekte currentStudent={currentStudent}/>
                   </Route>
-                  <Route path='/Berechtigung' component={Berechtigung} />
+                  
                 </>
                 :
                 // if not signed in show sign in page
