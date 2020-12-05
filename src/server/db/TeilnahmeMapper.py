@@ -1,19 +1,19 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from server.db.Mapper import Mapper
 from server.bo.Teilnahme import Teilnahme
+
 
 class TeilnahmeMapper(Mapper):
     def __init__(self):
         super().__init__()
 
-
     def find_all(self):
         """ Findet alle Teilnahmen"""
         result = []
         cursor = self._connection.cursor()
-        cursor.execute("SELECT * from teilnahmen") 
+        cursor.execute("SELECT * from teilnahmen")
         tuples = cursor.fetchall()
 
         for (id, lehrangebot, anrechnung, teilnehmer, resultat) in tuples:
@@ -29,13 +29,12 @@ class TeilnahmeMapper(Mapper):
         cursor.close()
 
         return result
-        
 
     def find_by_student_id(self, student_id):
         """ Findet alle Teilnahmen für eine bestimmte user_id"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id,lehrangebot, teilnehmer FROM teilnahmen WHERE teilnehmer={}".format(student_id) 
+        command = "SELECT id,lehrangebot, teilnehmer FROM teilnahmen WHERE teilnehmer={}".format(student_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -46,17 +45,16 @@ class TeilnahmeMapper(Mapper):
             teilnahme.set_teilnehmer(teilnehmer)
             result.append(teilnahme)
 
-
         self._connection.commit()
         cursor.close()
 
         return result
 
-    def find_projekt_id(self,id):
+    def find_projekt_id(self, id):
 
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT lehrangebot FROM teilnahmen WHERE id={}".format(id) 
+        command = "SELECT lehrangebot FROM teilnahmen WHERE id={}".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -64,7 +62,6 @@ class TeilnahmeMapper(Mapper):
             teilnahme = Teilnahme()
             teilnahme.set_lehrangebot(lehrangebot)
             result.append(teilnahme)
-
 
         self._connection.commit()
         cursor.close()
@@ -74,6 +71,7 @@ class TeilnahmeMapper(Mapper):
     def find_by_key(self):
         """Reads a tuple with a given ID"""
         pass
+
 
     def insert(self, teilnahme):
         cursor = self._connection.cursor()
@@ -112,7 +110,7 @@ class TeilnahmeMapper(Mapper):
 '''Nur zum testen'''
 
 if (__name__ == "__main__"):
-	with TeilnahmeMapper() as mapper:
-		result = mapper.find_all()
-		for p in result:
-			print(p)
+    with TeilnahmeMapper() as mapper:
+        result = mapper.find_all()
+        for p in result:
+            print(p)

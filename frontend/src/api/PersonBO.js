@@ -33,7 +33,7 @@ export default class PersonBO extends NamedBusinessObject{
         return this.rolle;
     }
 
-    setemail(arolle){
+    setrolle(arolle){
         this.rolle = arolle;
     }
     
