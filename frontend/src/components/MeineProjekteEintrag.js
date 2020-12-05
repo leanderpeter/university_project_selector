@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ElectivAPI from '../api/ElectivAPI';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
@@ -15,9 +14,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import LoadingProgress from './dialogs/LoadingProgress';
-import ContextErrorMessage from './dialogs/ContextErrorMessage';
-import TableFooter from '@material-ui/core/TableFooter';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -44,52 +40,22 @@ class MeineProjekteEintrag extends Component {
         super(props);
 
         this.state = {
-            dozentName: null,
-            loadingInProgress: false,
-            error: null
+            projekt : props.projekt
         };
     }   
 
-    getPerson = () => {
-      console.log(this.props.projekt.dozent, "noch mal Test oben");
-      ElectivAPI.getAPI().getPerson(this.props.projekt.dozent)
-      .then(personBO =>
-          this.setState({
-              dozentName: personBO.getname(),
-              error: null,
-              loadingInProgress: false,
-          }))
-          .catch(e =>
-              this.setState({
-                  dozentName: null,
-                  error: e,
-                  loadingInProgress: false,
-              }));
-      this.setState({
-          error: null,
-          loadingInProgress: true
-      });
-    }
-
-    componentDidMount() {
-      this.getPerson();
-    }
-
-    componentDidUpdate(prevProps){
-      if((this.props.show) && (this.props.show !== prevProps.show)) {
-        this.getPerson();
-      }
-    }
-
 
     render(){
-        const {classes, expandedState, projekt} = this.props;
-        const {  loadingInProgress, dozentName, error } = this.state;
+
+        const {classes, expandedState} = this.props;
+        const { projekt } = this.state;
 
         return(
               <StyledTableRow key={projekt.getID()}>
-                <StyledTableCell component="th" scope="row">{projekt.getname()}</StyledTableCell>
-                <StyledTableCell align="center">{dozentName}</StyledTableCell> 
+                <StyledTableCell component="th" scope="row">
+                {projekt.getname()}
+                </StyledTableCell>
+                <StyledTableCell align="center">Dozent fehlt noch</StyledTableCell> 
                 <StyledTableCell align="center">Note fehlt noch</StyledTableCell> 
                 <StyledTableCell align="center">
                     <FormControl className={classes.formControl}>
@@ -102,8 +68,6 @@ class MeineProjekteEintrag extends Component {
                             </Select>
                     </FormControl>
                 </StyledTableCell>
-                  <LoadingProgress show={loadingInProgress}></LoadingProgress>
-                  <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Projekt konnte nicht geladen werden'} onReload={this.getPerson} />
               </StyledTableRow>
         );
     }
@@ -134,8 +98,8 @@ const styles = theme => ({
 MeineProjekteEintrag.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
-    /** Projekt to be rendered */
-    projekt: PropTypes.object.isRequired,
+    /** The CustomerBO to be rendered */
+    customer: PropTypes.object.isRequired,
     /** The state of this ProjektListeEintrag. If true the customer is shown with its accounts */
     expandedState: PropTypes.bool.isRequired,
     /** The handler responsible for handle expanded state changes (exanding/collapsing) of this ProjektListeEintrag 
@@ -143,15 +107,12 @@ MeineProjekteEintrag.propTypes = {
      * Signature: onExpandedStateChange(CustomerBO customer)
      */
     onExpandedStateChange: PropTypes.func.isRequired,
-
     /** 
      *  Event Handler function which is called after a sucessfull delete of this customer.
      * 
      * Signature: onCustomerDelete(CustomerBO customer)
      */
-    onCustomerDeleted: PropTypes.func.isRequired,
-    /** wenn true, dozent wird geladen */
-    show: PropTypes.bool.isRequired
+    onCustomerDeleted: PropTypes.func.isRequired
   }
   
 
