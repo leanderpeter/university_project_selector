@@ -53,6 +53,9 @@ class MeineProjekteEintrag extends Component {
         };
     }
 
+
+    //Noch zu tun:  projektBO soll kein Array sein. Die 2 Funktionen sollen nacheinander aufgerufen werden
+    
     getProjekt = () => {
       ElectivAPI.getAPI().getProjekt(this.props.teilnahme.lehrangebot)
       .then(projektBO =>
