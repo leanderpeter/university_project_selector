@@ -19,6 +19,7 @@ CORS(app, resources=r'/electivApp/*')
 
 api = Api(app, version='1.0', title='electivApp API',
           description='Web App for choosing electiv subjects for the university')
+
 electivApp = api.namespace('electivApp', description='Functions of electivApp')
 
 bo = api.model('BusinessObject', {
@@ -56,6 +57,7 @@ projekt = api.inherit('Projekt', nbo, {
     'raum': fields.String(attribute='_raum', description='Raum des Projekts'),
     'sprache': fields.String(attribute='_sprache', description='Sprache des Projekts'),
     'dozent': fields.Integer(attribute='_dozent', description='Der Dozent des Projekts'),
+    'moduloption': fields.String(attribute='_moduloption', description='Die Moduloptionen für ein Projekt'),
     'anzahlTeilnehmer': fields.Integer(attribute='_anzahlTeilnehmer', description='Die Anzahl der angemeldeten Teilnehmer'),
     'teilnehmerListe': fields.String(attribute='_teilnehmerListe', description='Liste mit IDs der Teilnehmer')
 })
@@ -91,7 +93,7 @@ class ProjektListeOperationen(Resource):
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektOperationen(Resource):
     @electivApp.marshal_list_with(projekt)
-    @secured
+    
 
     def get(self, id):
         adm = ProjektAdministration()

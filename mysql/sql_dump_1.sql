@@ -70,28 +70,33 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `electivApp`.`teilnahmen`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `electivApp`.`teilnahmen` (
-  `id` INT NOT NULL DEFAULT '0',
-  `lehrangebot` INT NOT NULL,
-  `teilnehmer` INT NOT NULL,
-  `anrechnung` INT NULL DEFAULT NULL,
+  `id` INT(11) NOT NULL DEFAULT '0',
+  `lehrangebot` INT(11) NOT NULL,
+  `teilnehmer` INT(11) NOT NULL,
+  `anrechnung` INT DEFAULT NULL,
   `resultat` INT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_teilnahmen_projekte_idx` (`lehrangebot` ASC) VISIBLE,
   INDEX `fk_teilnahmen_studenten1_idx` (`teilnehmer` ASC) VISIBLE,
+  INDEX `fk_teilnahmen_module1_idx` (`anrechnung` ASC) VISIBLE,
   INDEX `fk_teilnahmen_bewertungen1_idx` (`resultat` ASC) VISIBLE,
   CONSTRAINT `fk_teilnahmen_projekte`
     FOREIGN KEY (`lehrangebot`)
-    REFERENCES `electivapp`.`projekte` (`id`),
+    REFERENCES `electivApp`.`projekte` (`id`),
   CONSTRAINT `fk_teilnahmen_studenten1`
     FOREIGN KEY (`teilnehmer`)
-    REFERENCES `electivapp`.`studenten` (`id`),
+    REFERENCES `electivApp`.`studenten` (`id`),
+  CONSTRAINT `fk_teilnahmen_module1`
+    FOREIGN KEY (`anrechnung`)
+    REFERENCES `electivApp`.`module` (`id`),
   CONSTRAINT `fk_teilnahmen_bewertungen1`
     FOREIGN KEY (`resultat`)
-    REFERENCES `electivapp`.`bewertungen` (`id`)
+    REFERENCES `electivApp`.`bewertungen` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
 
 
 -- -----------------------------------------------------
@@ -102,6 +107,40 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`bewertungen` (
   `note` DECIMAL(2,1) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `electivApp`.`module`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `electivApp`.`module` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(45) NULL,
+  `edv_nr` INT NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `electivApp`.`projekte_hat_module`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `electivApp`.`projekte_hat_module` (
+  `projekt_id` INT(11) NOT NULL,
+  `modul_id` INT NOT NULL,
+  PRIMARY KEY (`projekt_id`, `modul_id`),
+  INDEX `fk_projekte_has_module_module1_idx` (`modul_id` ASC) VISIBLE,
+  INDEX `fk_projekte_has_module_projekte1_idx` (`projekt_id` ASC) VISIBLE,
+  CONSTRAINT `fk_projekte_hat_module_projekte1`
+    FOREIGN KEY (`projekt_id`)
+    REFERENCES `electivApp`.`projekte` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_projekte_hat_module_module1`
+    FOREIGN KEY (`modul_id`)
+    REFERENCES `electivApp`.`module` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 LOCK TABLES `projekte` WRITE;
@@ -125,12 +164,22 @@ UNLOCK TABLES;
 
 LOCK TABLES `bewertungen` WRITE;
 /*!40000 ALTER TABLE `bewertungen` DISABLE KEYS */;
-INSERT INTO `electivApp`.`bewertungen` (`id`, `note`) VALUES ('1', '1.0');
+INSERT INTO `electivApp`.`bewertungen` (`id`, `note`) VALUES ('1', '1.3');
 INSERT INTO `electivApp`.`bewertungen` (`id`, `note`) VALUES ('2', '3.0');
 /*!40000 ALTER TABLE `bewertungen` ENABLE KEYS */;
 UNLOCK TABLES;
 
+LOCK TABLES `module` WRITE;
+/*!40000 ALTER TABLE `module` DISABLE KEYS */;
+INSERT INTO `electivApp`.`module` (`id`, `name`, `edv_nr`) VALUES ('1', 'SW Projekt', '338079');
+/*!40000 ALTER TABLE `module` ENABLE KEYS */;
+UNLOCK TABLES;
 
+LOCK TABLES `projekte_hat_module` WRITE;
+/*!40000 ALTER TABLE `projekte_hat_module` DISABLE KEYS */;
+INSERT INTO `electivApp`.`projekte_hat_module` (`projekt_id`, `modul_id`) VALUES ('1232', '1');
+/*!40000 ALTER TABLE `projekte_hat_module` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
