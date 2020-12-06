@@ -3,6 +3,7 @@ import StudentBO from './StudentBO';
 import PersonBO from './PersonBO';
 import TeilnahmeBO from './TeilnahmeBO';
 import BewertungBO from './BewertungBO';
+import ModulBO from './ModulBO';
 
 /*
 Singleton Abstarktion des backend REST interfaces. Es handelt sich um eine access methode
@@ -42,6 +43,9 @@ export default class ElectivAPI {
 
 	//Bewertung nach Id bekommen
 	#getBewertungURL = (id) => `${this.#ElectivServerBaseURL}/bewertung/${id}`;
+
+	//Module nach Id bekommen
+	#getModule_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/module/${id}`;
 
 
 
@@ -142,6 +146,15 @@ export default class ElectivAPI {
 			console.info(bewertungBO)
 			return new Promise(function (resolve){
 				resolve(bewertungBO)
+			})
+		})
+	}
+	getModule_by_projekt_id(id){
+		return this.#fetchAdvanced(this.#getModule_by_projekt_idURL(id)).then((responseJSON) => {
+			let modulBO = ModulBO.fromJSON(responseJSON);
+			console.info(modulBO)
+			return new Promise(function (resolve){
+				resolve(modulBO)
 			})
 		})
 	}

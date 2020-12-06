@@ -18,8 +18,9 @@ import Select from '@material-ui/core/Select';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import TableFooter from '@material-ui/core/TableFooter';
-import BewertungBO from '../api/BewertungBO';
 
+//import Component
+import ModulEintrag from './ModulEintrag';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -48,6 +49,7 @@ class MeineProjekteEintrag extends Component {
             projekt: null,
             projektID: null,
             projektName: null,
+            module: null,
             dozentName: null,
             note: null,
             loadingInProgress: false,
@@ -70,6 +72,7 @@ class MeineProjekteEintrag extends Component {
           })).then(()=>{
             this.getPerson()
             this.getBewertung()
+            this.getModule_by_projekt_id()
           })
           .catch(e =>
               this.setState({
@@ -96,6 +99,26 @@ class MeineProjekteEintrag extends Component {
           .catch(e =>
               this.setState({
                   note: null,
+                  error: null,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true
+      });
+    }
+
+    getModule_by_projekt_id = () => {
+      ElectivAPI.getAPI().getModule_by_projekt_id(this.state.projektID)
+      .then(modulBOs =>
+          this.setState({
+              module: modulBOs,
+              error: null,
+              loadingInProgress: false,
+          }))
+          .catch(e =>
+              this.setState({
+                  module: null,
                   error: null,
                   loadingInProgress: false,
               }));
@@ -139,7 +162,7 @@ class MeineProjekteEintrag extends Component {
 
     render(){
         const {classes, expandedState} = this.props;
-        const {   projektID, projektName, dozentName, note, loadingInProgress, error } = this.state;
+        const {  projekt, projektID, projektName, module, dozentName, note, loadingInProgress, error } = this.state;
 
         return(
               <StyledTableRow key={projektID}>
@@ -150,10 +173,23 @@ class MeineProjekteEintrag extends Component {
                     <FormControl className={classes.formControl}>
                         <InputLabel id="demo-controlled-open-select-label">EDV-Nummer</InputLabel>
                             <Select>
-                                <MenuItem value=""><em>None</em></MenuItem>
-                                <MenuItem value={10}>335123</MenuItem>
-                                <MenuItem value={20}>222134</MenuItem>
-                                <MenuItem value={30}>212324</MenuItem>
+                                <MenuItem value=""><em>-</em></MenuItem>
+                                {
+                                  module ?
+                                  <>
+                                    {
+                                    module.map(modul =>
+                                    <ModulEintrag key={modul.getID()} modul = {modul}
+                                    onExpandedStateChange={this.onExpandedStateChange}
+                                    show={this.props.show}/>
+                                    )
+                                    }
+                                  </>
+                                  :
+                                  <>
+                                  </>
+                                
+                                }
                             </Select>
                     </FormControl>
                 </StyledTableCell>

@@ -73,11 +73,16 @@ bewertung = api.inherit('Bewertung', bo, {
     'note': fields.Float(attribute='_note', description='Die Note der Teilnahme'),
 })
 
+modul = api.inherit('Modul', nbo, {
+    'edv_nr': fields.Integer(attribute='_edv_nr', description='Die EDV Nummer eines Moduls'),
+})
+
 @electivApp.route('/projekte')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektListeOperationen(Resource):
     @electivApp.marshal_list_with(projekt)
     @secured
+
     def get(self):
         adm = ProjektAdministration()
         projekte = adm.get_alle_projekte()
@@ -93,7 +98,7 @@ class ProjektListeOperationen(Resource):
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektOperationen(Resource):
     @electivApp.marshal_list_with(projekt)
-    
+    @secured
 
     def get(self, id):
         adm = ProjektAdministration()
@@ -148,6 +153,7 @@ class PersonOperationen(Resource):
 class StudentByGoogleIDOperationen(Resource):
     @electivApp.marshal_list_with(student)
     @secured
+
     def get(self, google_user_id):
         adm = ProjektAdministration()
         student = adm.get_student_by_google_user_id(google_user_id)
@@ -192,18 +198,21 @@ class BewertungOperationen(Resource):
     def put(self, bewertung_id):
         pass
 
+@electivApp.route('/module/<int:projekt_id>')
+@electivApp.response(500, 'Something went wrong')
+class ModulByProjektIDOperationen(Resource):
+    @electivApp.marshal_list_with(modul)
+    @secured
 
-class ModulOperationen(Resource):
-    def __init__(self):
+    def get(self, projekt_id):
+        adm = ProjektAdministration()
+        modul = adm.get_module_by_projekt_id(projekt_id)
+        return modul
+
+    def delete(self, id):
         pass
 
-    def get(self, module_id):
-        pass
-
-    def delete(self, module_id):
-        pass
-
-    def put(self, module_id):
+    def put(self, id):
         pass
 
 

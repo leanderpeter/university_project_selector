@@ -18,10 +18,10 @@ class ProjektMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
-             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, module) in tuples:
+             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) in tuples:
             projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
-                                          raum, sprache, dozent, module)
+                                          raum, sprache, dozent)
             result.append(projekt)
 
         self._connection.commit()
@@ -45,7 +45,32 @@ class ProjektMapper(Mapper):
         try:
             (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) = tuples1[0]
             module = tuples2
-            result = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, module)
+            projekt = Projekt()
+            projekt.set_id(id)
+            projekt.set_name(name)
+            projekt.set_max_teilnehmer(max_teilnehmer)
+            projekt.set_projektbeschreibung(beschreibung)
+            projekt.set_betreuer(betreuer)
+            projekt.set_externer_partner(externer_partner)
+            projekt.set_woechentlich(woechentlich)
+            projekt.set_anzahl_block_vor(anzahl_block_vor)
+            projekt.set_anzahl_block_in(anzahl_block_in)
+            projekt.set_praeferierte_block(praeferierte_block)
+            projekt.set_bes_raum(bes_raum)
+            projekt.set_raum(raum)
+            projekt.set_sprache(sprache)
+            projekt.set_dozent(dozent)
+            projekt.set_anzahlTeilnehmer(self.count_teilnehmer_by_projekt(id))
+            projekt.set_teilnehmerListe(self.get_teilnehmerId_by_projekt(id))
+
+            modulliste = []
+            for modultuple in module:
+                for modul in modultuple:
+                    modulliste.append(modul)
+            
+            projekt.set_moduloption(modulliste)
+
+            result = projekt
         
         except IndexError:
             result = None
@@ -57,7 +82,7 @@ class ProjektMapper(Mapper):
         return result
 
     def create_projekt(self, id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich,
-                       anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, module):
+                       anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent):
         projekt = Projekt()
         projekt.set_id(id)
         projekt.set_name(name)
@@ -75,14 +100,6 @@ class ProjektMapper(Mapper):
         projekt.set_dozent(dozent)
         projekt.set_anzahlTeilnehmer(self.count_teilnehmer_by_projekt(id))
         projekt.set_teilnehmerListe(self.get_teilnehmerId_by_projekt(id))
-
-        modulliste = []
-        for modultuple in module:
-            for modul in modultuple:
-                modulliste.append(modul)
-        
-        projekt.set_moduloption(modulliste)
-
         return projekt
 
     def find_by_key(self):

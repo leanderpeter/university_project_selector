@@ -5,13 +5,15 @@ import argparse
 from .bo.Person import Person
 from .bo.Student import Student
 from .bo.Projekt import Projekt
+from .bo.Teilnahme import Teilnahme
 
 from .db.PersonMapper import PersonMapper
 from .db.StudentMapper import StudentMapper
 from .db.TeilnahmeMapper import TeilnahmeMapper
 from .db.BewertungMapper import BewertungMapper
 from .db.ProjektMapper import ProjektMapper
-from .bo.Teilnahme import Teilnahme
+from .db.ModulMapper import ModulMapper
+
 
 
 class ProjektAdministration(object):
@@ -107,6 +109,14 @@ class ProjektAdministration(object):
 
     def create_bewertung(self, ):
         pass
+
+    def get_module_by_projekt_id(self, projekt_id):
+        with ModulMapper() as mapper:
+            return mapper.find_by_projekt_id(projekt_id)
+
+    def get_modul_by_id(self, id):
+        with ModulMapper() as mapper:
+            return mapper.find_by_id(id)
 
     def get_bewertung_by_id(self, id):
         with BewertungMapper() as mapper:
