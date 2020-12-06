@@ -19,7 +19,7 @@ class SignIn extends Component {
 
 				<img style={{margin:"auto",display: "flex",width:"80%",marginTop:"6%" }} src="https://www.hdm-stuttgart.de/news/news20200414121003/thumbstart"/>
 				<Typography className={classes.root} align='center' variant='h6'>Willkommen zur HDM Wahlfach App</Typography>
-				<Typography className={classes.root} align='center'>Für die Nutzung der weiteren Funktionen müssen Sie sich authentifizieren.</Typography>
+				<Typography className={classes.root} align='center'>Für die Nutzung der weiteren Funktionen müssen Sie sich authentifizieren!</Typography>
 				<Grid container justify='center'>
 					<Grid item>
 						<Button style={{marginBottom:"5%"}}variant='contained' color='primary' onClick={this.handleSignInButtonClicked}>
