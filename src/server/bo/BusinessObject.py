@@ -1,7 +1,6 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
-
 
 class BusinessObject(ABC):
     """
@@ -11,7 +10,7 @@ class BusinessObject(ABC):
     """
 
     def __init__(self):
-        self._id = 0  # unique ID for the instance of the class
+        self._id = 0 # unique ID for the instance of the class
         # self.__erstellungszeit = None
 
     def get_id(self):
@@ -27,3 +26,4 @@ class BusinessObject(ABC):
 
     def set_erstellungszeit(self, zeit):
         pass
+

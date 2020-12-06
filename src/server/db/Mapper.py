@@ -1,10 +1,9 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 import mysql.connector as connector
 import os
 from contextlib import AbstractContextManager
 from abc import ABC, abstractmethod
-
 
 class Mapper(AbstractContextManager, ABC):
     """Abstrakte Basisklasse für alle weiteren Mapper-Klassen"""
@@ -20,16 +19,16 @@ class Mapper(AbstractContextManager, ABC):
             Hierbei handelt es sich also um die Verbindung zwischen Google App Engine und Cloud SQL."""
 
             self._connection = connector.connect(user='demo', password='demo',
-                                                 unix_socket='/cloudsql/python-bankprojekt-thies:europe-west3:bank-db-thies',
-                                                 database='bankproject')
+                                          unix_socket='/cloudsql/python-bankprojekt-thies:europe-west3:bank-db-thies',
+                                          database='bankproject')
         else:
             """Wenn wir hier ankommen, dann handelt sich offenbar um die Ausführung des Codes in einer lokalen Umgebung,
             also auf einem Local Development Server. Hierbei stellen wir eine einfache Verbindung zu einer lokal
             installierten mySQL-Datenbank her."""
 
             self._connection = connector.connect(user='TestNutzer', password='P@s$w0rd123!',
-                                                 host='127.0.0.1',
-                                                 database='electivApp')
+                                  host='127.0.0.1',
+                                  database='electivApp')
 
         return self
 
@@ -45,7 +44,7 @@ class Mapper(AbstractContextManager, ABC):
         """Reads all tuple and returns them as an object"""
         pass
 
-    @abstractmethod
+    @abstractmethod 
     def find_by_key(self):
         """Reads a tuple with a given ID"""
         pass
@@ -54,12 +53,12 @@ class Mapper(AbstractContextManager, ABC):
     def insert(self):
         """Add the given object to the database"""
         pass
-
+    
     @abstractmethod
     def update(self):
         """Update an already given object in the DB"""
         pass
-
+    
     @abstractmethod
     def delete(self):
         """Delete an object from the DB"""

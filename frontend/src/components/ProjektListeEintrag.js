@@ -4,7 +4,6 @@ import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, 
 import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
-import { ElectivAPI } from '../api';
 /*
 import CustomerForm from './dialogs/CustomerForm';
 import CustomerDeleteDialog from './dialogs/CustomerDeleteDialog';
@@ -28,17 +27,13 @@ class ProjektListeEintrag extends Component {
 			projekt: props.projekt,
 			showProjektForm: false,
 			showProjektDeleteDialog: false
+
 		};
 	}
 
 	// Handles events wenn sich der status der oeffnung aendert
 	expansionPanelStateChanged = () => {
 		this.props.onExpandedStateChange(this.props.projekt);
-
-		// Teilnahme Button deaktivieren, sofern Teilnehmer bereits in Projekt eingeschrieben
-		if( this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
-		    this.setState({teilnahmeButtonDisabled:true});
-		}
 	}
 
 	// Kummert sich um das loschen des Projekts
@@ -74,14 +69,21 @@ class ProjektListeEintrag extends Component {
 	deleteProjektDialogClosed = (projekt) => {
 		// MORE CODE!
 	}
-	setTeilnahmeAnProjekt = () => {
-
-	}
 
 	teilnahmeButtonClicked = event => {
     	//Logik fuer Teilnahme Button
-    	this.setState({teilnahmeButtonDisabled:true});
-    	ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
+    	    var count = 1;
+	    	function setColor(btn, color) {
+		        var property = document.getElementById(btn);
+		        if (count == 0) {
+		            property.style.backgroundColor = "#FFFFFF"
+		            count = 1;        
+		        }
+		        else {
+		            property.style.backgroundColor = "#7FFF00"
+		            count = 0;
+		        }
+    }
 	}
 
 	/** Renders the component */
@@ -100,7 +102,7 @@ class ProjektListeEintrag extends Component {
           >
             <Grid container spacing={1} justify='flex-start' alignItems='center'>
               <Grid item>
-                <Typography variant='body1' className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()} </Typography> <Typography variant='body1' color={'success.main'}>{projekt.getAnzahlTeilnehmer()} / {projekt.getmax_teilnehmer()} Plätze besetzt
+                <Typography variant='body1' className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()} </Typography> <Typography variant='body1' color={'success.main'}> {projekt.getmax_teilnehmer()}/0 Plätze besetzt
                 </Typography>
               </Grid>
               <Grid item xs />
@@ -115,7 +117,7 @@ class ProjektListeEintrag extends Component {
             
           </AccordionDetails>
           <AccordionDetails>
-          <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
+          <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked}>
           Teilnahme
         </Button>
             

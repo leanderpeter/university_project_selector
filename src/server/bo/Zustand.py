@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 
 class Zustand:
     def __init__(self):
@@ -14,3 +14,4 @@ class Zustand:
 
     def __str__(self, ):
         pass
+

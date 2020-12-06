@@ -1,8 +1,7 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 
 from server.bo.BusinessObject import BusinessObject
-
 
 class Bewertung(BusinessObject):
     def __init__(self):
@@ -23,3 +22,4 @@ class Bewertung(BusinessObject):
 
     def __str__(self, ):
         pass
+

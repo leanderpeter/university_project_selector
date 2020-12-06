@@ -1,8 +1,7 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 
 from server.bo.BusinessObject import BusinessObject
-
 
 class NamedBusinessObject(BusinessObject):
     def __init__(self):
@@ -13,3 +12,4 @@ class NamedBusinessObject(BusinessObject):
 
     def set_name(self, name):
         self._name = name
+
