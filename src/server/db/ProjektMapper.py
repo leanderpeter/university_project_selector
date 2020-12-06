@@ -105,7 +105,7 @@ class ProjektMapper(Mapper):
         self._connection.commit()
         cursor.close()
         return countRow[0]
-        """ MUSS IN TEILNAHMEMAPPER! """
+        #MUSS IN TEILNAHMEMAPPER
 
     def get_teilnehmerId_by_projekt(self, projektID):
         result = []
@@ -118,7 +118,7 @@ class ProjektMapper(Mapper):
         self._connection.commit()
         cursor.close()
         return result
-        """ MUSS IN TEILNAHMEMAPPER! """
+        #MUSS IN TEILNAHMEMAPPER
 
 
 if (__name__ == "__main__"):
