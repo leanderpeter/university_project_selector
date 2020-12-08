@@ -8,6 +8,9 @@ from flask import request
 
 # Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.ProjektAdministration import ProjektAdministration
+from server.bo.Teilnahme import Teilnahme
+
+#SecurityDecorator
 from SecurityDecorator import secured
 
 # ..weitere Imports notwendig z.B. BO-Klassen und SecurityDecorator
@@ -180,6 +183,29 @@ class TeilnahmeOperationen(Resource):
         teilnehmerId = request.args.get("teilnehmerId")
         projektAdministration = ProjektAdministration()
         projektAdministration.create_teilnahme(lehrangebotId, teilnehmerId)
+
+
+@electivApp.route('/teilnahme2/<int:id>')
+@electivApp.response(500, 'Something went wrong')
+class Teilnahme2Operationen(Resource):
+    def get(self, teilname_id):
+        pass
+
+    def delete(self, teilnahme_id):
+        pass
+
+    @electivApp.marshal_with(teilnahme)
+    @electivApp.expect(teilnahme, validate=True)
+    def put(self, id):
+        adm = ProjektAdministration()
+        teilnahme = Teilnahme.from_dict(api.payload)
+
+        if teilnahme is not None:
+            teilnahme.set_id(id)
+            adm.save_teilnahme(teilnahme)
+            return '', 200
+        else:
+            return '', 500
 
 @electivApp.route('/bewertung/<int:id>')
 @electivApp.response(500, 'Something went wrong')

@@ -100,9 +100,16 @@ class TeilnahmeMapper(Mapper):
 
         return teilnahme
 
-    def update(self):
-        """Update an already given object in the DB"""
-        pass
+    def update(self, teilnahme):
+
+        cursor = self._connection.cursor()
+
+        command = "UPDATE teilnahmen SET lehrangebot=%s, teilnehmer=%s, anrechnung=%s, resultat=%s WHERE id=%s"
+        data = (teilnahme.get_lehrangebot(), teilnahme.get_teilnehmer(), teilnahme.get_anrechnung(), teilnahme.get_resultat(), teilnahme.get_id())
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
 
     def delete(self):
         """Delete an object from the DB"""

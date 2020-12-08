@@ -143,3 +143,7 @@ class ProjektAdministration(object):
 
         with TeilnahmeMapper() as mapper:
             return mapper.insert(teilnahme)
+
+    def save_teilnahme(self, teilnahme):
+        with TeilnahmeMapper() as mapper:
+            mapper.update(teilnahme)
