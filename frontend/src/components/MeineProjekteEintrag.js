@@ -51,12 +51,12 @@ class MeineProjekteEintrag extends Component {
             projektName: null,
             module: null,
             dozentName: null,
+            edv: null,
             note: null,
             loadingInProgress: false,
             error: null
         };
     }
-
 
     //Noch zu tun:  projektBO soll kein Array sein. Die 2 Funktionen sollen nacheinander aufgerufen werden
     
@@ -171,7 +171,7 @@ class MeineProjekteEintrag extends Component {
                 <StyledTableCell align="center">{note}</StyledTableCell> 
                 <StyledTableCell align="center">
                     <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-controlled-open-select-label">EDV-Nummer</InputLabel>
+                        <InputLabel id="edv_nr">EDV-Nummer</InputLabel>
                             <Select>
                                 <MenuItem value=""><em>-</em></MenuItem>
                                 {
@@ -186,15 +186,13 @@ class MeineProjekteEintrag extends Component {
                                     }
                                   </>
                                   :
-                                  <>
-                                  </>
-                                
+                                  <></>
                                 }
                             </Select>
                     </FormControl>
                 </StyledTableCell>
                   <LoadingProgress show={loadingInProgress}></LoadingProgress>
-                  <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Projekt konnte nicht geladen werden'} onReload={this.getPerson} />
+                  <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Projekt konnte nicht geladen werden'} onReload={this.getProjekt} />
               </StyledTableRow>
         );
     }

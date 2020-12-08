@@ -19,6 +19,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import TableFooter from '@material-ui/core/TableFooter';
 
+
+
+
+
 //import MeineProjekteEintrag
 import MeineProjekteEintrag from './MeineProjekteEintrag';
 
@@ -63,6 +67,7 @@ class MeineProjekte extends Component {
             expandedTeilnahmeID: expandedID,
         };
     }
+
 
 
     // API Anbindung um Projekte vom Backend zu bekommen 
@@ -129,20 +134,27 @@ class MeineProjekte extends Component {
                         </TableHead>
                         <TableBody>
                             {
-                                teilnahmen.map(teilnahme => 
-                                    <MeineProjekteEintrag key={teilnahme.getID()} teilnahme = {teilnahme} expandedState={expandedTeilnahmeID === teilnahme.getID()}
-                                    onExpandedStateChange={this.onExpandedStateChange}
-                                    show={this.props.show}
-                                />) 
+                                teilnahmen ?
+                                <>
+                                {
+                                    teilnahmen.map(teilnahme => 
+                                        <MeineProjekteEintrag key={teilnahme.getID()} teilnahme = {teilnahme} expandedState={expandedTeilnahmeID === teilnahme.getID()}
+                                        onExpandedStateChange={this.onExpandedStateChange}
+                                        show={this.props.show}
+                                    />) 
+                                }
+                                </>
+                                :
+                                <></>
                             }
                         </TableBody>
                     </Table>
                     <LoadingProgress show={loadingInProgress} />
                     <ContextErrorMessage error={error} contextErrorMsg = {'Meine Projekte konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
                 </TableContainer>
-                <Button variant="contained" color="primary" size="medium" className={classes.button}startIcon={<SaveIcon />}>
-                    Semesterbericht
-                </Button>
+                <Button variant="contained" color="primary" size="medium" className={classes.button} startIcon={<SaveIcon />}>
+                Semesterbericht
+                </Button>             
             </div>
         )
     }
@@ -158,6 +170,18 @@ const styles = theme => ({
       },
       content: {
         margin: theme.spacing(1),
+      },
+      button:{
+          marginTop: theme.spacing(2)
+      },
+      page: {
+        flexDirection: 'row',
+        backgroundColor: '#E4E4E4'
+      },
+      section: {
+        margin: 10,
+        padding: 10,
+        flexGrow: 1
       }
   });
 

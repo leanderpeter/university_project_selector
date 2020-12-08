@@ -35,7 +35,7 @@ class ModulEintrag extends Component {
         const {  } = this.state;
 
         return(
-                <MenuItem value={modul.getEdv_nr()}><em>{modul.getEdv_nr()}</em></MenuItem>
+          <MenuItem value={modul.getEdv_nr()}><em>{modul.getEdv_nr()}</em></MenuItem>
         );
     }
 }

@@ -130,7 +130,7 @@ class App extends React.Component {
             <Header user={currentUser}/> 
             {
               // is the user signed in?
-              currentUser ?
+              currentUser, currentStudent ?
                 <>
                   <Redirect from='/' to='projekte' />
                   <Route path='/projekte' component ={ProjektListe}>
