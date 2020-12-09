@@ -170,18 +170,18 @@ class MeineProjekteEintrag extends Component {
                 <StyledTableCell align="center">{dozentName}</StyledTableCell> 
                 <StyledTableCell align="center">{note}</StyledTableCell> 
                 <StyledTableCell align="center">
+                  
                     <FormControl className={classes.formControl}>
                         <InputLabel id="edv_nr">EDV-Nummer</InputLabel>
-                            <Select>
+                            <Select value={123}>
                                 <MenuItem value=""><em>-</em></MenuItem>
+                                <MenuItem value="123">Hallo</MenuItem>
                                 {
                                   module ?
                                   <>
                                     {
                                     module.map(modul =>
-                                    <ModulEintrag key={modul.getID()} modul = {modul}
-                                    onExpandedStateChange={this.onExpandedStateChange}
-                                    show={this.props.show}/>
+                                    <MenuItem value={123}><em>{modul.getEdv_nr()}</em></MenuItem>
                                     )
                                     }
                                   </>

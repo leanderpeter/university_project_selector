@@ -143,7 +143,7 @@ export default class ElectivAPI {
 
 	}
 
-	updateTeilnahme(teilnahemBO){
+/* 	updateTeilnahme(teilnahemBO){
         //TODO Set User ID
          return this.#fetchAdvanced(this.#updateTeilnahmeURL(teilnahmeBO.getID()),{
 			method: 'PUT',
@@ -158,7 +158,7 @@ export default class ElectivAPI {
 				resolve(responseTeilnahmeBO)
 			})
 		})
-	}
+	} */
 
 
 	getBewertung(id){
