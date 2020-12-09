@@ -196,6 +196,7 @@ class Teilnahme2Operationen(Resource):
 
     @electivApp.marshal_with(teilnahme)
     @electivApp.expect(teilnahme, validate=True)
+    @secured
     def put(self, id):
         adm = ProjektAdministration()
         teilnahme = Teilnahme.from_dict(api.payload)

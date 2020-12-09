@@ -47,7 +47,7 @@ export default class ElectivAPI {
 	//Module nach Id bekommen
 	#getModule_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/module/${id}`;
 
-	#updateTeilnahmeURL = (id) => `${this.#ElectivServerBaseURL}/teilnahme=${id}`;
+	#updateTeilnahmeURL = (id) => `${this.#ElectivServerBaseURL}/teilnahme2/${id}`;
 
 
 
@@ -143,22 +143,21 @@ export default class ElectivAPI {
 
 	}
 
-/* 	updateTeilnahme(teilnahemBO){
-        //TODO Set User ID
+	updateTeilnahme(teilnahmeBO){
          return this.#fetchAdvanced(this.#updateTeilnahmeURL(teilnahmeBO.getID()),{
 			method: 'PUT',
 			headers:{
 				'Accept': 'application/json, text/plain',
 				'Content-type': 'application/json',
 			},
-			body: JSON.stringify(teilnahemBO)
+			body: JSON.stringify(teilnahmeBO)
 		}).then((responseJSON) => {
 			let responseTeilnahmeBO = TeilnahmeBO.fromJSON(responseJSON)[0];
 			return new Promise(function (resolve){
 				resolve(responseTeilnahmeBO)
 			})
 		})
-	} */
+	}
 
 
 	getBewertung(id){

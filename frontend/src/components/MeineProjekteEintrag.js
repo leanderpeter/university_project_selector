@@ -19,8 +19,6 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import TableFooter from '@material-ui/core/TableFooter';
 
-//import Component
-import ModulEintrag from './ModulEintrag';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -51,7 +49,6 @@ class MeineProjekteEintrag extends Component {
             projektName: null,
             module: null,
             dozentName: null,
-            edv: null,
             note: null,
             loadingInProgress: false,
             error: null
@@ -64,9 +61,9 @@ class MeineProjekteEintrag extends Component {
       ElectivAPI.getAPI().getProjekt(this.props.teilnahme.lehrangebot)
       .then(projektBO =>
           this.setState({
-            projekt: projektBO[0],
-            projektID: projektBO[0].id,
-            projektName: projektBO[0].name,
+            projekt: projektBO,
+            projektID: projektBO.id,
+            projektName: projektBO.name,
             loadingInProgress: false,
             error: null,
           })).then(()=>{
@@ -149,6 +146,13 @@ class MeineProjekteEintrag extends Component {
       });
     }
 
+    handleChange = async (edv) => {
+      this.props.teilnahme.setAnrechnung(edv.target.value);
+      console.log(`Option selected:`, edv.target.value);
+      await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme);
+      this.props.getTeilnahmen();
+    };
+
     componentDidMount() {
       this.getProjekt();
     }
@@ -161,35 +165,36 @@ class MeineProjekteEintrag extends Component {
 
 
     render(){
-        const {classes, expandedState} = this.props;
-        const {  projekt, projektID, projektName, module, dozentName, note, loadingInProgress, error } = this.state;
+        const {classes, expandedState, teilnahme} = this.props;
+        const {  projektID, projektName, module, dozentName, note, loadingInProgress, error } = this.state;
 
         return(
               <StyledTableRow key={projektID}>
                 <StyledTableCell component="th" scope="row">{projektName}</StyledTableCell>
                 <StyledTableCell align="center">{dozentName}</StyledTableCell> 
                 <StyledTableCell align="center">{note}</StyledTableCell> 
-                <StyledTableCell align="center">
-                  
-                    <FormControl className={classes.formControl}>
-                        <InputLabel id="edv_nr">EDV-Nummer</InputLabel>
-                            <Select value={123}>
-                                <MenuItem value=""><em>-</em></MenuItem>
-                                <MenuItem value="123">Hallo</MenuItem>
+                <StyledTableCell align="center">                
                                 {
-                                  module ?
-                                  <>
-                                    {
-                                    module.map(modul =>
-                                    <MenuItem value={123}><em>{modul.getEdv_nr()}</em></MenuItem>
-                                    )
-                                    }
-                                  </>
+                                  module && note ?
+                                  <FormControl className={classes.formControl}>
+                                    <InputLabel>EDV-Nummer</InputLabel> 
+                                      <Select value = {teilnahme.anrechnung} onChange={this.handleChange}>
+                                        {
+                                        module.map(modul =>
+                                        <MenuItem value={modul.getID()}><em>{modul.getEdv_nr()}</em></MenuItem>
+                                        )
+                                        }
+                                      </Select>                                                                
+                                    </FormControl>                                  
                                   :
-                                  <></>
+                                  <FormControl className={classes.formControl}>
+                                    <InputLabel>EDV-Nummer</InputLabel>
+                                      <Select value="">
+                                        <MenuItem value=""><em>Noch nicht benotet</em></MenuItem>
+                                      </Select>
+                                  </FormControl>
                                 }
-                            </Select>
-                    </FormControl>
+
                 </StyledTableCell>
                   <LoadingProgress show={loadingInProgress}></LoadingProgress>
                   <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Projekt konnte nicht geladen werden'} onReload={this.getProjekt} />

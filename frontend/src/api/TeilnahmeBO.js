@@ -2,10 +2,12 @@ import BusinessObject from "./BusinessObject";
 
 export default class TeilnahmeBO extends BusinessObject{
 
-	constructor(ateilnehmer, alehrangebot){
+	constructor(ateilnehmer, alehrangebot, aanrechnung, aresultat){
         super();
         this.teilnehmer = ateilnehmer;
-        this.lehrangebot = alehrangebot;
+		this.lehrangebot = alehrangebot;
+		this.anrechnung = aanrechnung;
+		this.resultat = aresultat;
     }
     
 	/*
@@ -31,6 +33,30 @@ export default class TeilnahmeBO extends BusinessObject{
 	*/
 	setlehrangebot(alehrangebot){
 		this.lehrangebot = alehrangebot;  
+	}
+	 	/*
+	Erhalte 
+	*/
+	getAnrechnung(){
+		return this.anrechnung;
+	}
+	/*
+	Setze 
+	*/
+	setAnrechnung(aanrechnung){
+		this.anrechnung = aanrechnung;  
+	}
+	 	/*
+	Erhalte 
+	*/
+	getresultat(){
+		return this.resultat;
+	}
+	/*
+	Setze 
+	*/
+	setResultat(aresultat){
+		this.resultat = aresultat;  
     }
     
     static fromJSON(teilnahmen) {

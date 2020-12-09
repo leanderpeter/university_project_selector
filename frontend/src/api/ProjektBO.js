@@ -223,8 +223,9 @@ export default class ProjektBO extends NamedBusinessObject {
 	Gebe ein Array von Projekt BO's zuruck.
 	*/
 	static fromJSON(projekte) {
-		let results = [];
+		let results = null;
 		if (Array.isArray(projekte)) {
+			results = [];
 			projekte.forEach((c) => {
 				Object.setPrototypeOf(c, ProjektBO.prototype);
 				results.push(c);
@@ -233,7 +234,7 @@ export default class ProjektBO extends NamedBusinessObject {
 			// Es gibt wohl nur ein Objekt
 			let c = projekte;
 			Object.setPrototypeOf(c, ProjektBO.prototype);
-			results.push(c);
+			results = c;
 		}
 		return results;
 	}

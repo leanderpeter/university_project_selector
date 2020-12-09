@@ -25,7 +25,7 @@ class Teilnahme(BusinessObject):
         self._teilnehmer = teilnehmer
     
     def get_anrechnung(self ):
-        return self._teilnehmer
+        return self._anrechnung
 
     def set_anrechnung(self, anrechnung):
         self._anrechnung = anrechnung

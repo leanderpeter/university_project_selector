@@ -138,7 +138,9 @@ class MeineProjekte extends Component {
                                 <>
                                 {
                                     teilnahmen.map(teilnahme => 
-                                        <MeineProjekteEintrag key={teilnahme.getID()} teilnahme = {teilnahme} expandedState={expandedTeilnahmeID === teilnahme.getID()}
+                                        <MeineProjekteEintrag key={teilnahme.getID()} teilnahme = {teilnahme} 
+                                        getTeilnahmen = {this.getTeilnahmen}
+                                        expandedState={expandedTeilnahmeID === teilnahme.getID()}
                                         onExpandedStateChange={this.onExpandedStateChange}
                                         show={this.props.show}
                                     />) 
