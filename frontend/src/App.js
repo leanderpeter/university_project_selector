@@ -137,10 +137,14 @@ class App extends React.Component {
                     <ProjektListe currentStudent={currentStudent}/>
                   </Route>
                   <Route path='/about' component={About} />
-
+                  
+                  {currentStudent ?
                   <Route path='/meineprojekte' component={MeineProjekte}>
                     <MeineProjekte currentStudent={currentStudent}/>
                   </Route>
+                  :
+                  <></>
+                  }
                 </>
                 :
                 // if not signed in show sign in page
