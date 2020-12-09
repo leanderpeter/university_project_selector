@@ -10,6 +10,7 @@ import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import MeineProjekte from './components/MeineProjekte';
+import ProjektBearbeiten from './components/ProjektBearbeiten';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import ElectivAPI from './api/ElectivAPI';
@@ -140,6 +141,9 @@ class App extends React.Component {
 
                   <Route path='/meineprojekte' component={MeineProjekte}>
                     <MeineProjekte currentStudent={currentStudent}/>
+                  </Route>
+                  <Route path='/projektbearbeiten' component={ProjektBearbeiten}>
+                    <ProjektBearbeiten currentStudent={currentStudent}/>
                   </Route>
                 </>
                 :
