@@ -181,7 +181,7 @@ class Projekt(NamedBusinessObject, Automat):
         '''dict() -> projekt'''
         obj = Projekt()
         obj.set_id(dictionary["id"])  # from BO
-        obj.set_name(dictionary["name"])
+        # obj.set_name(dictionary["name"])
         obj.set_max_teilnehmer(dictionary["max_teilnehmer"])
         obj.set_projektbeschreibung(dictionary["beschreibung"])
         obj.set_betreuer(dictionary["betreuer"])

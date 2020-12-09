@@ -176,18 +176,30 @@ class ModulOperationen(Resource):
         pass
 
 
-
+@electivApp.route('/projektePending')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektGenehmigungOperation(Resource):
 
-
+    @electivApp.marshal_list_with(projekt)
+    @secured
     def get(self):
         pass
 
     def delete(self):
         pass
 
-    def put(self):
-        pass
+    def post(self):
+        '''
+        Einfugen eines Projekts im zustand pending. 
+        '''
+        adm = ProjektAdministration()
+        proposal = Projekt.from_dict(api.payload)
+
+        if proposal is not None:
+            p = adm.create_wartelisteProjekt(proposal.get_name(),proposal.get_max_teilnehmer(),proposal.get_projektbeschreibung(),proposal.get_betreuer(),proposal.get_externer_partner(),proposal.get_woechentlich(),proposal.get_anzahl_block_vor(),proposal.get_anzahl_block_in(),proposal.get_praeferierte_block(),proposal.get_bes_raum(),proposal.get_raum(),proposal.get_sprache(),proposal.get_dozent(),proposal.get_belegung(),proposal.get_moduloption(),proposal.get_art())
+            return p, 200
+        else:
+            return '', 500
 
 if __name__ == '__main__':
     app.run(debug=True)

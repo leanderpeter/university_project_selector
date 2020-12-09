@@ -26,6 +26,8 @@ export default class ElectivAPI {
 
 	// ---------------------------------------------------------------------------------
 
+	#addProjektPendingURL = () => `${this.#ElectivServerBaseURL}/projektePending`;
+
 
 	//meine Projekte anzeigen
 	#getMeineProjekteURL = (id) => `${this.#ElectivServerBaseURL}/meineprojekte/${id}`;
@@ -72,7 +74,7 @@ export default class ElectivAPI {
 	}
 
 	addProjekt(ProjektBO) {
-		return this.#fetchAdvanced(this.#addProjektURL(), {
+		return this.#fetchAdvanced(this.#addProjektPendingURL(), {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json, text/plain',
