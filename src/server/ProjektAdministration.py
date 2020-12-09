@@ -160,10 +160,8 @@ class ProjektAdministration(object):
         projekt.set_raum(raum)
         projekt.set_sprache(sprache)
         projekt.set_dozent(dozent)
-        projekt.set_belegung(belegung)
-        projekt.set_moduloption(moduloption)
-        projekt.set_art(art)
         projekt.set_id(1)
+        print(projekt.to_dict())
 
         with ProjektWartelisteMapper() as mapper:
             return mapper.insert(projekt)

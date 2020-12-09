@@ -99,7 +99,7 @@ class ProjektWartelisteMapper(Mapper):
         for (maxid) in tuples:
             projekt.set_id(maxid[0]+1)
 
-        command = "INSERT INTO projekte_ausstehend (id, name, max_teilnehmer, projektbeschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        command = "INSERT INTO projekte_ausstehend (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         data = (
             projekt.get_id(),
             projekt.get_name(),
@@ -114,9 +114,9 @@ class ProjektWartelisteMapper(Mapper):
             projekt.get_bes_raum(),
             projekt.get_raum(),
             projekt.get_sprache(),
-            projekt.get_dozent(),
-            projekt.get_anzahlTeilnehmer(),
-            projekt.get_teilnehmerListe())
+            projekt.get_dozent())
+            # projekt.get_anzahlTeilnehmer(),
+            # projekt.get_teilnehmerListe())
         cursor.execute(command, data)
         self._connection.commit()
         cursor.close()
