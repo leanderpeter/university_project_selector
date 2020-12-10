@@ -10,6 +10,7 @@ import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import MeineProjekte from './components/MeineProjekte';
+import Notenlisten from './components/Notenlisten';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import ElectivAPI from './api/ElectivAPI';
@@ -145,6 +146,9 @@ class App extends React.Component {
                   :
                   <></>
                   }
+                  <Route path='/notenlisten' component={Notenlisten}>
+                    <Notenlisten/>
+                  </Route>
                 </>
                 :
                 // if not signed in show sign in page

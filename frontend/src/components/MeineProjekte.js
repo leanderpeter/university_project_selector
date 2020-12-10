@@ -173,6 +173,9 @@ const styles = theme => ({
       content: {
         margin: theme.spacing(1),
       },
+      table: {
+        minWidth: 700,
+      },
       button:{
           marginTop: theme.spacing(2)
       },

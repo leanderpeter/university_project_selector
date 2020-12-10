@@ -3,12 +3,14 @@ import { colors } from '@material-ui/core';
 
 const white = '#FFFFFF';
 const black = '#000000';
+const darkgrey = '#808080';
 
 // A custom theme for this app
 const theme = createMuiTheme({
   palette: {
     black,
     white,
+    darkgrey,
     primary: {
       contrastText: white,
       dark: colors.indigo[900],

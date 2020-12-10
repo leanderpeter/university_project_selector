@@ -6,15 +6,15 @@ export default class BusinessObject {
 	/*
 	Null constructor
 	*/
-	constructor(id=0){
+	constructor(id){
 		this.id = id;
 	}
 
 	/*
 	Jedes Business Object erhaelt eine neue ID, die aId.
 	*/
-	setID(){
-		return this.id;
+	setID(id){
+		this.id =id
 	}
 
 	/*
