@@ -273,12 +273,10 @@ class ProjektForm extends Component {
               {header}
             </DialogContentText>
             <form className={classes.root} noValidate autoComplete='off'>
-              <TextField autoFocus type='text' required fullWidth margin='normal' 
+              <TextField autoFocus type='text' required fullWidth margin='normal' id='name' label='Projektname:' value={name}
                 onChange={this.textFieldValueChange} error={nameValidationFailed} 
                 helperText={nameValidationFailed ? 'The name must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='name' label='Projektname:' value={name}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
+          
               <TextField type='text' required fullWidth margin='normal' id='max_teilnehmer' label='Maximale Teilnehmeranzahl:' value={max_teilnehmer}
                 onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />

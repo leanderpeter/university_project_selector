@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`projekte_ausstehend` (
   `raum` VARCHAR(128) NULL DEFAULT '',
   `sprache` VARCHAR(128) NULL DEFAULT '',
   `dozent` INT(11) DEFAULT NULL,
+  `anzahlTeilnehmer` VARCHAR(128) DEFAULT NULL,
+  `teilnehmerListe` VARCHAR(128) DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;

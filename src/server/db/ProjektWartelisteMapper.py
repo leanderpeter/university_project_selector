@@ -6,16 +6,11 @@ from server.db.Mapper import Mapper
 
 '''
 -------------------------------------------------------------------------------------------------------------------------------
-
 Alle funktionen in dieser Klasse muessen neu geschrieben werden. Sie sind lediglich aufgrund zum testen hier.
 
 Diese klasse ist komplett kopiert von ProjektMapper!!
-
 -------------------------------------------------------------------------------------------------------------------------------
 '''
-
-
-
 
 class ProjektWartelisteMapper(Mapper):
     def __init__(self):
@@ -26,14 +21,14 @@ class ProjektWartelisteMapper(Mapper):
         result = []
         cursor = self._connection.cursor()
         cursor.execute(
-            "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent from projekte")
+            "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe from projekte_ausstehend")
         tuples = cursor.fetchall()
 
         for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
-             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) in tuples:
+             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe) in tuples:
             projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
-                                          raum, sprache, dozent)
+                                          raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe)
             result.append(projekt)
 
         self._connection.commit()
@@ -42,29 +37,10 @@ class ProjektWartelisteMapper(Mapper):
         return result
 
     def find_projekt_by_id(self, id):
-
-        cursor = self._connection.cursor()
-
-        command = (
-            "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent FROM projekte WHERE id={}").format(
-            id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        """TODO Wieso eine for Schleife.. ID = eindeutig"""
-        for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
-             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) in tuples:
-            projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
-                                          woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
-                                          raum, sprache, dozent)
-
-        self._connection.commit()
-        cursor.close()
-
-        return projekt
+        pass
 
     def create_projekt(self, id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich,
-                       anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent):
+                       anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe):
         projekt = Projekt()
         projekt.set_id(id)
         projekt.set_name(name)
@@ -84,6 +60,7 @@ class ProjektWartelisteMapper(Mapper):
         projekt.set_teilnehmerListe(self.get_teilnehmerId_by_projekt(id))
         return projekt
 
+
     def find_by_key(self):
         pass
 
@@ -96,10 +73,14 @@ class ProjektWartelisteMapper(Mapper):
         cursor.execute("SELECT MAX(id) AS maxid FROM projekte_ausstehend")
         tuples = cursor.fetchall()
 
-        for (maxid) in tuples:
-            projekt.set_id(maxid[0]+1)
 
-        command = "INSERT INTO projekte_ausstehend (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        for (maxid) in tuples:
+            if maxid[0] is None:
+                projekt.set_id(1)
+            else:
+                projekt.set_id(maxid[0]+1)
+
+        command = "INSERT INTO projekte_ausstehend (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         data = (
             projekt.get_id(),
             projekt.get_name(),
@@ -114,9 +95,10 @@ class ProjektWartelisteMapper(Mapper):
             projekt.get_bes_raum(),
             projekt.get_raum(),
             projekt.get_sprache(),
-            projekt.get_dozent())
-            # projekt.get_anzahlTeilnehmer(),
-            # projekt.get_teilnehmerListe())
+            projekt.get_dozent(),
+            projekt.get_anzahlTeilnehmer(),
+            projekt.get_teilnehmerListe()
+            )
         cursor.execute(command, data)
         self._connection.commit()
         cursor.close()
@@ -130,29 +112,12 @@ class ProjektWartelisteMapper(Mapper):
         pass
 
     def count_teilnehmer_by_projekt(self, projektID):
-        cursor = self._connection.cursor()
-        command = "SELECT COUNT(*) FROM teilnahmen WHERE lehrangebot={}".format(projektID)
-        cursor.execute(command)
-        countRow = cursor.fetchone()
-        self._connection.commit()
-        cursor.close()
-        return countRow[0]
-
+        pass
     def get_teilnehmerId_by_projekt(self, projektID):
-        result = []
-        cursor = self._connection.cursor()
-        command = "SELECT teilnehmer FROM teilnahmen WHERE lehrangebot={}".format(projektID)
-        cursor.execute(command)
-        rows = cursor.fetchall()
-        for teilnehmer in rows:
-            result.append(teilnehmer[0])
-        self._connection.commit()
-        cursor.close()
-        return result
-
+        pass
 
 if (__name__ == "__main__"):
-    with ProjektMapper() as mapper:
+    with ProjektWartelisteMapper() as mapper:
         result = mapper.find_all()
         for p in result:
             print(p)

@@ -34,10 +34,12 @@ class ProjektDozentListeEintrag extends Component {
 	expansionPanelStateChanged = () => {
 		this.props.onExpandedStateChange(this.props.projekt);
 
+    /*
 		// Teilnahme Button deaktivieren, sofern Teilnehmer bereits in Projekt eingeschrieben
 		if( this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
 		    this.setState({teilnahmeButtonDisabled:true});
 		}
+    */
 	}
 
 	// Kummert sich um das loschen des Projekts

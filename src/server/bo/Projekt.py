@@ -5,7 +5,7 @@ from server.bo.NamedBusinessObject import NamedBusinessObject
 from server.bo.Automat import Automat
 
 
-class Projekt(NamedBusinessObject, Automat):
+class Projekt(NamedBusinessObject):
     def __init__(self):
         super().__init__()
         self._max_teilnehmer = None
@@ -141,9 +141,9 @@ class Projekt(NamedBusinessObject, Automat):
     def set_teilnehmerListe(self, teilnehmerListe):
         self._teilnehmerListe = teilnehmerListe
 
-    def _str_(self):
+    def __str__(self):
         '''Create and return simple string of the BO'''
-        return "Projekt: {},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}".format(
+        return "Projekt: {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}".format(
                                                                               self._max_teilnehmer,
                                                                               self._projektbeschreibung,
                                                                               self._betreuer, 
@@ -161,27 +161,6 @@ class Projekt(NamedBusinessObject, Automat):
                                                                               self.get_name(),
                                                                               self.get_id())
 
-    def to_dict(self):
-        """Umwandeln Projekt() in ein Python dict()"""
-        result = {
-            "max_teilnehmer": self.get_max_teilnehmer(),
-            "beschreibung": self.get_projektbeschreibung(),
-            "betreuer": self.get_betreuer(),
-            "externer_partner": self.get_externer_partner(),
-            "woechentlich": self.get_woechentlich(),
-            "anzahl_block_vor": self.get_anzahl_block_vor(),
-            "anzahl_block_in": self.get_anzahl_block_in(),
-            "praeferierte_block": self.get_praeferierte_block(),
-            "bes_raum": self.get_bes_raum(),
-            "raum": self.get_raum(),
-            "sprache": self.get_sprache(),
-            "dozent": self.get_dozent(),
-            # "anzahlTeilnehmer": self.get_anzahlTeilnehmer(),
-            # "teilnehmerListe": self.get_teilnehmerListe(),
-            "name": self.get_name(),
-            "id": self.get_id()
-        }
-        return result
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -198,9 +177,31 @@ class Projekt(NamedBusinessObject, Automat):
         obj.set_bes_raum(dictionary["bes_raum"])
         obj.set_raum(dictionary["raum"])
         obj.set_sprache(dictionary["sprache"])
-        obj.set_dozent(dictionary['dozent'])
-        # obj.set_anzahlTeilnehmer(dictionary["anzahlTeilnehmer"])
-        # obj.set_teilnehmerListe(dictionary["teilnehmerListe"])
-        obj.set_name(dictionary['name'])
+        obj.set_dozent(dictionary["dozent"])
+        obj.set_anzahlTeilnehmer(dictionary["anzahlTeilnehmer"])
+        obj.set_teilnehmerListe(dictionary["teilnehmerListe"])
+        obj.set_name(dictionary["name"])
         obj.set_id(dictionary["id"])  # from BO
         return obj
+
+    def to_dict(self):
+        """Umwandeln Projekt() in ein Python dict()"""
+        result = {
+            "max_teilnehmer": self.get_max_teilnehmer(),
+            "beschreibung": self.get_projektbeschreibung(),
+            "betreuer": self.get_betreuer(),
+            "externer_partner": self.get_externer_partner(),
+            "woechentlich": self.get_woechentlich(),
+            "anzahl_block_vor": self.get_anzahl_block_vor(),
+            "anzahl_block_in": self.get_anzahl_block_in(),
+            "praeferierte_block": self.get_praeferierte_block(),
+            "bes_raum": self.get_bes_raum(),
+            "raum": self.get_raum(),
+            "sprache": self.get_sprache(),
+            "dozent": self.get_dozent(),
+            "anzahlTeilnehmer": self.get_anzahlTeilnehmer(),
+            "teilnehmerListe": self.get_teilnehmerListe(),
+            "name": self.get_name(),
+            "id": self.get_id()
+        }
+        return result

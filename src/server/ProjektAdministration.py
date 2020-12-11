@@ -88,6 +88,11 @@ class ProjektAdministration(object):
         with ProjektMapper() as mapper:
             return mapper.find_all()
 
+    def get_alle_pending_projekte(self):
+        '''Gib alle ungehemigten Projekte zuruck'''
+        with ProjektWartelisteMapper() as mapper:
+            return mapper.find_all()
+
     def get_projekt_teilnehmer(self, ):
         pass
 
@@ -144,10 +149,9 @@ class ProjektAdministration(object):
         with TeilnahmeMapper() as mapper:
             return mapper.insert(teilnahme)
 
-    def create_wartelisteProjekt(self, name, max_teilnehmer, projektbeschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, belegung, moduloption, art):
+    def create_wartelisteProjekt(self, name, max_teilnehmer, projektbeschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe):
         '''Ein warteliste Projekt erstellen'''
         projekt = Projekt()
-        projekt.set_name(name)
         projekt.set_max_teilnehmer(max_teilnehmer)
         projekt.set_projektbeschreibung(projektbeschreibung)
         projekt.set_betreuer(betreuer)
@@ -160,8 +164,11 @@ class ProjektAdministration(object):
         projekt.set_raum(raum)
         projekt.set_sprache(sprache)
         projekt.set_dozent(dozent)
+        projekt.set_anzahlTeilnehmer(anzahlTeilnehmer)
+        projekt.set_teilnehmerListe(teilnehmerListe)
         projekt.set_id(1)
-        print(projekt.to_dict())
+        projekt.set_name(name)
+        # print(projekt)
 
         with ProjektWartelisteMapper() as mapper:
             return mapper.insert(projekt)

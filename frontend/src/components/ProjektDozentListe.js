@@ -42,7 +42,7 @@ class ProjektDozentListe extends Component {
 
 	//hole alle Projekte vom Backend
 	getProjekte = () => {
-		ElectivAPI.getAPI().getProjekte()
+		ElectivAPI.getAPI().getPendingProjekte()
       .then(projekteBOs => 
 				this.setState({								//neuer status wenn fetch komplett
 					projekte: projekteBOs,					
@@ -117,7 +117,7 @@ class ProjektDozentListe extends Component {
         <Grid className={classes.projektFilter} container spacing={1} justify='flex-start' alignItems='center'>
           <Grid item>
             <Typography>
-              Filter Projekliste nach Namen:
+              Deine noch nicht genehmigten Projekte:
               </Typography>
           </Grid>
           <Grid item xs={4}>

@@ -27,6 +27,7 @@ export default class ElectivAPI {
 	// ---------------------------------------------------------------------------------
 
 	#addProjektPendingURL = () => `${this.#ElectivServerBaseURL}/projektePending`;
+	#getProjektePendingURL = () => `${this.#ElectivServerBaseURL}/projektePending`;
 
 
 	//meine Projekte anzeigen
@@ -73,19 +74,29 @@ export default class ElectivAPI {
 		})
 	}
 
-	addProjekt(ProjektBO) {
+	addProjekt(projektBO) {
 		return this.#fetchAdvanced(this.#addProjektPendingURL(), {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json, text/plain',
 				'Content-type': 'application/json',
 			},
-			body: JSON.stringify(ProjektBO)
+			body: JSON.stringify(projektBO)
 		}).then((responseJSON) => {
 			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
 			let responseProjektBO = ProjektBO.fromJSON(responseJSON)[0];
 			return new Promise(function (resolve) {
 				resolve(responseProjektBO);
+			})
+		})
+	}
+
+	getPendingProjekte() {
+		return this.#fetchAdvanced(this.#getProjektePendingURL(),{method: 'GET'}).then((responseJSON) => {
+			let projektBOs = ProjektBO.fromJSON(responseJSON);
+			console.info(projektBOs)
+			return new Promise(function (resolve){
+				resolve(projektBOs);
 			})
 		})
 	}
