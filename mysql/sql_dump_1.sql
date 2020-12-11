@@ -89,23 +89,77 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`studenten` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-
 -- -----------------------------------------------------
--- Table `electivapp`.`teilnahmen`
+-- Table `electivApp`.`teilnahmen`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `electivApp`.`teilnahmen` (
   `id` INT(11) NOT NULL DEFAULT '0',
   `lehrangebot` INT(11) NOT NULL,
   `teilnehmer` INT(11) NOT NULL,
+  `anrechnung` INT DEFAULT NULL,
+  `resultat` INT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_teilnahmen_projekte_idx` (`lehrangebot` ASC) VISIBLE,
   INDEX `fk_teilnahmen_studenten1_idx` (`teilnehmer` ASC) VISIBLE,
+  INDEX `fk_teilnahmen_module1_idx` (`anrechnung` ASC) VISIBLE,
+  INDEX `fk_teilnahmen_bewertungen1_idx` (`resultat` ASC) VISIBLE,
   CONSTRAINT `fk_teilnahmen_projekte`
     FOREIGN KEY (`lehrangebot`)
     REFERENCES `electivApp`.`projekte` (`id`),
   CONSTRAINT `fk_teilnahmen_studenten1`
     FOREIGN KEY (`teilnehmer`)
-    REFERENCES `electivApp`.`studenten` (`id`)
+    REFERENCES `electivApp`.`studenten` (`id`),
+  CONSTRAINT `fk_teilnahmen_module1`
+    FOREIGN KEY (`anrechnung`)
+    REFERENCES `electivApp`.`module` (`id`),
+  CONSTRAINT `fk_teilnahmen_bewertungen1`
+    FOREIGN KEY (`resultat`)
+    REFERENCES `electivApp`.`bewertungen` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+
+-- -----------------------------------------------------
+-- Table `electivApp`.`bewertungen`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `electivApp`.`bewertungen` (
+  `id` INT NOT NULL,
+  `note` DECIMAL(2,1) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `electivApp`.`module`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `electivApp`.`module` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(45) NULL,
+  `edv_nr` INT NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `electivApp`.`projekte_hat_module`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `electivApp`.`projekte_hat_module` (
+  `projekt_id` INT(11) NOT NULL,
+  `modul_id` INT NOT NULL,
+  PRIMARY KEY (`projekt_id`, `modul_id`),
+  INDEX `fk_projekte_has_module_module1_idx` (`modul_id` ASC) VISIBLE,
+  INDEX `fk_projekte_has_module_projekte1_idx` (`projekt_id` ASC) VISIBLE,
+  CONSTRAINT `fk_projekte_hat_module_projekte1`
+    FOREIGN KEY (`projekt_id`)
+    REFERENCES `electivApp`.`projekte` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_projekte_hat_module_module1`
+    FOREIGN KEY (`modul_id`)
+    REFERENCES `electivApp`.`module` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -114,7 +168,7 @@ DEFAULT CHARACTER SET = utf8;
 
 LOCK TABLES `projekte` WRITE;
 /*!40000 ALTER TABLE `projekte` DISABLE KEYS */;
-INSERT INTO `projekte` VALUES (1232,'Sofware for Monkeys', 30, 'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch', NULL), (3,'Marketing for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', NULL),(4,'Programmieren for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', NULL),(5,'BWL for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', NULL),(6,'Rechnungswesen for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', NULL),(7,'UX for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', NULL),(8,'Datenbanken for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', NULL),(9,'Web Technologie for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', NULL),(10,'Datenschutz for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', NULL);               
+INSERT INTO `projekte` VALUES (1232,'Sofware for Monkeys', 30, 'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch', 1), (3,'Marketing for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 2),(4,'Programmieren for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1),(5,'BWL for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1),(6,'Rechnungswesen for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1),(7,'UX for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1),(8,'Datenbanken for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1),(9,'Web Technologie for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1),(10,'Datenschutz for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1);               
 /*!40000 ALTER TABLE `projekte` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -126,8 +180,34 @@ UNLOCK TABLES;
 
 LOCK TABLES `teilnahmen` WRITE;
 /*!40000 ALTER TABLE `teilnahmen` DISABLE KEYS */;
-INSERT INTO `electivapp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`) VALUES ('1', '1232', '1');
+INSERT INTO `electivApp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`,`anrechnung`, `resultat`) VALUES ('1', '1232', '1', NULL, 1);
 /*!40000 ALTER TABLE `teilnahmen` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `personen` WRITE;
+/*!40000 ALTER TABLE `personen` DISABLE KEYS */;
+INSERT INTO `electivApp`.`personen` (`id`, `name`, `email`, `rolle`) VALUES ('1', 'Prof. Dr. Thies', 'thies@hdm.de', '1');
+INSERT INTO `electivApp`.`personen` (`id`, `name`, `email`, `rolle`) VALUES ('2', 'Prof. Dr. Kunz', 'kunz@mail.de', '1');
+/*!40000 ALTER TABLE `personen` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `bewertungen` WRITE;
+/*!40000 ALTER TABLE `bewertungen` DISABLE KEYS */;
+INSERT INTO `electivApp`.`bewertungen` (`id`, `note`) VALUES ('1', '1.3');
+INSERT INTO `electivApp`.`bewertungen` (`id`, `note`) VALUES ('2', '3.0');
+/*!40000 ALTER TABLE `bewertungen` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `module` WRITE;
+/*!40000 ALTER TABLE `module` DISABLE KEYS */;
+INSERT INTO `electivApp`.`module` (`id`, `name`, `edv_nr`) VALUES ('1', 'SW Projekt', '338079');
+/*!40000 ALTER TABLE `module` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `projekte_hat_module` WRITE;
+/*!40000 ALTER TABLE `projekte_hat_module` DISABLE KEYS */;
+INSERT INTO `electivApp`.`projekte_hat_module` (`projekt_id`, `modul_id`) VALUES ('1232', '1');
+/*!40000 ALTER TABLE `projekte_hat_module` ENABLE KEYS */;
 UNLOCK TABLES;
 
 

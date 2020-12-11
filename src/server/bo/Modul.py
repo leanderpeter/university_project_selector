@@ -7,20 +7,13 @@ from server.bo.NamedBusinessObject import NamedBusinessObject
 class Modul(NamedBusinessObject):
     def __init__(self):
         self._edv_nr = None
-        self._bestandteil = []
         self._zugewiesene_teilnahme = []
 
-    def get_edv_nr(self, ):
-        pass
+    def get_edv_nr(self):
+        return self._edv_nr
 
-    def set_edv_nr(self, edvnr):
-        pass
-
-    def get_bestandteil(self, ):
-        pass
-
-    def set_bestandteil(self, bestandteil):
-        pass
+    def set_edv_nr(self, edv_nr):
+        self._edv_nr = edv_nr
 
     def get_zugewiesene_teilnahmen(self, ):
         pass

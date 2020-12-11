@@ -15,3 +15,4 @@ frontend/http-fake-backend/
 node_modules
 
 .vscode/settings.json
+frontend/debug.log

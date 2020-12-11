@@ -36,11 +36,11 @@ export default class PersonBO extends NamedBusinessObject{
     setrolle(arolle){
         this.rolle = arolle;
     }
-
-
+    
     static fromJSON(personen) {
-		let results = [];
+		let results = null;
 		if (Array.isArray(personen)) {
+			results = [];
 			personen.forEach((c) => {
 				Object.setPrototypeOf(c, PersonBO.prototype);
 				results.push(c);
@@ -49,7 +49,7 @@ export default class PersonBO extends NamedBusinessObject{
 			// Es gibt wohl nur ein Objekt
 			let c = personen;
 			Object.setPrototypeOf(c, PersonBO.prototype);
-			results.push(c);
+			results = c;
 		}
 		return results;
 	}

@@ -34,15 +34,17 @@ class TeilnahmeMapper(Mapper):
         """ Findet alle Teilnahmen für eine bestimmte user_id"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id,lehrangebot, teilnehmer FROM teilnahmen WHERE teilnehmer={}".format(student_id)
+        command = "SELECT id, lehrangebot, teilnehmer, anrechnung, resultat FROM teilnahmen WHERE teilnehmer={}".format(student_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, lehrangebot, teilnehmer) in tuples:
+        for (id, lehrangebot, teilnehmer, anrechnung, resultat) in tuples:
             teilnahme = Teilnahme()
             teilnahme.set_id(id)
             teilnahme.set_lehrangebot(lehrangebot)
             teilnahme.set_teilnehmer(teilnehmer)
+            teilnahme.set_anrechnung(anrechnung)
+            teilnahme.set_resultat(resultat)
             result.append(teilnahme)
 
         self._connection.commit()
@@ -98,9 +100,16 @@ class TeilnahmeMapper(Mapper):
 
         return teilnahme
 
-    def update(self):
-        """Update an already given object in the DB"""
-        pass
+    def update(self, teilnahme):
+
+        cursor = self._connection.cursor()
+
+        command = "UPDATE teilnahmen SET lehrangebot=%s, teilnehmer=%s, anrechnung=%s, resultat=%s WHERE id=%s"
+        data = (teilnahme.get_lehrangebot(), teilnahme.get_teilnehmer(), teilnahme.get_anrechnung(), teilnahme.get_resultat(), teilnahme.get_id())
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
 
     def delete(self):
         """Delete an object from the DB"""

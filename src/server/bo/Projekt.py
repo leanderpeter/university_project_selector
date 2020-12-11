@@ -120,8 +120,8 @@ class Projekt(NamedBusinessObject):
     def get_moduloption(self):
         return self._moduloption
 
-    def set_moduloption(self, modul):
-        self._moduloption = modul
+    def set_moduloption(self, module):
+        self._moduloption = module
 
     def get_dozent(self):
         return self._dozent

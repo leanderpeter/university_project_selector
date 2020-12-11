@@ -5,13 +5,17 @@ import argparse
 from .bo.Person import Person
 from .bo.Student import Student
 from .bo.Projekt import Projekt
+from .bo.Teilnahme import Teilnahme
 
 from .db.PersonMapper import PersonMapper
 from .db.StudentMapper import StudentMapper
 from .db.TeilnahmeMapper import TeilnahmeMapper
+from .db.BewertungMapper import BewertungMapper
 from .db.ProjektMapper import ProjektMapper
 from .db.ProjektWartelisteMapper import ProjektWartelisteMapper
 from .bo.Teilnahme import Teilnahme
+from .db.ModulMapper import ModulMapper
+
 
 
 class ProjektAdministration(object):
@@ -45,8 +49,9 @@ class ProjektAdministration(object):
     def get_user_by_name(self, ):
         pass
 
-    def get_user_by_id(self, ):
-        pass
+    def get_person_by_id(self, id):
+        with PersonMapper() as mapper:
+            return mapper.find_by_id(id)
 
     def get_user_by_email(self, ):
         pass
@@ -80,8 +85,9 @@ class ProjektAdministration(object):
     def create_projekt(self, ):
         pass
 
-    def get_projekt_by_id(self, ):
-        pass
+    def get_projekt_by_id(self, projekt_id):
+        with ProjektMapper() as mapper:
+            return mapper.find_projekt_by_id(projekt_id)
 
     def get_alle_projekte(self, ):
         """return alle Projekte """
@@ -111,30 +117,26 @@ class ProjektAdministration(object):
     def create_bewertung(self, ):
         pass
 
-    def get_bewertung(self, ):
-        pass
+    def get_module_by_projekt_id(self, projekt_id):
+        with ModulMapper() as mapper:
+            return mapper.find_by_projekt_id(projekt_id)
+
+    def get_modul_by_id(self, id):
+        with ModulMapper() as mapper:
+            return mapper.find_by_id(id)
+
+    def get_bewertung_by_id(self, id):
+        with BewertungMapper() as mapper:
+            return mapper.find_by_id(id)
 
     def delete_bewertung(self, ):
         pass
 
-    def create_teilnahme(self, ):
-        pass
 
     def get_teilnahmen_von_student(self, id):
         """ Alle Teilnamen des Users auslesen"""
         with TeilnahmeMapper() as mapper:
             return mapper.find_by_student_id(id)
-
-    def get_projekte_von_teilnahmen(self, teilnahmen):
-        result = []
-
-        for a in teilnahmen:
-            projekt_id = a.get_lehrangebot()
-            with ProjektMapper() as mapper:
-                projekt = mapper.find_projekt_by_id(projekt_id)
-            result.append(projekt)
-
-        return result
 
     def delete_teilnahme(self, ):
         pass
@@ -174,3 +176,6 @@ class ProjektAdministration(object):
             return mapper.insert(projekt)
 
 
+    def save_teilnahme(self, teilnahme):
+        with TeilnahmeMapper() as mapper:
+            mapper.update(teilnahme)

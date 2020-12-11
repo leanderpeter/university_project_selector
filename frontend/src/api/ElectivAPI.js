@@ -1,5 +1,9 @@
 import ProjektBO from './ProjektBO';
 import StudentBO from './StudentBO';
+import PersonBO from './PersonBO';
+import TeilnahmeBO from './TeilnahmeBO';
+import BewertungBO from './BewertungBO';
+import ModulBO from './ModulBO';
 
 /*
 Singleton Abstarktion des backend REST interfaces. Es handelt sich um eine access methode
@@ -15,8 +19,8 @@ export default class ElectivAPI {
 
 	//Projekte anzeigen fuer Student
 	#getProjekteURL = () => `${this.#ElectivServerBaseURL}/projekte`;
-	#addProjektURL = () => `${this.#ElectivServerBaseURL}/projekte`;
-	#getProjektURL = (id) => `${this.#ElectivServerBaseURL}/projekte/${id}`;
+	#addProjekteURL = () => `${this.#ElectivServerBaseURL}/projekte`;
+	#getProjekteByIDURL = (id) => `${this.#ElectivServerBaseURL}/projekte/${id}`;
 	//update 
 	//delete
 	#searchProjektURL = (projektname) => `${this.#ElectivServerBaseURL}/projekte_by_name/${projektname}`;
@@ -29,15 +33,32 @@ export default class ElectivAPI {
 	#addProjektPendingURL = () => `${this.#ElectivServerBaseURL}/projektePending`;
 	#getProjektePendingURL = () => `${this.#ElectivServerBaseURL}/projektePending`;
 
+	//Projekt nach ID bekommen
+	#getProjektURL = (id) => `${this.#ElectivServerBaseURL}/projekt/${id}`;
 
-	//meine Projekte anzeigen
-	#getMeineProjekteURL = (id) => `${this.#ElectivServerBaseURL}/meineprojekte/${id}`;
+	//alle Teilnahmen eines Students anzeigen
+	#getTeilnahmenURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/${id}`;
   
 	//Teilnahme wählen
 	#putTeilnahmeURL = (lehrangebotId,teilnehmerId) => `${this.#ElectivServerBaseURL}/teilnahme?lehrangebotId=${lehrangebotId}&teilnehmerId=${teilnehmerId}`;
 
+
+	//getPerson: id
+	#getPersonURL = (id) => `${this.#ElectivServerBaseURL}/person/${id}`;
+
 	//getStudent: google_user_id
 	#getStudentURL = (google_user_id) => `${this.#ElectivServerBaseURL}/student/${google_user_id}`;
+
+	//Bewertung nach Id bekommen
+	#getBewertungURL = (id) => `${this.#ElectivServerBaseURL}/bewertung/${id}`;
+
+	//Module nach Id bekommen
+	#getModule_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/module/${id}`;
+
+	#updateTeilnahmeURL = (id) => `${this.#ElectivServerBaseURL}/teilnahme2/${id}`;
+
+
+
 
 	/*
 	Singleton/Einzelstuck instanz erhalten
@@ -100,6 +121,15 @@ export default class ElectivAPI {
 			})
 		})
 	}
+	getProjekt(id){
+		return this.#fetchAdvanced(this.#getProjektURL(id)).then((responseJSON) => {
+			let projektBO = ProjektBO.fromJSON(responseJSON);
+			console.info(projektBO)
+			return new Promise(function (resolve){
+				resolve(projektBO)
+			})
+		})
+	}
 
 	updateProjekt(){
 		//USW
@@ -109,13 +139,22 @@ export default class ElectivAPI {
 		//USW
 	}
 
-	
-	getMeineProjekte(studentID){
-		return this.#fetchAdvanced(this.#getMeineProjekteURL(studentID)).then((responseJSON) => {
-			let projektBOs = ProjektBO.fromJSON(responseJSON);
-			console.info(projektBOs)
+	getPerson(id){
+		return this.#fetchAdvanced(this.#getPersonURL(id)).then((responseJSON) => {
+			let personBO = PersonBO.fromJSON(responseJSON);
+			console.info(personBO)
 			return new Promise(function (resolve){
-				resolve(projektBOs)
+				resolve(personBO)
+			})
+		})
+	}
+	
+	getTeilnahmen(studentID){
+		return this.#fetchAdvanced(this.#getTeilnahmenURL(studentID)).then((responseJSON) => {
+			let teilnahmeBOs = TeilnahmeBO.fromJSON(responseJSON);
+			console.info(teilnahmeBOs)
+			return new Promise(function (resolve){
+				resolve(teilnahmeBOs)
 			})
 		})
 	}
@@ -136,5 +175,41 @@ export default class ElectivAPI {
 
 		})
 
+	}
+
+	updateTeilnahme(teilnahmeBO){
+         return this.#fetchAdvanced(this.#updateTeilnahmeURL(teilnahmeBO.getID()),{
+			method: 'PUT',
+			headers:{
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(teilnahmeBO)
+		}).then((responseJSON) => {
+			let responseTeilnahmeBO = TeilnahmeBO.fromJSON(responseJSON)[0];
+			return new Promise(function (resolve){
+				resolve(responseTeilnahmeBO)
+			})
+		})
+	}
+
+
+	getBewertung(id){
+		return this.#fetchAdvanced(this.#getBewertungURL(id)).then((responseJSON) => {
+			let bewertungBO = BewertungBO.fromJSON(responseJSON);
+			console.info(bewertungBO)
+			return new Promise(function (resolve){
+				resolve(bewertungBO)
+			})
+		})
+	}
+	getModule_by_projekt_id(id){
+		return this.#fetchAdvanced(this.#getModule_by_projekt_idURL(id)).then((responseJSON) => {
+			let modulBO = ModulBO.fromJSON(responseJSON);
+			console.info(modulBO)
+			return new Promise(function (resolve){
+				resolve(modulBO)
+			})
+		})
 	}
 }

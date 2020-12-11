@@ -1,6 +1,5 @@
 from server.ProjektAdministration import ProjektAdministration
+from server.db.ProjektMapper import ProjektMapper
 
-pm = ProjektAdministration()
-teilnahmen = pm.get_teilnahmen_von_person(1)
-projekte = pm.get_projekte_von_teilnahmen(teilnahmen)
-print(projekte)
+test = ProjektMapper()
+print(test.find_projekt_by_id(1232))

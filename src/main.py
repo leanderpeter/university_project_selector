@@ -8,9 +8,9 @@ from flask import request
 
 # Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.ProjektAdministration import ProjektAdministration
-from server.bo.Person import Person
-from server.bo.Student import Student
-from server.bo.Projekt import Projekt
+from server.bo.Teilnahme import Teilnahme
+
+#SecurityDecorator
 from SecurityDecorator import secured
 
 # ..weitere Imports notwendig z.B. BO-Klassen und SecurityDecorator
@@ -22,6 +22,7 @@ CORS(app, resources=r'/electivApp/*')
 
 api = Api(app, version='1.0', title='electivApp API',
           description='Web App for choosing electiv subjects for the university')
+
 electivApp = api.namespace('electivApp', description='Functions of electivApp')
 
 bo = api.model('BusinessObject', {
@@ -63,12 +64,28 @@ projekt = api.inherit('Projekt', nbo, {
     'teilnehmerListe': fields.String(attribute='_teilnehmerListe', description='Liste mit IDs der Teilnehmer')
 })
 
+# Moduloption aus projekt entfernt !!INFO!!
+
+teilnahme = api.inherit('Teilnahme', bo, {
+    'teilnehmer': fields.Integer(attribute='_teilnehmer', description='Die ID des Studenten der Teilnahme'),
+    'lehrangebot': fields.Integer(attribute='_lehrangebot', description='Die ID des Projekts der Teilnahme'),
+    'anrechnung': fields.Integer(attribute='_anrechnung', description='Das Modul auf das die Teilnahme angerechnet wurde'),
+    'resultat': fields.Integer(attribute='_resultat', description='Die ID der Note einer Teilnahme')
+})
+
+bewertung = api.inherit('Bewertung', bo, {
+    'note': fields.Float(attribute='_note', description='Die Note der Teilnahme'),
+})
+
+modul = api.inherit('Modul', nbo, {
+    'edv_nr': fields.Integer(attribute='_edv_nr', description='Die EDV Nummer eines Moduls'),
+})
 
 @electivApp.route('/projekte')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektListeOperationen(Resource):
     @electivApp.marshal_list_with(projekt)
-    # @secured
+    @secured
 
     def get(self):
         adm = ProjektAdministration()
@@ -81,18 +98,35 @@ class ProjektListeOperationen(Resource):
     def put(self, projekt_id):
         pass
 
-
-@electivApp.route('/meineprojekte/<int:id>')
+@electivApp.route('/projekt/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class MeineProjektListeOperationen(Resource):
+class ProjektOperationen(Resource):
     @electivApp.marshal_list_with(projekt)
     @secured
+
+    def get(self, id):
+        adm = ProjektAdministration()
+        projekt = adm.get_projekt_by_id(id)
+        return projekt
+
+    def delete(self, projekt_id):
+        pass
+
+    def put(self, projekt_id):
+        pass
+
+
+@electivApp.route('/teilnahmen/<int:id>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class TeilnahmeListeOperationen(Resource):
+    @electivApp.marshal_list_with(teilnahme)
+    @secured
+ 
     def get(self, id):
         adm = ProjektAdministration()
         """TODO 1 SQL Abfrage machen"""
         teilnahmen = adm.get_teilnahmen_von_student(id)
-        projekte = adm.get_projekte_von_teilnahmen(teilnahmen)
-        return projekte
+        return teilnahmen
 
     def delete(self, ):
         pass
@@ -100,13 +134,16 @@ class MeineProjektListeOperationen(Resource):
     def put(self, ):
         pass
 
-
-@electivApp.route('/person')
+@electivApp.route('/person/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonOperationen(Resource):
-    def get(self, person_id):
+    @electivApp.marshal_list_with(person)
+    @secured
+
+    def get(self, id):
         adm = ProjektAdministration()
-        # personen = adm.
+        person = adm.get_person_by_id(id)
+        return person
 
     def delete(self, person_id):
         pass
@@ -120,6 +157,7 @@ class PersonOperationen(Resource):
 class StudentByGoogleIDOperationen(Resource):
     @electivApp.marshal_list_with(student)
     @secured
+
     def get(self, google_user_id):
         adm = ProjektAdministration()
         student = adm.get_student_by_google_user_id(google_user_id)
@@ -148,12 +186,39 @@ class TeilnahmeOperationen(Resource):
         projektAdministration.create_teilnahme(lehrangebotId, teilnehmerId)
 
 
-class BewertungOperationen(Resource):
-    def __init__(self):
+@electivApp.route('/teilnahme2/<int:id>')
+@electivApp.response(500, 'Something went wrong')
+class Teilnahme2Operationen(Resource):
+    def get(self, teilname_id):
         pass
 
-    def get(self, bewertung_id):
+    def delete(self, teilnahme_id):
         pass
+
+    @electivApp.marshal_with(teilnahme)
+    @electivApp.expect(teilnahme, validate=True)
+    @secured
+    def put(self, id):
+        adm = ProjektAdministration()
+        teilnahme = Teilnahme.from_dict(api.payload)
+
+        if teilnahme is not None:
+            teilnahme.set_id(id)
+            adm.save_teilnahme(teilnahme)
+            return '', 200
+        else:
+            return '', 500
+
+@electivApp.route('/bewertung/<int:id>')
+@electivApp.response(500, 'Something went wrong')
+class BewertungOperationen(Resource):
+    @electivApp.marshal_list_with(bewertung)
+    @secured
+    
+    def get(self, id):
+        adm = ProjektAdministration()
+        bewertung = adm.get_bewertung_by_id(id)
+        return bewertung
 
     def delete(self, bewertung_id):
         pass
@@ -161,18 +226,21 @@ class BewertungOperationen(Resource):
     def put(self, bewertung_id):
         pass
 
+@electivApp.route('/module/<int:projekt_id>')
+@electivApp.response(500, 'Something went wrong')
+class ModulByProjektIDOperationen(Resource):
+    @electivApp.marshal_list_with(modul)
+    @secured
 
-class ModulOperationen(Resource):
-    def __init__(self):
+    def get(self, projekt_id):
+        adm = ProjektAdministration()
+        modul = adm.get_module_by_projekt_id(projekt_id)
+        return modul
+
+    def delete(self, id):
         pass
 
-    def get(self, module_id):
-        pass
-
-    def delete(self, module_id):
-        pass
-
-    def put(self, module_id):
+    def put(self, id):
         pass
 
 

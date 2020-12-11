@@ -17,6 +17,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import TableFooter from '@material-ui/core/TableFooter';
+
+
+
+
 
 //import MeineProjekteEintrag
 import MeineProjekteEintrag from './MeineProjekteEintrag';
@@ -48,68 +53,75 @@ class MeineProjekte extends Component {
 
         let expandedID = null;
 
-        if (this.props.location.expandProjekt){
-            expandedID = this.props.location.expandProjekt.getID();
+        if (this.props.location.expandTeilnahme){
+            expandedID = this.props.location.expandTeilnahme.getID();
         }
 
 
         this.state = {
-            projekte : [],
-            student: null,
+            teilnahmen : [],
+            currentStudentName: null,
+            currentStudentmat_nr: null,
             error: null,
             loadingInProgress: false, 
-            expandedProjektID: expandedID,
+            expandedTeilnahmeID: expandedID,
         };
     }
 
 
+
     // API Anbindung um Projekte vom Backend zu bekommen 
-    getMeineProjekte = () => {
-            ElectivAPI.getAPI().getMeineProjekte(this.props.currentStudent.id)
-            .then(projekteBOs =>
+    getTeilnahmen = () => {
+            ElectivAPI.getAPI().getTeilnahmen(this.props.currentStudent.id)
+            .then(teilnahmeBOs =>
                 this.setState({
-                    projekte: projekteBOs,
+                    teilnahmen: teilnahmeBOs,
                     error: null,
                     loadingInProgress: false,
                 })).catch(e =>
                     this.setState({
-                        projekte: [],
+                        teilnahme: [],
                         error: e,
                         loadingInProgress: false,
                     }));
             this.setState({
                 error: null,
-                loadingInProgress: true
+                loadingInProgress: true,
+                loadingTeilnahmeError: null
             });
     }
 
     componentDidMount() {
-        this.getMeineProjekte();
+        this.getTeilnahmen();
+        this.setState({
+            currentStudentName: this.props.currentStudent.getname(),
+            currentStudentmat_nr: this.props.currentStudent.getmat_nr(),
+        })
     }
 
-    onExpandedStateChange = projekt => {
-        //  Zum anfang Projekt Eintrag = null
+    onExpandedStateChange = teilnahme => {
+        //  Zum anfang Teilnahme Eintrag = null
         let newID = null;
     
         // Falls ein Objekt geclicket wird, collapse
-        if (projekt.getID() !== this.state.expandedProjektID) {
-          // Oeffnen mit neuer Projekt ID
-          newID = projekt.getID()
+        if (teilnahme.getID() !== this.state.expandedTeilnahmeID) {
+          // Oeffnen mit neuer Teilnahme ID
+          newID = teilnahme.getID()
         }
         this.setState({
-          expandedProjektID: newID,
+          expandedTeilnahmeID: newID,
         });
     
       }
 
     render(){
 
-        const { classes, currentStudent } = this.props;
-        const { projekte, expandedProjektID, error, loadingInProgress} = this.state;
+        const { classes } = this.props;
+        const { teilnahmen, currentStudentName, currentStudentmat_nr, expandedTeilnahmeID, error, loadingInProgress} = this.state;
         
         return(
             <div className={classes.root}>
-                <Typography>Projekte von {currentStudent.getname()}, Matrikelnummer: {currentStudent.getmat_nr()}</Typography>
+                <Typography>Projekte von {currentStudentName}, Matrikelnummer: {currentStudentmat_nr}</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="customized table">
                         <TableHead>
@@ -122,20 +134,29 @@ class MeineProjekte extends Component {
                         </TableHead>
                         <TableBody>
                             {
-                                projekte.map(projekt => 
-                                    <MeineProjekteEintrag key={projekt.getID()} projekt = {projekt} expandedState={expandedProjektID === projekt.getID()}
-                                    onExpandedStateChange={this.onExpandedStateChange}
-                                />) 
+                                teilnahmen ?
+                                <>
+                                {
+                                    teilnahmen.map(teilnahme => 
+                                        <MeineProjekteEintrag key={teilnahme.getID()} teilnahme = {teilnahme} 
+                                        getTeilnahmen = {this.getTeilnahmen}
+                                        expandedState={expandedTeilnahmeID === teilnahme.getID()}
+                                        onExpandedStateChange={this.onExpandedStateChange}
+                                        show={this.props.show}
+                                    />) 
+                                }
+                                </>
+                                :
+                                <></>
                             }
                         </TableBody>
                     </Table>
+                    <LoadingProgress show={loadingInProgress} />
+                    <ContextErrorMessage error={error} contextErrorMsg = {'Meine Projekte konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
                 </TableContainer>
-                <Button variant="contained" color="primary" size="medium" className={classes.button}startIcon={<SaveIcon />}>
-                    Semesterbericht
-                </Button>
-                <LoadingProgress show={loadingInProgress} />
-                <ContextErrorMessage error={error} contextErrorMsg = {'Meine Projekte konnten nicht geladen werden'} onReload={this.getProjekte} />
-                
+                <Button variant="contained" color="primary" size="medium" className={classes.button} startIcon={<SaveIcon />}>
+                Semesterbericht
+                </Button>             
             </div>
         )
     }
@@ -151,6 +172,18 @@ const styles = theme => ({
       },
       content: {
         margin: theme.spacing(1),
+      },
+      button:{
+          marginTop: theme.spacing(2)
+      },
+      page: {
+        flexDirection: 'row',
+        backgroundColor: '#E4E4E4'
+      },
+      section: {
+        margin: 10,
+        padding: 10,
+        flexGrow: 1
       }
   });
 
@@ -161,7 +194,7 @@ MeineProjekte.propTypes = {
     /** @ignore */
     location: PropTypes.object.isRequired,
 	// logged in Firebase user/person
-	user: PropTypes.object,
+    show: PropTypes.bool.isRequired
 }
 
 
