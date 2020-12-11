@@ -9,6 +9,7 @@ from flask import request
 # Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.ProjektAdministration import ProjektAdministration
 from server.bo.Teilnahme import Teilnahme
+from server.bo.Projekt import Projekt
 
 #SecurityDecorator
 from SecurityDecorator import secured

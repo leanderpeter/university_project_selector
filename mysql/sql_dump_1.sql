@@ -172,12 +172,6 @@ INSERT INTO `projekte` VALUES (1232,'Sofware for Monkeys', 30, 'Die Ziele von So
 /*!40000 ALTER TABLE `projekte` ENABLE KEYS */;
 UNLOCK TABLES;
 
-LOCK TABLES `projekte_ausstehend` WRITE;
-/*!40000 ALTER TABLE `projekte` DISABLE KEYS */;
-INSERT INTO `projekte_ausstehend` VALUES (2,'Sofware for Monkeys', 30, 'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch', NULL);               
-/*!40000 ALTER TABLE `projekte` ENABLE KEYS */;
-UNLOCK TABLES;
-
 LOCK TABLES `teilnahmen` WRITE;
 /*!40000 ALTER TABLE `teilnahmen` DISABLE KEYS */;
 INSERT INTO `electivApp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`,`anrechnung`, `resultat`) VALUES ('1', '1232', '1', NULL, 1);
