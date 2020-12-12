@@ -233,7 +233,7 @@ class BewertungOperationen(Resource):
     def put(self, bewertung_id):
         pass
 
-@electivApp.route('/module/<int:projekt_id>')
+@electivApp.route('/modul/<int:projekt_id>')
 @electivApp.response(500, 'Something went wrong')
 class ModulByProjektIDOperationen(Resource):
     @electivApp.marshal_list_with(modul)
@@ -249,6 +249,26 @@ class ModulByProjektIDOperationen(Resource):
 
     def put(self, id):
         pass
+
+@electivApp.route('/module')
+@electivApp.response(500, 'Something went wrong')
+class ModulOperationen(Resource):
+    @electivApp.marshal_list_with(modul)
+    @secured
+
+    def get(self):
+        adm = ProjektAdministration()
+        module = adm.get_alle_module()
+        return module
+
+    def delete(self, id):
+        pass
+
+    def put(self, id):
+        pass
+
+
+
 
 
 @electivApp.route('/projektePending')

@@ -35,11 +35,31 @@ class Notenlisten extends Component {
 			expandedModulID: expandedID,
 			showModulform: false
 		};
-	}
+  }
+    // API Anbindung um alle Module vom Backend zu bekommen 
+    getModule = () => {
+      ElectivAPI.getAPI().getModule()
+      .then(modulBOs =>
+          this.setState({
+              module: modulBOs,
+              error: null,
+              loadingInProgress: false,
+          })).catch(e =>
+              this.setState({
+                  module: [],
+                  error: e,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingTeilnahmeError: null
+      });
+}
 
 	// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 	componentDidMount() {
-        
+    this.getModule();
 	}
 
   onExpandedStateChange = modul => {
@@ -56,23 +76,9 @@ class Notenlisten extends Component {
 
 	/** Renders the component */
 	render() {
-
-    function createData (id, name, edv_nr){
-      var a = new ModulBO();
-      a.setID(id);
-      a.setname(name);
-      a.setEdv_nr(edv_nr);
-      return a;
-    }
-
-    const module = [
-      createData(131, 'Transdisziplinäres Projekt', 33466),
-      createData(231, 'Transdisziplinäres Projekt 2', 55367),
-      createData(313, 'Projekt', 43654)
-    ];
     
     const { classes } = this.props;
-    const { filteredModule, edvFilter,  expandedModulID, loadingInProgress, error } = this.state;
+    const { module, filteredModule, edvFilter,  expandedModulID, loadingInProgress, error } = this.state;
     return (
     <div className={classes.root}>
         <Grid className={classes.header} container spacing={1} justify='flex-start' alignItems='space-between'>
@@ -110,7 +116,7 @@ class Notenlisten extends Component {
         </Grid>
         {
           module.map(modul =>
-          <NotenlistenEintrag key={modul.id} modul = {modul} expandedState={expandedModulID === modul.getID()} onExpandedStateChange={this.onExpandedStateChange}/>
+          <NotenlistenEintrag key={modul.getID()} modul = {modul} expandedState={expandedModulID === modul.getID()} onExpandedStateChange={this.onExpandedStateChange}/>
           )
         }
         <LoadingProgress show={loadingInProgress} />

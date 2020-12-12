@@ -117,6 +117,10 @@ class ProjektAdministration(object):
     def create_bewertung(self, ):
         pass
 
+    def get_alle_module(self):
+        with ModulMapper() as mapper:
+            return mapper.find_all()
+
     def get_module_by_projekt_id(self, projekt_id):
         with ModulMapper() as mapper:
             return mapper.find_by_projekt_id(projekt_id)

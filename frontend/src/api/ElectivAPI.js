@@ -52,8 +52,11 @@ export default class ElectivAPI {
 	//Bewertung nach Id bekommen
 	#getBewertungURL = (id) => `${this.#ElectivServerBaseURL}/bewertung/${id}`;
 
+	//Alle Module bekommen
+	#getModuleURL = () => `${this.#ElectivServerBaseURL}/module`;
+
 	//Module nach Id bekommen
-	#getModule_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/module/${id}`;
+	#getModule_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/modul/${id}`;
 
 	#updateTeilnahmeURL = (id) => `${this.#ElectivServerBaseURL}/teilnahme2/${id}`;
 
@@ -200,6 +203,15 @@ export default class ElectivAPI {
 			console.info(bewertungBO)
 			return new Promise(function (resolve){
 				resolve(bewertungBO)
+			})
+		})
+	}
+	getModule(){
+		return this.#fetchAdvanced(this.#getModuleURL()).then((responseJSON) => {
+			let modulBOs = ModulBO.fromJSON(responseJSON);
+			console.info(modulBOs)
+			return new Promise(function (resolve){
+				resolve(modulBOs)
 			})
 		})
 	}

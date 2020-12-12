@@ -152,7 +152,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `electivApp`.`semester` (
   `id` INT NOT NULL,
-  `name` VARCHAR(6) NULL,
+  `name` VARCHAR(7) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;#
 
@@ -215,7 +215,15 @@ DEFAULT CHARACTER SET = utf8;
 
 LOCK TABLES `projekte` WRITE;
 /*!40000 ALTER TABLE `projekte` DISABLE KEYS */;
-INSERT INTO `projekte` VALUES (1232,'Sofware for Monkeys', 30, 'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch', 1,NULL, NULL,NULL), (3,'Marketing for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 2,NULL, NULL,NULL),(4,'Programmieren for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL),(5,'BWL for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL),(6,'Rechnungswesen for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL),(7,'UX for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL),(8,'Datenbanken for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL),(9,'Web Technologie for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL),(10,'Datenschutz for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL);               
+INSERT INTO `projekte` VALUES (1232,'Sofware for Monkeys', 30, 'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch', 1,NULL, 2,NULL), 
+(3,'Marketing for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 2,NULL, 3,NULL),
+(4,'Programmieren for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 2,NULL),
+(5,'BWL for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 3,NULL),
+(6,'Rechnungswesen for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 2,NULL),
+(7,'UX for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 3,NULL),
+(8,'Datenbanken for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 2,NULL),
+(9,'Web Technologie for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 3,NULL),
+(10,'Datenschutz for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 2,NULL);               
 /*!40000 ALTER TABLE `projekte` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -242,6 +250,10 @@ UNLOCK TABLES;
 LOCK TABLES `module` WRITE;
 /*!40000 ALTER TABLE `module` DISABLE KEYS */;
 INSERT INTO `electivApp`.`module` (`id`, `name`, `edv_nr`) VALUES ('1', 'SW Projekt', '338079');
+INSERT INTO `electivapp`.`module` (`id`, `name`, `edv_nr`) VALUES ('2', 'Interdisziplinäres Projekt', '387662');
+INSERT INTO `electivapp`.`module` (`id`, `name`, `edv_nr`) VALUES ('3', 'HansWurst Modult', '481907');
+INSERT INTO `electivapp`.`module` (`id`, `name`, `edv_nr`) VALUES ('4', 'Affen Modul', '331341');
+INSERT INTO `electivapp`.`module` (`id`, `name`, `edv_nr`) VALUES ('5', 'Marketing', '333312');
 /*!40000 ALTER TABLE `module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,6 +261,26 @@ LOCK TABLES `projekte_hat_module` WRITE;
 /*!40000 ALTER TABLE `projekte_hat_module` DISABLE KEYS */;
 INSERT INTO `electivApp`.`projekte_hat_module` (`projekt_id`, `modul_id`) VALUES ('1232', '1');
 /*!40000 ALTER TABLE `projekte_hat_module` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `semester` WRITE;
+/*!40000 ALTER TABLE `semester` DISABLE KEYS */;
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('1', 'SS19');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('2', 'WS19/20');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('3', 'SS20');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('4', 'WS20/21');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('5', 'SS21');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('6', 'WS21/22');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('7', 'SS22');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('8', 'WS22/23');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('9', 'SS23');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('10', 'WS23/24');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('11', 'SS24');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('12', 'WS24/25');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('13', 'SS25');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('14', 'WS25/26');
+INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('15', 'SS26');
+/*!40000 ALTER TABLE `semester` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
