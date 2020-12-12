@@ -48,7 +48,7 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 -- Table `electivApp`.`projekte`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `electivapp`.`projekte` (
+CREATE TABLE IF NOT EXISTS `electivApp`.`projekte` (
   `id` INT NOT NULL DEFAULT '0',
   `name` VARCHAR(100) NOT NULL DEFAULT '',
   `max_teilnehmer` INT NOT NULL DEFAULT '30',
@@ -62,17 +62,29 @@ CREATE TABLE IF NOT EXISTS `electivapp`.`projekte` (
   `bes_raum` TINYINT(1) NULL DEFAULT '0',
   `raum` VARCHAR(128) NULL DEFAULT '',
   `sprache` VARCHAR(128) NULL DEFAULT '',
-  `dozent` INT NULL DEFAULT NULL,
-  `aktueller_zustand` INT NOT NULL,
+  `dozent` INT DEFAULT NULL,
+  `aktueller_zustand` INT DEFAULT NULL,
+  `halbjahr` INT DEFAULT NULL,
+  `art` INT DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_projekte_personen1_idx` (`dozent` ASC) VISIBLE,
-  INDEX `fk_projekte_Zustand1_idx` (`aktueller_zustand` ASC) VISIBLE,
+  INDEX `fk_projekte_zustaende1_idx` (`aktueller_zustand` ASC) VISIBLE,
+  INDEX `fk_projekte_semester1_idx` (`halbjahr` ASC) VISIBLE,
+  INDEX `fk_projekte_projektarten1_idx` (`art` ASC) VISIBLE,
   CONSTRAINT `fk_projekte_personen1`
     FOREIGN KEY (`dozent`)
-    REFERENCES `electivapp`.`personen` (`id`),
-  CONSTRAINT `fk_projekte_Zustand1`
+    REFERENCES `electivApp`.`personen` (`id`),
+  CONSTRAINT `fk_projekte_zustaende1` (`id`),
     FOREIGN KEY (`aktueller_zustand`)
-    REFERENCES `electivapp`.`Zustand` (`id`)
+    REFERENCES `electivApp`.`zustaende` (`id`)
+  CONSTRAINT `fk_projekte_semester1`
+    FOREIGN KEY (`halbjahr`)
+    REFERENCES `electivApp`.`semester` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_projekte_projektarten1`
+    FOREIGN KEY (`art`)
+    REFERENCES `electivApp`.`projektarten` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -129,12 +141,31 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 -- Table `electivApp`.`Zustand`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `electivApp`.`Zustand` (
+CREATE TABLE IF NOT EXISTS `electivApp`.`zustaende` (
   `id` INT NOT NULL,
   `name` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `electivApp`.`semester`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `electivApp`.`semester` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(6) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;#
+
+-- -----------------------------------------------------
+-- Table `electivapp`.`projektarten`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `electivApp`.`projektarten` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(45) NULL,
+  `ects` INT NULL,
+  `sws` INT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
 
 
 
@@ -184,7 +215,7 @@ DEFAULT CHARACTER SET = utf8;
 
 LOCK TABLES `projekte` WRITE;
 /*!40000 ALTER TABLE `projekte` DISABLE KEYS */;
-INSERT INTO `projekte` VALUES (1232,'Sofware for Monkeys', 30, 'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch', 1), (3,'Marketing for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 2),(4,'Programmieren for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1),(5,'BWL for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1),(6,'Rechnungswesen for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1),(7,'UX for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1),(8,'Datenbanken for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1),(9,'Web Technologie for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1),(10,'Datenschutz for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1);               
+INSERT INTO `projekte` VALUES (1232,'Sofware for Monkeys', 30, 'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch', 1,NULL, NULL,NULL), (3,'Marketing for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 2,NULL, NULL,NULL),(4,'Programmieren for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL),(5,'BWL for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL),(6,'Rechnungswesen for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL),(7,'UX for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL),(8,'Datenbanken for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL),(9,'Web Technologie for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL),(10,'Datenschutz for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, NULL,NULL);               
 /*!40000 ALTER TABLE `projekte` ENABLE KEYS */;
 UNLOCK TABLES;
 
