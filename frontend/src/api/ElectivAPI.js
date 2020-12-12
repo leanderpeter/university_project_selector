@@ -4,6 +4,7 @@ import PersonBO from './PersonBO';
 import TeilnahmeBO from './TeilnahmeBO';
 import BewertungBO from './BewertungBO';
 import ModulBO from './ModulBO';
+import SemesterBO from './SemesterBO';
 
 /*
 Singleton Abstarktion des backend REST interfaces. Es handelt sich um eine access methode
@@ -38,6 +39,9 @@ export default class ElectivAPI {
 
 	//alle Teilnahmen eines Students anzeigen
 	#getTeilnahmenURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/${id}`;
+
+	//Alle Teilnahmen einer EDV Nummer für ein bestimmtes Semester
+	#getTeilnahmen_by_modul_und_semesterURL = (modul_id, semester_id) => `${this.#ElectivServerBaseURL}/teilnahmen/${modul_id}/${semester_id}`
   
 	//Teilnahme wählen
 	#putTeilnahmeURL = (lehrangebotId,teilnehmerId) => `${this.#ElectivServerBaseURL}/teilnahme?lehrangebotId=${lehrangebotId}&teilnehmerId=${teilnehmerId}`;
@@ -59,6 +63,9 @@ export default class ElectivAPI {
 	#getModule_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/modul/${id}`;
 
 	#updateTeilnahmeURL = (id) => `${this.#ElectivServerBaseURL}/teilnahme2/${id}`;
+
+	//Alle Semester bekommen
+	#getSemesterURL = () => `${this.#ElectivServerBaseURL}/semester`;
 
 
 
@@ -162,6 +169,17 @@ export default class ElectivAPI {
 		})
 	}
 
+	getTeilnahmen_by_modul_und_semester(modul_id, semester_id){
+		return this.#fetchAdvanced(this.#getTeilnahmen_by_modul_und_semesterURL(modul_id, semester_id)).then((responseJSON) => {
+			let teilnahmeBOs = TeilnahmeBO.fromJSON(responseJSON);
+			console.info(teilnahmeBOs)
+			return new Promise(function (resolve){
+				resolve(teilnahmeBOs)
+			})
+		})
+	}
+
+
 	getStudent(google_user_id){
 		return this.#fetchAdvanced(this.#getStudentURL(google_user_id)).then((responseJSON) => {
 			let studentBO = StudentBO.fromJSON(responseJSON);
@@ -206,6 +224,7 @@ export default class ElectivAPI {
 			})
 		})
 	}
+
 	getModule(){
 		return this.#fetchAdvanced(this.#getModuleURL()).then((responseJSON) => {
 			let modulBOs = ModulBO.fromJSON(responseJSON);
@@ -215,12 +234,23 @@ export default class ElectivAPI {
 			})
 		})
 	}
+
 	getModule_by_projekt_id(id){
 		return this.#fetchAdvanced(this.#getModule_by_projekt_idURL(id)).then((responseJSON) => {
 			let modulBO = ModulBO.fromJSON(responseJSON);
 			console.info(modulBO)
 			return new Promise(function (resolve){
 				resolve(modulBO)
+			})
+		})
+	}
+
+	getSemester(){
+		return this.#fetchAdvanced(this.#getSemesterURL()).then((responseJSON) => {
+			let semesterBOs = SemesterBO.fromJSON(responseJSON);
+			console.info(semesterBOs)
+			return new Promise(function (resolve){
+				resolve(semesterBOs)
 			})
 		})
 	}

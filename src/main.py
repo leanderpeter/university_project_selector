@@ -84,8 +84,15 @@ bewertung = api.inherit('Bewertung', bo, {
     'note': fields.Float(attribute='_note', description='Die Note der Teilnahme'),
 })
 
+bewertung = api.inherit('Bewertung', bo, {
+    'note': fields.Float(attribute='_note', description='Die Note der Teilnahme'),
+})
+
 modul = api.inherit('Modul', nbo, {
     'edv_nr': fields.Integer(attribute='_edv_nr', description='Die EDV Nummer eines Moduls'),
+})
+
+semester = api.inherit('Semester', nbo, {
 })
 
 @electivApp.route('/projekte')
@@ -216,6 +223,16 @@ class Teilnahme2Operationen(Resource):
         else:
             return '', 500
 
+@electivApp.route('/teilnahmen/<int:modul_id>/<int:semester_id>')
+@electivApp.response(500, 'Something went wrong')
+class TeilnahmenByModulundSemesterOperationen(Resource):
+    @electivApp.marshal_list_with(teilnahme)
+
+    def get(self, modul_id, semester_id):
+        adm = ProjektAdministration()
+        teilnahmen = adm.get_teilnahmen_by_modul_und_semester(modul_id, semester_id)
+        return teilnahmen
+
 @electivApp.route('/bewertung/<int:id>')
 @electivApp.response(500, 'Something went wrong')
 class BewertungOperationen(Resource):
@@ -267,7 +284,22 @@ class ModulOperationen(Resource):
     def put(self, id):
         pass
 
+@electivApp.route('/semester')
+@electivApp.response(500, 'Something went wrong')
+class SemesterOperationen(Resource):
+    @electivApp.marshal_list_with(semester)
+    @secured
 
+    def get(self):
+        adm = ProjektAdministration()
+        semester = adm.get_alle_semester()
+        return semester
+
+    def delete(self, id):
+        pass
+
+    def put(self, id):
+        pass
 
 
 

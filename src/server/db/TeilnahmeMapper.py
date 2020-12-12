@@ -115,6 +115,29 @@ class TeilnahmeMapper(Mapper):
         """Delete an object from the DB"""
         pass
 
+    def find_by_modul_und_semester(self, modul_id, semester_id):
+        result = []
+
+        cursor = self._connection.cursor()
+
+        command = "SELECT electivapp.teilnahmen.id, electivapp.teilnahmen.lehrangebot, electivapp.teilnahmen.teilnehmer, electivapp.teilnahmen.anrechnung, electivapp.teilnahmen.resultat FROM electivapp.teilnahmen INNER JOIN electivapp.projekte ON electivapp.teilnahmen.lehrangebot = electivapp.projekte.id WHERE electivapp.teilnahmen.anrechnung = %s AND electivapp.projekte.halbjahr = %s"
+        data = (modul_id, semester_id)
+        cursor.execute(command, data)
+        tuples = cursor.fetchall()
+
+        for (id, lehrangebot, teilnehmer, anrechnung, resultat) in tuples:
+            teilnahme = Teilnahme()
+            teilnahme.set_id(id)
+            teilnahme.set_lehrangebot(lehrangebot)
+            teilnahme.set_teilnehmer(teilnehmer)
+            teilnahme.set_anrechnung(anrechnung)
+            teilnahme.set_resultat(resultat)
+            result.append(teilnahme)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
 
 '''Nur zum testen'''
 

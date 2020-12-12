@@ -15,6 +15,7 @@ from .db.ProjektMapper import ProjektMapper
 from .db.ProjektWartelisteMapper import ProjektWartelisteMapper
 from .bo.Teilnahme import Teilnahme
 from .db.ModulMapper import ModulMapper
+from .db.SemesterMapper import SemesterMapper
 
 
 
@@ -117,6 +118,10 @@ class ProjektAdministration(object):
     def create_bewertung(self, ):
         pass
 
+    def get_alle_semester(self):
+        with SemesterMapper() as mapper:
+            return mapper.find_all()
+
     def get_alle_module(self):
         with ModulMapper() as mapper:
             return mapper.find_all()
@@ -141,6 +146,11 @@ class ProjektAdministration(object):
         """ Alle Teilnamen des Users auslesen"""
         with TeilnahmeMapper() as mapper:
             return mapper.find_by_student_id(id)
+    
+    def get_teilnahmen_by_modul_und_semester(self, modul_id, semester_id):
+        """ Alle Teilnamen des Users auslesen"""
+        with TeilnahmeMapper() as mapper:
+            return mapper.find_by_modul_und_semester(modul_id, semester_id)
 
     def delete_teilnahme(self, ):
         pass

@@ -237,13 +237,6 @@ MeineProjekteEintrag.propTypes = {
      * Signature: onExpandedStateChange(CustomerBO customer)
      */
     onExpandedStateChange: PropTypes.func.isRequired,
-
-    /** 
-     *  Event Handler function which is called after a sucessfull delete of this customer.
-     * 
-     * Signature: onCustomerDelete(CustomerBO customer)
-     */
-    onCustomerDeleted: PropTypes.func.isRequired,
     /** wenn true, dozent wird geladen */
     show: PropTypes.bool.isRequired
   }

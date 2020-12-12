@@ -80,7 +80,7 @@ class MeineProjekte extends Component {
                     loadingInProgress: false,
                 })).catch(e =>
                     this.setState({
-                        teilnahme: [],
+                        teilnahmen: [],
                         error: e,
                         loadingInProgress: false,
                     }));

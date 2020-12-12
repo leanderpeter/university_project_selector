@@ -15,6 +15,8 @@ import Paper from '@material-ui/core/Paper';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
+import EdvListeEintrag from './EdvListeEintrag';
+
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -43,15 +45,19 @@ class NotenlistenEintrag extends Component {
 
 		// Status initalisieren
 		this.state = {
-			modul: props.modul,
-			showModulForm: false
+      modul: props.modul,
+      teilnahmen : [],
+      showModulForm: false,
+      error: null,
+      loadingInProgress: false
 		};
 	}
 
 	// Handles events wenn sich der status der oeffnung aendert
 	expansionPanelStateChanged = () => {
-		this.props.onExpandedStateChange(this.props.modul);
-
+    this.props.onExpandedStateChange(this.props.modul);
+    this.getTeilnahmen_by_modul_und_semester();
+    console.log(this.props.modul.getID(),'Modul', this.props.semesterwahl, 'SEM')
 	}
 
 	// Kummert sich um das close event vom ProjektForm
@@ -66,18 +72,42 @@ class NotenlistenEintrag extends Component {
 				showModulForm: false
 			});
 		}
-	}
+  }
+
+  // API Anbindung um Teilnahmen des Students vom Backend zu bekommen 
+  getTeilnahmen_by_modul_und_semester = () => {
+    ElectivAPI.getAPI().getTeilnahmen_by_modul_und_semester(this.props.modul.getID(), this.props.semesterwahl)
+    .then(teilnahmeBOs =>
+        this.setState({
+            teilnahmen: teilnahmeBOs,
+            error: null,
+            loadingInProgress: false,
+        })).catch(e =>
+            this.setState({
+                teilnahmen: [],
+                error: e,
+                loadingInProgress: false,
+            }));
+    this.setState({
+        error: null,
+        loadingInProgress: true,
+        loadingTeilnahmeError: null
+    });
+  }
+
+
 
 	/** Renders the component */
   render() {
-    const { classes, expandedState } = this.props;
+    const { classes, expandedState, semesterwahl } = this.props;
     // Use the states projekt
-    const { modul, showModulForm } = this.state;
+    const { modul, teilnahmen, showModulForm } = this.state;
 
     // console.log(this.state);
     return (
     <div>
-        <Accordion className={classes.accordion} defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
+        <Accordion className={classes.accordion} defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}> 
+        {/* evtl. nur beim Öffnen ausführen implementieren Problem jetzt: auch beim schließen wird Backend anfrage erstellt */}
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 id={`modul${modul.id}Infopanel-header`} >
@@ -92,34 +122,39 @@ class NotenlistenEintrag extends Component {
                 </Grid>
             </AccordionSummary>
             <AccordionDetails className={classes.nopadding}>
+            { semesterwahl ?
             <TableContainer>
-                    <Table className={classes.table} aria-label="customized table">
-                        <TableHead>
-                            <StyledTableRow>
-                                <StyledTableCell align="left">Student</StyledTableCell>
-                                <StyledTableCell align="left">Matrikelnummer</StyledTableCell>
-                                <StyledTableCell align="center">Note</StyledTableCell>
-                            </StyledTableRow>
-                        </TableHead>
-                        <TableBody>
-                        <StyledTableRow>
-                                <StyledTableCell align="left">Jannik Merz</StyledTableCell>
-                                <StyledTableCell align="left">38631</StyledTableCell>
-                                <StyledTableCell align="center">2.0</StyledTableCell>
-                            </StyledTableRow>
-                            <StyledTableRow>
-                                <StyledTableCell align="left">Jannik Merz</StyledTableCell>
-                                <StyledTableCell align="left">38631</StyledTableCell>
-                                <StyledTableCell align="center">2.0</StyledTableCell>
-                            </StyledTableRow>
-                            <StyledTableRow>
-                                <StyledTableCell align="left">Jannik Merz</StyledTableCell>
-                                <StyledTableCell align="left">38631</StyledTableCell>
-                                <StyledTableCell align="center">2.0</StyledTableCell>
-                            </StyledTableRow>
-                        </TableBody>
+                  <Table className={classes.table} aria-label="customized table">
+                      <TableHead>
+                          <StyledTableRow>
+                              <StyledTableCell align="left">Student</StyledTableCell>
+                              <StyledTableCell align="left">Matrikelnummer</StyledTableCell>
+                              <StyledTableCell align="center">Note</StyledTableCell>
+                          </StyledTableRow>
+                      </TableHead>
+                      <TableBody>
+                        {
+                                teilnahmen ?
+                                <>
+                                {
+                                    teilnahmen.map(teilnahme => 
+                                        <EdvListeEintrag key={teilnahme.getID()} teilnahme = {teilnahme}
+                                        onExpandedStateChange={this.onExpandedStateChange}
+                                        show={this.props.show}
+                                    />) 
+                                }
+                                </>
+                                :
+                                <></>
+                            }
+                      </TableBody>
                     </Table>
-                </TableContainer>
+              </TableContainer>
+            :
+            <Grid container justify-content='center 'alignItems='center'>
+              <Grid item xs><Typography variant='body1' className={classes.warnung}> Bitte wählen Sie zunächst ein Semester aus</Typography></Grid>
+            </Grid>
+            }
             </AccordionDetails>
         </Accordion> 
     </div>
@@ -138,6 +173,11 @@ const styles = theme => ({
   },
   nopadding: {
     padding: theme.spacing(0),
+  },
+  warnung: {
+    marginLeft: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    color: 'red'
   }
 });
 

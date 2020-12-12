@@ -27,8 +27,10 @@ class Notenlisten extends Component {
 
 		//gebe einen leeren status
 		this.state = {
-			module: [],
-			filteredModule: [],
+      module: [],
+      semester: [],
+      filteredModule: [],
+      semesterwahl: null,
 			edvFilter: '',
 			error: null,
 			loadingInProgress: false,
@@ -55,11 +57,42 @@ class Notenlisten extends Component {
           loadingInProgress: true,
           loadingTeilnahmeError: null
       });
-}
+  }
+
+    // API Anbindung um alle Module vom Backend zu bekommen 
+    getSemester = () => {
+      ElectivAPI.getAPI().getSemester()
+      .then(semesterBOs =>
+          this.setState({
+              semester: semesterBOs,
+              error: null,
+              loadingInProgress: false,
+          })).catch(e =>
+              this.setState({
+                  semester: [],
+                  error: e,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingTeilnahmeError: null
+      });
+  }
+
+  handleChange = (semester) => {
+    this.setState({
+      semesterwahl: semester.target.value
+    })
+    setTimeout(() => {
+      console.log('Ausgewählte Semester ID:',this.state.semesterwahl)
+    }, 500);
+  };
 
 	// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 	componentDidMount() {
     this.getModule();
+    this.getSemester();
 	}
 
   onExpandedStateChange = modul => {
@@ -78,17 +111,31 @@ class Notenlisten extends Component {
 	render() {
     
     const { classes } = this.props;
-    const { module, filteredModule, edvFilter,  expandedModulID, loadingInProgress, error } = this.state;
+    const { module, semester, semesterwahl, filteredModule, edvFilter,  expandedModulID, loadingInProgress, error } = this.state;
     return (
     <div className={classes.root}>
         <Grid className={classes.header} container spacing={1} justify='flex-start' alignItems='space-between'>
           <Grid item xs={2}>
+          {
+            semester ?
+            <FormControl className={classes.formControl}>
+              <InputLabel>Semester</InputLabel> 
+                <Select value = {semester.id} onChange={this.handleChange}>
+                  {
+                  semester.map(semester =>
+                  <MenuItem value={semester.getID()}><em>{semester.getname()}</em></MenuItem>
+                  )
+                  }
+                </Select>                                                                
+              </FormControl>                                  
+            :
             <FormControl className={classes.formControl}>
               <InputLabel>Semester</InputLabel>
                 <Select value="">
-                  <MenuItem value=""><em>Noch nicht benotet</em></MenuItem>
+                  <MenuItem value=""><em>Semester noch nicht geladen</em></MenuItem>
                 </Select>
             </FormControl>
+          }
           </Grid>
           <Grid item xs></Grid>
           <Grid item className={classes.test}>
@@ -116,7 +163,7 @@ class Notenlisten extends Component {
         </Grid>
         {
           module.map(modul =>
-          <NotenlistenEintrag key={modul.getID()} modul = {modul} expandedState={expandedModulID === modul.getID()} onExpandedStateChange={this.onExpandedStateChange}/>
+          <NotenlistenEintrag key={modul.getID()} modul = {modul} semesterwahl = {semesterwahl} expandedState={expandedModulID === modul.getID()} onExpandedStateChange={this.onExpandedStateChange}/>
           )
         }
         <LoadingProgress show={loadingInProgress} />
