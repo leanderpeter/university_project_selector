@@ -48,26 +48,31 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 -- Table `electivApp`.`projekte`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `electivApp`.`projekte` (
-  `id` INT(11) NOT NULL DEFAULT '0',
+CREATE TABLE IF NOT EXISTS `electivapp`.`projekte` (
+  `id` INT NOT NULL DEFAULT '0',
   `name` VARCHAR(100) NOT NULL DEFAULT '',
-  `max_teilnehmer` INT(11) NOT NULL DEFAULT '30',
+  `max_teilnehmer` INT NOT NULL DEFAULT '30',
   `beschreibung` VARCHAR(100) NOT NULL DEFAULT '',
   `betreuer` VARCHAR(100) NOT NULL DEFAULT '',
   `externer_partner` VARCHAR(100) NULL DEFAULT '',
   `woechentlich` TINYINT(1) NULL DEFAULT NULL,
-  `anzahl_block_vor` INT(11) NULL DEFAULT NULL,
-  `anzahl_block_in` INT(11) NULL DEFAULT NULL,
+  `anzahl_block_vor` INT NULL DEFAULT NULL,
+  `anzahl_block_in` INT NULL DEFAULT NULL,
   `praeferierte_block` VARCHAR(128) NULL DEFAULT '',
   `bes_raum` TINYINT(1) NULL DEFAULT '0',
   `raum` VARCHAR(128) NULL DEFAULT '',
   `sprache` VARCHAR(128) NULL DEFAULT '',
-  `dozent` INT(11) DEFAULT NULL,
+  `dozent` INT NULL DEFAULT NULL,
+  `aktueller_zustand` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_projekte_personen1_idx` (`dozent` ASC) VISIBLE,
+  INDEX `fk_projekte_Zustand1_idx` (`aktueller_zustand` ASC) VISIBLE,
   CONSTRAINT `fk_projekte_personen1`
     FOREIGN KEY (`dozent`)
-    REFERENCES `electivApp`.`personen` (`id`)
+    REFERENCES `electivapp`.`personen` (`id`),
+  CONSTRAINT `fk_projekte_Zustand1`
+    FOREIGN KEY (`aktueller_zustand`)
+    REFERENCES `electivapp`.`Zustand` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -119,6 +124,17 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`teilnahmen` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `electivApp`.`Zustand`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `electivApp`.`Zustand` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
 
 
 

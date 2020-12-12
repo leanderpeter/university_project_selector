@@ -5,7 +5,7 @@ from server.bo.NamedBusinessObject import NamedBusinessObject
 from server.bo.Automat import Automat
 
 
-class Projekt(NamedBusinessObject):
+class Projekt(NamedBusinessObject, Automat):
     def __init__(self):
         super().__init__()
         self._max_teilnehmer = None
