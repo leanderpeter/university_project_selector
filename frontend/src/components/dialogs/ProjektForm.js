@@ -91,6 +91,18 @@ class ProjektForm extends Component {
 			dozentValidationFailed: false,
 			dozentEdited: false,
 
+			aktueller_zustand: 2,
+			dozentValidationFailed: false,
+			dozentEdited: false,
+
+			halbjahr: null,
+			dozentValidationFailed: false,
+			dozentEdited: false,
+
+			art: null,
+			dozentValidationFailed: false,
+			dozentEdited: false,
+
 			anzahlTeilnehmer: at,
 			anzahlTeilnehmerValidationFailed: false,
 			anzahlTeilnehmerEdited: false,
@@ -123,6 +135,9 @@ class ProjektForm extends Component {
 			this.state.raum,
 			this.state.sprache,
 			this.state.dozent,
+			this.state.aktueller_zustand,
+			this.state.art,
+			this.state.halbjahr,
 			this.state.anzahlTeilnehmer,
 			this.state.teilnehmerListe,
 			this.state.name

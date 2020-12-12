@@ -30,6 +30,10 @@ bo = api.model('BusinessObject', {
     'id': fields.Integer(attribute='_id', description='ID des BOs'),
 })
 
+automat = api.model('Automat',{
+    'aktueller_zustand': fields.Integer(attribute='_aktueller_zustand', description='ID des aktuellen Zustands des Automaten')
+})
+
 nbo = api.inherit('NamedBusinessObject', bo, {
     'name': fields.String(attribute='_name', description='Name des BOs'),
 })
@@ -45,7 +49,7 @@ student = api.inherit('Student', person, {
     'kuerzel': fields.String(attribute='_kuerzel', description='Kuerzel des Studenten')
 })
 
-projekt = api.inherit('Projekt', nbo, {
+projekt = api.inherit('Projekt', nbo, automat, {
     'max_teilnehmer': fields.Integer(attribute='_max_teilnehmer', description='Maximale Anzahl an teilnehmern'),
     'beschreibung': fields.String(attribute='_projektbeschreibung', description='Kurzbeschreibung des Projekts'),
     'betreuer': fields.String(attribute='_betreuer', description='Name des Betreuers'),
@@ -61,6 +65,8 @@ projekt = api.inherit('Projekt', nbo, {
     'raum': fields.String(attribute='_raum', description='Raum des Projekts'),
     'sprache': fields.String(attribute='_sprache', description='Sprache des Projekts'),
     'dozent': fields.Integer(attribute='_dozent', description='Der Dozent des Projekts'),
+    'halbjahr': fields.Integer(attribute='_halbjahr', description='Die ID des Semesters des Projekts'),
+    'art': fields.Integer(attribute='_art', description='Die ID der Projektart'),
     'anzahlTeilnehmer': fields.String(attribute='_anzahlTeilnehmer', description='Die Anzahl der angemeldeten Teilnehmer'),
     'teilnehmerListe': fields.String(attribute='_teilnehmerListe', description='Liste mit IDs der Teilnehmer')
 })

@@ -21,9 +21,8 @@ class Projekt(NamedBusinessObject, Automat):
         self._sprache = None
         self._dozent = None
         self._belegung = None
-        self._moduloption = None
-        self._art = None
         self._halbjahr = None
+        self._art = None
         self._anzahlTeilnehmer = None
         self._teilnehmerListe = None
 
@@ -105,23 +104,11 @@ class Projekt(NamedBusinessObject, Automat):
     def set_art(self, art):
         self._art = art
 
-    def get_status(self):
-        return self._status
-
-    def set_status(self, status):
-        self._status = status
-
     def get_belegung(self):
         return self._belegung
 
     def set_belegung(self, teilnahmen):
         self._belegung = teilnahmen
-
-    def get_moduloption(self):
-        return self._moduloption
-
-    def set_moduloption(self, module):
-        self._moduloption = module
 
     def get_dozent(self):
         return self._dozent
@@ -178,10 +165,12 @@ class Projekt(NamedBusinessObject, Automat):
         obj.set_raum(dictionary["raum"])
         obj.set_sprache(dictionary["sprache"])
         obj.set_dozent(dictionary["dozent"])
+        obj.set_aktueller_zustand(dictionary["aktueller_zustand"]) # from Automat
+        obj.set_art(dictionary["art"])
+        obj.set_halbjahr(dictionary["halbjahr"])
         obj.set_anzahlTeilnehmer(dictionary["anzahlTeilnehmer"])
         obj.set_teilnehmerListe(dictionary["teilnehmerListe"])
-        obj.set_name(dictionary["name"])
-        obj.set_id(dictionary["id"])  # from BO
+        obj.set_name(dictionary["name"]) # from NBO
         return obj
 
     def to_dict(self):
@@ -199,6 +188,9 @@ class Projekt(NamedBusinessObject, Automat):
             "raum": self.get_raum(),
             "sprache": self.get_sprache(),
             "dozent": self.get_dozent(),
+            "aktueller_zustand": self.get_aktueller_zustand(),
+            "halbjahr": self.get_halbjahr(),
+            "art": self.get_art(),
             "anzahlTeilnehmer": self.get_anzahlTeilnehmer(),
             "teilnehmerListe": self.get_teilnehmerListe(),
             "name": self.get_name(),

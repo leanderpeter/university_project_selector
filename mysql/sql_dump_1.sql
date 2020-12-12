@@ -73,10 +73,10 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`projekte` (
   INDEX `fk_projekte_projektarten1_idx` (`art` ASC) VISIBLE,
   CONSTRAINT `fk_projekte_personen1`
     FOREIGN KEY (`dozent`)
-    REFERENCES `electivApp`.`personen` (`id`),
-  CONSTRAINT `fk_projekte_zustaende1` (`id`),
+    REFERENCES `electivApp`.`personen` (`id`),  
+CONSTRAINT `fk_projekte_zustaende1`
     FOREIGN KEY (`aktueller_zustand`)
-    REFERENCES `electivApp`.`zustaende` (`id`)
+    REFERENCES `electivApp`.`zustaende` (`id`),
   CONSTRAINT `fk_projekte_semester1`
     FOREIGN KEY (`halbjahr`)
     REFERENCES `electivApp`.`semester` (`id`)

@@ -14,14 +14,14 @@ class ProjektMapper(Mapper):
         result = []
         cursor = self._connection.cursor()
         cursor.execute(
-            "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent from projekte")
+            "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art from projekte")
         tuples = cursor.fetchall()
 
         for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
-             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) in tuples:
+             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art) in tuples:
             projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
-                                          raum, sprache, dozent)
+                                          raum, sprache, dozent, aktueller_zustand, halbjahr, art)
             result.append(projekt)
 
         self._connection.commit()
@@ -34,17 +34,12 @@ class ProjektMapper(Mapper):
 
         cursor = self._connection.cursor()
 
-        command1 = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent FROM projekte WHERE id={}").format(id)
+        command1 = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art FROM projekte WHERE id={}").format(id)
         cursor.execute(command1)
         tuples1 = cursor.fetchall()
 
-        command2 = ("SELECT modul_id FROM projekte_hat_module WHERE projekt_id={}").format(id)
-        cursor.execute(command2)
-        tuples2 = cursor.fetchall()
-
         try:
-            (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) = tuples1[0]
-            module = tuples2
+            (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art) = tuples1[0]
             projekt = Projekt()
             projekt.set_id(id)
             projekt.set_name(name)
@@ -60,16 +55,11 @@ class ProjektMapper(Mapper):
             projekt.set_raum(raum)
             projekt.set_sprache(sprache)
             projekt.set_dozent(dozent)
+            projekt.set_aktueller_zustand(aktueller_zustand)
+            projekt.set_halbjahr(halbjahr)
+            projekt.set_art(art)
             projekt.set_anzahlTeilnehmer(self.count_teilnehmer_by_projekt(id))
             projekt.set_teilnehmerListe(self.get_teilnehmerId_by_projekt(id))
-
-            modulliste = []
-            for modultuple in module:
-                for modul in modultuple:
-                    modulliste.append(modul)
-            
-            projekt.set_moduloption(modulliste)
-
             result = projekt
         
         except IndexError:
@@ -82,7 +72,7 @@ class ProjektMapper(Mapper):
         return result
 
     def create_projekt(self, id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich,
-                       anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent):
+                       anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art):
         projekt = Projekt()
         projekt.set_id(id)
         projekt.set_name(name)
@@ -98,6 +88,9 @@ class ProjektMapper(Mapper):
         projekt.set_raum(raum)
         projekt.set_sprache(sprache)
         projekt.set_dozent(dozent)
+        projekt.set_aktueller_zustand(aktueller_zustand)
+        projekt.set_halbjahr(halbjahr)
+        projekt.set_art(art)
         projekt.set_anzahlTeilnehmer(self.count_teilnehmer_by_projekt(id))
         projekt.set_teilnehmerListe(self.get_teilnehmerId_by_projekt(id))
         return projekt
