@@ -30,6 +30,7 @@ export default class ProjektBO extends NamedBusinessObject {
 		this.moduloption = amoduloption;
 		this.anzahlTeilnehmer = aanzahlTeilnehmer;
 		this.teilnehmerListe = ateilnehmerListe;
+
 	}
 
 
@@ -129,7 +130,7 @@ export default class ProjektBO extends NamedBusinessObject {
 	/*
 	Setze 
 	*/
-	setname(apraeferierte_block){
+	setpraeferierte_block(apraeferierte_block){
 		this.praeferierte_block = apraeferierte_block;  
 	}
 			/*

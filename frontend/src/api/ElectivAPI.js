@@ -25,6 +25,14 @@ export default class ElectivAPI {
 	//delete
 	#searchProjektURL = (projektname) => `${this.#ElectivServerBaseURL}/projekte_by_name/${projektname}`;
 
+	// ------------------------Projekte bearbeiten/hinzufugen---------------------------
+
+
+	// ---------------------------------------------------------------------------------
+
+	#addProjektPendingURL = () => `${this.#ElectivServerBaseURL}/projektePending`;
+	#getProjektePendingURL = () => `${this.#ElectivServerBaseURL}/projektePending`;
+
 	//Projekt nach ID bekommen
 	#getProjektURL = (id) => `${this.#ElectivServerBaseURL}/projekt/${id}`;
 
@@ -87,6 +95,32 @@ export default class ElectivAPI {
 		})
 	}
 
+	addProjekt(projektBO) {
+		return this.#fetchAdvanced(this.#addProjektPendingURL(), {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(projektBO)
+		}).then((responseJSON) => {
+			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
+			let responseProjektBO = ProjektBO.fromJSON(responseJSON)[0];
+			return new Promise(function (resolve) {
+				resolve(responseProjektBO);
+			})
+		})
+	}
+
+	getPendingProjekte() {
+		return this.#fetchAdvanced(this.#getProjektePendingURL(),{method: 'GET'}).then((responseJSON) => {
+			let projektBOs = ProjektBO.fromJSON(responseJSON);
+			console.info(projektBOs)
+			return new Promise(function (resolve){
+				resolve(projektBOs);
+			})
+		})
+	}
 	getProjekt(id){
 		return this.#fetchAdvanced(this.#getProjektURL(id)).then((responseJSON) => {
 			let projektBO = ProjektBO.fromJSON(responseJSON);

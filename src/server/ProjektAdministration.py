@@ -12,6 +12,8 @@ from .db.StudentMapper import StudentMapper
 from .db.TeilnahmeMapper import TeilnahmeMapper
 from .db.BewertungMapper import BewertungMapper
 from .db.ProjektMapper import ProjektMapper
+from .db.ProjektWartelisteMapper import ProjektWartelisteMapper
+from .bo.Teilnahme import Teilnahme
 from .db.ModulMapper import ModulMapper
 
 
@@ -92,6 +94,11 @@ class ProjektAdministration(object):
         with ProjektMapper() as mapper:
             return mapper.find_all()
 
+    def get_alle_pending_projekte(self):
+        '''Gib alle ungehemigten Projekte zuruck'''
+        with ProjektWartelisteMapper() as mapper:
+            return mapper.find_all()
+
     def get_projekt_teilnehmer(self, ):
         pass
 
@@ -104,7 +111,7 @@ class ProjektAdministration(object):
     def delete_projekt(self, ):
         pass
 
-    def save_projekt(self, ):
+    def save_projekt(self, projekt):
         pass
 
     def create_bewertung(self, ):
@@ -143,6 +150,31 @@ class ProjektAdministration(object):
 
         with TeilnahmeMapper() as mapper:
             return mapper.insert(teilnahme)
+
+    def create_wartelisteProjekt(self, name, max_teilnehmer, projektbeschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe):
+        '''Ein warteliste Projekt erstellen'''
+        projekt = Projekt()
+        projekt.set_max_teilnehmer(max_teilnehmer)
+        projekt.set_projektbeschreibung(projektbeschreibung)
+        projekt.set_betreuer(betreuer)
+        projekt.set_externer_partner(externer_partner)
+        projekt.set_woechentlich(woechentlich)
+        projekt.set_anzahl_block_vor(anzahl_block_vor)
+        projekt.set_anzahl_block_in(anzahl_block_in)
+        projekt.set_praeferierte_block(praeferierte_block)
+        projekt.set_bes_raum(bes_raum)
+        projekt.set_raum(raum)
+        projekt.set_sprache(sprache)
+        projekt.set_dozent(dozent)
+        projekt.set_anzahlTeilnehmer(anzahlTeilnehmer)
+        projekt.set_teilnehmerListe(teilnehmerListe)
+        projekt.set_id(1)
+        projekt.set_name(name)
+        # print(projekt)
+
+        with ProjektWartelisteMapper() as mapper:
+            return mapper.insert(projekt)
+
 
     def save_teilnahme(self, teilnahme):
         with TeilnahmeMapper() as mapper:

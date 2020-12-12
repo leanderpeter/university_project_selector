@@ -9,6 +9,7 @@ from flask import request
 # Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.ProjektAdministration import ProjektAdministration
 from server.bo.Teilnahme import Teilnahme
+from server.bo.Projekt import Projekt
 
 #SecurityDecorator
 from SecurityDecorator import secured
@@ -49,21 +50,22 @@ projekt = api.inherit('Projekt', nbo, {
     'beschreibung': fields.String(attribute='_projektbeschreibung', description='Kurzbeschreibung des Projekts'),
     'betreuer': fields.String(attribute='_betreuer', description='Name des Betreuers'),
     'externer_partner': fields.String(attribute='_externer_partner', description='Name des externen Partners'),
-    'woechentlich': fields.Boolean(attribute='_woechentlich',
+    'woechentlich': fields.Integer(attribute='_woechentlich',
                                    description='Bool ob das Projekt oeffentlich stattfindet'),
     'anzahl_block_vor': fields.Integer(attribute='_anzahl_block_vor',
                                        description='Anzahl Blocktage vor der Vorlesungszeit'),
     'anzahl_block_in': fields.Integer(attribute='_anzahl_block_in',
                                       description='Anzahl Blocktage in der Vorlesungszeit'),
     'praeferierte_block': fields.String(attribute='_ praeferierte_block', description=' Praeferierte Blocktage'),
-    'bes_raum': fields.Boolean(attribute='_bes_raum', description='Bool ob ein besonderer Raum notwendig ist'),
+    'bes_raum': fields.Integer(attribute='_bes_raum', description='Bool ob ein besonderer Raum notwendig ist'),
     'raum': fields.String(attribute='_raum', description='Raum des Projekts'),
     'sprache': fields.String(attribute='_sprache', description='Sprache des Projekts'),
     'dozent': fields.Integer(attribute='_dozent', description='Der Dozent des Projekts'),
-    'moduloption': fields.String(attribute='_moduloption', description='Die Moduloptionen für ein Projekt'),
-    'anzahlTeilnehmer': fields.Integer(attribute='_anzahlTeilnehmer', description='Die Anzahl der angemeldeten Teilnehmer'),
+    'anzahlTeilnehmer': fields.String(attribute='_anzahlTeilnehmer', description='Die Anzahl der angemeldeten Teilnehmer'),
     'teilnehmerListe': fields.String(attribute='_teilnehmerListe', description='Liste mit IDs der Teilnehmer')
 })
+
+# Moduloption aus projekt entfernt !!INFO!!
 
 teilnahme = api.inherit('Teilnahme', bo, {
     'teilnehmer': fields.Integer(attribute='_teilnehmer', description='Die ID des Studenten der Teilnahme'),
@@ -242,6 +244,38 @@ class ModulByProjektIDOperationen(Resource):
     def put(self, id):
         pass
 
+
+@electivApp.route('/projektePending')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ProjektGenehmigungOperation(Resource):
+
+    @electivApp.marshal_list_with(projekt)
+    def get(self):
+        adm = ProjektAdministration()
+        projekte = adm.get_alle_pending_projekte()
+        return projekte
+
+    def delete(self):
+        pass
+
+    @electivApp.marshal_with(projekt, code=200)
+    @electivApp.expect(projekt)
+    @secured
+    def post(self):
+        '''
+        Einfugen eines Projekts im zustand pending. 
+        '''
+        adm = ProjektAdministration()
+        proposal = Projekt.from_dict(api.payload)
+        # print(proposal)
+
+
+        if proposal is not None:
+            p = adm.create_wartelisteProjekt(proposal.get_name(),proposal.get_max_teilnehmer(),proposal.get_projektbeschreibung(),proposal.get_betreuer(),proposal.get_externer_partner(),proposal.get_woechentlich(),proposal.get_anzahl_block_vor(),proposal.get_anzahl_block_in(),proposal.get_praeferierte_block(),proposal.get_bes_raum(),proposal.get_raum(),proposal.get_sprache(),proposal.get_dozent(),proposal.get_anzahlTeilnehmer(),proposal.get_teilnehmerListe())
+            print(p.__str__())
+            return p, 200
+        else:
+            return '', 500
 
 if __name__ == '__main__':
     app.run(debug=True)
