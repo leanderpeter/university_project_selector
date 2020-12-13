@@ -166,7 +166,7 @@ class PersonOperationen(Resource):
         pass
 
 
-@electivApp.route('/student/<string:google_user_id>')
+@electivApp.route('/studentbygoogle/<string:google_user_id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class StudentByGoogleIDOperationen(Resource):
     @electivApp.marshal_list_with(student)
@@ -175,6 +175,24 @@ class StudentByGoogleIDOperationen(Resource):
     def get(self, google_user_id):
         adm = ProjektAdministration()
         student = adm.get_student_by_google_user_id(google_user_id)
+        return student
+
+    def delete(self, student_id):
+        pass
+
+    def put(self, student_id):
+        pass
+
+
+@electivApp.route('/student/<int:id>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class StudentOperationen(Resource):
+    @electivApp.marshal_list_with(student)
+    @secured
+
+    def get(self, id):
+        adm = ProjektAdministration()
+        student = adm.get_student_by_id(id)
         return student
 
     def delete(self, student_id):

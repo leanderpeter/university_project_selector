@@ -229,7 +229,10 @@ UNLOCK TABLES;
 
 LOCK TABLES `teilnahmen` WRITE;
 /*!40000 ALTER TABLE `teilnahmen` DISABLE KEYS */;
-INSERT INTO `electivApp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`,`anrechnung`, `resultat`) VALUES ('1', '1232', '1', NULL, 1);
+INSERT INTO `electivApp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`,`anrechnung`, `resultat`) VALUES ('1', '1232', '1', '1', '1');
+INSERT INTO `electivapp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`, `anrechnung`, `resultat`) VALUES ('2', '1232', '1', '1', '1');
+INSERT INTO `electivapp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`, `anrechnung`, `resultat`) VALUES ('3', '1232', '1', '1', '2');
+
 /*!40000 ALTER TABLE `teilnahmen` ENABLE KEYS */;
 UNLOCK TABLES;
 

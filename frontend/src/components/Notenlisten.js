@@ -11,7 +11,6 @@ import Select from '@material-ui/core/Select';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import NotenlistenEintrag from './NotenlistenEintrag';
-import ModulBO from '../api/ModulBO';
 
 
 class Notenlisten extends Component {
@@ -44,6 +43,7 @@ class Notenlisten extends Component {
       .then(modulBOs =>
           this.setState({
               module: modulBOs,
+              filteredModule: [...modulBOs],
               error: null,
               loadingInProgress: false,
           })).catch(e =>
@@ -82,7 +82,8 @@ class Notenlisten extends Component {
 
   handleChange = (semester) => {
     this.setState({
-      semesterwahl: semester.target.value
+      semesterwahl: semester.target.value,
+      expandedModulID: null
     })
     setTimeout(() => {
       console.log('Ausgewählte Semester ID:',this.state.semesterwahl)
@@ -103,6 +104,30 @@ class Notenlisten extends Component {
     }
     this.setState({
       expandedModulID: newID,
+    });
+  }
+
+/** bla bla
+*   
+* @param {modul} ModulBO 
+*/
+
+  filterFieldValueChange = event => {
+    const value = event.target.value.toString();
+    this.setState({
+      filteredModule: this.state.module.filter(modul => {
+        let modulContainsValue = modul.getEdv_nr().toString().includes(value);
+        return modulContainsValue;
+      }),
+      edvFilter: value,
+      expandedModulID: null
+    });
+  }
+
+  clearFilterFieldButtonClicked = () => {
+    this.setState({
+      filteredModule: [...this.state.module],
+      edvFilter: ''
     });
   }
     
@@ -138,14 +163,13 @@ class Notenlisten extends Component {
           }
           </Grid>
           <Grid item xs></Grid>
-          <Grid item className={classes.test}>
+          <Grid item className={classes.filter}>
               <Typography>
               Filter Notenlisten nach EDV-Nummer:
               </Typography>
           </Grid>
-          <Grid item xs={2} className={classes.test}>
+          <Grid item xs={2} className={classes.filter}>
               <TextField
-              autoFocus
               fullWidth
               id='edvFilter'
               type='text'
@@ -162,13 +186,12 @@ class Notenlisten extends Component {
           </Grid>
         </Grid>
         {
-          module.map(modul =>
+          filteredModule.map(modul =>
           <NotenlistenEintrag key={modul.getID()} modul = {modul} semesterwahl = {semesterwahl} expandedState={expandedModulID === modul.getID()} onExpandedStateChange={this.onExpandedStateChange}/>
           )
         }
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`} onReload={this.getProjekte} />
-        
     </div>
     );
     }
@@ -186,7 +209,7 @@ const styles = theme => ({
   formControl: {
     minWidth: 150,
   },
-  test: {
+  filter: {
     marginTop: theme.spacing(2)
   }
 });

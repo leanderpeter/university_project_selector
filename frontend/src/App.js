@@ -62,7 +62,7 @@ class App extends React.Component {
           authError: null,
           authLoading: false
         })}).then(() => {
-        this.getStudent()
+        this.getStudentByGoogleID()
       }).catch(e => {
         this.setState({
           authError: e,
@@ -91,8 +91,8 @@ class App extends React.Component {
   }
 
     //aktuell eingeloggten Student vom Backend abfragen
-  getStudent = () => {
-    ElectivAPI.getAPI().getStudent(this.state.currentUser.uid)
+  getStudentByGoogleID = () => {
+    ElectivAPI.getAPI().getStudentByGoogleID(this.state.currentUser.uid)
         .then(studentBO =>
             this.setState({
                 currentStudent: studentBO,

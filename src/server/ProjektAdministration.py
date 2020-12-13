@@ -67,6 +67,11 @@ class ProjektAdministration(object):
         with StudentMapper() as mapper:
             return mapper.find_by_google_user_id(id)
 
+    def get_student_by_id(self, id):
+        '''read and return user with specific student id'''
+        with StudentMapper() as mapper:
+            return mapper.find_by_id(id)
+
     def get_all_users(self, ):
         pass
 

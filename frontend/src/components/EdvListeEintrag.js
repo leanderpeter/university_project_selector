@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles, createGenerateClassName } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
+import StudentBO from '../api/StudentBO';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -32,35 +33,72 @@ class EdvListeEintrag extends Component {
         super(props);
 
         this.state = {
-            student: null,
+            studentName: null,
             mat_nr: null,
+            note: null,
             loadingInProgress: false,
             error: null
         };
     }
 
-    getStudent(){
+     //Student vom Backend abfragen
+     getStudentByID = () => {
+      ElectivAPI.getAPI().getStudentByID(this.props.teilnahme.teilnehmer)
+          .then(studentBO =>
+              this.setState({
+                  studentName: studentBO.getname(),
+                  mat_nr: studentBO.getmat_nr(),
+                  error: null,
+                  loadingInProgress: false,
+              })
+              ).catch(e =>
+                  this.setState({
+                      studentName: null,
+                      mat_nr: null,
+                      error: e,
+                      loadingInProgress: false,
+                  }));
+          this.setState({
+              error: null,
+              loadingInProgress: true
+          });
+      }  
+  
 
-    }
-
-    getBewertung(){
-
-    }
-
+      getBewertung = () => {
+        ElectivAPI.getAPI().getBewertung(this.props.teilnahme.resultat)
+        .then(bewertungBO =>
+            this.setState({
+                note: bewertungBO.getnote(),
+                error: null,
+                loadingInProgress: false,
+            }))
+            .catch(e =>
+                this.setState({
+                    note: null,
+                    error: null,
+                    loadingInProgress: false,
+                }));
+        this.setState({
+            error: null,
+            loadingInProgress: true
+        });
+      }
 
     componentDidMount() {
-        this.getStudent();
+        this.getStudentByID();
+        this.getBewertung();
     }
 
     render(){
         const {classes, expandedState, teilnahme} = this.props;
-        const { student, mat_nr, loadingInProgress, error } = this.state;
+        const { studentName, mat_nr, note, loadingInProgress, error } = this.state;
         
         return(
               <StyledTableRow key={this.props.teilnahme.id}>
-                <StyledTableCell component="th" scope="row"></StyledTableCell>
-                <StyledTableCell align="center"></StyledTableCell> 
-                <StyledTableCell align="center">{teilnahme.resultat}</StyledTableCell> 
+                <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
+                <StyledTableCell align="left">{mat_nr}</StyledTableCell> 
+                <StyledTableCell align="center">{note}</StyledTableCell> 
                   <LoadingProgress show={loadingInProgress}></LoadingProgress>
                   <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getStudent} />
               </StyledTableRow>
