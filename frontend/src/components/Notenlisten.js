@@ -107,10 +107,6 @@ class Notenlisten extends Component {
     });
   }
 
-/** bla bla
-*   
-* @param {modul} ModulBO 
-*/
 
   filterFieldValueChange = event => {
     const value = event.target.value.toString();
