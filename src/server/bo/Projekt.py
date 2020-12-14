@@ -146,7 +146,8 @@ class Projekt(NamedBusinessObject, Automat):
                                                                               self._anzahlTeilnehmer,
                                                                               self._teilnehmerListe,
                                                                               self.get_name(),
-                                                                              self.get_id())
+                                                                              self.get_id(),
+                                                                              self.get_aktueller_zustand())
 
 
     @staticmethod

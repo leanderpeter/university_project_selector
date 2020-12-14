@@ -89,10 +89,20 @@ class ProjektAdministration(object):
         with ProjektMapper() as mapper:
             return mapper.find_projekt_by_id(projekt_id)
 
-    def get_alle_projekte(self, ):
+    def get_projekt_by_zus(self, zus):
+        with ProjektMapper() as mapper:
+            return mapper.find_projekt_by_zustand(zus)
+
+
+    def get_alle_projekte(self):
         """return alle Projekte """
         with ProjektMapper() as mapper:
             return mapper.find_all()
+
+    def get_granted_projekte(self):
+        """return alle Projekte """
+        with ProjektMapper() as mapper:
+            return mapper.find_granted()
 
     def get_alle_pending_projekte(self):
         '''Gib alle ungehemigten Projekte zuruck'''
@@ -170,10 +180,11 @@ class ProjektAdministration(object):
         projekt.set_teilnehmerListe(teilnehmerListe)
         projekt.set_id(1)
         projekt.set_name(name)
-        # print(projekt)
+        projekt.set_aktueller_zustand(1)
+        print(projekt)
 
-        with ProjektWartelisteMapper() as mapper:
-            return mapper.insert(projekt)
+        with ProjektMapper() as mapper:
+            return mapper.insert_pending(projekt)
 
 
     def save_teilnahme(self, teilnahme):

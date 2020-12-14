@@ -99,6 +99,7 @@ class ProjektWartelisteMapper(Mapper):
             projekt.get_anzahlTeilnehmer(),
             projekt.get_teilnehmerListe()
             )
+        print(projekt)
         cursor.execute(command, data)
         self._connection.commit()
         cursor.close()
