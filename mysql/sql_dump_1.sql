@@ -251,6 +251,17 @@ INSERT INTO `electivApp`.`projekte_hat_module` (`projekt_id`, `modul_id`) VALUES
 /*!40000 ALTER TABLE `projekte_hat_module` ENABLE KEYS */;
 UNLOCK TABLES;
 
+LOCK TABLES `zustaende` WRITE;
+/*!40000 ALTER TABLE `zustaende` DISABLE KEYS */;
+INSERT INTO `electivapp`.`zustaende` (`id`, `name`) VALUES ('1', 'neu');
+INSERT INTO `electivapp`.`zustaende` (`id`, `name`) VALUES ('2', 'genehmigt');
+INSERT INTO `electivapp`.`zustaende` (`id`, `name`) VALUES ('4', 'abgelehnt');
+INSERT INTO `electivapp`.`zustaende` (`id`, `name`) VALUES ('8', 'ausgebucht');
+INSERT INTO `electivapp`.`zustaende` (`id`, `name`) VALUES ('16', 'in durchführung');
+INSERT INTO `electivapp`.`zustaende` (`id`, `name`) VALUES ('32', 'bewertet');
+/*!40000 ALTER TABLE `zustaende` ENABLE KEYS */;
+UNLOCK TABLES;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
