@@ -211,13 +211,13 @@ class TeilnahmeOperationen(Resource):
     def delete(self, teilnahme_id):
         pass
 
-    def put(self):
+    def post(self):
         lehrangebotId = request.args.get("lehrangebotId")
         teilnehmerId = request.args.get("teilnehmerId")
         projektAdministration = ProjektAdministration()
         projektAdministration.create_teilnahme(lehrangebotId, teilnehmerId)
 
-
+"""Wieso teilnahme2? Mach doch einfach /teilnahme/<int:id>"""
 @electivApp.route('/teilnahme2/<int:id>')
 @electivApp.response(500, 'Something went wrong')
 class Teilnahme2Operationen(Resource):

@@ -205,7 +205,7 @@ export default class ElectivAPI {
 
 	setTeilnahme(lehrangebotId, studentID){
         //TODO Set User ID
-         return this.#fetchAdvanced(this.#putTeilnahmeURL(lehrangebotId, studentID),{method: 'PUT'}).then((responseJSON) => {
+         return this.#fetchAdvanced(this.#putTeilnahmeURL(lehrangebotId, studentID),{method: 'POST'}).then((responseJSON) => {
 
 		})
 
