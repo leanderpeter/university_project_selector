@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`semester` (
 ENGINE = InnoDB;#
 
 -- -----------------------------------------------------
--- Table `electivapp`.`projektarten`
+-- Table `electivApp`.`projektarten`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `electivApp`.`projektarten` (
   `id` INT NOT NULL,
@@ -253,12 +253,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `zustaende` WRITE;
 /*!40000 ALTER TABLE `zustaende` DISABLE KEYS */;
-INSERT INTO `electivapp`.`zustaende` (`id`, `name`) VALUES ('1', 'neu');
-INSERT INTO `electivapp`.`zustaende` (`id`, `name`) VALUES ('2', 'genehmigt');
-INSERT INTO `electivapp`.`zustaende` (`id`, `name`) VALUES ('4', 'abgelehnt');
-INSERT INTO `electivapp`.`zustaende` (`id`, `name`) VALUES ('8', 'ausgebucht');
-INSERT INTO `electivapp`.`zustaende` (`id`, `name`) VALUES ('16', 'in durchführung');
-INSERT INTO `electivapp`.`zustaende` (`id`, `name`) VALUES ('32', 'bewertet');
+INSERT INTO `electivApp`.`zustaende` (`id`, `name`) VALUES (1, 'neu'),(2, 'genehmigt'),(4, 'abgelehnt'),(8, 'ausgebucht'),(16, 'in durchführung'),(32, 'bewertet');
 /*!40000 ALTER TABLE `zustaende` ENABLE KEYS */;
 UNLOCK TABLES;
 
