@@ -32,7 +32,7 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
-    '&:nth-of-type(odd)': {
+    '&:nth-of-type(3n)': {
       backgroundColor: theme.palette.action.hover,
     },
   },
@@ -55,6 +55,7 @@ class MeineProjekteEintrag extends Component {
         };
     }
 
+    
     //Noch zu tun:  projektBO soll kein Array sein. Die 2 Funktionen sollen nacheinander aufgerufen werden
     
     getProjekt = () => {
@@ -169,36 +170,40 @@ class MeineProjekteEintrag extends Component {
         const {  projektID, projektName, module, dozentName, note, loadingInProgress, error } = this.state;
 
         return(
-              <StyledTableRow key={projektID}>
-                <StyledTableCell component="th" scope="row">{projektName}</StyledTableCell>
-                <StyledTableCell align="center">{dozentName}</StyledTableCell> 
-                <StyledTableCell align="center">{note}</StyledTableCell> 
-                <StyledTableCell align="center">                
-                                {
-                                  module && note ?
-                                  <FormControl className={classes.formControl}>
-                                    <InputLabel>EDV-Nummer</InputLabel> 
-                                      <Select value = {teilnahme.anrechnung} onChange={this.handleChange}>
-                                        {
-                                        module.map(modul =>
-                                        <MenuItem value={modul.getID()}><em>{modul.getEdv_nr()}</em></MenuItem>
-                                        )
-                                        }
-                                      </Select>                                                                
-                                    </FormControl>                                  
-                                  :
-                                  <FormControl className={classes.formControl}>
-                                    <InputLabel>EDV-Nummer</InputLabel>
-                                      <Select value="">
-                                        <MenuItem value=""><em>Noch nicht benotet</em></MenuItem>
-                                      </Select>
-                                  </FormControl>
-                                }
+          <>
+                <StyledTableRow key={projektID}>
+                  <StyledTableCell component="th" scope="row">{projektName}</StyledTableCell>
+                  <StyledTableCell align="center">{dozentName}</StyledTableCell> 
+                  <StyledTableCell align="center">{note}</StyledTableCell> 
+                  <StyledTableCell align="center">                
+                                  {
+                                    module && note ?
+                                    <FormControl className={classes.formControl}>
+                                      <InputLabel>EDV-Nummer</InputLabel> 
+                                        <Select value = {teilnahme.anrechnung} onChange={this.handleChange}>
+                                          {
+                                          module.map(modul =>
+                                          <MenuItem value={modul.getID()}><em>{modul.getEdv_nr()}</em></MenuItem>
+                                          )
+                                          }
+                                        </Select>                                                                
+                                      </FormControl>                                  
+                                    :
+                                    <FormControl className={classes.formControl}>
+                                      <InputLabel>EDV-Nummer</InputLabel>
+                                        <Select value="">
+                                          <MenuItem value=""><em>Noch nicht benotet</em></MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                  }
 
-                </StyledTableCell>
-                  <LoadingProgress show={loadingInProgress}></LoadingProgress>
-                  <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Projekt konnte nicht geladen werden'} onReload={this.getProjekt} />
-              </StyledTableRow>
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                    <LoadingProgress show={loadingInProgress}></LoadingProgress>
+                    <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Projekt konnte nicht geladen werden'} onReload={this.getProjekt} />
+                </StyledTableRow>
+          </>                        
         );
     }
 }

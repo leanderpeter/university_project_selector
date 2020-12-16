@@ -39,7 +39,7 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
     root: {
-      '&:nth-of-type(odd)': {
+      '&:nth-of-type(3n)': {
         backgroundColor: theme.palette.action.hover,
       },
     },

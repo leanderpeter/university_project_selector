@@ -21,7 +21,7 @@ const StyledTableCell = withStyles((theme) => ({
   
   const StyledTableRow = withStyles((theme) => ({
     root: {
-      '&:nth-of-type(odd)': {
+      '&:nth-of-type(3n)': {
         backgroundColor: theme.palette.action.hover,
       },
     },
@@ -95,13 +95,17 @@ class EdvListeEintrag extends Component {
         const { studentName, mat_nr, note, loadingInProgress, error } = this.state;
         
         return(
+          <>
               <StyledTableRow key={this.props.teilnahme.id}>
                 <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
                 <StyledTableCell align="left">{mat_nr}</StyledTableCell> 
                 <StyledTableCell align="center">{note}</StyledTableCell> 
+              </StyledTableRow>
+              <StyledTableRow>
                   <LoadingProgress show={loadingInProgress}></LoadingProgress>
                   <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getStudent} />
               </StyledTableRow>
+          </>
         );
     }
 }
