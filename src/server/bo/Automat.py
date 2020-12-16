@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from server.bo.BusinessObject import BusinessObject
+from server.bo.Zustand import Zustand
 
-class Automat(BusinessObject):
+class Automat(Zustand):
     def __init__(self):
         self._aktueller_zustand = None
 
