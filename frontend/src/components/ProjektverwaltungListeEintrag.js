@@ -33,7 +33,19 @@ class ProjektverwaltungListeEintrag extends Component {
 
 	}
 
+	annehmenButtonClicked = event => {
+        //Logik fuer annehmen Button
+        this.setState({projektAnnehmenButton:true});
+        this.setState({projektAblehnenButton:true});
+    	ElectivAPI.getAPI().setZustandAtProjekt(this.props.projekt.id, 2);
+     }
 
+    ablehnenButtonClicked = event => {
+    //Logik fuer ablehnen Button
+        this.setState({projektAnnehmenButton:true});
+        this.setState({projektAblehnenButton:true});
+        ElectivAPI.getAPI().setZustandAtProjekt(this.props.projekt.id, 4);
+    }
 
 
 	// Kummert sich um das close event vom ProjektForm
@@ -69,7 +81,7 @@ class ProjektverwaltungListeEintrag extends Component {
           >
             <Grid container spacing={1} justify='flex-start' alignItems='center'>
               <Grid item>
-                <Typography variant='body1' className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()} </Typography> <Typography variant='body1' color={'success.main'}>{projekt.getAnzahlTeilnehmer()} / {projekt.getmax_teilnehmer()} Plätze besetzt
+                <Typography variant='body1' className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()} </Typography> <Typography variant='body1' color={'success.main'}>
                 </Typography>
               </Grid>
               <Grid item xs />
@@ -84,8 +96,11 @@ class ProjektverwaltungListeEintrag extends Component {
             
           </AccordionDetails>
           <AccordionDetails>
-          <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
-          Teilnahme
+          <Button className={classes.projektAnnehmenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.annehmenButtonClicked} disabled={this.state.projektAnnehmenButton}>
+          Annehmen
+        </Button>
+        <Button className={classes.projektAblehnenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.ablehnenButtonClicked} disabled={this.state.projektAblehnenButton}>
+          Ablehnen
         </Button>
             
           </AccordionDetails>
@@ -102,7 +117,12 @@ const styles = theme => ({
   root: {
     width: '100%',
   },
-  teilnahmeButton: {
+  projektAnnehmenButton: {
+    position: 'absolute',
+    right: theme.spacing(22),
+    bottom: theme.spacing(0),
+  },
+  projektAblehnenButton: {
     position: 'absolute',
     right: theme.spacing(3),
     bottom: theme.spacing(0),

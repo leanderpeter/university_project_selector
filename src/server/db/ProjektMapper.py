@@ -29,7 +29,14 @@ class ProjektMapper(Mapper):
 
         return result
 
+    def set_zustand_at_projekt(self, projekt_id, zustand_id):
+        cursor = self._connection.cursor()
+        command = "UPDATE projekte SET aktueller_zustand = %s WHERE id = %s"
+        data = (zustand_id,projekt_id)
+        cursor.execute(command, data)
 
+        self._connection.commit()
+        cursor.close()
 
     def find_projekte_by_zustand(self,zustand_id):
 
