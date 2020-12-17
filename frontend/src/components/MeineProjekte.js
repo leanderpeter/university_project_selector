@@ -39,7 +39,7 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
     root: {
-      '&:nth-of-type(3n)': {
+      '&:nth-of-type(4n+1)': {
         backgroundColor: theme.palette.action.hover,
       },
     },
@@ -91,6 +91,10 @@ class MeineProjekte extends Component {
             });
     }
 
+    printSemesterbericht= () => {
+      window.print()
+    }
+
     componentDidMount() {
         this.getTeilnahmen();
         this.setState({
@@ -127,6 +131,7 @@ class MeineProjekte extends Component {
                         <TableHead>
                             <StyledTableRow>
                                 <StyledTableCell>Projekte</StyledTableCell>
+                                <StyledTableCell align="center">Semester</StyledTableCell>
                                 <StyledTableCell align="center">Dozent</StyledTableCell>
                                 <StyledTableCell align="center">Note</StyledTableCell>
                                 <StyledTableCell align="center">Modulzuweisung</StyledTableCell>
@@ -152,10 +157,10 @@ class MeineProjekte extends Component {
                         </TableBody>
                     </Table>
                     <LoadingProgress show={loadingInProgress} />
-                    <ContextErrorMessage error={error} contextErrorMsg = {'Meine Projekte konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
+                    <ContextErrorMessage error={error} contextErrorMsg = {'Deine Projekte konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
                 </TableContainer>
-                <Button variant="contained" color="primary" size="medium" className={classes.button} startIcon={<SaveIcon />}>
-                Semesterbericht
+                <Button variant="contained" color="primary" size="medium" className={classes.button} startIcon={<SaveIcon />} onClick={this.printSemesterbericht}>
+                Notenspiegel
                 </Button>             
             </div>
         )
@@ -177,7 +182,9 @@ const styles = theme => ({
         minWidth: 700,
       },
       button:{
-          marginTop: theme.spacing(2)
+          marginTop: theme.spacing(2),
+          marginBottom: theme.spacing(3),
+          float: 'right'
       },
       page: {
         flexDirection: 'row',

@@ -21,7 +21,7 @@ const StyledTableCell = withStyles((theme) => ({
   
   const StyledTableRow = withStyles((theme) => ({
     root: {
-      '&:nth-of-type(3n)': {
+      '&:nth-of-type(4n+1)': {
         backgroundColor: theme.palette.action.hover,
       },
     },
@@ -101,9 +101,11 @@ class EdvListeEintrag extends Component {
                 <StyledTableCell align="left">{mat_nr}</StyledTableCell> 
                 <StyledTableCell align="center">{note}</StyledTableCell> 
               </StyledTableRow>
-              <StyledTableRow>
-                  <LoadingProgress show={loadingInProgress}></LoadingProgress>
-                  <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getStudent} />
+              <StyledTableRow> 
+                  <StyledTableCell colspan="10" className={classes.laden}>
+                      <LoadingProgress show={loadingInProgress}></LoadingProgress>
+                      <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getProjekt} />
+                  </StyledTableCell>
               </StyledTableRow>
           </>
         );
@@ -120,6 +122,9 @@ const styles = theme => ({
     table: {
         minWidth: 700,
       },
+    laden: {
+        padding: 0
+      }
     });
 
 /** PropTypes */
