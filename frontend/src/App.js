@@ -16,6 +16,7 @@ import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import ElectivAPI from './api/ElectivAPI';
 import firebaseConfig from './firebaseconfig';
+import ProjektverwaltungListe from './components/ProjektverwaltungListe';
 
 
 /*
@@ -145,6 +146,9 @@ class App extends React.Component {
                     <ProjektDozentListe currentStudent={currentStudent}/>
                   </Route>
 
+                  <Route path='/projektverwaltung' component={ProjektverwaltungListe}>
+                    <ProjektverwaltungListe currentStudent={currentStudent}/>
+                  </Route>
                   
                   {currentStudent ?
                   <Route path='/meineprojekte' component={MeineProjekte}>
