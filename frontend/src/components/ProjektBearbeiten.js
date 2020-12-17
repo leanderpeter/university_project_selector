@@ -19,6 +19,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import TableFooter from '@material-ui/core/TableFooter';
 
+//import ProjektBearbeitenEintrag
+import ProjektBearbeitenEintrag from './ProjektBearbeitenEintrag';
+
 
 
 
