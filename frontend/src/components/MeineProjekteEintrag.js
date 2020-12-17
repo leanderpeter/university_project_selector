@@ -32,7 +32,7 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
-    '&:nth-of-type(3n)': {
+    '&:nth-of-type(4n+1)': {
       backgroundColor: theme.palette.action.hover,
     },
   },
@@ -47,6 +47,7 @@ class MeineProjekteEintrag extends Component {
             projekt: null,
             projektID: null,
             projektName: null,
+            semester: null,
             module: null,
             dozentName: null,
             note: null,
@@ -55,9 +56,6 @@ class MeineProjekteEintrag extends Component {
         };
     }
 
-    
-    //Noch zu tun:  projektBO soll kein Array sein. Die 2 Funktionen sollen nacheinander aufgerufen werden
-    
     getProjekt = () => {
       ElectivAPI.getAPI().getProjekt(this.props.teilnahme.lehrangebot)
       .then(projektBO =>
@@ -71,6 +69,7 @@ class MeineProjekteEintrag extends Component {
             this.getPerson()
             this.getBewertung()
             this.getModule_by_projekt_id()
+            this.getSemester_by_id()
           })
           .catch(e =>
               this.setState({
@@ -97,6 +96,26 @@ class MeineProjekteEintrag extends Component {
           .catch(e =>
               this.setState({
                   note: null,
+                  error: null,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true
+      });
+    }
+
+    getSemester_by_id = () => {
+      ElectivAPI.getAPI().getSemester_by_id(this.state.projekt.getHalbjahr())
+      .then(semesterBO =>
+          this.setState({
+              semester: semesterBO.name,
+              error: null,
+              loadingInProgress: false,
+          }))
+          .catch(e =>
+              this.setState({
+                  semester: null,
                   error: null,
                   loadingInProgress: false,
               }));
@@ -167,12 +186,13 @@ class MeineProjekteEintrag extends Component {
 
     render(){
         const {classes, expandedState, teilnahme} = this.props;
-        const {  projektID, projektName, module, dozentName, note, loadingInProgress, error } = this.state;
+        const {  projektID, projektName, semester, module, dozentName, note, loadingInProgress, error } = this.state;
 
         return(
           <>
                 <StyledTableRow key={projektID}>
-                  <StyledTableCell component="th" scope="row">{projektName}</StyledTableCell>
+                  <StyledTableCell align="left">{projektName}</StyledTableCell>
+                  <StyledTableCell align="center">{semester}</StyledTableCell>
                   <StyledTableCell align="center">{dozentName}</StyledTableCell> 
                   <StyledTableCell align="center">{note}</StyledTableCell> 
                   <StyledTableCell align="center">                
@@ -198,11 +218,13 @@ class MeineProjekteEintrag extends Component {
                                   }
 
                   </StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow>
-                    <LoadingProgress show={loadingInProgress}></LoadingProgress>
-                    <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Projekt konnte nicht geladen werden'} onReload={this.getProjekt} />
-                </StyledTableRow>
+                  </StyledTableRow>
+                  <StyledTableRow> 
+                    <StyledTableCell colspan="10" className={classes.laden}>
+                      <LoadingProgress show={loadingInProgress}></LoadingProgress>
+                      <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getProjekt} />
+                    </StyledTableCell>
+                  </StyledTableRow>
           </>                        
         );
     }
@@ -211,8 +233,8 @@ const styles = theme => ({
     root: {
         width: '100%',
         marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-      padding: theme.spacing(1),
+        marginBottom: theme.spacing(2),
+        padding: theme.spacing(1),
     },
     content: {
         margin: theme.spacing(1),
@@ -227,6 +249,9 @@ const styles = theme => ({
     button: {
         margin: theme.spacing(1),
         },
+    laden: {
+      padding: 0
+    }
     });
 
 /** PropTypes */

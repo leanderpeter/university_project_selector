@@ -197,7 +197,7 @@ export default class ProjektBO extends NamedBusinessObject{
 	Erhalte  Halbjahr
 	*/
 	getHalbjahr(){
-		return this.halbjhar;
+		return this.halbjahr;
 	}
 
     /*

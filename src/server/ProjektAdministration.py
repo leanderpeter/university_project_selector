@@ -127,6 +127,10 @@ class ProjektAdministration(object):
         with SemesterMapper() as mapper:
             return mapper.find_all()
 
+    def get_semester_by_id(self, id):
+        with SemesterMapper() as mapper:
+            return mapper.find_by_id(id)
+
     def get_alle_module(self):
         with ModulMapper() as mapper:
             return mapper.find_all()

@@ -30,6 +30,30 @@ class SemesterMapper(Mapper):
 
         return result
 
+    def find_by_id(self, id):
+        result = None
+        
+        cursor = self._connection.cursor()
+        command = "SELECT id, name FROM semester WHERE id ='{}'".format(id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            (id, name) = tuples[0]
+            semester = Semester()
+            semester.set_id(id)
+            semester.set_name(name)
+            result = semester
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+			keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
+
+        self._connection.commit()
+        cursor.close()
+        return result
+
     def find_by_key(self):
         """Reads a tuple with a given ID"""
         pass

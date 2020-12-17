@@ -70,6 +70,9 @@ export default class ElectivAPI {
 	//Alle Semester bekommen
 	#getSemesterURL = () => `${this.#ElectivServerBaseURL}/semester`;
 
+	//Semester nach projekt Id bekommen
+	#getSemester_by_idURL = (id) => `${this.#ElectivServerBaseURL}/semester/${id}`;
+
 
 
 
@@ -256,6 +259,16 @@ export default class ElectivAPI {
 				resolve(modulBO)
 			})
 		})
+	}
+
+	getSemester_by_id(id){
+		return this.#fetchAdvanced(this.#getSemester_by_idURL(id)).then((responseJSON) => {
+			let semesterBO = SemesterBO.fromJSON(responseJSON);
+			console.info(semesterBO)
+			return new Promise(function (resolve){
+				resolve(semesterBO)
+			})
+		})		
 	}
 
 	getSemester(){

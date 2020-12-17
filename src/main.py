@@ -319,6 +319,17 @@ class SemesterOperationen(Resource):
     def put(self, id):
         pass
 
+@electivApp.route('/semester/<int:id>')
+@electivApp.response(500, 'Something went wrong')
+class SemesterByIDOperationen(Resource):
+    @electivApp.marshal_list_with(semester)
+    @secured
+
+    def get(self, id):
+        adm = ProjektAdministration()
+        semester = adm.get_semester_by_id(id)
+        return semester
+
 
 
 @electivApp.route('/projektePending')
