@@ -76,6 +76,11 @@ class ProjektBearbeiten extends Component {
             expandedTeilnahmeID: expandedID,
         };
     }
+    getProjekte=()=>{
+      ElectivAPI.getAPI().getProjekte()
+    }
+
+    
     // API Anbindung um Studenten von den Projekten vom Backend zu bekommen 
     getTeilnahmen = () => {
       ElectivAPI.getAPI().getTeilnahmen(this.props.currentProjekt.id)
