@@ -95,6 +95,10 @@ class ProjektAdministration(object):
         with ProjektMapper() as mapper:
             return mapper.find_projekt_by_id(projekt_id)
 
+    def get_projekte_by_zustand(self, zustand_id):
+        with ProjektMapper() as mapper:
+            return mapper.find_projekte_by_zustand(zustand_id)
+
     def get_alle_projekte(self, ):
         """return alle Projekte """
         with ProjektMapper() as mapper:

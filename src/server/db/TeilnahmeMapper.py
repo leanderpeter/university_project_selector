@@ -119,9 +119,6 @@ class TeilnahmeMapper(Mapper):
         command = "DELETE FROM teilnahmen WHERE lehrangebot=%s AND teilnehmer=%s"
         data = (lehrangebotId, teilnehmerId)
         cursor.execute(command, data)
-        print("gelöscht")
-        print(lehrangebotId)
-        print(teilnehmerId)
         self._connection.commit()
         cursor.close()
 

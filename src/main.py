@@ -112,6 +112,17 @@ class ProjektListeOperationen(Resource):
     def put(self, projekt_id):
         pass
 
+@electivApp.route('/projekte/zustand/<int:id>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class Projektverwaltungoperation(Resource):
+    @electivApp.marshal_list_with(projekt)
+    @secured
+
+    def get(self, id):
+        adm = ProjektAdministration()
+        projekte = adm.get_projekte_by_zustand(id)
+        return projekte
+
 @electivApp.route('/projekt/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektOperationen(Resource):

@@ -42,7 +42,7 @@ class ProjektverwaltungListe extends Component {
 
 	//hole alle Projekte vom Backend
 	getProjekte = () => {
-		ElectivAPI.getAPI().getProjekte()
+		ElectivAPI.getAPI().getProjekteByZustand()
       .then(projekteBOs => 
 				this.setState({								//neuer status wenn fetch komplett
 					projekte: projekteBOs,					

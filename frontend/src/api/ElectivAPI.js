@@ -20,6 +20,7 @@ export default class ElectivAPI {
 
 	//Projekte anzeigen fuer Student
 	#getProjekteURL = () => `${this.#ElectivServerBaseURL}/projekte`;
+	#getProjekteByZustandURL = (id) => `${this.#ElectivServerBaseURL}/projekte/zustand/${id}`;
 	#addProjekteURL = () => `${this.#ElectivServerBaseURL}/projekte`;
 	#getProjekteByIDURL = (id) => `${this.#ElectivServerBaseURL}/projekte/${id}`;
 	//update 
@@ -110,6 +111,18 @@ export default class ElectivAPI {
 			})
 		})
 	}
+
+	getProjekteByZustand() { 
+		//immer Zustand 1 (neues Projekt) holen
+		return this.#fetchAdvanced(this.#getProjekteByZustandURL(1),{method: 'GET'}).then((responseJSON) => {
+			let projektBOs = ProjektBO.fromJSON(responseJSON);
+			console.info(projektBOs)
+			return new Promise(function (resolve){
+				resolve(projektBOs);
+			})
+		})
+	}
+
 
 	addProjekt(projektBO) {
 		return this.#fetchAdvanced(this.#addProjektPendingURL(), {

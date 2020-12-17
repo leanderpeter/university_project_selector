@@ -29,6 +29,32 @@ class ProjektMapper(Mapper):
 
         return result
 
+
+
+    def find_projekte_by_zustand(self,zustand_id):
+
+        result = []
+        cursor = self._connection.cursor()
+        command = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art from projekte WHERE aktueller_zustand={}").format(zustand_id)
+        data = (zustand_id)
+        cursor.execute(command, data)
+        tuples = cursor.fetchall()
+
+        for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
+             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art) in tuples:
+            projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
+                                          woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
+                                          raum, sprache, dozent, aktueller_zustand, halbjahr, art)
+            result.append(projekt)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+
+
+
     def find_projekt_by_id(self, id):
         result = None
 
