@@ -34,11 +34,14 @@ class ProjektListeEintrag extends Component {
 	// Handles events wenn sich der status der oeffnung aendert
 	expansionPanelStateChanged = () => {
 		this.props.onExpandedStateChange(this.props.projekt);
-
+    this.setState({teilnahmeAbwaehlenButtonDisabled:true});
 		// Teilnahme Button deaktivieren, sofern Teilnehmer bereits in Projekt eingeschrieben
 		if( this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
-		    this.setState({teilnahmeButtonDisabled:true});
-		}
+        this.setState({teilnahmeButtonDisabled:true});
+        this.setState({teilnahmeAbwaehlenButtonDisabled:false});
+    }
+    
+    
 	}
 
 	// Kummert sich um das loschen des Projekts
@@ -80,12 +83,15 @@ class ProjektListeEintrag extends Component {
 
 	teilnahmeButtonClicked = event => {
     	//Logik fuer Teilnahme Button
-    	this.setState({teilnahmeButtonDisabled:true});
+      this.setState({teilnahmeButtonDisabled:true});
+      this.setState({teilnahmeAbwaehlenButtonDisabled:false});
     	ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
   }
   
   teilnahmeAbwaehlenButtonClicked = event => {
     //Logik fuer Teilnahme Button
+    this.setState({teilnahmeButtonDisabled:false});
+    this.setState({teilnahmeAbwaehlenButtonDisabled:true});
     ElectivAPI.getAPI().deleteTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
 }
 
@@ -121,7 +127,7 @@ class ProjektListeEintrag extends Component {
           </AccordionDetails>
           <AccordionDetails>
           
-        <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked}>
+        <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
           Teilnahme abwählen
         </Button>  
         <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
