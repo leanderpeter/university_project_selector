@@ -82,7 +82,12 @@ class ProjektListeEintrag extends Component {
     	//Logik fuer Teilnahme Button
     	this.setState({teilnahmeButtonDisabled:true});
     	ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
-	}
+  }
+  
+  teilnahmeAbwaehlenButtonClicked = event => {
+    //Logik fuer Teilnahme Button
+    ElectivAPI.getAPI().deleteTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
+}
 
 	/** Renders the component */
   render() {
@@ -115,10 +120,13 @@ class ProjektListeEintrag extends Component {
             
           </AccordionDetails>
           <AccordionDetails>
-          <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
+          
+        <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked}>
+          Teilnahme abwählen
+        </Button>  
+        <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
           Teilnahme
         </Button>
-            
           </AccordionDetails>
         </Accordion>
               
@@ -133,6 +141,11 @@ const styles = theme => ({
     width: '100%',
   },
   teilnahmeButton: {
+    position: 'absolute',
+    right: theme.spacing(31),
+    bottom: theme.spacing(0),
+  },
+  teilnahmeAbwaehlenButton: {
     position: 'absolute',
     right: theme.spacing(3),
     bottom: theme.spacing(0),

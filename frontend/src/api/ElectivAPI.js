@@ -44,7 +44,10 @@ export default class ElectivAPI {
 	#getTeilnahmen_by_modul_und_semesterURL = (modul_id, semester_id) => `${this.#ElectivServerBaseURL}/teilnahmen/${modul_id}/${semester_id}`
   
 	//Teilnahme wählen
-	#putTeilnahmeURL = (lehrangebotId,teilnehmerId) => `${this.#ElectivServerBaseURL}/teilnahme?lehrangebotId=${lehrangebotId}&teilnehmerId=${teilnehmerId}`;
+	#postTeilnahmeURL = (lehrangebotId,teilnehmerId) => `${this.#ElectivServerBaseURL}/teilnahme?lehrangebotId=${lehrangebotId}&teilnehmerId=${teilnehmerId}`;
+
+	//Teilnahme löschen
+	#deleteTeilnahmeURL = (lehrangebotId,teilnehmerId) => `${this.#ElectivServerBaseURL}/teilnahme?lehrangebotId=${lehrangebotId}&teilnehmerId=${teilnehmerId}`;
 
 
 	//getPerson: id
@@ -205,7 +208,15 @@ export default class ElectivAPI {
 
 	setTeilnahme(lehrangebotId, studentID){
         //TODO Set User ID
-         return this.#fetchAdvanced(this.#putTeilnahmeURL(lehrangebotId, studentID),{method: 'POST'}).then((responseJSON) => {
+         return this.#fetchAdvanced(this.#postTeilnahmeURL(lehrangebotId, studentID),{method: 'POST'}).then((responseJSON) => {
+
+		})
+
+	}
+
+	deleteTeilnahme(lehrangebotId, studentID){
+        //TODO Set User ID
+         return this.#fetchAdvanced(this.#deleteTeilnahmeURL(lehrangebotId, studentID),{method: 'DELETE'}).then((responseJSON) => {
 
 		})
 

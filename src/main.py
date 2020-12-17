@@ -208,8 +208,11 @@ class TeilnahmeOperationen(Resource):
     def get(self, teilname_id):
         pass
 
-    def delete(self, teilnahme_id):
-        pass
+    def delete(self):
+        lehrangebotId = request.args.get("lehrangebotId")
+        teilnehmerId = request.args.get("teilnehmerId")
+        projektAdministration = ProjektAdministration()
+        projektAdministration.delete_teilnahme(lehrangebotId, teilnehmerId)
 
     def post(self):
         lehrangebotId = request.args.get("lehrangebotId")
@@ -225,7 +228,7 @@ class Teilnahme2Operationen(Resource):
         pass
 
     def delete(self, teilnahme_id):
-        pass
+        pass  
 
     @electivApp.marshal_with(teilnahme)
     @electivApp.expect(teilnahme, validate=True)

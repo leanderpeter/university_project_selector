@@ -157,8 +157,9 @@ class ProjektAdministration(object):
         with TeilnahmeMapper() as mapper:
             return mapper.find_by_modul_und_semester(modul_id, semester_id)
 
-    def delete_teilnahme(self, ):
-        pass
+    def delete_teilnahme(self, lehrangebotId, teilnehmerId):
+       with TeilnahmeMapper() as mapper:
+            return mapper.delete(lehrangebotId, teilnehmerId)
 
     def create_teilnahme(self, lehrangebotId, teilnehmerId):
         '''creat person'''

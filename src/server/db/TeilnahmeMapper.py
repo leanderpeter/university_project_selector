@@ -111,9 +111,20 @@ class TeilnahmeMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete(self):
+    def delete(self, lehrangebotId, teilnehmerId):
         """Delete an object from the DB"""
-        pass
+        
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM teilnahmen WHERE lehrangebot=%s AND teilnehmer=%s"
+        data = (lehrangebotId, teilnehmerId)
+        cursor.execute(command, data)
+        print("gelöscht")
+        print(lehrangebotId)
+        print(teilnehmerId)
+        self._connection.commit()
+        cursor.close()
+
 
     def find_by_modul_und_semester(self, modul_id, semester_id):
         result = []
