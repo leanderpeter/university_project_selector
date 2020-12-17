@@ -69,6 +69,8 @@ class ProjektBearbeiten extends Component {
 
         this.state = {
             teilnahmen : [],
+            projekte:[],
+            teilnehmer:[],
             currentStudentName: null,
             currentStudentmat_nr: null,
             error: null,
@@ -78,9 +80,25 @@ class ProjektBearbeiten extends Component {
     }
     getProjekte=()=>{
       ElectivAPI.getAPI().getProjekte()
+      .then(projekteBOs =>
+        this.setState({
+            projekte: projekteBOs,
+            error: null,
+            loadingInProgress: false,
+        })).catch(e =>
+            this.setState({
+                projekte: [],
+                error: e,
+                loadingInProgress: false,
+            }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingProjekteError: null
+      });
     }
 
-    
+
     // API Anbindung um Studenten von den Projekten vom Backend zu bekommen 
     getTeilnahmen = () => {
       ElectivAPI.getAPI().getTeilnahmen(this.props.currentProjekt.id)
@@ -101,6 +119,23 @@ class ProjektBearbeiten extends Component {
           loadingTeilnahmeError: null
       });
 }
+
+componentDidMount() {
+  this.getProjekte();
+  
+}
+
+onExpandedStateChange = projekt => {
+  let newID = null;
+  
+  if (projekt.getID() !== this.state.expandedProjektID) {
+    newID = projekt.getID()
+  }
+  this.setState({
+    expandedProjektID: newID,
+  });
+}
+
     
 
 
@@ -110,22 +145,11 @@ class ProjektBearbeiten extends Component {
 
     render(){
 
-        function createData(name, matrikelnr,note) {
-            return { name, matrikelnr, note};
-          }
-          
-          const rows = [
-            createData('Raphael Müller', 23423,4.0  ),
-            createData('Pascal Gienger', 23434,3.7),
-            createData('Leander Peter', 43421,2.3),
-            createData('Jannik Merz', 24456,5.0),
-            createData('Alexander Hofstetter', 13455,1.3),
-            createData('Daria Bilyk',24455,1.7),
-          ];
+        
         
         
         const { classes } = this.props;
-        const { teilnahmen, currentStudentName, currentStudentmat_nr, expandedTeilnahmeID, error, loadingInProgress} = this.state;
+        const { teilnahmen,projekte, currentStudentName, currentStudentmat_nr, expandedTeilnahmeID, error, loadingInProgress} = this.state;
         
         return(
             <div className={classes.root}>
@@ -135,16 +159,14 @@ class ProjektBearbeiten extends Component {
                 <Typography>Projekte von {currentStudentName}</Typography>
                 <FormControl className={classes.formControl}>
                                 <InputLabel id="demo-simple-select-label">Projekt</InputLabel>
-                                <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                
-                                value={projekt}
-                                >
-                                <MenuItem value={10}>Software Engineering</MenuItem>
-                                <MenuItem value={20}>Marketing</MenuItem>
-                                <MenuItem value={30}>Organisation</MenuItem>
-                                </Select>
+                                <Select value = {projekt.id} onChange={this.handleChange}>
+                                  {
+                                  projekte.map(projekt =>
+                                  <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
+                                  )
+                                  }
+                                </Select>                                                                
+
                             </FormControl>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="customized table">
@@ -157,14 +179,8 @@ class ProjektBearbeiten extends Component {
                             </StyledTableRow>
                         </TableHead>
                         <TableBody>
-                        {rows.map((row) => (
-            <TableRow key={row.name}>
-                     
-              
-              <TableCell align="center">{row.name}</TableCell>
-              <TableCell align="center">{row.matrikelnr}</TableCell>
-              
-              <TableCell align="center">{row.note}</TableCell>
+                        
+            <TableRow >
               <TableCell>   
                   <Button style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" >entfernen</Button>
               </TableCell>
@@ -172,7 +188,7 @@ class ProjektBearbeiten extends Component {
               
             </TableRow>
             
-          ))}   
+            
         
                      
             </TableBody>
