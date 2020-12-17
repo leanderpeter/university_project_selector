@@ -50,7 +50,7 @@ class ProjektBearbeitenEintrag extends Component {
             projektID: null,
             projektName: null,
             module: null,
-            dozentName: null,
+            studentName: null,
             note: null,
             loadingInProgress: false,
             error: null
@@ -61,31 +61,23 @@ class ProjektBearbeitenEintrag extends Component {
     //Noch zu tun:  projektBO soll kein Array sein. Die 2 Funktionen sollen nacheinander aufgerufen werden
     
     getStudent = (google_user_id) => {
-      ElectivAPI.getAPI().getStudent(this.props.teilnahme.lehrangebot)
-      .then(projektBO =>
-          this.setState({
-            projekt: projektBO[0],
-            projektID: projektBO[0].id,
-            projektName: projektBO[0].name,
-            loadingInProgress: false,
+      ElectivAPI.getAPI().getStudent(this.props.teilnahme.teilnehmer)
+      .then(studentBO =>
+        this.setState({
+            studentName: studentBO.getname(),
             error: null,
-          })).then(()=>{
-            this.getPerson()
-            this.getBewertung()
-            this.getModule_by_projekt_id()
-          })
-          .catch(e =>
-              this.setState({
-                projekt: null,
-                projektID: null,
-                projektName: null,
-                loadingInProgress: false,
+            loadingInProgress: false,
+        }))
+        .catch(e =>
+            this.setState({
+                studentName: null,
                 error: e,
-              }));
-      this.setState({
-        loadingInProgress: true,
-        error: null
-      });
+                loadingInProgress: false,
+            }));
+    this.setState({
+        error: null,
+        loadingInProgress: true
+    });
     }
 
     getBewertung = () => {
@@ -162,12 +154,12 @@ class ProjektBearbeitenEintrag extends Component {
 
     render(){
         const {classes, expandedState} = this.props;
-        const {  projekt, projektID, projektName, module, dozentName, note, loadingInProgress, error } = this.state;
+        const {  projekt, projektID, projektName, module, studentName, note, loadingInProgress, error } = this.state;
 
         return(
               <StyledTableRow key={projektID}>
                 <StyledTableCell component="th" scope="row">{projektName}</StyledTableCell>
-                <StyledTableCell align="center">{dozentName}</StyledTableCell> 
+                <StyledTableCell align="center">{studentName}</StyledTableCell> 
                 <StyledTableCell align="center">{note}</StyledTableCell> 
                 <StyledTableCell align="center">
                     <FormControl className={classes.formControl}>

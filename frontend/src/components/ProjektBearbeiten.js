@@ -45,6 +45,7 @@ const StyledTableRow = withStyles((theme) => ({
     },
   }))(TableRow);
 
+  //muss irwo noch defined werden, so geht es ist aber glaub falsch
 const projekt=[
     {value:10,
     name: 'Software Engineering'},
@@ -54,7 +55,7 @@ const projekt=[
     name: 'Organisation'},
 
 ]
-
+  
 
 
 
@@ -81,16 +82,17 @@ class ProjektBearbeiten extends Component {
             expandedTeilnahmeID: expandedID,
         };
     }
+    //AO`PI Anbindung: erstes Dropdown der Seite, um die Projekte des Dozenten zu erhalten
     getProjekte=()=>{
       ElectivAPI.getAPI().getProjekte()
-      .then(projekteBOs =>
+      .then(projektBOs =>
         this.setState({
-            projekte: projekteBOs,
+            projekte: projektBOs,
             error: null,
             loadingInProgress: false,
         })).catch(e =>
             this.setState({
-                projekte: [],
+                projekt: [],
                 error: e,
                 loadingInProgress: false,
             }));
