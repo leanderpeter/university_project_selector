@@ -85,6 +85,7 @@ class ProjektListeEintrag extends Component {
     	//Logik fuer Teilnahme Button
       this.setState({teilnahmeButtonDisabled:true});
       this.setState({teilnahmeAbwaehlenButtonDisabled:false});
+      this.state.projekt.anzahlTeilnehmer = this.state.projekt.anzahlTeilnehmer + 1;
     	ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
   }
   
@@ -92,6 +93,7 @@ class ProjektListeEintrag extends Component {
     //Logik fuer Teilnahme Button
     this.setState({teilnahmeButtonDisabled:false});
     this.setState({teilnahmeAbwaehlenButtonDisabled:true});
+    this.state.projekt.anzahlTeilnehmer = this.state.projekt.anzahlTeilnehmer - 1;
     ElectivAPI.getAPI().deleteTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
 }
 
