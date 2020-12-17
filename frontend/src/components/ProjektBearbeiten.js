@@ -76,6 +76,26 @@ class ProjektBearbeiten extends Component {
             expandedTeilnahmeID: expandedID,
         };
     }
+    // API Anbindung um Studenten von den Projekten vom Backend zu bekommen 
+    getTeilnahmen = () => {
+      ElectivAPI.getAPI().getTeilnahmen(this.props.currentProjekt.id)
+      .then(teilnahmeBOs =>
+          this.setState({
+              teilnahmen: teilnahmeBOs,
+              error: null,
+              loadingInProgress: false,
+          })).catch(e =>
+              this.setState({
+                  teilnahme: [],
+                  error: e,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingTeilnahmeError: null
+      });
+}
     
 
 
@@ -90,12 +110,12 @@ class ProjektBearbeiten extends Component {
           }
           
           const rows = [
-            createData('Raphael', 23423,4.0  ),
-            createData('Pascal', 23434,3.7),
-            createData('Leander', 43421,2.3),
-            createData('Jannik', 24456,5.0),
-            createData('Alex', 13455,1.3),
-            createData('Daria',24455,1.7),
+            createData('Raphael Müller', 23423,4.0  ),
+            createData('Pascal Gienger', 23434,3.7),
+            createData('Leander Peter', 43421,2.3),
+            createData('Jannik Merz', 24456,5.0),
+            createData('Alexander Hofstetter', 13455,1.3),
+            createData('Daria Bilyk',24455,1.7),
           ];
         
         
@@ -107,7 +127,7 @@ class ProjektBearbeiten extends Component {
                 <Paper>
                 
                 
-                <Typography>Projekte von {currentStudentName}, Matrikelnummer: {currentStudentmat_nr}</Typography>
+                <Typography>Projekte von {currentStudentName}</Typography>
                 <FormControl className={classes.formControl}>
                                 <InputLabel id="demo-simple-select-label">Projekt</InputLabel>
                                 <Select
@@ -165,7 +185,7 @@ class ProjektBearbeiten extends Component {
                                 <TableCell align="center"><TextField  label="Name" variant="outlined" /></TableCell>
                                 <TableCell align="center"><TextField label="Matrikelnummer" variant="outlined" /></TableCell>
                                 <TableCell align="center"><TextField  label="Note" variant="outlined" /></TableCell>
-                                <Button style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" >hinzufügen</Button>
+                                <Button style={{backgroundColor:"lightblue", display:"flex",margin:"auto",}} variant="contained" >hinzufügen</Button>
                             </TableRow>
                         </TableHead>
                     </Table>
