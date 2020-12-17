@@ -112,6 +112,30 @@ class ProjektListeOperationen(Resource):
     def put(self, projekt_id):
         pass
 
+@electivApp.route('/projekte/zustand/<int:id>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class Projektverwaltungoperation(Resource):
+    @electivApp.marshal_list_with(projekt)
+    @secured
+
+    def get(self, id):
+        adm = ProjektAdministration()
+        projekte = adm.get_projekte_by_zustand(id)
+        return projekte
+
+@electivApp.route('/projekte/zustand')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class Projektverwaltungzustandoperation(Resource):
+    @electivApp.marshal_list_with(projekt)
+    @secured
+
+    def put(self):
+        projektId = request.args.get("projektId")
+        zustandId = request.args.get("zustandId")
+        adm = ProjektAdministration()
+        projekte = adm.set_zustand_at_projekt(projektId,zustandId)
+        return projekte
+
 @electivApp.route('/projekt/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektOperationen(Resource):
@@ -208,8 +232,11 @@ class TeilnahmeOperationen(Resource):
     def get(self, teilname_id):
         pass
 
-    def delete(self, teilnahme_id):
-        pass
+    def delete(self):
+        lehrangebotId = request.args.get("lehrangebotId")
+        teilnehmerId = request.args.get("teilnehmerId")
+        projektAdministration = ProjektAdministration()
+        projektAdministration.delete_teilnahme(lehrangebotId, teilnehmerId)
 
     def post(self):
         lehrangebotId = request.args.get("lehrangebotId")
@@ -225,7 +252,7 @@ class Teilnahme2Operationen(Resource):
         pass
 
     def delete(self, teilnahme_id):
-        pass
+        pass  
 
     @electivApp.marshal_with(teilnahme)
     @electivApp.expect(teilnahme, validate=True)

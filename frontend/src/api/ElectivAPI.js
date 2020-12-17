@@ -20,6 +20,8 @@ export default class ElectivAPI {
 
 	//Projekte anzeigen fuer Student
 	#getProjekteURL = () => `${this.#ElectivServerBaseURL}/projekte`;
+	#getProjekteByZustandURL = (id) => `${this.#ElectivServerBaseURL}/projekte/zustand/${id}`;
+	#setZustandAtProjekt = (projektId, zustandId) => `${this.#ElectivServerBaseURL}/projekte/zustand?projektId=${projektId}&zustandId=${zustandId}`;
 	#addProjekteURL = () => `${this.#ElectivServerBaseURL}/projekte`;
 	#getProjekteByIDURL = (id) => `${this.#ElectivServerBaseURL}/projekte/${id}`;
 	//update 
@@ -44,7 +46,10 @@ export default class ElectivAPI {
 	#getTeilnahmen_by_modul_und_semesterURL = (modul_id, semester_id) => `${this.#ElectivServerBaseURL}/teilnahmen/${modul_id}/${semester_id}`
   
 	//Teilnahme wählen
-	#putTeilnahmeURL = (lehrangebotId,teilnehmerId) => `${this.#ElectivServerBaseURL}/teilnahme?lehrangebotId=${lehrangebotId}&teilnehmerId=${teilnehmerId}`;
+	#postTeilnahmeURL = (lehrangebotId,teilnehmerId) => `${this.#ElectivServerBaseURL}/teilnahme?lehrangebotId=${lehrangebotId}&teilnehmerId=${teilnehmerId}`;
+
+	//Teilnahme löschen
+	#deleteTeilnahmeURL = (lehrangebotId,teilnehmerId) => `${this.#ElectivServerBaseURL}/teilnahme?lehrangebotId=${lehrangebotId}&teilnehmerId=${teilnehmerId}`;
 
 
 	//getPerson: id
@@ -110,6 +115,29 @@ export default class ElectivAPI {
 			})
 		})
 	}
+
+	getProjekteByZustand() { 
+		//immer Zustand 1 (neues Projekt) holen
+		return this.#fetchAdvanced(this.#getProjekteByZustandURL(1),{method: 'GET'}).then((responseJSON) => {
+			let projektBOs = ProjektBO.fromJSON(responseJSON);
+			console.info(projektBOs)
+			return new Promise(function (resolve){
+				resolve(projektBOs);
+			})
+		})
+	}
+
+	setZustandAtProjekt(projektId, zustandId) { 
+		//immer Zustand 1 (neues Projekt) holen
+		return this.#fetchAdvanced(this.#setZustandAtProjekt(projektId,zustandId),{method: 'PUT'}).then((responseJSON) => {
+			let projektBOs = ProjektBO.fromJSON(responseJSON);
+			console.info(projektBOs)
+			return new Promise(function (resolve){
+				resolve(projektBOs);
+			})
+		})
+	}
+
 
 	addProjekt(projektBO) {
 		return this.#fetchAdvanced(this.#addProjektPendingURL(), {
@@ -208,7 +236,15 @@ export default class ElectivAPI {
 
 	setTeilnahme(lehrangebotId, studentID){
         //TODO Set User ID
-         return this.#fetchAdvanced(this.#putTeilnahmeURL(lehrangebotId, studentID),{method: 'POST'}).then((responseJSON) => {
+         return this.#fetchAdvanced(this.#postTeilnahmeURL(lehrangebotId, studentID),{method: 'POST'}).then((responseJSON) => {
+
+		})
+
+	}
+
+	deleteTeilnahme(lehrangebotId, studentID){
+        //TODO Set User ID
+         return this.#fetchAdvanced(this.#deleteTeilnahmeURL(lehrangebotId, studentID),{method: 'DELETE'}).then((responseJSON) => {
 
 		})
 
