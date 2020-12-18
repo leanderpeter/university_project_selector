@@ -31,7 +31,7 @@ bo = api.model('BusinessObject', {
 })
 
 automat = api.model('Automat',{
-    'aktueller_zustand': fields.Integer(attribute='_aktueller_zustand', description='ID des aktuellen Zustands des Automaten')
+    'aktueller_zustand': fields.String(attribute='_aktueller_zustand', description='ID des aktuellen Zustands des Automaten')
 })
 
 nbo = api.inherit('NamedBusinessObject', bo, {

@@ -203,7 +203,7 @@ class ProjektMapper(Mapper):
             projekt.get_raum(),
             projekt.get_sprache(),
             projekt.get_dozent(),
-            projekt.get_aktueller_zustand(),
+            str(projekt.get_aktueller_zustand()),
             projekt.get_halbjahr(),
             projekt.get_art()
             )

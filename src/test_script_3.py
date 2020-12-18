@@ -10,4 +10,7 @@ from test_script_2 import Projekt, Zustand
 p = Projekt()
 
 p.set_aktueller_zustand(Zustand('Was'))
-print(p.get_aktueller_zustand())
+print(str(p.get_aktueller_zustand()))
+
+print(type(p.get_aktueller_zustand()))
+
