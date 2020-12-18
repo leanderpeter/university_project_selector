@@ -43,8 +43,7 @@ class ProjektMapper(Mapper):
         result = []
         cursor = self._connection.cursor()
         command = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art from projekte WHERE aktueller_zustand={}").format(zustand_id)
-        data = (zustand_id)
-        cursor.execute(command, data)
+        cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
