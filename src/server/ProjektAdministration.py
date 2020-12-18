@@ -6,6 +6,7 @@ from .bo.Person import Person
 from .bo.Student import Student
 from .bo.Projekt import Projekt
 from .bo.Teilnahme import Teilnahme
+from .bo.Zustand import Zustand
 
 from .db.PersonMapper import PersonMapper
 from .db.StudentMapper import StudentMapper
@@ -180,7 +181,7 @@ class ProjektAdministration(object):
         projekt.set_teilnehmerListe(teilnehmerListe)
         projekt.set_id(1)
         projekt.set_name(name)
-        projekt.set_aktueller_zustand(1)
+        projekt.set_aktueller_zustand(Zustand('Neu'))
         print(projekt)
 
         with ProjektMapper() as mapper:
@@ -190,3 +191,12 @@ class ProjektAdministration(object):
     def save_teilnahme(self, teilnahme):
         with TeilnahmeMapper() as mapper:
             mapper.update(teilnahme)
+
+    def set_state(self, projekt, zus):
+        projekt = Projekt()
+        projekt.set_aktueller_zustand(zus)
+        return projekt
+
+    def get_state(self, projekt):
+        return self.projekt.get_aktueller_zustand()
+

@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`projekte` (
   `raum` VARCHAR(128) NULL DEFAULT '',
   `sprache` VARCHAR(128) NULL DEFAULT '',
   `dozent` INT DEFAULT NULL,
-  `aktueller_zustand` INT DEFAULT NULL,
+  `aktueller_zustand` VARCHAR DEFAULT NULL,
   `halbjahr` INT DEFAULT NULL,
   `art` INT DEFAULT NULL,
   PRIMARY KEY (`id`),

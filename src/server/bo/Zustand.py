@@ -12,7 +12,7 @@ class Zustand:
     def set_name(self, txt):
     	self.name = txt
 
-    def __str__(self, ):
-        pass
+    def __str__(self):
+        return "{}".format(self.name)
 
 
