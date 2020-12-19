@@ -3,7 +3,7 @@
 
 
 class Zustand:
-    def __init__(self, txt=""):
+    def __init__(self, txt='""'):
         self.name = txt
 
     def get_name(self):
@@ -13,6 +13,7 @@ class Zustand:
     	self.name = txt
 
     def __str__(self):
-        return "{}".format(self.name)
+        return '{}'.format(self.name)
 
+        # return '"{}"'.format(self.name)
 

@@ -14,4 +14,6 @@ class Automat(Zustand):
         self._aktueller_zustand = Zustand(zustand)
 
     def __str__(self):
-    	return "{}".format(self._aktueller_zustand)
+    	return self._aktueller_zustand
+
+    	# return '"{}"'.format(self._aktueller_zustand)

@@ -70,7 +70,7 @@ class MeineProjekte extends Component {
 
 
 
-    // API Anbindung um Projekte vom Backend zu bekommen 
+    // API Anbindung um Teilnahmen des Students vom Backend zu bekommen 
     getTeilnahmen = () => {
             ElectivAPI.getAPI().getTeilnahmen(this.props.currentStudent.id)
             .then(teilnahmeBOs =>
@@ -80,7 +80,7 @@ class MeineProjekte extends Component {
                     loadingInProgress: false,
                 })).catch(e =>
                     this.setState({
-                        teilnahme: [],
+                        teilnahmen: [],
                         error: e,
                         loadingInProgress: false,
                     }));

@@ -16,6 +16,7 @@ import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import ElectivAPI from './api/ElectivAPI';
 import firebaseConfig from './firebaseconfig';
+import ProjektverwaltungListe from './components/ProjektverwaltungListe';
 
 
 /*
@@ -62,7 +63,7 @@ class App extends React.Component {
           authError: null,
           authLoading: false
         })}).then(() => {
-        this.getStudent()
+        this.getStudentByGoogleID()
       }).catch(e => {
         this.setState({
           authError: e,
@@ -91,8 +92,8 @@ class App extends React.Component {
   }
 
     //aktuell eingeloggten Student vom Backend abfragen
-  getStudent = () => {
-    ElectivAPI.getAPI().getStudent(this.state.currentUser.uid)
+  getStudentByGoogleID = () => {
+    ElectivAPI.getAPI().getStudentByGoogleID(this.state.currentUser.uid)
         .then(studentBO =>
             this.setState({
                 currentStudent: studentBO,
@@ -145,6 +146,9 @@ class App extends React.Component {
                     <ProjektDozentListe currentStudent={currentStudent}/>
                   </Route>
 
+                  <Route path='/projektverwaltung' component={ProjektverwaltungListe}>
+                    <ProjektverwaltungListe currentStudent={currentStudent}/>
+                  </Route>
                   
                   {currentStudent ?
                   <Route path='/meineprojekte' component={MeineProjekte}>

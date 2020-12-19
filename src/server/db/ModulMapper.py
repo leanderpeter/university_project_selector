@@ -57,8 +57,27 @@ class ModulMapper(Mapper):
 
 
     def find_all(self):
-        """Reads all tuple and returns them as an object"""
-        pass
+        """finde alle Module in der Datenbank"""
+        result = []
+
+        cursor = self._connection.cursor()
+
+        command = "SELECT id, name, edv_nr  FROM module"
+
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, name, edv_nr) in tuples:
+            modul = Modul()
+            modul.set_id(id)
+            modul.set_name(name)
+            modul.set_edv_nr(edv_nr)
+            result.append(modul)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
 
     def find_by_key(self):
         """Reads a tuple with a given ID"""

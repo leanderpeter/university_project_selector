@@ -16,6 +16,7 @@ from .db.ProjektMapper import ProjektMapper
 from .db.ProjektWartelisteMapper import ProjektWartelisteMapper
 from .bo.Teilnahme import Teilnahme
 from .db.ModulMapper import ModulMapper
+from .db.SemesterMapper import SemesterMapper
 
 
 
@@ -67,6 +68,11 @@ class ProjektAdministration(object):
         with StudentMapper() as mapper:
             return mapper.find_by_google_user_id(id)
 
+    def get_student_by_id(self, id):
+        '''read and return user with specific student id'''
+        with StudentMapper() as mapper:
+            return mapper.find_by_id(id)
+
     def get_all_users(self, ):
         pass
 
@@ -90,12 +96,23 @@ class ProjektAdministration(object):
         with ProjektMapper() as mapper:
             return mapper.find_projekt_by_id(projekt_id)
 
-    def get_projekt_by_zus(self, zus):
+    def get_projekt_by_zus(self):
         with ProjektMapper() as mapper:
-            return mapper.find_projekt_by_zustand(zus)
+            return mapper.find_granted()
 
 
     def get_alle_projekte(self):
+        pass
+        
+    def get_projekte_by_zustand(self, zustand_id):
+        with ProjektMapper() as mapper:
+            return mapper.find_projekte_by_zustand(zustand_id)
+
+    def set_zustand_at_projekt(self, projekt_id, zustand_id):
+        with ProjektMapper() as mapper:
+            return mapper.set_zustand_at_projekt(projekt_id,zustand_id)
+
+    def get_alle_projekte(self, ):
         """return alle Projekte """
         with ProjektMapper() as mapper:
             return mapper.find_all()
@@ -128,6 +145,14 @@ class ProjektAdministration(object):
     def create_bewertung(self, ):
         pass
 
+    def get_alle_semester(self):
+        with SemesterMapper() as mapper:
+            return mapper.find_all()
+
+    def get_alle_module(self):
+        with ModulMapper() as mapper:
+            return mapper.find_all()
+
     def get_module_by_projekt_id(self, projekt_id):
         with ModulMapper() as mapper:
             return mapper.find_by_projekt_id(projekt_id)
@@ -148,9 +173,15 @@ class ProjektAdministration(object):
         """ Alle Teilnamen des Users auslesen"""
         with TeilnahmeMapper() as mapper:
             return mapper.find_by_student_id(id)
+    
+    def get_teilnahmen_by_modul_und_semester(self, modul_id, semester_id):
+        """ Alle Teilnamen des Users auslesen"""
+        with TeilnahmeMapper() as mapper:
+            return mapper.find_by_modul_und_semester(modul_id, semester_id)
 
-    def delete_teilnahme(self, ):
-        pass
+    def delete_teilnahme(self, lehrangebotId, teilnehmerId):
+       with TeilnahmeMapper() as mapper:
+            return mapper.delete(lehrangebotId, teilnehmerId)
 
     def create_teilnahme(self, lehrangebotId, teilnehmerId):
         '''creat person'''

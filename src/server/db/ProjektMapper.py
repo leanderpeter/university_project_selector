@@ -32,7 +32,7 @@ class ProjektMapper(Mapper):
     def find_granted(self):
 
         result = []
-        granted = 2
+        granted = 'Neu'
         cursor = self._connection.cursor()
         cursor.execute(
             "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art from projekte WHERE aktueller_zustand={}".format(granted))
@@ -50,16 +50,29 @@ class ProjektMapper(Mapper):
 
         return result
 
-    def find_projekt_by_zustand(self, zus):
+    def set_zustand_at_projekt(self, projekt_id, zustand_id):
+        cursor = self._connection.cursor()
+        command = "UPDATE projekte SET aktueller_zustand = %s WHERE id = %s"
+        data = (zustand_id,projekt_id)
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+   
+    def find_projekte_by_zustand(self, zustand):
 
         result = []
         cursor = self._connection.cursor()
-        cursor.execute(
-            "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art from projekte WHERE aktueller_zustand={}".format(zus))
+        
+        command = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art from projekte WHERE aktueller_zustand = {}".format(zustand))
+        cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
              anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art) in tuples:
+            
             projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
                                           raum, sprache, dozent, aktueller_zustand, halbjahr, art)
@@ -70,17 +83,20 @@ class ProjektMapper(Mapper):
 
         return result
 
+
+
+
     def find_projekt_by_id(self, id):
         result = None
 
         cursor = self._connection.cursor()
 
-        command1 = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art FROM projekte WHERE id={}").format(id)
-        cursor.execute(command1)
-        tuples1 = cursor.fetchall()
+        command = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art FROM projekte WHERE id={}").format(id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
 
         try:
-            (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art) = tuples1[0]
+            (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art) = tuples[0]
             projekt = Projekt()
             projekt.set_id(id)
             projekt.set_name(name)

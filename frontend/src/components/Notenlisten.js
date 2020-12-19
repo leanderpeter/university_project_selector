@@ -11,7 +11,6 @@ import Select from '@material-ui/core/Select';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import NotenlistenEintrag from './NotenlistenEintrag';
-import ModulBO from '../api/ModulBO';
 
 
 class Notenlisten extends Component {
@@ -27,19 +26,74 @@ class Notenlisten extends Component {
 
 		//gebe einen leeren status
 		this.state = {
-			module: [],
-			filteredModule: [],
+      module: [],
+      semester: [],
+      filteredModule: [],
+      semesterwahl: null,
 			edvFilter: '',
 			error: null,
 			loadingInProgress: false,
 			expandedModulID: expandedID,
 			showModulform: false
 		};
-	}
+  }
+    // API Anbindung um alle Module vom Backend zu bekommen 
+    getModule = () => {
+      ElectivAPI.getAPI().getModule()
+      .then(modulBOs =>
+          this.setState({
+              module: modulBOs,
+              filteredModule: [...modulBOs],
+              error: null,
+              loadingInProgress: false,
+          })).catch(e =>
+              this.setState({
+                  module: [],
+                  error: e,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingTeilnahmeError: null
+      });
+  }
+
+    // API Anbindung um alle Module vom Backend zu bekommen 
+    getSemester = () => {
+      ElectivAPI.getAPI().getSemester()
+      .then(semesterBOs =>
+          this.setState({
+              semester: semesterBOs,
+              error: null,
+              loadingInProgress: false,
+          })).catch(e =>
+              this.setState({
+                  semester: [],
+                  error: e,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingTeilnahmeError: null
+      });
+  }
+
+  handleChange = (semester) => {
+    this.setState({
+      semesterwahl: semester.target.value,
+      expandedModulID: null
+    })
+    setTimeout(() => {
+      console.log('Ausgewählte Semester ID:',this.state.semesterwahl)
+    }, 500);
+  };
 
 	// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 	componentDidMount() {
-        
+    this.getModule();
+    this.getSemester();
 	}
 
   onExpandedStateChange = modul => {
@@ -52,47 +106,66 @@ class Notenlisten extends Component {
       expandedModulID: newID,
     });
   }
+
+
+  filterFieldValueChange = event => {
+    const value = event.target.value.toString();
+    this.setState({
+      filteredModule: this.state.module.filter(modul => {
+        let modulContainsValue = modul.getEdv_nr().toString().includes(value);
+        return modulContainsValue;
+      }),
+      edvFilter: value,
+      expandedModulID: null
+    });
+  }
+
+  clearFilterFieldButtonClicked = () => {
+    this.setState({
+      filteredModule: [...this.state.module],
+      edvFilter: ''
+    });
+  }
     
 
 	/** Renders the component */
 	render() {
-
-    function createData (id, name, edv_nr){
-      var a = new ModulBO();
-      a.setID(id);
-      a.setname(name);
-      a.setEdv_nr(edv_nr);
-      return a;
-    }
-
-    const module = [
-      createData(131, 'Transdisziplinäres Projekt', 33466),
-      createData(231, 'Transdisziplinäres Projekt 2', 55367),
-      createData(313, 'Projekt', 43654)
-    ];
     
     const { classes } = this.props;
-    const { filteredModule, edvFilter,  expandedModulID, loadingInProgress, error } = this.state;
+    const { module, semester, semesterwahl, filteredModule, edvFilter,  expandedModulID, loadingInProgress, error } = this.state;
     return (
     <div className={classes.root}>
         <Grid className={classes.header} container spacing={1} justify='flex-start' alignItems='space-between'>
           <Grid item xs={2}>
+          {
+            semester ?
+            <FormControl className={classes.formControl}>
+              <InputLabel>Semester</InputLabel> 
+                <Select value = {semester.id} onChange={this.handleChange}>
+                  {
+                  semester.map(semester =>
+                  <MenuItem value={semester.getID()}><em>{semester.getname()}</em></MenuItem>
+                  )
+                  }
+                </Select>                                                                
+              </FormControl>                                  
+            :
             <FormControl className={classes.formControl}>
               <InputLabel>Semester</InputLabel>
                 <Select value="">
-                  <MenuItem value=""><em>Noch nicht benotet</em></MenuItem>
+                  <MenuItem value=""><em>Semester noch nicht geladen</em></MenuItem>
                 </Select>
             </FormControl>
+          }
           </Grid>
           <Grid item xs></Grid>
-          <Grid item className={classes.test}>
+          <Grid item className={classes.filter}>
               <Typography>
               Filter Notenlisten nach EDV-Nummer:
               </Typography>
           </Grid>
-          <Grid item xs={2} className={classes.test}>
+          <Grid item xs={2} className={classes.filter}>
               <TextField
-              autoFocus
               fullWidth
               id='edvFilter'
               type='text'
@@ -109,13 +182,12 @@ class Notenlisten extends Component {
           </Grid>
         </Grid>
         {
-          module.map(modul =>
-          <NotenlistenEintrag key={modul.id} modul = {modul} expandedState={expandedModulID === modul.getID()} onExpandedStateChange={this.onExpandedStateChange}/>
+          filteredModule.map(modul =>
+          <NotenlistenEintrag key={modul.getID()} modul = {modul} semesterwahl = {semesterwahl} expandedState={expandedModulID === modul.getID()} onExpandedStateChange={this.onExpandedStateChange}/>
           )
         }
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`} onReload={this.getProjekte} />
-        
     </div>
     );
     }
@@ -133,7 +205,7 @@ const styles = theme => ({
   formControl: {
     minWidth: 150,
   },
-  test: {
+  filter: {
     marginTop: theme.spacing(2)
   }
 });

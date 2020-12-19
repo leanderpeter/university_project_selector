@@ -131,7 +131,7 @@ class Projekt(NamedBusinessObject, Automat):
 
     def __str__(self):
         '''Create and return simple string of the BO'''
-        return "Projekt: {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}".format(
+        return "Projekt: {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, '{}'".format(
                                                                               self._max_teilnehmer,
                                                                               self._projektbeschreibung,
                                                                               self._betreuer, 

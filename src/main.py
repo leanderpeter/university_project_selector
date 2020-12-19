@@ -84,8 +84,15 @@ bewertung = api.inherit('Bewertung', bo, {
     'note': fields.Float(attribute='_note', description='Die Note der Teilnahme'),
 })
 
+bewertung = api.inherit('Bewertung', bo, {
+    'note': fields.Float(attribute='_note', description='Die Note der Teilnahme'),
+})
+
 modul = api.inherit('Modul', nbo, {
     'edv_nr': fields.Integer(attribute='_edv_nr', description='Die EDV Nummer eines Moduls'),
+})
+
+semester = api.inherit('Semester', nbo, {
 })
 
 @electivApp.route('/projekte')
@@ -96,7 +103,10 @@ class ProjektListeOperationen(Resource):
 
     def get(self):
         adm = ProjektAdministration()
-        projekte = adm.get_granted_projekte()
+        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
+        zus = "Neu"
+        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
+        projekte = adm.get_projekte_by_zustand('"{}"'.format(zus))
         return projekte
 
     def delete(self, projekt_id):
@@ -104,6 +114,31 @@ class ProjektListeOperationen(Resource):
 
     def put(self, projekt_id):
         pass
+
+@electivApp.route('/projekte/zustand/<string:id>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class Projektverwaltungoperation(Resource):
+    @electivApp.marshal_list_with(projekt)
+    @secured
+
+    def get(self, id):
+        adm = ProjektAdministration()
+        projekte = adm.get_projekte_by_zustand('"{}"'.format(id))
+        print(projekte)
+        return projekte
+
+@electivApp.route('/projekte/zustand')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class Projektverwaltungzustandoperation(Resource):
+    @electivApp.marshal_list_with(projekt)
+    @secured
+
+    def put(self):
+        projektId = request.args.get("projektId")
+        zustandId = request.args.get("zustandId")
+        adm = ProjektAdministration()
+        projekte = adm.set_zustand_at_projekt(projektId,zustandId)
+        return projekte
 
 @electivApp.route('/projekt/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -159,7 +194,7 @@ class PersonOperationen(Resource):
         pass
 
 
-@electivApp.route('/student/<string:google_user_id>')
+@electivApp.route('/studentbygoogle/<string:google_user_id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class StudentByGoogleIDOperationen(Resource):
     @electivApp.marshal_list_with(student)
@@ -177,22 +212,43 @@ class StudentByGoogleIDOperationen(Resource):
         pass
 
 
+@electivApp.route('/student/<int:id>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class StudentOperationen(Resource):
+    @electivApp.marshal_list_with(student)
+    @secured
+
+    def get(self, id):
+        adm = ProjektAdministration()
+        student = adm.get_student_by_id(id)
+        return student
+
+    def delete(self, student_id):
+        pass
+
+    def put(self, student_id):
+        pass
+
+
 @electivApp.route('/teilnahme')
 @electivApp.response(500, 'Something went wrong')
 class TeilnahmeOperationen(Resource):
     def get(self, teilname_id):
         pass
 
-    def delete(self, teilnahme_id):
-        pass
+    def delete(self):
+        lehrangebotId = request.args.get("lehrangebotId")
+        teilnehmerId = request.args.get("teilnehmerId")
+        projektAdministration = ProjektAdministration()
+        projektAdministration.delete_teilnahme(lehrangebotId, teilnehmerId)
 
-    def put(self):
+    def post(self):
         lehrangebotId = request.args.get("lehrangebotId")
         teilnehmerId = request.args.get("teilnehmerId")
         projektAdministration = ProjektAdministration()
         projektAdministration.create_teilnahme(lehrangebotId, teilnehmerId)
 
-
+"""Wieso teilnahme2? Mach doch einfach /teilnahme/<int:id>"""
 @electivApp.route('/teilnahme2/<int:id>')
 @electivApp.response(500, 'Something went wrong')
 class Teilnahme2Operationen(Resource):
@@ -200,7 +256,7 @@ class Teilnahme2Operationen(Resource):
         pass
 
     def delete(self, teilnahme_id):
-        pass
+        pass  
 
     @electivApp.marshal_with(teilnahme)
     @electivApp.expect(teilnahme, validate=True)
@@ -215,6 +271,16 @@ class Teilnahme2Operationen(Resource):
             return '', 200
         else:
             return '', 500
+
+@electivApp.route('/teilnahmen/<int:modul_id>/<int:semester_id>')
+@electivApp.response(500, 'Something went wrong')
+class TeilnahmenByModulundSemesterOperationen(Resource):
+    @electivApp.marshal_list_with(teilnahme)
+
+    def get(self, modul_id, semester_id):
+        adm = ProjektAdministration()
+        teilnahmen = adm.get_teilnahmen_by_modul_und_semester(modul_id, semester_id)
+        return teilnahmen
 
 @electivApp.route('/bewertung/<int:id>')
 @electivApp.response(500, 'Something went wrong')
@@ -233,7 +299,7 @@ class BewertungOperationen(Resource):
     def put(self, bewertung_id):
         pass
 
-@electivApp.route('/module/<int:projekt_id>')
+@electivApp.route('/modul/<int:projekt_id>')
 @electivApp.response(500, 'Something went wrong')
 class ModulByProjektIDOperationen(Resource):
     @electivApp.marshal_list_with(modul)
@@ -249,6 +315,41 @@ class ModulByProjektIDOperationen(Resource):
 
     def put(self, id):
         pass
+
+@electivApp.route('/module')
+@electivApp.response(500, 'Something went wrong')
+class ModulOperationen(Resource):
+    @electivApp.marshal_list_with(modul)
+    @secured
+
+    def get(self):
+        adm = ProjektAdministration()
+        module = adm.get_alle_module()
+        return module
+
+    def delete(self, id):
+        pass
+
+    def put(self, id):
+        pass
+
+@electivApp.route('/semester')
+@electivApp.response(500, 'Something went wrong')
+class SemesterOperationen(Resource):
+    @electivApp.marshal_list_with(semester)
+    @secured
+
+    def get(self):
+        adm = ProjektAdministration()
+        semester = adm.get_alle_semester()
+        return semester
+
+    def delete(self, id):
+        pass
+
+    def put(self, id):
+        pass
+
 
 
 @electivApp.route('/projektePending')

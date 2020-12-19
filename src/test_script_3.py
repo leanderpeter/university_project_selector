@@ -9,8 +9,8 @@ from test_script_2 import Projekt, Zustand
 
 p = Projekt()
 
-p.set_aktueller_zustand(Zustand('Was'))
-print(str(p.get_aktueller_zustand()))
+p.set_aktueller_zustand(Zustand('Unfertig 1/2'))
+print('"{}"'.format(str(p.get_aktueller_zustand())))
 
-print(type(p.get_aktueller_zustand()))
+print('"{}"'.format(type(p.get_aktueller_zustand())))
 
