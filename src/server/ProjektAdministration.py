@@ -131,6 +131,21 @@ class ProjektAdministration(object):
         with TeilnahmeMapper() as mapper:
             return mapper.find_by_student_id(id)
 
+
+    def get_teilnahmen_by_projekt_id(self, id):
+        """ Alle Teilnamen des Users auslesen"""
+        with TeilnahmeMapper() as mapper:
+            return mapper.find_by_projekt_id(id)
+    
+    def get_students_by_projekt_id(self, id):
+        """ Alle teilnehmenden Studenten des Projekts auslesen"""
+        teilnahmen = self.get_teilnahmen_by_projekt_id(id)
+        students = []
+        for teilnahme in teilnahmen:  
+            with StudentMapper() as mapper:
+                students.append(mapper.find_by_id(teilnahme.get_teilnehmer()))
+        return students
+
     def delete_teilnahme(self, ):
         pass
 

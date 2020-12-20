@@ -48,8 +48,11 @@ export default class ElectivAPI {
 	#getModule_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/module/${id}`;
 
 
-	//Teilnehmer eines Projekts bekommen
-    #getTeilnahmen_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/projektteilnehmer/${id}}`
+	//Studenten eines Projekts bekommen
+	#getStudentenByProjektIdURL = (id) => `${this.#ElectivServerBaseURL}/student/projekt/${id}`
+	
+	//Teilnahmen eines Projekts bekommen
+    #getTeilnahmenByProjektIdURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/projekt/${id}`
   
 
 
@@ -161,8 +164,17 @@ export default class ElectivAPI {
 			})
 		})
 	}
-	getTeilnahmen_by_projekt_id(id){
-		return this.#fetchAdvanced(this.#getTeilnahmen_by_projekt_idURL(id)).then((responseJSON) => {
+	getStudentenByProjektId(id){
+		return this.#fetchAdvanced(this.#getStudentenByProjektIdURL(id)).then((responseJSON) => {
+			let studentBOs = StudentBO.fromJSON(responseJSON);
+			console.info(studentBOs)
+			return new Promise(function (resolve){
+				resolve(studentBOs)
+			})
+		})
+	}
+	getTeilnahmenByProjektId(id){
+		return this.#fetchAdvanced(this.#getTeilnahmenByProjektIdURL(id)).then((responseJSON) => {
 			let teilnahmeBOs = TeilnahmeBO.fromJSON(responseJSON);
 			console.info(teilnahmeBOs)
 			return new Promise(function (resolve){

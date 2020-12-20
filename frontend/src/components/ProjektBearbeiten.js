@@ -64,22 +64,13 @@ class ProjektBearbeiten extends Component {
     constructor(props){
         super(props);
 
-        let expandedID = null;
-
-        if (this.props.location.expandTeilnahme){
-            expandedID = this.props.location.expandTeilnahme.getID();
-        }
-
-
         this.state = {
-            teilnahmen : [],
+            teilnahmen:[],
             projekte:[],
-            teilnehmer:[],
-            currentStudentName: null,
-            currentStudentmat_nr: null,
+            currentProjekt: 0,
             error: null,
             loadingInProgress: false, 
-            expandedTeilnahmeID: expandedID,
+            
         };
     }
     
@@ -103,87 +94,62 @@ class ProjektBearbeiten extends Component {
           loadingProjekteError: null
       });
     }
-    // API Anbindung um Projekte vom Backend zu bekommen 
-    getTeilnahmen = () => {
-      ElectivAPI.getAPI().getTeilnahmen(this.props.currentStudent.id)
-      .then(teilnahmeBOs =>
-          this.setState({
-              teilnahmen: teilnahmeBOs,
-              error: null,
-              loadingInProgress: false,
-          })).catch(e =>
-              this.setState({
-                  teilnahme: [],
-                  error: e,
-                  loadingInProgress: false,
-              }));
+
+    getStudentenByProjektId=()=>{
+      ElectivAPI.getAPI().getStudentenByProjektId(this.state.currentProjekt)
+      .then(studentBOs =>
+        this.setState({
+            studenten: studentBOs,
+            error: null,
+            loadingInProgress: false,
+        })).catch(e =>
+            this.setState({
+                student: [],
+                error: e,
+                loadingInProgress: false,
+            }));
       this.setState({
           error: null,
           loadingInProgress: true,
-          loadingTeilnahmeError: null
+          loadingProjekteError: null
       });
-}
+    }
+
+    getTeilnahmenByProjektId=()=>{
+      ElectivAPI.getAPI().getTeilnahmenByProjektId(this.state.currentProjekt)
+      .then(teilnahmeBOs =>
+        this.setState({
+            teilnahmen: teilnahmeBOs,
+            error: null,
+            loadingInProgress: false,
+        })).catch(e =>
+            this.setState({
+                teilnahme: [],
+                error: e,
+                loadingInProgress: false,
+            }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingProjekteError: null
+      });
+    }
+    
 
 componentDidMount() {
   this.getProjekte();
-  this.getTeilnahmen();
-  this.setState({
-      currentStudentName: this.props.currentStudent.getname(),
-      currentStudentmat_nr: this.props.currentStudent.getmat_nr(),
-  })
+  
+  
 }
-handleChange = (projekt) => {
+handleChange = fieldname => (event) => {
   this.setState({
-    projektwahl: projekt.target.value,
-    expandedProjektID: null
+    [fieldname]:event.target.value
   })
-  setTimeout(() => {
-    console.log('Ausgewählte Projekt ID:',this.state.projektwahl)
-  }, 500);
+  console.log(this.state)
+  this.getStudentenByProjektId()
+  this.getTeilnahmenByProjektId()
 };
 
-
-
-
-
-
-
-  
-
-onExpandedStateChange = teilnahme => {
-  //  Zum anfang Teilnahme Eintrag = null
-  let newID = null;
-
-  // Falls ein Objekt geclicket wird, collapse
-  if (teilnahme.getID() !== this.state.expandedTeilnahmeID) {
-    // Oeffnen mit neuer Teilnahme ID
-    newID = teilnahme.getID()
-  }
-  this.setState({
-    expandedTeilnahmeID: newID,
-  });
-
-}
-
-
-    
-
-
-onExpandedStateChange = projekt => {
-  let newID = null;
-  
-  if (projekt.getID() !== this.state.expandedProjektID) {
-    newID = projekt.getID()
-  }
-  this.setState({
-    expandedProjektID: newID,
-  });
-}
-
-    
-
-
-    
 
 
 
@@ -193,7 +159,7 @@ onExpandedStateChange = projekt => {
         
         
         const { classes } = this.props;
-        const { teilnahmen,projekte, currentStudentName, currentStudentmat_nr, expandedTeilnahmeID, error, loadingInProgress} = this.state;
+        const { projekte, currentStudentName, teilnahmen, currentStudentmat_nr, error, loadingInProgress} = this.state;
         
         return(
             <div className={classes.root}>
@@ -203,7 +169,7 @@ onExpandedStateChange = projekt => {
                 <Typography>Projekte von {currentStudentName}</Typography>
                 <FormControl className={classes.formControl}>
                                 <InputLabel id="demo-simple-select-label">Projekt</InputLabel>
-                                <Select value = {projekt.id} onChange={this.handleChange}>
+                                <Select value = {projekt.id} onChange={this.handleChange("currentProjekt")}>
                                   {
                                   projekte.map(projekt =>
                                   <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
@@ -223,16 +189,14 @@ onExpandedStateChange = projekt => {
                             </StyledTableRow>
                         </TableHead>
                         <TableBody>
-                            {
-                                teilnahmen.map(teilnahme => 
-                                    <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme} expandedState={expandedTeilnahmeID === teilnahme.getID()}
-                                    onExpandedStateChange={this.onExpandedStateChange}
-                                    show={this.props.show}
-                                />) 
-                            }
-                        
+                           
                             <TableRow >
-                              
+                            {
+                              teilnahmen.map(teilnahme =>
+                              <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme}  />
+                              )
+                            }
+
                               
                               
                             </TableRow>
