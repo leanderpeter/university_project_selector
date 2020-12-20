@@ -18,9 +18,9 @@ import Select from '@material-ui/core/Select';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import TableFooter from '@material-ui/core/TableFooter';
+
+//import Component
 import ModulEintrag from './ModulEintrag';
-
-
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -46,40 +46,91 @@ class ProjektBearbeitenEintrag extends Component {
         super(props);
 
         this.state = {
+            modul: props.modul,
+            teilnahmen : [],
             projekt: null,
             projektID: null,
             projektName: null,
-            module: null,
             studentName: null,
+            dozentName: null,
             note: null,
             loadingInProgress: false,
             error: null
         };
     }
 
+  // Handles events wenn sich der status der oeffnung aendert
+  expansionPanelStateChanged = () => {
+    this.props.onExpandedStateChange(this.props.projekt);
+    this.getTeilnahmen_by_projekt();
+    console.log(this.props.projekt.getID(),'Projekt')
+  }
+
+  // Kummert sich um das close event vom ProjektForm
+  projektFormClosed = (projekt) => {
+    if ( projekt ) {
+      this.setState({
+        projekt: projekt,
+        showProjektForm: false
+      });
+    }else {
+      this.setState({
+        showprojektForm: false
+      });
+    }
+  }
 
     //Noch zu tun:  projektBO soll kein Array sein. Die 2 Funktionen sollen nacheinander aufgerufen werden
     
-    getStudent = (google_user_id) => {
-      ElectivAPI.getAPI().getStudent(this.props.teilnahme.teilnehmer)
-      .then(studentBO =>
-        this.setState({
-            studentName: studentBO.getname(),
-            error: null,
-            loadingInProgress: false,
-        }))
-        .catch(e =>
+    getTeilnahmen_by_projekt = () => {
+        ElectivAPI.getAPI().getTeilnahmen_by_projekt(this.props.projekt.getID())
+        .then(teilnahmeBOs =>
             this.setState({
-                studentName: null,
-                error: e,
+                teilnahmen: teilnahmeBOs,
+                error: null,
                 loadingInProgress: false,
-            }));
-    this.setState({
-        error: null,
-        loadingInProgress: true
-    });
+            })).catch(e =>
+                this.setState({
+                    teilnahmen: [],
+                    error: e,
+                    loadingInProgress: false,
+                }));
+        this.setState({
+            error: null,
+            loadingInProgress: true,
+            loadingTeilnahmeError: null
+        });
+      }
+    
+    getProjekt = () => {
+      ElectivAPI.getAPI().getProjekt(this.props.teilnahme.lehrangebot)
+      .then(projektBO =>
+          this.setState({
+            projekt: projektBO[0],
+            projektID: projektBO[0].id,
+            projektName: projektBO[0].name,
+            loadingInProgress: false,
+            error: null,
+          })).then(()=>{
+            this.getPerson()
+            this.getBewertung()
+            this.getStudent()
+          })
+          .catch(e =>
+              this.setState({
+                projekt: null,
+                projektID: null,
+                projektName: null,
+                loadingInProgress: false,
+                error: e,
+              }));
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
     }
 
+    
     getBewertung = () => {
       ElectivAPI.getAPI().getBewertung(this.props.teilnahme.resultat)
       .then(bewertungBO =>
@@ -100,17 +151,17 @@ class ProjektBearbeitenEintrag extends Component {
       });
     }
 
-    getModule_by_projekt_id = () => {
-      ElectivAPI.getAPI().getModule_by_projekt_id(this.state.projektID)
-      .then(modulBOs =>
+    getStudent = () => {
+      ElectivAPI.getAPI().getStudent(this.state.teilnahme.teilnehmer)
+      .then(studentBO =>
           this.setState({
-              module: modulBOs,
+              studentName: studentBO.getname(),
               error: null,
               loadingInProgress: false,
           }))
           .catch(e =>
               this.setState({
-                  module: null,
+                  studentName: null,
                   error: null,
                   loadingInProgress: false,
               }));
@@ -154,36 +205,16 @@ class ProjektBearbeitenEintrag extends Component {
 
     render(){
         const {classes, expandedState} = this.props;
-        const {  projekt, projektID, projektName, module, studentName, note, loadingInProgress, error } = this.state;
+        const {  projekt, projektID, projektName, studentName, dozentName, note, loadingInProgress, error } = this.state;
 
         return(
               <StyledTableRow key={projektID}>
-                <StyledTableCell component="th" scope="row">{projektName}</StyledTableCell>
-                <StyledTableCell align="center">{studentName}</StyledTableCell> 
+                <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
+                <StyledTableCell align="center">{dozentName}</StyledTableCell> 
                 <StyledTableCell align="center">{note}</StyledTableCell> 
-                <StyledTableCell align="center">
-                    <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-controlled-open-select-label">EDV-Nummer</InputLabel>
-                            <Select>
-                                <MenuItem value=""><em>-</em></MenuItem>
-                                {
-                                  module ?
-                                  <>
-                                    {
-                                    module.map(modul =>
-                                    <ModulEintrag key={modul.getID()} modul = {modul}
-                                    onExpandedStateChange={this.onExpandedStateChange}
-                                    show={this.props.show}/>
-                                    )
-                                    }
-                                  </>
-                                  :
-                                  <>
-                                  </>
-                                
-                                }
-                            </Select>
-                    </FormControl>
+                <StyledTableCell align="center"><Button style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" >entfernen</Button>
+                              
+                    
                 </StyledTableCell>
                   <LoadingProgress show={loadingInProgress}></LoadingProgress>
                   <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Projekt konnte nicht geladen werden'} onReload={this.getPerson} />

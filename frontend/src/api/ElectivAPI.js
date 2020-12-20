@@ -48,6 +48,9 @@ export default class ElectivAPI {
 	#getModule_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/module/${id}`;
 
 
+	//Teilnehmer eines Projekts bekommen
+    #getTeilnahmen_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/projektteilnehmer/${id}}`
+  
 
 
 	/*
@@ -158,4 +161,16 @@ export default class ElectivAPI {
 			})
 		})
 	}
+	getTeilnahmen_by_projekt_id(id){
+		return this.#fetchAdvanced(this.#getTeilnahmen_by_projekt_idURL(id)).then((responseJSON) => {
+			let teilnahmeBOs = TeilnahmeBO.fromJSON(responseJSON);
+			console.info(teilnahmeBOs)
+			return new Promise(function (resolve){
+				resolve(teilnahmeBOs)
+			})
+		})
+	}
 }
+
+	
+

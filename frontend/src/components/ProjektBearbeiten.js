@@ -55,7 +55,7 @@ const projekt=[
     name: 'Organisation'},
 
 ]
-  
+
 
 
 
@@ -82,6 +82,7 @@ class ProjektBearbeiten extends Component {
             expandedTeilnahmeID: expandedID,
         };
     }
+    
     //AO`PI Anbindung: erstes Dropdown der Seite, um die Projekte des Dozenten zu erhalten
     getProjekte=()=>{
       ElectivAPI.getAPI().getProjekte()
@@ -102,11 +103,9 @@ class ProjektBearbeiten extends Component {
           loadingProjekteError: null
       });
     }
-
-
-    // API Anbindung um Studenten von den Projekten vom Backend zu bekommen 
+    // API Anbindung um Projekte vom Backend zu bekommen 
     getTeilnahmen = () => {
-      ElectivAPI.getAPI().getTeilnahmen(this.props.currentProjekt.id)
+      ElectivAPI.getAPI().getTeilnahmen(this.props.currentStudent.id)
       .then(teilnahmeBOs =>
           this.setState({
               teilnahmen: teilnahmeBOs,
@@ -127,8 +126,48 @@ class ProjektBearbeiten extends Component {
 
 componentDidMount() {
   this.getProjekte();
-  
+  this.getTeilnahmen();
+  this.setState({
+      currentStudentName: this.props.currentStudent.getname(),
+      currentStudentmat_nr: this.props.currentStudent.getmat_nr(),
+  })
 }
+handleChange = (projekt) => {
+  this.setState({
+    projektwahl: projekt.target.value,
+    expandedProjektID: null
+  })
+  setTimeout(() => {
+    console.log('Ausgewählte Projekt ID:',this.state.projektwahl)
+  }, 500);
+};
+
+
+
+
+
+
+
+  
+
+onExpandedStateChange = teilnahme => {
+  //  Zum anfang Teilnahme Eintrag = null
+  let newID = null;
+
+  // Falls ein Objekt geclicket wird, collapse
+  if (teilnahme.getID() !== this.state.expandedTeilnahmeID) {
+    // Oeffnen mit neuer Teilnahme ID
+    newID = teilnahme.getID()
+  }
+  this.setState({
+    expandedTeilnahmeID: newID,
+  });
+
+}
+
+
+    
+
 
 onExpandedStateChange = projekt => {
   let newID = null;
@@ -184,19 +223,21 @@ onExpandedStateChange = projekt => {
                             </StyledTableRow>
                         </TableHead>
                         <TableBody>
+                            {
+                                teilnahmen.map(teilnahme => 
+                                    <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme} expandedState={expandedTeilnahmeID === teilnahme.getID()}
+                                    onExpandedStateChange={this.onExpandedStateChange}
+                                    show={this.props.show}
+                                />) 
+                            }
                         
-            <TableRow >
-              <TableCell>   
-                  <Button style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" >entfernen</Button>
-              </TableCell>
-              
-              
-            </TableRow>
+                            <TableRow >
+                              
+                              
+                              
+                            </TableRow>
             
-            
-        
-                     
-            </TableBody>
+                        </TableBody>
                         
                     </Table>
                     <LoadingProgress show={loadingInProgress} />
