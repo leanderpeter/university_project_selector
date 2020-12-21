@@ -32,14 +32,14 @@ class ProjektverwaltungListeEintrag extends Component {
     //Logik fuer annehmen Button
     this.setState({ projektAnnehmenButton: true });
     this.setState({ projektAblehnenButton: true });
-    ElectivAPI.getAPI().setZustandAtProjekt(this.props.projekt.id, 2);
+    ElectivAPI.getAPI().setZustandAtProjekt(this.props.projekt.id, "Genehmigt");
   }
 
   ablehnenButtonClicked = event => {
     //Logik fuer ablehnen Button
     this.setState({ projektAnnehmenButton: true });
     this.setState({ projektAblehnenButton: true });
-    ElectivAPI.getAPI().setZustandAtProjekt(this.props.projekt.id, 4);
+    ElectivAPI.getAPI().setZustandAtProjekt(this.props.projekt.id, "Abgelehnt");
   }
 
 

@@ -59,7 +59,6 @@ class ProjektMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-        return result
    
     def find_projekte_by_zustand(self, zustand):
 
