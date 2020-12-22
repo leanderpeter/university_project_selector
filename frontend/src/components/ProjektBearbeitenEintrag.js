@@ -47,9 +47,9 @@ class ProjektBearbeitenEintrag extends Component {
 
         this.state = {
             teilnahmen : [],
-            student: new StudentBO("", ""),
-            studentID: null,
             studentName: null,
+            mat_nr: null,
+            note: null,
             loadingInProgress: false,
             error: null
         };
@@ -62,9 +62,8 @@ class ProjektBearbeitenEintrag extends Component {
         ElectivAPI.getAPI().getStudentById(this.props.teilnahme.getteilnehmer())
         .then(studentBO =>
             this.setState({
-              student: studentBO[0],
-              studentID: studentBO[0].id,
-              studentName: studentBO[0].name,
+              studentName: studentBO.getname(),
+              mat_nr:studentBO.getmat_nr(),
               loadingInProgress: false,
               error: null,
             })).then(()=>{
@@ -85,6 +84,26 @@ class ProjektBearbeitenEintrag extends Component {
       }
     
     
+    getBewertung = () => {
+        ElectivAPI.getAPI().getBewertung(this.props.teilnahme.resultat)
+        .then(bewertungBO =>
+            this.setState({
+                note: bewertungBO.getnote(),
+                error: null,
+                loadingInProgress: false,
+            }))
+            .catch(e =>
+                this.setState({
+                    note: null,
+                    error: null,
+                    loadingInProgress: false,
+                }));
+        this.setState({
+            error: null,
+            loadingInProgress: true
+        });
+      }
+    
 
     
     
@@ -93,6 +112,8 @@ class ProjektBearbeitenEintrag extends Component {
 
     componentDidMount() {
       this.getStudentById();
+      this.getBewertung();
+      
     }
 
     
@@ -100,13 +121,13 @@ class ProjektBearbeitenEintrag extends Component {
 
     render(){
         const {classes, expandedState} = this.props;
-        const {  student, studentID, studentName,  loadingInProgress, error } = this.state;
+        const {studentName, mat_nr, note,  loadingInProgress, error } = this.state;
 
         return(
-              <StyledTableRow key={studentID}>
+              <StyledTableRow >
                 <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
-                <StyledTableCell align="center"></StyledTableCell> 
-                <StyledTableCell align="center"></StyledTableCell> 
+                <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
+                <StyledTableCell align="center">{note}</StyledTableCell> 
                 <StyledTableCell align="center"><Button style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" >entfernen</Button>
                               
                     

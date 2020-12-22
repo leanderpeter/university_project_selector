@@ -58,7 +58,7 @@ class ProjektBearbeiten extends Component {
         this.state = {
             teilnahmen:[],
             projekte:[],
-            "currentProjekt": 0,
+            "currentProjekt": null,
             error: null,
             loadingInProgress: false, 
             
@@ -118,12 +118,16 @@ componentDidMount() {
   
   
 }
-handleChange = fieldname => (event) => {
+handleChange = currentProjekt => (event) => {
   this.setState({
-    [fieldname]:event.target.value
+    currentProjekt:event.target.value
   })
-  console.log(this.state)
+  setTimeout(()=>{
+
+  },500);
+
   this.getTeilnahmenByProjektId()
+  console.log(this.state)
 };
 
 
@@ -145,7 +149,7 @@ handleChange = fieldname => (event) => {
                 <Typography>Projekte von {currentProjekt}</Typography>
                 <FormControl className={classes.formControl}>
                                 <InputLabel id="demo-simple-select-label">Projekt</InputLabel>
-                                <Select  onChange={this.handleChange("currentProjekt")}>
+                                <Select value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
                                   {
                                   projekte.map(projekt =>
                                   <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
@@ -166,17 +170,14 @@ handleChange = fieldname => (event) => {
                         </TableHead>
                         <TableBody>
                            
-                            <TableRow >
+                            
                             {
                               teilnahmen.map(teilnahme =>
                               <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme}  />
                               )
                             }
 
-                              
-                              
-                            </TableRow>
-            
+                    
                         </TableBody>
                         
                     </Table>
