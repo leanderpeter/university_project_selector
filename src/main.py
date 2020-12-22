@@ -359,7 +359,10 @@ class ProjektGenehmigungOperation(Resource):
     @electivApp.marshal_list_with(projekt)
     def get(self):
         adm = ProjektAdministration()
-        projekte = adm.get_alle_pending_projekte()
+        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
+        zus = "Neu"
+        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
+        projekte = adm.get_projekte_by_zustand('"{}"'.format(zus))
         return projekte
 
     def delete(self):
