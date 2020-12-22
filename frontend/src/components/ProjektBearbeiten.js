@@ -141,10 +141,10 @@ handleChange = currentProjekt => (event) => {
                 <Paper>
                 
                 
-                <Typography>Projekte von {currentProjekt}</Typography>
-                <FormControl className={classes.formControl}>
-                                <InputLabel id="demo-simple-select-label">Projekt</InputLabel>
-                                <Select value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
+                <Typography style={{marginTop:"2%",textAlign:"center",position: "relative",}} >Projektname:
+                <FormControl style={{paddingLeft: "5px",paddingRight:"50px"}}className={classes.formControl}>
+                
+                                <Select   style={{display:"flex", minWidth:"5rem",paddingRight:"10px", paddingLeft:"10px",}} value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
                                   {
                                   projekte.map(projekt =>
                                   <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
@@ -153,7 +153,9 @@ handleChange = currentProjekt => (event) => {
                                 </Select>                                                                
 
                 </FormControl>
-                <TableContainer component={Paper}>
+                Projekt ID: {currentProjekt}
+                </Typography>
+                <TableContainer component={Paper} style={{marginTop:"5%", marginBottom:"5%"}}>
                     <Table className={classes.table} aria-label="customized table">
                         <TableHead>
                             <StyledTableRow>
