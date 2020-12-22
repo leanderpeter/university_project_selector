@@ -86,8 +86,8 @@ class ProjektBearbeiten extends Component {
       });
     }
 
-    getTeilnahmenByProjektId=()=>{
-      ElectivAPI.getAPI().getTeilnahmenByProjektId(this.state.currentProjekt)
+    getTeilnahmenByProjektId=(id)=>{
+      ElectivAPI.getAPI().getTeilnahmenByProjektId(id)
       .then(teilnahmeBOs =>
         this.setState({
             
@@ -122,12 +122,7 @@ handleChange = currentProjekt => (event) => {
   this.setState({
     currentProjekt:event.target.value
   })
-  setTimeout(()=>{
-
-  },500);
-
-  this.getTeilnahmenByProjektId()
-  console.log(this.state)
+  this.getTeilnahmenByProjektId(event.target.value)
 };
 
 
@@ -157,7 +152,7 @@ handleChange = currentProjekt => (event) => {
                                   }
                                 </Select>                                                                
 
-                            </FormControl>
+                </FormControl>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="customized table">
                         <TableHead>
@@ -185,19 +180,7 @@ handleChange = currentProjekt => (event) => {
                     <ContextErrorMessage error={error} contextErrorMsg = {'Meine Projekte konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
                 </TableContainer>
 
-                <TableContainer component={Paper}>
-                    <Table >
-                        <TableHead>
-                            <TableRow>
-                            
-                                <TableCell align="center"><TextField  label="Name" variant="outlined" /></TableCell>
-                                <TableCell align="center"><TextField label="Matrikelnummer" variant="outlined" /></TableCell>
-                                <TableCell align="center"><TextField  label="Note" variant="outlined" /></TableCell>
-                                <Button style={{backgroundColor:"lightblue", display:"flex",margin:"auto",}} variant="contained" >hinzufügen</Button>
-                            </TableRow>
-                        </TableHead>
-                    </Table>
-            </TableContainer>
+                
             
             <Button style={{backgroundColor:"lightgrey", display:"flex",margin:"auto", }} variant="contained" >speichern</Button>
               
