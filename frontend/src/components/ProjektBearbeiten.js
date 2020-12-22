@@ -45,16 +45,7 @@ const StyledTableRow = withStyles((theme) => ({
     },
   }))(TableRow);
 
-  //muss irwo noch defined werden, so geht es ist aber glaub falsch
-const projekt=[
-    {value:10,
-    name: 'Software Engineering'},
-    {value:20,
-    name:'Marketing'},
-    {value:30,
-    name: 'Organisation'},
 
-]
 
 
 
@@ -67,7 +58,7 @@ class ProjektBearbeiten extends Component {
         this.state = {
             teilnahmen:[],
             projekte:[],
-            currentProjekt: 0,
+            "currentProjekt": 0,
             error: null,
             loadingInProgress: false, 
             
@@ -95,34 +86,17 @@ class ProjektBearbeiten extends Component {
       });
     }
 
-    getStudentenByProjektId=()=>{
-      ElectivAPI.getAPI().getStudentenByProjektId(this.state.currentProjekt)
-      .then(studentBOs =>
-        this.setState({
-            studenten: studentBOs,
-            error: null,
-            loadingInProgress: false,
-        })).catch(e =>
-            this.setState({
-                student: [],
-                error: e,
-                loadingInProgress: false,
-            }));
-      this.setState({
-          error: null,
-          loadingInProgress: true,
-          loadingProjekteError: null
-      });
-    }
-
     getTeilnahmenByProjektId=()=>{
       ElectivAPI.getAPI().getTeilnahmenByProjektId(this.state.currentProjekt)
       .then(teilnahmeBOs =>
         this.setState({
+            
             teilnahmen: teilnahmeBOs,
             error: null,
             loadingInProgress: false,
-        })).catch(e =>
+        })
+        
+      ).catch(e =>
             this.setState({
                 teilnahme: [],
                 error: e,
@@ -134,7 +108,10 @@ class ProjektBearbeiten extends Component {
           loadingProjekteError: null
       });
     }
-    
+
+
+
+
 
 componentDidMount() {
   this.getProjekte();
@@ -146,7 +123,6 @@ handleChange = fieldname => (event) => {
     [fieldname]:event.target.value
   })
   console.log(this.state)
-  this.getStudentenByProjektId()
   this.getTeilnahmenByProjektId()
 };
 
@@ -159,17 +135,17 @@ handleChange = fieldname => (event) => {
         
         
         const { classes } = this.props;
-        const { projekte, currentStudentName, teilnahmen, currentStudentmat_nr, error, loadingInProgress} = this.state;
+        const { projekte, currentProjekt, teilnahmen, error, loadingInProgress} = this.state;
         
         return(
             <div className={classes.root}>
                 <Paper>
                 
                 
-                <Typography>Projekte von {currentStudentName}</Typography>
+                <Typography>Projekte von {currentProjekt}</Typography>
                 <FormControl className={classes.formControl}>
                                 <InputLabel id="demo-simple-select-label">Projekt</InputLabel>
-                                <Select value = {projekt.id} onChange={this.handleChange("currentProjekt")}>
+                                <Select  onChange={this.handleChange("currentProjekt")}>
                                   {
                                   projekte.map(projekt =>
                                   <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>

@@ -18,9 +18,9 @@ import Select from '@material-ui/core/Select';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import TableFooter from '@material-ui/core/TableFooter';
+import StudentBO from '../api/StudentBO'
 
-//import Component
-import ModulEintrag from './ModulEintrag';
+
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -46,172 +46,67 @@ class ProjektBearbeitenEintrag extends Component {
         super(props);
 
         this.state = {
-            modul: props.modul,
             teilnahmen : [],
-            projekt: null,
-            projektID: null,
-            projektName: null,
+            student: new StudentBO("", ""),
+            studentID: null,
             studentName: null,
-            dozentName: null,
-            note: null,
             loadingInProgress: false,
             error: null
         };
     }
 
-  // Handles events wenn sich der status der oeffnung aendert
-  expansionPanelStateChanged = () => {
-    this.props.onExpandedStateChange(this.props.projekt);
-    this.getTeilnahmen_by_projekt();
-    console.log(this.props.projekt.getID(),'Projekt')
-  }
+  
 
-  // Kummert sich um das close event vom ProjektForm
-  projektFormClosed = (projekt) => {
-    if ( projekt ) {
-      this.setState({
-        projekt: projekt,
-        showProjektForm: false
-      });
-    }else {
-      this.setState({
-        showprojektForm: false
-      });
-    }
-  }
-
-    //Noch zu tun:  projektBO soll kein Array sein. Die 2 Funktionen sollen nacheinander aufgerufen werden
     
-    getTeilnahmen_by_projekt = () => {
-        ElectivAPI.getAPI().getTeilnahmen_by_projekt(this.props.projekt.getID())
-        .then(teilnahmeBOs =>
+    getStudentById = () => {
+        ElectivAPI.getAPI().getStudentById(this.props.teilnahme.getteilnehmer())
+        .then(studentBO =>
             this.setState({
-                teilnahmen: teilnahmeBOs,
-                error: null,
-                loadingInProgress: false,
-            })).catch(e =>
+              student: studentBO[0],
+              studentID: studentBO[0].id,
+              studentName: studentBO[0].name,
+              loadingInProgress: false,
+              error: null,
+            })).then(()=>{
+              
+            })
+            .catch(e =>
                 this.setState({
-                    teilnahmen: [],
-                    error: e,
-                    loadingInProgress: false,
+                  student: null,
+                  studentID: null,
+                  studentName: null,
+                  loadingInProgress: false,
+                  error: e,
                 }));
         this.setState({
-            error: null,
-            loadingInProgress: true,
-            loadingTeilnahmeError: null
+          loadingInProgress: true,
+          error: null
         });
       }
     
-    getProjekt = () => {
-      ElectivAPI.getAPI().getProjekt(this.props.teilnahme.lehrangebot)
-      .then(projektBO =>
-          this.setState({
-            projekt: projektBO[0],
-            projektID: projektBO[0].id,
-            projektName: projektBO[0].name,
-            loadingInProgress: false,
-            error: null,
-          })).then(()=>{
-            this.getPerson()
-            this.getBewertung()
-            this.getStudent()
-          })
-          .catch(e =>
-              this.setState({
-                projekt: null,
-                projektID: null,
-                projektName: null,
-                loadingInProgress: false,
-                error: e,
-              }));
-      this.setState({
-        loadingInProgress: true,
-        error: null
-      });
+    
+
+    
+    
+
+    
+
+    componentDidMount() {
+      this.getStudentById();
     }
 
     
-    getBewertung = () => {
-      ElectivAPI.getAPI().getBewertung(this.props.teilnahme.resultat)
-      .then(bewertungBO =>
-          this.setState({
-              note: bewertungBO.getnote(),
-              error: null,
-              loadingInProgress: false,
-          }))
-          .catch(e =>
-              this.setState({
-                  note: null,
-                  error: null,
-                  loadingInProgress: false,
-              }));
-      this.setState({
-          error: null,
-          loadingInProgress: true
-      });
-    }
-
-    getStudent = () => {
-      ElectivAPI.getAPI().getStudent(this.state.teilnahme.teilnehmer)
-      .then(studentBO =>
-          this.setState({
-              studentName: studentBO.getname(),
-              error: null,
-              loadingInProgress: false,
-          }))
-          .catch(e =>
-              this.setState({
-                  studentName: null,
-                  error: null,
-                  loadingInProgress: false,
-              }));
-      this.setState({
-          error: null,
-          loadingInProgress: true
-      });
-    }
-
-
-    getPerson = () => {
-      ElectivAPI.getAPI().getPerson(this.state.projekt.dozent)
-      .then(personBO =>
-          this.setState({
-              dozentName: personBO.getname(),
-              error: null,
-              loadingInProgress: false,
-          }))
-          .catch(e =>
-              this.setState({
-                  dozentName: null,
-                  error: e,
-                  loadingInProgress: false,
-              }));
-      this.setState({
-          error: null,
-          loadingInProgress: true
-      });
-    }
-
-    componentDidMount() {
-      this.getProjekt();
-    }
-
-    componentDidUpdate(prevProps){
-      if((this.props.show) && (this.props.show !== prevProps.show)) {
-        this.getProjekt();
-      }
-    }
 
 
     render(){
         const {classes, expandedState} = this.props;
-        const {  projekt, projektID, projektName, studentName, dozentName, note, loadingInProgress, error } = this.state;
+        const {  student, studentID, studentName,  loadingInProgress, error } = this.state;
 
         return(
-              <StyledTableRow key={projektID}>
+              <StyledTableRow key={studentID}>
                 <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
-                <StyledTableCell align="center">{dozentName}</StyledTableCell> 
-                <StyledTableCell align="center">{note}</StyledTableCell> 
+                <StyledTableCell align="center"></StyledTableCell> 
+                <StyledTableCell align="center"></StyledTableCell> 
                 <StyledTableCell align="center"><Button style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" >entfernen</Button>
                               
                     

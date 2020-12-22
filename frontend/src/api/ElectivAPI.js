@@ -41,6 +41,9 @@ export default class ElectivAPI {
 	//getStudent: google_user_id
 	#getStudentURL = (google_user_id) => `${this.#ElectivServerBaseURL}/student/${google_user_id}`;
 
+	//getStudent: id
+	#getStudentByIdURL = (id) => `${this.#ElectivServerBaseURL}/student/${id}`;
+
 	//Bewertung nach Id bekommen
 	#getBewertungURL = (id) => `${this.#ElectivServerBaseURL}/bewertung/${id}`;
 
@@ -131,6 +134,15 @@ export default class ElectivAPI {
 
 	getStudent(google_user_id){
 		return this.#fetchAdvanced(this.#getStudentURL(google_user_id)).then((responseJSON) => {
+			let studentBO = StudentBO.fromJSON(responseJSON);
+			console.info(studentBO)
+			return new Promise(function (resolve){
+				resolve(studentBO)
+			})
+		})
+	}
+	getStudentById(id){
+		return this.#fetchAdvanced(this.#getStudentByIdURL(id)).then((responseJSON) => {
 			let studentBO = StudentBO.fromJSON(responseJSON);
 			console.info(studentBO)
 			return new Promise(function (resolve){
