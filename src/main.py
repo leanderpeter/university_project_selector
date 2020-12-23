@@ -248,7 +248,7 @@ class StudentByGoogleIDOperationen(Resource):
 
 @electivApp.route('/student/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class StudentByGoogleIDOperationen(Resource):
+class StudentIDOperationen(Resource):
     @electivApp.marshal_list_with(student)
     @secured
 
