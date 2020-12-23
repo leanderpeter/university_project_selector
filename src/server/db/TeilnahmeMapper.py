@@ -122,14 +122,52 @@ class TeilnahmeMapper(Mapper):
 
         return teilnahme
 
-    def update(self):
-        """Update an already given object in the DB"""
-        pass
+    def update(self, teilnahme):
 
-    def delete(self):
+        cursor = self._connection.cursor()
+
+        command = "UPDATE teilnahmen SET lehrangebot=%s, teilnehmer=%s, anrechnung=%s, resultat=%s WHERE id=%s"
+        data = (teilnahme.get_lehrangebot(), teilnahme.get_teilnehmer(), teilnahme.get_anrechnung(), teilnahme.get_resultat(), teilnahme.get_id())
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+    def delete(self, lehrangebotId, teilnehmerId):
         """Delete an object from the DB"""
-        pass
+        
+        cursor = self._connection.cursor()
 
+        command = "DELETE FROM teilnahmen WHERE lehrangebot=%s AND teilnehmer=%s"
+        data = (lehrangebotId, teilnehmerId)
+        cursor.execute(command, data)
+        self._connection.commit()
+        cursor.close()
+
+
+    def find_by_modul_und_semester(self, modul_id, semester_id):
+        result = []
+
+        cursor = self._connection.cursor()
+
+        command = "SELECT electivapp.teilnahmen.id, electivapp.teilnahmen.lehrangebot, electivapp.teilnahmen.teilnehmer, electivapp.teilnahmen.anrechnung, electivapp.teilnahmen.resultat FROM electivapp.teilnahmen INNER JOIN electivapp.projekte ON electivapp.teilnahmen.lehrangebot = electivapp.projekte.id WHERE electivapp.teilnahmen.anrechnung = %s AND electivapp.projekte.halbjahr = %s"
+        data = (modul_id, semester_id)
+        cursor.execute(command, data)
+        tuples = cursor.fetchall()
+
+        for (id, lehrangebot, teilnehmer, anrechnung, resultat) in tuples:
+            teilnahme = Teilnahme()
+            teilnahme.set_id(id)
+            teilnahme.set_lehrangebot(lehrangebot)
+            teilnahme.set_teilnehmer(teilnehmer)
+            teilnahme.set_anrechnung(anrechnung)
+            teilnahme.set_resultat(resultat)
+            result.append(teilnahme)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
 
 '''Nur zum testen'''
 

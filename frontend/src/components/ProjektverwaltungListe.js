@@ -7,61 +7,63 @@ import { ElectivAPI } from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
-// import CustomerForm from './dialogs/CustomerForm';
-import ProjektListeEintrag from './ProjektListeEintrag';
+import ProjektForm from './dialogs/ProjektForm';
+import ProjektverwaltungListeEintrag from './ProjektverwaltungListeEintrag';
 
 /*
-Erstellt eine Liste von ProjektListeEintrag fuer jedes Projekt
+Erstellt eine Liste von Projekten um sie zu verwalten
 */
 
-class ProjektListe extends Component {
 
-	constructor(props) {
-		super(props);
 
-		let expandedID = null;
+class ProjektverwaltungListe extends Component {
 
-		if (this.props.location.expandProjekt){
-			expandedID = this.props.location.expandProjekt.getID();
-		}
+  constructor(props) {
+    super(props);
 
-		//gebe einen leeren status
-		this.state = {
-			projekte: [],
-			filteredProjekte: [],
-			projektFilter: '',
-			error: null,
-			loadingInProgress: false,
-			expandedProjektID: expandedID,
-			showProjekteForm: false
-		};
-	}
+    let expandedID = null;
 
-	//hole alle Projekte vom Backend
-	getProjekte = () => {
-		ElectivAPI.getAPI().getProjekteByZustand("Genehmigt")
-      .then(projekteBOs => 
-				this.setState({								//neuer status wenn fetch komplett
-					projekte: projekteBOs,					
-					filteredProjekte: [...projekteBOs],		//speicher eine kopie
-					loadingInProgress: false,				// deaktiviere ladeindikator
+    if (this.props.location.expandProjekt) {
+      expandedID = this.props.location.expandProjekt.getID();
+    }
+
+    //gebe einen leeren status
+    this.state = {
+      projekte: [],
+      filteredProjekte: [],
+      projektFilter: '',
+      error: null,
+      loadingInProgress: false,
+      expandedProjektID: expandedID,
+      showProjekteForm: false
+    };
+  }
+
+  //hole alle Projekte vom Backend
+  getProjekte = () => {
+    ElectivAPI.getAPI().getProjekteByZustand("Neu")
+      .then(projekteBOs =>
+        this.setState({								//neuer status wenn fetch komplett
+          projekte: projekteBOs,
+          filteredProjekte: [...projekteBOs],		//speicher eine kopie
+          loadingInProgress: false,				// deaktiviere ladeindikator
           error: null,
-				})).catch(e =>
-					this.setState({
-						projekte: [],
-						loadingInProgress: false,
-						error: e
+        })).catch(e =>
+          this.setState({
+            projekte: [],
+            loadingInProgress: false,
+            error: e
           }));
-		// setze laden auf wahr
-		this.setState({
-			loadingInProgress: true,
-			error: null
-		});
-	}
-	// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
-	componentDidMount() {
-		this.getProjekte();
-	}
+    // setze laden auf wahr
+    this.setState({
+      loadingInProgress: true,
+      error: null
+    });
+  }
+  // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
+  componentDidMount() {
+    this.getProjekte();
+  }
 
   onExpandedStateChange = projekt => {
     //  Zum anfang Projekt Eintrag = null
@@ -79,12 +81,28 @@ class ProjektListe extends Component {
   }
 
 
+  projektFormClosed = projekt => {
+    if (projekt) {
+      const newProjektList = [...this.state.projekte, projekt];
+      this.setState({
+        projekte: newProjektList,
+        filteredProjekte: [...newProjektList],
+        showProjekteForm: false
+      });
+    } else {
+      this.setState({
+        showProjekteForm: false
+      });
+    }
+  }
 
 
 
-	/** Renders the component */
-	render() {
-    const { classes , currentStudent } = this.props;
+
+
+  /** Renders the component */
+  render() {
+    const { classes, currentStudent } = this.props;
     const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm } = this.state;
 
     return (
@@ -92,7 +110,7 @@ class ProjektListe extends Component {
         <Grid className={classes.projektFilter} container spacing={1} justify='flex-start' alignItems='center'>
           <Grid item>
             <Typography>
-              Filter Projekliste nach Namen:
+              Nicht genehmigten Projekte:
               </Typography>
           </Grid>
           <Grid item xs={4}>
@@ -114,21 +132,20 @@ class ProjektListe extends Component {
           </Grid>
           <Grid item xs />
           <Grid item>
-            
           </Grid>
         </Grid>
-        { 
-          // Show the list of ProjektListeEintrag components
+        {
+          // Show the list of ProjektverwaltungsllisteEintrag components
           // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters
-          
+
           filteredProjekte.map(projekt =>
-            <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
+            <ProjektverwaltungListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent}
-            />) 
+            />)
         }
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`} onReload={this.getProjekte} />
-        
+        <ProjektForm show={showProjekteForm} onClose={this.projektFormClosed} />
       </div>
     );
   }
@@ -146,12 +163,12 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-ProjektListe.propTypes = {
+ProjektverwaltungListe.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   /** @ignore */
   location: PropTypes.object.isRequired,
 }
 
-export default withRouter(withStyles(styles)(ProjektListe));
-	
+export default withRouter(withStyles(styles)(ProjektverwaltungListe));
+

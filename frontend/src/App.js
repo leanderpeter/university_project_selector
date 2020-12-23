@@ -5,16 +5,20 @@ import firebase from 'firebase/app'; //Firebase module
 import 'firebase/auth'; //Firebase module
 import Header from './components/layout/Header';
 import ProjektListe from './components/ProjektListe';
+import ProjektDozentListe from './components/ProjektDozentListe';
 // import Electivs from '/components/Electivs';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import MeineProjekte from './components/MeineProjekte';
 import ProjektBearbeiten from './components/ProjektBearbeiten';
+import Notenlisten from './components/Notenlisten';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import ElectivAPI from './api/ElectivAPI';
 import firebaseConfig from './firebaseconfig';
+import ProjektverwaltungListe from './components/ProjektverwaltungListe';
+
 
 /*
 Main page of the electivApp. First firebase to verify users. Then routing to the pages via react-router-dom
@@ -60,7 +64,7 @@ class App extends React.Component {
           authError: null,
           authLoading: false
         })}).then(() => {
-        this.getStudent()
+        this.getStudentByGoogleID()
       }).catch(e => {
         this.setState({
           authError: e,
@@ -89,8 +93,8 @@ class App extends React.Component {
   }
 
     //aktuell eingeloggten Student vom Backend abfragen
-  getStudent = () => {
-    ElectivAPI.getAPI().getStudent(this.state.currentUser.uid)
+  getStudentByGoogleID = () => {
+    ElectivAPI.getAPI().getStudentByGoogleID(this.state.currentUser.uid)
         .then(studentBO =>
             this.setState({
                 currentStudent: studentBO,
@@ -139,11 +143,27 @@ class App extends React.Component {
                   </Route>
                   <Route path='/about' component={About} />
 
-                  <Route path='/meineprojekte' component={MeineProjekte}>
-                    <MeineProjekte currentStudent={currentStudent}/>
+                  <Route path='/projekteDozent' component={ProjektDozentListe}>
+                    <ProjektDozentListe currentStudent={currentStudent}/>
+                  </Route>
+
+                  <Route path='/projektverwaltung' component={ProjektverwaltungListe}>
+                    <ProjektverwaltungListe currentStudent={currentStudent}/>
                   </Route>
                   <Route path='/projektbearbeiten' component={ProjektBearbeiten}>
                     <ProjektBearbeiten currentStudent={currentStudent}/>
+                  </Route>
+                  
+                  {currentStudent ?
+                  <Route path='/meineprojekte' component={MeineProjekte}>
+                    <MeineProjekte currentStudent={currentStudent}/>
+                  </Route>
+                  
+                  :
+                  <></>
+                  }
+                  <Route path='/notenlisten' component={Notenlisten}>
+                    <Notenlisten/>
                   </Route>
                 </>
                 :
@@ -154,8 +174,8 @@ class App extends React.Component {
                 </>
             }
             <LoadingProgress show={authLoading} />
-            <ContextErrorMessage error={authError} contextErrorMsg={`Something went wrong during sighn in process.`} onReload={this.handleSignIn} />
-            <ContextErrorMessage error={appError} contextErrorMsg={`Something went wrong inside the app. Please reload the page.`} />
+            <ContextErrorMessage error={authError} contextErrorMsg={`Something went wrong during signIn process.`} onReload={this.handleSignIn} />
+            <ContextErrorMessage error={appError} contextErrorMsg={`Doh! Something went wrong inside the app. Please reload the page.`} />
           </Container>
         </Router>
       </ThemeProvider>

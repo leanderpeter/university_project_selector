@@ -5,8 +5,8 @@ import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import { ElectivAPI } from '../api';
+import ProjektForm from './dialogs/ProjektForm';
 /*
-import CustomerForm from './dialogs/CustomerForm';
 import CustomerDeleteDialog from './dialogs/CustomerDeleteDialog';
 import AccountList from './AccountList';
 */
@@ -14,11 +14,10 @@ import AccountList from './AccountList';
 //Muss noch geschrieben werden!
 
 var InfoList = null;
-var ProjektForm = null;
 var ProjektDeleteDialog = null;
 
 
-class ProjektListeEintrag extends Component {
+class ProjektDozentListeEintrag extends Component {
 
 	constructor(props) {
 		super(props);
@@ -34,14 +33,13 @@ class ProjektListeEintrag extends Component {
 	// Handles events wenn sich der status der oeffnung aendert
 	expansionPanelStateChanged = () => {
 		this.props.onExpandedStateChange(this.props.projekt);
-    this.setState({teilnahmeAbwaehlenButtonDisabled:true});
+
+    /*
 		// Teilnahme Button deaktivieren, sofern Teilnehmer bereits in Projekt eingeschrieben
 		if( this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
-        this.setState({teilnahmeButtonDisabled:true});
-        this.setState({teilnahmeAbwaehlenButtonDisabled:false});
-    }
-    
-    
+		    this.setState({teilnahmeButtonDisabled:true});
+		}
+    */
 	}
 
 	// Kummert sich um das loschen des Projekts
@@ -83,25 +81,15 @@ class ProjektListeEintrag extends Component {
 
 	teilnahmeButtonClicked = event => {
     	//Logik fuer Teilnahme Button
-      this.setState({teilnahmeButtonDisabled:true});
-      this.setState({teilnahmeAbwaehlenButtonDisabled:false});
-      this.state.projekt.anzahlTeilnehmer = this.state.projekt.anzahlTeilnehmer + 1;
+    	this.setState({teilnahmeButtonDisabled:true});
     	ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
-  }
-  
-  teilnahmeAbwaehlenButtonClicked = event => {
-    //Logik fuer Teilnahme Button
-    this.setState({teilnahmeButtonDisabled:false});
-    this.setState({teilnahmeAbwaehlenButtonDisabled:true});
-    this.state.projekt.anzahlTeilnehmer = this.state.projekt.anzahlTeilnehmer - 1;
-    ElectivAPI.getAPI().deleteTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
-}
+	}
 
 	/** Renders the component */
   render() {
     const { classes, expandedState } = this.props;
     // Use the states projekt
-    const { projekt } = this.state;
+    const { projekt, showProjektForm} = this.state;
 
     // console.log(this.state);
     return (
@@ -128,16 +116,14 @@ class ProjektListeEintrag extends Component {
             
           </AccordionDetails>
           <AccordionDetails>
-          
-        <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
-          Teilnahme abwählen
-        </Button>  
-        <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
+          <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
           Teilnahme
         </Button>
+            
           </AccordionDetails>
         </Accordion>
-              
+        <ProjektForm show={showProjektForm} projekt={projekt} onClose={this.projektFormClosed} />
+
       </div>
     );
   }
@@ -150,35 +136,30 @@ const styles = theme => ({
   },
   teilnahmeButton: {
     position: 'absolute',
-    right: theme.spacing(31),
-    bottom: theme.spacing(0),
-  },
-  teilnahmeAbwaehlenButton: {
-    position: 'absolute',
     right: theme.spacing(3),
     bottom: theme.spacing(0),
   }
 });
 
 /** PropTypes */
-ProjektListeEintrag.propTypes = {
+ProjektDozentListeEintrag.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
-  /** The CustomerBO to be rendered */
-  customer: PropTypes.object.isRequired,
-  /** The state of this ProjektListeEintrag. If true the customer is shown with its accounts */
+  /** The ProjektBO to be rendered */
+  projekt: PropTypes.object.isRequired,
+  /** The state of this ProjektDozentListeEintrag. If true the projekt is shown with its accounts */
   expandedState: PropTypes.bool.isRequired,
-  /** The handler responsible for handle expanded state changes (exanding/collapsing) of this ProjektListeEintrag 
+  /** The handler responsible for handle expanded state changes (exanding/collapsing) of this ProjektDozentListeEintrag 
    * 
-   * Signature: onExpandedStateChange(CustomerBO customer)
+   * Signature: onExpandedStateChange(projektBo projekt)
    */
   onExpandedStateChange: PropTypes.func.isRequired,
   /** 
    *  Event Handler function which is called after a sucessfull delete of this customer.
    * 
-   * Signature: onCustomerDelete(CustomerBO customer)
+   * Signature: onProjektDelete(projektBO projekt)
    */
-  onCustomerDeleted: PropTypes.func.isRequired
+  onProjektDeleted: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(ProjektListeEintrag);
+export default withStyles(styles)(ProjektDozentListeEintrag);

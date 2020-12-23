@@ -25,7 +25,7 @@ class Teilnahme(BusinessObject):
         self._teilnehmer = teilnehmer
     
     def get_anrechnung(self ):
-        return self._teilnehmer
+        return self._anrechnung
 
     def set_anrechnung(self, anrechnung):
         self._anrechnung = anrechnung
@@ -35,3 +35,13 @@ class Teilnahme(BusinessObject):
 
     def set_resultat(self, resultat):
         self._resultat = resultat
+
+    @staticmethod
+    def from_dict(dictionary=dict()):
+        teilnahme = Teilnahme()
+        teilnahme.set_id(dictionary["id"])
+        teilnahme.set_teilnehmer(dictionary["teilnehmer"])
+        teilnahme.set_lehrangebot(dictionary["lehrangebot"])
+        teilnahme.set_anrechnung(dictionary["anrechnung"])
+        teilnahme.set_resultat(dictionary["resultat"])
+        return teilnahme

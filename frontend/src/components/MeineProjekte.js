@@ -19,6 +19,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import TableFooter from '@material-ui/core/TableFooter';
 
+
+
+
+
 //import MeineProjekteEintrag
 import MeineProjekteEintrag from './MeineProjekteEintrag';
 
@@ -35,7 +39,7 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
     root: {
-      '&:nth-of-type(odd)': {
+      '&:nth-of-type(4n+1)': {
         backgroundColor: theme.palette.action.hover,
       },
     },
@@ -65,7 +69,8 @@ class MeineProjekte extends Component {
     }
 
 
-    // API Anbindung um Projekte vom Backend zu bekommen 
+
+    // API Anbindung um Teilnahmen des Students vom Backend zu bekommen 
     getTeilnahmen = () => {
             ElectivAPI.getAPI().getTeilnahmen(this.props.currentStudent.id)
             .then(teilnahmeBOs =>
@@ -75,7 +80,7 @@ class MeineProjekte extends Component {
                     loadingInProgress: false,
                 })).catch(e =>
                     this.setState({
-                        teilnahme: [],
+                        teilnahmen: [],
                         error: e,
                         loadingInProgress: false,
                     }));
@@ -84,6 +89,10 @@ class MeineProjekte extends Component {
                 loadingInProgress: true,
                 loadingTeilnahmeError: null
             });
+    }
+
+    printSemesterbericht= () => {
+      window.print()
     }
 
     componentDidMount() {
@@ -122,6 +131,7 @@ class MeineProjekte extends Component {
                         <TableHead>
                             <StyledTableRow>
                                 <StyledTableCell>Projekte</StyledTableCell>
+                                <StyledTableCell align="center">Semester</StyledTableCell>
                                 <StyledTableCell align="center">Dozent</StyledTableCell>
                                 <StyledTableCell align="center">Note</StyledTableCell>
                                 <StyledTableCell align="center">Modulzuweisung</StyledTableCell>
@@ -129,20 +139,29 @@ class MeineProjekte extends Component {
                         </TableHead>
                         <TableBody>
                             {
-                                teilnahmen.map(teilnahme => 
-                                    <MeineProjekteEintrag key={teilnahme.getID()} teilnahme = {teilnahme} expandedState={expandedTeilnahmeID === teilnahme.getID()}
-                                    onExpandedStateChange={this.onExpandedStateChange}
-                                    show={this.props.show}
-                                />) 
+                                teilnahmen ?
+                                <>
+                                {
+                                    teilnahmen.map(teilnahme => 
+                                        <MeineProjekteEintrag key={teilnahme.getID()} teilnahme = {teilnahme} 
+                                        getTeilnahmen = {this.getTeilnahmen}
+                                        expandedState={expandedTeilnahmeID === teilnahme.getID()}
+                                        onExpandedStateChange={this.onExpandedStateChange}
+                                        show={this.props.show}
+                                    />) 
+                                }
+                                </>
+                                :
+                                <></>
                             }
                         </TableBody>
                     </Table>
                     <LoadingProgress show={loadingInProgress} />
-                    <ContextErrorMessage error={error} contextErrorMsg = {'Meine Projekte konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
+                    <ContextErrorMessage error={error} contextErrorMsg = {'Deine Projekte konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
                 </TableContainer>
-                <Button variant="contained" color="primary" size="medium" className={classes.button}startIcon={<SaveIcon />}>
-                    Semesterbericht
-                </Button>
+                <Button variant="contained" color="primary" size="medium" className={classes.button} startIcon={<SaveIcon />} onClick={this.printSemesterbericht}>
+                Notenspiegel
+                </Button>             
             </div>
         )
     }
@@ -158,6 +177,23 @@ const styles = theme => ({
       },
       content: {
         margin: theme.spacing(1),
+      },
+      table: {
+        minWidth: 700,
+      },
+      button:{
+          marginTop: theme.spacing(2),
+          marginBottom: theme.spacing(3),
+          float: 'right'
+      },
+      page: {
+        flexDirection: 'row',
+        backgroundColor: '#E4E4E4'
+      },
+      section: {
+        margin: 10,
+        padding: 10,
+        flexGrow: 1
       }
   });
 

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
+import datetime
 
 
 class BusinessObject(ABC):
@@ -12,7 +13,7 @@ class BusinessObject(ABC):
 
     def __init__(self):
         self._id = 0  # unique ID for the instance of the class
-        # self.__erstellungszeit = None
+        self._erstellungszeit = datetime.datetime.now()
 
     def get_id(self):
         ''' return the ID of the business object'''
@@ -23,7 +24,6 @@ class BusinessObject(ABC):
         self._id = value
 
     def get_erstellungszeit(self):
-        pass
+        return self._erstellungszeit
 
-    def set_erstellungszeit(self, zeit):
-        pass
+

@@ -14,14 +14,14 @@ class ProjektMapper(Mapper):
         result = []
         cursor = self._connection.cursor()
         cursor.execute(
-            "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent from projekte")
+            "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art from projekte")
         tuples = cursor.fetchall()
 
         for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
-             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) in tuples:
+             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art) in tuples:
             projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
-                                          raum, sprache, dozent)
+                                          raum, sprache, dozent, aktueller_zustand, halbjahr, art)
             result.append(projekt)
 
         self._connection.commit()
@@ -29,22 +29,73 @@ class ProjektMapper(Mapper):
 
         return result
 
+    def find_granted(self):
+
+        result = []
+        granted = 'Neu'
+        cursor = self._connection.cursor()
+        cursor.execute(
+            "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art from projekte WHERE aktueller_zustand={}".format(granted))
+        tuples = cursor.fetchall()
+
+        for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
+             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art) in tuples:
+            projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
+                                          woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
+                                          raum, sprache, dozent, aktueller_zustand, halbjahr, art)
+            result.append(projekt)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def set_zustand_at_projekt(self, projekt_id, zustand_id):
+        cursor = self._connection.cursor()
+        command = "UPDATE projekte SET aktueller_zustand = %s WHERE id = %s"
+        data = (zustand_id,projekt_id)
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+   
+    def find_projekte_by_zustand(self, zustand):
+
+        result = []
+        cursor = self._connection.cursor()
+        
+        command = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art from projekte WHERE aktueller_zustand = {}".format(zustand))
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
+             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art) in tuples:
+            
+            projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
+                                          woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
+                                          raum, sprache, dozent, aktueller_zustand, halbjahr, art)
+            result.append(projekt)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+
+
+
     def find_projekt_by_id(self, id):
         result = None
 
         cursor = self._connection.cursor()
 
-        command1 = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent FROM projekte WHERE id={}").format(id)
-        cursor.execute(command1)
-        tuples1 = cursor.fetchall()
-
-        command2 = ("SELECT modul_id FROM projekte_hat_module WHERE projekt_id={}").format(id)
-        cursor.execute(command2)
-        tuples2 = cursor.fetchall()
+        command = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art FROM projekte WHERE id={}").format(id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
 
         try:
-            (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent) = tuples1[0]
-            module = tuples2
+            (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art) = tuples[0]
             projekt = Projekt()
             projekt.set_id(id)
             projekt.set_name(name)
@@ -60,16 +111,11 @@ class ProjektMapper(Mapper):
             projekt.set_raum(raum)
             projekt.set_sprache(sprache)
             projekt.set_dozent(dozent)
+            projekt.set_aktueller_zustand(aktueller_zustand)
+            projekt.set_halbjahr(halbjahr)
+            projekt.set_art(art)
             projekt.set_anzahlTeilnehmer(self.count_teilnehmer_by_projekt(id))
             projekt.set_teilnehmerListe(self.get_teilnehmerId_by_projekt(id))
-
-            modulliste = []
-            for modultuple in module:
-                for modul in modultuple:
-                    modulliste.append(modul)
-            
-            projekt.set_moduloption(modulliste)
-
             result = projekt
         
         except IndexError:
@@ -82,7 +128,7 @@ class ProjektMapper(Mapper):
         return result
 
     def create_projekt(self, id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich,
-                       anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent):
+                       anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art):
         projekt = Projekt()
         projekt.set_id(id)
         projekt.set_name(name)
@@ -98,6 +144,9 @@ class ProjektMapper(Mapper):
         projekt.set_raum(raum)
         projekt.set_sprache(sprache)
         projekt.set_dozent(dozent)
+        projekt.set_aktueller_zustand(aktueller_zustand)
+        projekt.set_halbjahr(halbjahr)
+        projekt.set_art(art)
         projekt.set_anzahlTeilnehmer(self.count_teilnehmer_by_projekt(id))
         projekt.set_teilnehmerListe(self.get_teilnehmerId_by_projekt(id))
         return projekt
@@ -136,6 +185,48 @@ class ProjektMapper(Mapper):
         cursor.close()
         return result
         #MUSS IN TEILNAHMEMAPPER
+
+    def insert_pending(self, projekt):
+        '''
+        Einfugen eines Projekts BO's in die DB
+        '''
+
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT MAX(id) AS maxid FROM projekte")
+        tuples = cursor.fetchall()
+
+
+        for (maxid) in tuples:
+            if maxid[0] is None:
+                projekt.set_id(1)
+            else:
+                projekt.set_id(maxid[0]+1)
+
+        command = "INSERT INTO projekte (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (
+            projekt.get_id(),
+            projekt.get_name(),
+            projekt.get_max_teilnehmer(),
+            projekt.get_projektbeschreibung(),
+            projekt.get_betreuer(),
+            projekt.get_externer_partner(),
+            projekt.get_woechentlich(),
+            projekt.get_anzahl_block_vor(),
+            projekt.get_anzahl_block_in(),
+            projekt.get_praeferierte_block(),
+            projekt.get_bes_raum(),
+            projekt.get_raum(),
+            projekt.get_sprache(),
+            projekt.get_dozent(),
+            str(projekt.get_aktueller_zustand()),
+            projekt.get_halbjahr(),
+            projekt.get_art()
+            )
+        cursor.execute(command, data)
+        self._connection.commit()
+        cursor.close()
+
+        return projekt
 
 
 if (__name__ == "__main__"):

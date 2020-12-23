@@ -19,8 +19,6 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import TableFooter from '@material-ui/core/TableFooter';
 
-//import Component
-import ModulEintrag from './ModulEintrag';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -34,7 +32,7 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
-    '&:nth-of-type(odd)': {
+    '&:nth-of-type(4n+1)': {
       backgroundColor: theme.palette.action.hover,
     },
   },
@@ -49,6 +47,7 @@ class MeineProjekteEintrag extends Component {
             projekt: null,
             projektID: null,
             projektName: null,
+            semester: null,
             module: null,
             dozentName: null,
             note: null,
@@ -57,22 +56,20 @@ class MeineProjekteEintrag extends Component {
         };
     }
 
-
-    //Noch zu tun:  projektBO soll kein Array sein. Die 2 Funktionen sollen nacheinander aufgerufen werden
-    
     getProjekt = () => {
       ElectivAPI.getAPI().getProjekt(this.props.teilnahme.lehrangebot)
       .then(projektBO =>
           this.setState({
-            projekt: projektBO[0],
-            projektID: projektBO[0].id,
-            projektName: projektBO[0].name,
+            projekt: projektBO,
+            projektID: projektBO.id,
+            projektName: projektBO.name,
             loadingInProgress: false,
             error: null,
           })).then(()=>{
             this.getPerson()
             this.getBewertung()
             this.getModule_by_projekt_id()
+            this.getSemester_by_id()
           })
           .catch(e =>
               this.setState({
@@ -99,6 +96,26 @@ class MeineProjekteEintrag extends Component {
           .catch(e =>
               this.setState({
                   note: null,
+                  error: null,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true
+      });
+    }
+
+    getSemester_by_id = () => {
+      ElectivAPI.getAPI().getSemester_by_id(this.state.projekt.getHalbjahr())
+      .then(semesterBO =>
+          this.setState({
+              semester: semesterBO.name,
+              error: null,
+              loadingInProgress: false,
+          }))
+          .catch(e =>
+              this.setState({
+                  semester: null,
                   error: null,
                   loadingInProgress: false,
               }));
@@ -149,6 +166,13 @@ class MeineProjekteEintrag extends Component {
       });
     }
 
+    handleChange = async (edv) => {
+      this.props.teilnahme.setAnrechnung(edv.target.value);
+      console.log(`Option selected:`, edv.target.value);
+      await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme);
+      this.props.getTeilnahmen();
+    };
+
     componentDidMount() {
       this.getProjekt();
     }
@@ -161,41 +185,47 @@ class MeineProjekteEintrag extends Component {
 
 
     render(){
-        const {classes, expandedState} = this.props;
-        const {  projekt, projektID, projektName, module, dozentName, note, loadingInProgress, error } = this.state;
+        const {classes, expandedState, teilnahme} = this.props;
+        const {  projektID, projektName, semester, module, dozentName, note, loadingInProgress, error } = this.state;
 
         return(
-              <StyledTableRow key={projektID}>
-                <StyledTableCell component="th" scope="row">{projektName}</StyledTableCell>
-                <StyledTableCell align="center">{dozentName}</StyledTableCell> 
-                <StyledTableCell align="center">{note}</StyledTableCell> 
-                <StyledTableCell align="center">
-                    <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-controlled-open-select-label">EDV-Nummer</InputLabel>
-                            <Select>
-                                <MenuItem value=""><em>-</em></MenuItem>
-                                {
-                                  module ?
-                                  <>
-                                    {
-                                    module.map(modul =>
-                                    <ModulEintrag key={modul.getID()} modul = {modul}
-                                    onExpandedStateChange={this.onExpandedStateChange}
-                                    show={this.props.show}/>
-                                    )
-                                    }
-                                  </>
-                                  :
-                                  <>
-                                  </>
-                                
-                                }
-                            </Select>
-                    </FormControl>
-                </StyledTableCell>
-                  <LoadingProgress show={loadingInProgress}></LoadingProgress>
-                  <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Projekt konnte nicht geladen werden'} onReload={this.getPerson} />
-              </StyledTableRow>
+          <>
+                <StyledTableRow key={projektID}>
+                  <StyledTableCell align="left">{projektName}</StyledTableCell>
+                  <StyledTableCell align="center">{semester}</StyledTableCell>
+                  <StyledTableCell align="center">{dozentName}</StyledTableCell> 
+                  <StyledTableCell align="center">{note}</StyledTableCell> 
+                  <StyledTableCell align="center">                
+                                  {
+                                    module && note ?
+                                    <FormControl className={classes.formControl}>
+                                      <InputLabel>EDV-Nummer</InputLabel> 
+                                        <Select value = {teilnahme.anrechnung} onChange={this.handleChange}>
+                                          {
+                                          module.map(modul =>
+                                          <MenuItem value={modul.getID()}><em>{modul.getEdv_nr()}</em></MenuItem>
+                                          )
+                                          }
+                                        </Select>                                                                
+                                      </FormControl>                                  
+                                    :
+                                    <FormControl className={classes.formControl}>
+                                      <InputLabel>EDV-Nummer</InputLabel>
+                                        <Select value="">
+                                          <MenuItem value=""><em>Noch nicht benotet</em></MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                  }
+
+                  </StyledTableCell>
+                  </StyledTableRow>
+                  <StyledTableRow> 
+                    <StyledTableCell colspan="10" className={classes.laden}>
+                      <LoadingProgress show={loadingInProgress}></LoadingProgress>
+                      <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getProjekt} />
+                    </StyledTableCell>
+                  </StyledTableRow>
+          </>                        
         );
     }
 }
@@ -203,8 +233,8 @@ const styles = theme => ({
     root: {
         width: '100%',
         marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-      padding: theme.spacing(1),
+        marginBottom: theme.spacing(2),
+        padding: theme.spacing(1),
     },
     content: {
         margin: theme.spacing(1),
@@ -219,6 +249,9 @@ const styles = theme => ({
     button: {
         margin: theme.spacing(1),
         },
+    laden: {
+      padding: 0
+    }
     });
 
 /** PropTypes */
@@ -234,13 +267,6 @@ MeineProjekteEintrag.propTypes = {
      * Signature: onExpandedStateChange(CustomerBO customer)
      */
     onExpandedStateChange: PropTypes.func.isRequired,
-
-    /** 
-     *  Event Handler function which is called after a sucessfull delete of this customer.
-     * 
-     * Signature: onCustomerDelete(CustomerBO customer)
-     */
-    onCustomerDeleted: PropTypes.func.isRequired,
     /** wenn true, dozent wird geladen */
     show: PropTypes.bool.isRequired
   }

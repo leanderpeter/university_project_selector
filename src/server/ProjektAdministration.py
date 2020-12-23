@@ -6,13 +6,17 @@ from .bo.Person import Person
 from .bo.Student import Student
 from .bo.Projekt import Projekt
 from .bo.Teilnahme import Teilnahme
+from .bo.Zustand import Zustand
 
 from .db.PersonMapper import PersonMapper
 from .db.StudentMapper import StudentMapper
 from .db.TeilnahmeMapper import TeilnahmeMapper
 from .db.BewertungMapper import BewertungMapper
 from .db.ProjektMapper import ProjektMapper
+from .db.ProjektWartelisteMapper import ProjektWartelisteMapper
+from .bo.Teilnahme import Teilnahme
 from .db.ModulMapper import ModulMapper
+from .db.SemesterMapper import SemesterMapper
 
 
 
@@ -65,10 +69,9 @@ class ProjektAdministration(object):
             return mapper.find_by_google_user_id(id)
 
     def get_student_by_id(self, id):
-        '''read and return user with specific user id'''
+        '''read and return user with specific student id'''
         with StudentMapper() as mapper:
             return mapper.find_by_id(id)
-
 
     def get_all_users(self, ):
         pass
@@ -93,9 +96,34 @@ class ProjektAdministration(object):
         with ProjektMapper() as mapper:
             return mapper.find_projekt_by_id(projekt_id)
 
+    def get_projekt_by_zus(self):
+        with ProjektMapper() as mapper:
+            return mapper.find_granted()
+
+
+    
+        
+    def get_projekte_by_zustand(self, zustand_id):
+        with ProjektMapper() as mapper:
+            return mapper.find_projekte_by_zustand(zustand_id)
+
+    def set_zustand_at_projekt(self, projekt_id, zustand_id):
+        with ProjektMapper() as mapper:
+            return mapper.set_zustand_at_projekt(projekt_id,zustand_id)
+
     def get_alle_projekte(self, ):
         """return alle Projekte """
         with ProjektMapper() as mapper:
+            return mapper.find_all()
+
+    def get_granted_projekte(self):
+        """return alle Projekte """
+        with ProjektMapper() as mapper:
+            return mapper.find_granted()
+
+    def get_alle_pending_projekte(self):
+        '''Gib alle ungehemigten Projekte zuruck'''
+        with ProjektWartelisteMapper() as mapper:
             return mapper.find_all()
 
     def get_projekt_teilnehmer(self, ):
@@ -110,11 +138,23 @@ class ProjektAdministration(object):
     def delete_projekt(self, ):
         pass
 
-    def save_projekt(self, ):
+    def save_projekt(self, projekt):
         pass
 
     def create_bewertung(self, ):
         pass
+
+    def get_alle_semester(self):
+        with SemesterMapper() as mapper:
+            return mapper.find_all()
+
+    def get_semester_by_id(self, id):
+        with SemesterMapper() as mapper:
+            return mapper.find_by_id(id)
+
+    def get_alle_module(self):
+        with ModulMapper() as mapper:
+            return mapper.find_all()
 
     def get_module_by_projekt_id(self, projekt_id):
         with ModulMapper() as mapper:
@@ -136,6 +176,11 @@ class ProjektAdministration(object):
         """ Alle Teilnamen des Users auslesen"""
         with TeilnahmeMapper() as mapper:
             return mapper.find_by_student_id(id)
+    
+    def get_teilnahmen_by_modul_und_semester(self, modul_id, semester_id):
+        """ Alle Teilnamen des Users auslesen"""
+        with TeilnahmeMapper() as mapper:
+            return mapper.find_by_modul_und_semester(modul_id, semester_id)
 
 
     def get_teilnahmen_by_projekt_id(self, id):
@@ -152,8 +197,10 @@ class ProjektAdministration(object):
                 students.append(mapper.find_by_id(teilnahme.get_teilnehmer()))
         return students
 
-    def delete_teilnahme(self, ):
-        pass
+    
+    def delete_teilnahme(self, lehrangebotId, teilnehmerId):
+       with TeilnahmeMapper() as mapper:
+            return mapper.delete(lehrangebotId, teilnehmerId)
 
     def create_teilnahme(self, lehrangebotId, teilnehmerId):
         '''creat person'''
@@ -164,3 +211,42 @@ class ProjektAdministration(object):
 
         with TeilnahmeMapper() as mapper:
             return mapper.insert(teilnahme)
+
+    def create_wartelisteProjekt(self, name, max_teilnehmer, projektbeschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe):
+        '''Ein warteliste Projekt erstellen'''
+        projekt = Projekt()
+        projekt.set_max_teilnehmer(max_teilnehmer)
+        projekt.set_projektbeschreibung(projektbeschreibung)
+        projekt.set_betreuer(betreuer)
+        projekt.set_externer_partner(externer_partner)
+        projekt.set_woechentlich(woechentlich)
+        projekt.set_anzahl_block_vor(anzahl_block_vor)
+        projekt.set_anzahl_block_in(anzahl_block_in)
+        projekt.set_praeferierte_block(praeferierte_block)
+        projekt.set_bes_raum(bes_raum)
+        projekt.set_raum(raum)
+        projekt.set_sprache(sprache)
+        projekt.set_dozent(dozent)
+        projekt.set_anzahlTeilnehmer(anzahlTeilnehmer)
+        projekt.set_teilnehmerListe(teilnehmerListe)
+        projekt.set_id(1)
+        projekt.set_name(name)
+        projekt.set_aktueller_zustand(Zustand('Neu'))
+        print(projekt)
+
+        with ProjektMapper() as mapper:
+            return mapper.insert_pending(projekt)
+
+
+    def save_teilnahme(self, teilnahme):
+        with TeilnahmeMapper() as mapper:
+            mapper.update(teilnahme)
+
+    def set_state(self, projekt, zus):
+        projekt = Projekt()
+        projekt.set_aktueller_zustand(zus)
+        return projekt
+
+    def get_state(self, projekt):
+        return self.projekt.get_aktueller_zustand()
+

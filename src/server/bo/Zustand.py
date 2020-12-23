@@ -1,16 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+
 class Zustand:
-    def __init__(self):
-        self._name = None
-        self._zugewiesene_projekte = []
+    def __init__(self, txt='""'):
+        self.name = txt
 
-    def get_zugewiesene_projekte(self, ):
-        pass
+    def get_name(self):
+    	return self.name
 
-    def set_zugewiesene_projekte(self, projektliste):
-        pass
+    def set_name(self, txt):
+    	self.name = txt
 
-    def __str__(self, ):
-        pass
+    def __str__(self):
+        return '{}'.format(self.name)
+
+        # return '"{}"'.format(self.name)
+

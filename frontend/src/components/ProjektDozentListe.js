@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
+import { withStyles, Button, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear'
 import { withRouter } from 'react-router-dom';
 import { ElectivAPI } from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
-// import CustomerForm from './dialogs/CustomerForm';
-import ProjektListeEintrag from './ProjektListeEintrag';
+import ProjektForm from './dialogs/ProjektForm';
+import ProjektDozentListeEintrag from './ProjektDozentListeEintrag';
 
 /*
-Erstellt eine Liste von ProjektListeEintrag fuer jedes Projekt
+Erstellt eine Liste von ProjektDozentListeEintrag fuer jedes Projekt
 */
 
-class ProjektListe extends Component {
+
+
+class ProjektDozentListe extends Component {
 
 	constructor(props) {
 		super(props);
@@ -39,7 +42,7 @@ class ProjektListe extends Component {
 
 	//hole alle Projekte vom Backend
 	getProjekte = () => {
-		ElectivAPI.getAPI().getProjekteByZustand("Genehmigt")
+		ElectivAPI.getAPI().getPendingProjekte()
       .then(projekteBOs => 
 				this.setState({								//neuer status wenn fetch komplett
 					projekte: projekteBOs,					
@@ -78,6 +81,28 @@ class ProjektListe extends Component {
 
   }
 
+  addProjektButtonClicked = event => {
+    event.stopPropagation();
+    this.setState({
+      showProjekteForm: true
+    });
+  }
+
+  projektFormClosed = projekt => {
+    if (projekt) {
+      const newProjektList = [...this.state.projekte, projekt];
+      this.setState({
+        projekte: newProjektList,
+        filteredProjekte: [...newProjektList],
+        showProjekteForm: false
+      });
+    } else {
+      this.setState({
+        showProjekteForm: false
+      });
+    }
+  }
+
 
 
 
@@ -92,7 +117,7 @@ class ProjektListe extends Component {
         <Grid className={classes.projektFilter} container spacing={1} justify='flex-start' alignItems='center'>
           <Grid item>
             <Typography>
-              Filter Projekliste nach Namen:
+              Deine noch nicht genehmigten Projekte:
               </Typography>
           </Grid>
           <Grid item xs={4}>
@@ -114,21 +139,23 @@ class ProjektListe extends Component {
           </Grid>
           <Grid item xs />
           <Grid item>
-            
+            <Button variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.addProjektButtonClicked}>
+              Add Projekt
+          </Button>
           </Grid>
         </Grid>
         { 
-          // Show the list of ProjektListeEintrag components
+          // Show the list of ProjektDozentListeEintrag components
           // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters
           
           filteredProjekte.map(projekt =>
-            <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
+            <ProjektDozentListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent}
             />) 
         }
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`} onReload={this.getProjekte} />
-        
+        <ProjektForm show={showProjekteForm} onClose={this.projektFormClosed} />
       </div>
     );
   }
@@ -146,12 +173,12 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-ProjektListe.propTypes = {
+ProjektDozentListe.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   /** @ignore */
   location: PropTypes.object.isRequired,
 }
 
-export default withRouter(withStyles(styles)(ProjektListe));
+export default withRouter(withStyles(styles)(ProjektDozentListe));
 	

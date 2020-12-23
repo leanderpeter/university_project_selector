@@ -4,7 +4,7 @@ import NamedBusinessObject from './NamedBusinessObject';
 Projekt von ElectivApp
 */
 
-export default class ProjektBO extends NamedBusinessObject {
+export default class ProjektBO extends NamedBusinessObject{
 	/*
 	Erstellt ein BO mit den Parametern:
   `name` varchar(100) NOT NULL DEFAULT '',
@@ -13,7 +13,7 @@ export default class ProjektBO extends NamedBusinessObject {
   `date` varchar(100) NOT NULL DEFAULT '',
   `max_subscriber` int(11) NOT NULL DEFAULT '0',
 	*/
-	constructor(amax_teilnehmer, aprojektbeschreibung, abetreuer, aexterner_partner, awoechentlich, aanzahl_block_vor, aanzahl_block_in, apraeferierte_block, abes_raum, araum, asprache, adozent, amoduloption, aanzahlTeilnehmer,ateilnehmerListe){
+	constructor(amax_teilnehmer, aprojektbeschreibung, abetreuer, aexterner_partner, awoechentlich, aanzahl_block_vor, aanzahl_block_in, apraeferierte_block, abes_raum, araum, asprache, adozent, azustand, ahalbjahr, aart, amoduloption, aanzahlTeilnehmer,ateilnehmerListe){
 		super();
 		this.max_teilnehmer = amax_teilnehmer;
 		this.beschreibung = aprojektbeschreibung;
@@ -27,6 +27,9 @@ export default class ProjektBO extends NamedBusinessObject {
 		this.raum = araum;
 		this.sprache = asprache;
 		this.dozent = adozent;
+		this.aktueller_zustand = azustand
+		this.halbjahr = ahalbjahr;
+		this.art = aart;
 		this.moduloption = amoduloption;
 		this.anzahlTeilnehmer = aanzahlTeilnehmer;
 		this.teilnehmerListe = ateilnehmerListe;
@@ -129,7 +132,7 @@ export default class ProjektBO extends NamedBusinessObject {
 	/*
 	Setze 
 	*/
-	setname(apraeferierte_block){
+	setpraeferierte_block(apraeferierte_block){
 		this.praeferierte_block = apraeferierte_block;  
 	}
 			/*
@@ -176,18 +179,45 @@ export default class ProjektBO extends NamedBusinessObject {
 	setdozent(adozent){
 		this.dozent = adozent;
 	}
-		/*
-	Erhalte  Moduloptionen
+
+	/*
+	Erhalte aktuellen Zustand
 	*/
-	getModuloption(){
-		return this.moduloption;
+	getAktuellerZustand(){
+		return this.aktuellerZustand;
+	}
+	/*
+	Setze aktuellen Zustand
+	*/
+	setAktuellerZustand(azustand){
+		this.aktuellerZustand = azustand;  
+	}
+
+		/*
+	Erhalte  Halbjahr
+	*/
+	getHalbjahr(){
+		return this.halbjahr;
 	}
 
     /*
-	Setze  Moduloptionen
+	Setze  Halbjahr
 	*/
-	setModuloption(amoduloption){
-		this.moduloption = amoduloption;
+	setHalbjahr(ahalbjahr){
+		this.halbjahr = ahalbjahr;
+	}
+			/*
+	Erhalte  Art
+	*/
+	getArt(){
+		return this.art;
+	}
+
+    /*
+	Setze  Art
+	*/
+	setArt(aart){
+		this.art = aart;
 	}
 
     /*
@@ -223,8 +253,9 @@ export default class ProjektBO extends NamedBusinessObject {
 	Gebe ein Array von Projekt BO's zuruck.
 	*/
 	static fromJSON(projekte) {
-		let results = [];
+		let results = null;
 		if (Array.isArray(projekte)) {
+			results = [];
 			projekte.forEach((c) => {
 				Object.setPrototypeOf(c, ProjektBO.prototype);
 				results.push(c);
@@ -233,7 +264,7 @@ export default class ProjektBO extends NamedBusinessObject {
 			// Es gibt wohl nur ein Objekt
 			let c = projekte;
 			Object.setPrototypeOf(c, ProjektBO.prototype);
-			results.push(c);
+			results = c;
 		}
 		return results;
 	}
