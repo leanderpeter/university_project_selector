@@ -1,12 +1,32 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+class Zustand:
+    def __init__(self, txt=""):
+        self.name = txt
 
-from server.bo.NamedBusinessObject import NamedBusinessObject
-from server.bo.Automat import Automat
-from server.bo.Zustand import Zustand
+    def get_name(self):
+    	return self.name
+
+    def set_name(self, txt):
+    	self.name = txt
+
+    def __str__(self):
+        return "{}".format(self.name)
 
 
-class Projekt(NamedBusinessObject, Automat):
+class Automat(Zustand):
+    def __init__(self):
+        self._aktueller_zustand = Zustand()
+
+    def get_aktueller_zustand(self):
+        return self._aktueller_zustand.get_name()
+
+    def set_aktueller_zustand(self, zustand):
+        self._aktueller_zustand = Zustand(zustand)
+
+    def __str__(self):
+    	return "{}".format(self._aktueller_zustand)
+
+
+class Projekt(Automat):
     def __init__(self):
         super().__init__()
         self._max_teilnehmer = None
@@ -131,7 +151,7 @@ class Projekt(NamedBusinessObject, Automat):
 
     def __str__(self):
         '''Create and return simple string of the BO'''
-        return "Projekt: {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, '{}'".format(
+        return "Projekt: {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}".format(
                                                                               self._max_teilnehmer,
                                                                               self._projektbeschreibung,
                                                                               self._betreuer, 
@@ -199,3 +219,5 @@ class Projekt(NamedBusinessObject, Automat):
             "id": self.get_id()
         }
         return result
+
+

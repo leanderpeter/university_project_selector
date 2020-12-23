@@ -6,6 +6,7 @@ from .bo.Person import Person
 from .bo.Student import Student
 from .bo.Projekt import Projekt
 from .bo.Teilnahme import Teilnahme
+from .bo.Zustand import Zustand
 
 from .db.PersonMapper import PersonMapper
 from .db.StudentMapper import StudentMapper
@@ -95,6 +96,14 @@ class ProjektAdministration(object):
         with ProjektMapper() as mapper:
             return mapper.find_projekt_by_id(projekt_id)
 
+    def get_projekt_by_zus(self):
+        with ProjektMapper() as mapper:
+            return mapper.find_granted()
+
+
+    def get_alle_projekte(self):
+        pass
+        
     def get_projekte_by_zustand(self, zustand_id):
         with ProjektMapper() as mapper:
             return mapper.find_projekte_by_zustand(zustand_id)
@@ -107,6 +116,11 @@ class ProjektAdministration(object):
         """return alle Projekte """
         with ProjektMapper() as mapper:
             return mapper.find_all()
+
+    def get_granted_projekte(self):
+        """return alle Projekte """
+        with ProjektMapper() as mapper:
+            return mapper.find_granted()
 
     def get_alle_pending_projekte(self):
         '''Gib alle ungehemigten Projekte zuruck'''
@@ -202,12 +216,22 @@ class ProjektAdministration(object):
         projekt.set_teilnehmerListe(teilnehmerListe)
         projekt.set_id(1)
         projekt.set_name(name)
-        # print(projekt)
+        projekt.set_aktueller_zustand(Zustand('Neu'))
+        print(projekt)
 
-        with ProjektWartelisteMapper() as mapper:
-            return mapper.insert(projekt)
+        with ProjektMapper() as mapper:
+            return mapper.insert_pending(projekt)
 
 
     def save_teilnahme(self, teilnahme):
         with TeilnahmeMapper() as mapper:
             mapper.update(teilnahme)
+
+    def set_state(self, projekt, zus):
+        projekt = Projekt()
+        projekt.set_aktueller_zustand(zus)
+        return projekt
+
+    def get_state(self, projekt):
+        return self.projekt.get_aktueller_zustand()
+

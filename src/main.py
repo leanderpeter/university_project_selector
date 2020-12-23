@@ -31,7 +31,7 @@ bo = api.model('BusinessObject', {
 })
 
 automat = api.model('Automat',{
-    'aktueller_zustand': fields.Integer(attribute='_aktueller_zustand', description='ID des aktuellen Zustands des Automaten')
+    'aktueller_zustand': fields.String(attribute='_aktueller_zustand', description='ID des aktuellen Zustands des Automaten')
 })
 
 nbo = api.inherit('NamedBusinessObject', bo, {
@@ -103,7 +103,10 @@ class ProjektListeOperationen(Resource):
 
     def get(self):
         adm = ProjektAdministration()
-        projekte = adm.get_alle_projekte()
+        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
+        zus = "Neu"
+        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
+        projekte = adm.get_projekte_by_zustand('"{}"'.format(zus))
         return projekte
 
     def delete(self, projekt_id):
@@ -112,7 +115,7 @@ class ProjektListeOperationen(Resource):
     def put(self, projekt_id):
         pass
 
-@electivApp.route('/projekte/zustand/<int:id>')
+@electivApp.route('/projekte/zustand/<string:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class Projektverwaltungoperation(Resource):
     @electivApp.marshal_list_with(projekt)
@@ -120,7 +123,8 @@ class Projektverwaltungoperation(Resource):
 
     def get(self, id):
         adm = ProjektAdministration()
-        projekte = adm.get_projekte_by_zustand(id)
+        projekte = adm.get_projekte_by_zustand('"{}"'.format(id))
+        print(projekte)
         return projekte
 
 @electivApp.route('/projekte/zustand')
@@ -366,7 +370,10 @@ class ProjektGenehmigungOperation(Resource):
     @electivApp.marshal_list_with(projekt)
     def get(self):
         adm = ProjektAdministration()
-        projekte = adm.get_alle_pending_projekte()
+        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
+        zus = "Neu"
+        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
+        projekte = adm.get_projekte_by_zustand('"{}"'.format(zus))
         return projekte
 
     def delete(self):
@@ -386,7 +393,6 @@ class ProjektGenehmigungOperation(Resource):
 
         if proposal is not None:
             p = adm.create_wartelisteProjekt(proposal.get_name(),proposal.get_max_teilnehmer(),proposal.get_projektbeschreibung(),proposal.get_betreuer(),proposal.get_externer_partner(),proposal.get_woechentlich(),proposal.get_anzahl_block_vor(),proposal.get_anzahl_block_in(),proposal.get_praeferierte_block(),proposal.get_bes_raum(),proposal.get_raum(),proposal.get_sprache(),proposal.get_dozent(),proposal.get_anzahlTeilnehmer(),proposal.get_teilnehmerListe())
-            print(p.__str__())
             return p, 200
         else:
             return '', 500

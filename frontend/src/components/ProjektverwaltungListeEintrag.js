@@ -1,74 +1,69 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
-import { Button, ButtonGroup } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import { ElectivAPI } from '../api';
 import ProjektForm from './dialogs/ProjektForm';
 
 
-
-var InfoList = null;
-var ProjektDeleteDialog = null;
-
-
 class ProjektverwaltungListeEintrag extends Component {
 
-	constructor(props) {
-		super(props);
+  constructor(props) {
+    super(props);
 
-		// Status initalisieren
-		this.state = {
-			projekt: props.projekt,
-			showProjektForm: false,
-			showProjektDeleteDialog: false
-		};
-	}
+    // Status initalisieren
+    this.state = {
+      projekt: props.projekt,
+      showProjektForm: false,
+      showProjektDeleteDialog: false
+    };
+  }
 
-	// Handles events wenn sich der status der oeffnung aendert
-	expansionPanelStateChanged = () => {
-		this.props.onExpandedStateChange(this.props.projekt);
+  // Handles events wenn sich der status der oeffnung aendert
+  expansionPanelStateChanged = () => {
+    this.props.onExpandedStateChange(this.props.projekt);
 
 
-	}
+  }
 
-	annehmenButtonClicked = event => {
-        //Logik fuer annehmen Button
-        this.setState({projektAnnehmenButton:true});
-        this.setState({projektAblehnenButton:true});
-    	ElectivAPI.getAPI().setZustandAtProjekt(this.props.projekt.id, 2);
-     }
+  annehmenButtonClicked = event => {
+    //Logik fuer annehmen Button
+    this.setState({ projektAnnehmenButton: true });
+    this.setState({ projektAblehnenButton: true });
+    ElectivAPI.getAPI().setZustandAtProjekt(this.props.projekt.id, "Genehmigt");
+  }
 
-    ablehnenButtonClicked = event => {
+  ablehnenButtonClicked = event => {
     //Logik fuer ablehnen Button
-        this.setState({projektAnnehmenButton:true});
-        this.setState({projektAblehnenButton:true});
-        ElectivAPI.getAPI().setZustandAtProjekt(this.props.projekt.id, 4);
+    this.setState({ projektAnnehmenButton: true });
+    this.setState({ projektAblehnenButton: true });
+    ElectivAPI.getAPI().setZustandAtProjekt(this.props.projekt.id, "Abgelehnt");
+  }
+
+
+  // Kummert sich um das close event vom ProjektForm
+  projektFormClosed = (projekt) => {
+    if (projekt) {
+      this.setState({
+        projekt: projekt,
+        showProjektForm: false
+      });
+    } else {
+      this.setState({
+        showProjektForm: false
+      });
     }
-
-
-	// Kummert sich um das close event vom ProjektForm
-	projektFormClosed = (projekt) => {
-		if ( projekt ) {
-			this.setState({
-				projekt: projekt,
-				showProjektForm: false
-			});
-		}else {
-			this.setState({
-				showProjektForm: false
-			});
-		}
-	}
+  }
 
 
 
-	/** Renders the component */
+  /** Renders the component */
   render() {
     const { classes, expandedState } = this.props;
     // Use the states projekt
-    const { projekt, showProjektForm} = this.state;
+    const { projekt, showProjektForm } = this.state;
 
 
 
@@ -86,23 +81,23 @@ class ProjektverwaltungListeEintrag extends Component {
               </Grid>
               <Grid item xs />
               <Grid item>
-              	<Typography variant='body2' color={'textSecondary'}>Details</Typography>
-            	</Grid>
+                <Typography variant='body2' color={'textSecondary'}>Details</Typography>
+              </Grid>
             </Grid>
           </AccordionSummary>
           <AccordionDetails>
             <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
             <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
-            
+
           </AccordionDetails>
           <AccordionDetails>
-          <Button className={classes.projektAnnehmenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.annehmenButtonClicked} disabled={this.state.projektAnnehmenButton}>
-          Annehmen
+            <Button className={classes.projektAnnehmenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.annehmenButtonClicked} disabled={this.state.projektAnnehmenButton}>
+              Annehmen
         </Button>
-        <Button className={classes.projektAblehnenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.ablehnenButtonClicked} disabled={this.state.projektAblehnenButton}>
-          Ablehnen
+            <Button className={classes.projektAblehnenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.ablehnenButtonClicked} disabled={this.state.projektAblehnenButton}>
+              Ablehnen
         </Button>
-            
+
           </AccordionDetails>
         </Accordion>
         <ProjektForm show={showProjektForm} projekt={projekt} onClose={this.projektFormClosed} />
@@ -142,7 +137,7 @@ ProjektverwaltungListeEintrag.propTypes = {
    * Signature: onExpandedStateChange(projektBo projekt)
    */
   onExpandedStateChange: PropTypes.func.isRequired,
-  
+
 }
 
 export default withStyles(styles)(ProjektverwaltungListeEintrag);

@@ -1,14 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from server.bo.NamedBusinessObject import NamedBusinessObject
-
-class Zustand(NamedBusinessObject):
-    def __init__(self):
-        super().__init__()
-        self._name = None
 
 
-    def __str__(self, ):
-        pass
+class Zustand:
+    def __init__(self, txt='""'):
+        self.name = txt
 
+    def get_name(self):
+    	return self.name
+
+    def set_name(self, txt):
+    	self.name = txt
+
+    def __str__(self):
+        return '{}'.format(self.name)
+
+        # return '"{}"'.format(self.name)
 

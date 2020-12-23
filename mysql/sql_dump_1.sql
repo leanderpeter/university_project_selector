@@ -22,30 +22,6 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
--- Table `electivApp`.`projekte_ausstehend`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `electivApp`.`projekte_ausstehend` (
-  `id` INT(11) NOT NULL DEFAULT '0',
-  `name` VARCHAR(100) NOT NULL DEFAULT '',
-  `max_teilnehmer` INT(11) NOT NULL DEFAULT '30',
-  `beschreibung` VARCHAR(100) NOT NULL DEFAULT '',
-  `betreuer` VARCHAR(100) NOT NULL DEFAULT '',
-  `externer_partner` VARCHAR(100) NULL DEFAULT '',
-  `woechentlich` TINYINT(1) NULL DEFAULT NULL,
-  `anzahl_block_vor` INT(11) NULL DEFAULT NULL,
-  `anzahl_block_in` INT(11) NULL DEFAULT NULL,
-  `praeferierte_block` VARCHAR(128) NULL DEFAULT '',
-  `bes_raum` TINYINT(1) NULL DEFAULT '0',
-  `raum` VARCHAR(128) NULL DEFAULT '',
-  `sprache` VARCHAR(128) NULL DEFAULT '',
-  `dozent` INT(11) DEFAULT NULL,
-  `anzahlTeilnehmer` VARCHAR(128) DEFAULT NULL,
-  `teilnehmerListe` VARCHAR(128) DEFAULT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
--- -----------------------------------------------------
 -- Table `electivApp`.`projekte`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `electivApp`.`projekte` (
@@ -62,31 +38,23 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`projekte` (
   `bes_raum` TINYINT(1) NULL DEFAULT '0',
   `raum` VARCHAR(128) NULL DEFAULT '',
   `sprache` VARCHAR(128) NULL DEFAULT '',
-  `dozent` INT DEFAULT NULL,
-  `aktueller_zustand` INT DEFAULT NULL,
-  `halbjahr` INT DEFAULT NULL,
-  `art` INT DEFAULT NULL,
+  `dozent` INT NULL DEFAULT NULL,
+  `aktueller_zustand` VARCHAR(128) NULL DEFAULT NULL,
+  `halbjahr` INT NULL DEFAULT NULL,
+  `art` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_projekte_personen1_idx` (`dozent` ASC) VISIBLE,
-  INDEX `fk_projekte_zustaende1_idx` (`aktueller_zustand` ASC) VISIBLE,
   INDEX `fk_projekte_semester1_idx` (`halbjahr` ASC) VISIBLE,
   INDEX `fk_projekte_projektarten1_idx` (`art` ASC) VISIBLE,
   CONSTRAINT `fk_projekte_personen1`
     FOREIGN KEY (`dozent`)
-    REFERENCES `electivApp`.`personen` (`id`),  
-CONSTRAINT `fk_projekte_zustaende1`
-    FOREIGN KEY (`aktueller_zustand`)
-    REFERENCES `electivApp`.`zustaende` (`id`),
-  CONSTRAINT `fk_projekte_semester1`
-    FOREIGN KEY (`halbjahr`)
-    REFERENCES `electivApp`.`semester` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `electivApp`.`personen` (`id`),
   CONSTRAINT `fk_projekte_projektarten1`
     FOREIGN KEY (`art`)
-    REFERENCES `electivApp`.`projektarten` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `electivApp`.`projektarten` (`id`),
+  CONSTRAINT `fk_projekte_semester1`
+    FOREIGN KEY (`halbjahr`)
+    REFERENCES `electivApp`.`semester` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -137,15 +105,6 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`teilnahmen` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-
--- -----------------------------------------------------
--- Table `electivApp`.`Zustand`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `electivApp`.`zustaende` (
-  `id` INT NOT NULL,
-  `name` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `electivApp`.`semester`
@@ -222,16 +181,16 @@ INSERT INTO `projekte` VALUES (1232,'Sofware for Monkeys', 30, 'Die Ziele von So
 (6,'Rechnungswesen for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 2,NULL),
 (7,'UX for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 3,NULL),
 (8,'Datenbanken for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 2,NULL),
-(9,'Web Technologie for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 3,NULL),
-(10,'Datenschutz for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 2,NULL);               
+(9,'Web Technologie for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Genehmigt', 3,NULL),
+(10,'Datenschutz for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Neu', 2,NULL);               
 /*!40000 ALTER TABLE `projekte` ENABLE KEYS */;
 UNLOCK TABLES;
 
 LOCK TABLES `teilnahmen` WRITE;
 /*!40000 ALTER TABLE `teilnahmen` DISABLE KEYS */;
 INSERT INTO `electivApp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`,`anrechnung`, `resultat`) VALUES ('1', '1232', '1', '1', '1');
-INSERT INTO `electivapp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`, `anrechnung`, `resultat`) VALUES ('2', '1232', '1', '1', '1');
-INSERT INTO `electivapp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`, `anrechnung`, `resultat`) VALUES ('3', '1232', '1', '1', '2');
+INSERT INTO `electivApp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`, `anrechnung`, `resultat`) VALUES ('2', '1232', '1', '1', '1');
+INSERT INTO `electivApp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`, `anrechnung`, `resultat`) VALUES ('3', '1232', '1', '1', '2');
 
 /*!40000 ALTER TABLE `teilnahmen` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -253,10 +212,10 @@ UNLOCK TABLES;
 LOCK TABLES `module` WRITE;
 /*!40000 ALTER TABLE `module` DISABLE KEYS */;
 INSERT INTO `electivApp`.`module` (`id`, `name`, `edv_nr`) VALUES ('1', 'SW Projekt', '338079');
-INSERT INTO `electivapp`.`module` (`id`, `name`, `edv_nr`) VALUES ('2', 'Interdisziplinäres Projekt', '387662');
-INSERT INTO `electivapp`.`module` (`id`, `name`, `edv_nr`) VALUES ('3', 'HansWurst Modult', '481907');
-INSERT INTO `electivapp`.`module` (`id`, `name`, `edv_nr`) VALUES ('4', 'Affen Modul', '331341');
-INSERT INTO `electivapp`.`module` (`id`, `name`, `edv_nr`) VALUES ('5', 'Marketing', '333312');
+INSERT INTO `electivApp`.`module` (`id`, `name`, `edv_nr`) VALUES ('2', 'Interdisziplinäres Projekt', '387662');
+INSERT INTO `electivApp`.`module` (`id`, `name`, `edv_nr`) VALUES ('3', 'HansWurst Modult', '481907');
+INSERT INTO `electivApp`.`module` (`id`, `name`, `edv_nr`) VALUES ('4', 'Affen Modul', '331341');
+INSERT INTO `electivApp`.`module` (`id`, `name`, `edv_nr`) VALUES ('5', 'Marketing', '333312');
 /*!40000 ALTER TABLE `module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -268,21 +227,21 @@ UNLOCK TABLES;
 
 LOCK TABLES `semester` WRITE;
 /*!40000 ALTER TABLE `semester` DISABLE KEYS */;
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('1', 'SS19');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('2', 'WS19/20');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('3', 'SS20');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('4', 'WS20/21');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('5', 'SS21');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('6', 'WS21/22');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('7', 'SS22');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('8', 'WS22/23');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('9', 'SS23');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('10', 'WS23/24');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('11', 'SS24');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('12', 'WS24/25');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('13', 'SS25');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('14', 'WS25/26');
-INSERT INTO `electivapp`.`semester` (`id`, `name`) VALUES ('15', 'SS26');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('1', 'SS19');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('2', 'WS19/20');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('3', 'SS20');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('4', 'WS20/21');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('5', 'SS21');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('6', 'WS21/22');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('7', 'SS22');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('8', 'WS22/23');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('9', 'SS23');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('10', 'WS23/24');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('11', 'SS24');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('12', 'WS24/25');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('13', 'SS25');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('14', 'WS25/26');
+INSERT INTO `electivApp`.`semester` (`id`, `name`) VALUES ('15', 'SS26');
 /*!40000 ALTER TABLE `semester` ENABLE KEYS */;
 UNLOCK TABLES;
 
