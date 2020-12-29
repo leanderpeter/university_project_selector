@@ -167,8 +167,8 @@ class StudentMapper(Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 student.set_id(1)
 
-        command = "INSERT INTO studenten (id, name, email, google_user_id) VALUES (%s,%s,%s,%s)"
-        data = (student.get_id(), student.get_name(), student.get_email(), student.get_google_user_id())
+        command = "INSERT INTO studenten (id, name, email, google_user_id, rolle) VALUES (%s,%s,%s,%s,%s)"
+        data = (student.get_id(), student.get_name(), student.get_email(), student.get_google_user_id(), student.get_rolle())
         cursor.execute(command, data)
 
         self._connection.commit()

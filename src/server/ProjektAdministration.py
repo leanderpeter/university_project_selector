@@ -36,13 +36,14 @@ class ProjektAdministration(object):
         with PersonMapper() as mapper:
             return mapper.insert(user)
 
-    def create_student(self, name, email, google_user_id):
+    def create_student(self, name, email, google_user_id, rolle):
         '''creat person'''
 
         user = Student()
         user.set_name(name)
         user.set_email(email)
         user.set_google_user_id(google_user_id)
+        user.set_rolle(rolle)
         user.set_id(1)
 
         with StudentMapper() as mapper:

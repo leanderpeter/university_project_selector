@@ -28,7 +28,11 @@ def secured(function):
         Here firebase receives the token that the frontend has 'sendet'/saved in cookies
         '''
         id_token = request.cookies.get("token")
-        # print(id_token)
+        rolle = request.cookies.get("rolle")
+        name = request.cookies.get("name")
+        kuerzel = request.cookies.get("kuerzel")
+        mat_nr = request.cookies.get("mat_nr")
+
         error_message = None
         claims = None
         objects = None
@@ -49,7 +53,6 @@ def secured(function):
                     google_user_id = claims.get("user_id")
                     # print(google_user_id)
                     email = claims.get("email")
-                    name = claims.get("name")
 
                     student = adm.get_student_by_google_user_id(google_user_id)
                     if student is not None:
@@ -64,7 +67,7 @@ def secured(function):
                         '''
                         System dont know the user -> user object is created and saved into the DB
                         '''
-                        student = adm.create_student(name, email, google_user_id)
+                        student = adm.create_student(name, email, google_user_id, rolle)
                     print(request.method, request.path, 'asked by:', name, email)
 
                     objects = function(*args, **kwargs)
