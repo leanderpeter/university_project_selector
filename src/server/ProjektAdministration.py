@@ -101,8 +101,7 @@ class ProjektAdministration(object):
             return mapper.find_granted()
 
 
-    def get_alle_projekte(self):
-        pass
+    
         
     def get_projekte_by_zustand(self, zustand_id):
         with ProjektMapper() as mapper:
@@ -183,6 +182,22 @@ class ProjektAdministration(object):
         with TeilnahmeMapper() as mapper:
             return mapper.find_by_modul_und_semester(modul_id, semester_id)
 
+
+    def get_teilnahmen_by_projekt_id(self, id):
+        """ Alle Teilnamen des Users auslesen"""
+        with TeilnahmeMapper() as mapper:
+            return mapper.find_by_projekt_id(id)
+    
+    def get_students_by_projekt_id(self, id):
+        """ Alle teilnehmenden Studenten des Projekts auslesen"""
+        teilnahmen = self.get_teilnahmen_by_projekt_id(id)
+        students = []
+        for teilnahme in teilnahmen:  
+            with StudentMapper() as mapper:
+                students.append(mapper.find_by_id(teilnahme.get_teilnehmer()))
+        return students
+
+    
     def delete_teilnahme(self, lehrangebotId, teilnehmerId):
        with TeilnahmeMapper() as mapper:
             return mapper.delete(lehrangebotId, teilnehmerId)

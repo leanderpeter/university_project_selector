@@ -43,10 +43,13 @@ class Header extends Component {
             <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
               <Tab label='Projekte' component={RouterLink} to={`/projekte`} />
               <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'}/>
+              <Tab label='Projektbearbeiten' component={RouterLink} to={`/projektbearbeiten`} />
               <Tab label="Notenlisten" component={RouterLink} to={'/notenlisten'}/>
               <Tab label='Projekte Dozent' component={RouterLink} to={`/projekteDozent`} />
               <Tab label='Projektverwaltung' component={RouterLink} to={`/projektverwaltung`} />
-              <Tab label='About' component={RouterLink} to={`/about`} />
+              {/*
+              s<Tab label='About' component={RouterLink} to={`/about`} />
+              */}
             </Tabs>
             : null
         }

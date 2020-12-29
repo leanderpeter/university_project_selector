@@ -11,6 +11,7 @@ import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import MeineProjekte from './components/MeineProjekte';
+import ProjektBearbeiten from './components/ProjektBearbeiten';
 import Notenlisten from './components/Notenlisten';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
@@ -149,11 +150,15 @@ class App extends React.Component {
                   <Route path='/projektverwaltung' component={ProjektverwaltungListe}>
                     <ProjektverwaltungListe currentStudent={currentStudent}/>
                   </Route>
+                  <Route path='/projektbearbeiten' component={ProjektBearbeiten}>
+                    <ProjektBearbeiten currentStudent={currentStudent}/>
+                  </Route>
                   
                   {currentStudent ?
                   <Route path='/meineprojekte' component={MeineProjekte}>
                     <MeineProjekte currentStudent={currentStudent}/>
                   </Route>
+                  
                   :
                   <></>
                   }

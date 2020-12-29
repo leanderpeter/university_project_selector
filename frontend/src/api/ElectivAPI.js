@@ -61,6 +61,9 @@ export default class ElectivAPI {
 	//getStudent: id
 	#getStudentByIDURL = (id) => `${this.#ElectivServerBaseURL}/student/${id}`;
 
+	//getStudent: id
+	#getStudentByIdURL = (id) => `${this.#ElectivServerBaseURL}/student/${id}`;
+
 	//Bewertung nach Id bekommen
 	#getBewertungURL = (id) => `${this.#ElectivServerBaseURL}/bewertung/${id}`;
 
@@ -79,6 +82,12 @@ export default class ElectivAPI {
 	#getSemester_by_idURL = (id) => `${this.#ElectivServerBaseURL}/semester/${id}`;
 
 
+	//Studenten eines Projekts bekommen
+	#getStudentenByProjektIdURL = (id) => `${this.#ElectivServerBaseURL}/student/projekt/${id}`
+	
+	//Teilnahmen eines Projekts bekommen
+    #getTeilnahmenByProjektIdURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/projekt/${id}`
+  
 
 
 	/*
@@ -233,6 +242,15 @@ export default class ElectivAPI {
 			})
 		})
 	}
+	getStudentById(id){
+		return this.#fetchAdvanced(this.#getStudentByIdURL(id)).then((responseJSON) => {
+			let studentBO = StudentBO.fromJSON(responseJSON);
+			console.info(studentBO)
+			return new Promise(function (resolve){
+				resolve(studentBO)
+			})
+		})
+	}
 
 	setTeilnahme(lehrangebotId, studentID){
         //TODO Set User ID
@@ -296,6 +314,28 @@ export default class ElectivAPI {
 			})
 		})
 	}
+	getStudentenByProjektId(id){
+		return this.#fetchAdvanced(this.#getStudentenByProjektIdURL(id)).then((responseJSON) => {
+			let studentBOs = StudentBO.fromJSON(responseJSON);
+			console.info(studentBOs)
+			return new Promise(function (resolve){
+				resolve(studentBOs)
+			})
+		})
+	}
+	getTeilnahmenByProjektId(id){
+		return this.#fetchAdvanced(this.#getTeilnahmenByProjektIdURL(id)).then((responseJSON) => {
+			let teilnahmeBOs = TeilnahmeBO.fromJSON(responseJSON);
+			console.info(teilnahmeBOs)
+			return new Promise(function (resolve){
+				resolve(teilnahmeBOs)
+			})
+		})
+	}
+
+
+	
+
 
 	getSemester_by_id(id){
 		return this.#fetchAdvanced(this.#getSemester_by_idURL(id)).then((responseJSON) => {
