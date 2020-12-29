@@ -20,6 +20,7 @@ import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import TableFooter from '@material-ui/core/TableFooter';
 import StudentBO from '../api/StudentBO'
 
+import ProjektBearbeiten from './ProjektBearbeiten';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -47,6 +48,7 @@ class ProjektBearbeitenEintrag extends Component {
 
         this.state = {
             teilnahmen : [],
+            studentID: null,
             studentName: null,
             mat_nr: null,
             note: null,
@@ -56,12 +58,18 @@ class ProjektBearbeitenEintrag extends Component {
     }
 
   
-
+    teilnahmeAbwaehlenButtonClicked = event => {
+      //Logik fuer Teilnahme abwaehlen Button
+      this.setState({teilnahmeAbwaehlenButtonDisabled:true});
+      ElectivAPI.getAPI().deleteTeilnahme(this.props.teilnahme.lehrangebot, this.state.studentID).then(()=>this.props.reloadteilnahmen(this.props.teilnahme.lehrangebot));
+      
+    }
     
     getStudentById = () => {
         ElectivAPI.getAPI().getStudentById(this.props.teilnahme.getteilnehmer())
         .then(studentBO =>
             this.setState({
+              studentID: studentBO.getID(),
               studentName: studentBO.getname(),
               mat_nr:studentBO.getmat_nr(),
               loadingInProgress: false,
@@ -121,15 +129,16 @@ class ProjektBearbeitenEintrag extends Component {
 
     render(){
         const {classes, expandedState} = this.props;
-        const {studentName, mat_nr, note,  loadingInProgress, error } = this.state;
+        const {studentID,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
 
         return(
               <StyledTableRow >
                 <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
                 <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
                 <StyledTableCell align="center">{note}</StyledTableCell> 
-                <StyledTableCell align="center"><Button style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" >entfernen</Button>
-                              
+                <StyledTableCell align="center">
+                  <Button className={classes.teilnahmeAbwaehlenButton} style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" onClick={this.teilnahmeAbwaehlenButtonClicked}>entfernen</Button>
+                           
                     
                 </StyledTableCell>
                   <LoadingProgress show={loadingInProgress}></LoadingProgress>

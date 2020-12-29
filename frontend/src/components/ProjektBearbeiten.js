@@ -60,9 +60,11 @@ class ProjektBearbeiten extends Component {
             projekte:[],
             "currentProjekt": null,
             error: null,
-            loadingInProgress: false, 
+            loadingInProgress: false,
+
             
         };
+        this.getTeilnahmenByProjektId=this.getTeilnahmenByProjektId.bind(this)
     }
     
     //AO`PI Anbindung: erstes Dropdown der Seite, um die Projekte des Dozenten zu erhalten
@@ -170,7 +172,7 @@ handleChange = currentProjekt => (event) => {
                             
                             {
                               teilnahmen.map(teilnahme =>
-                              <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme}  />
+                                <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme} reloadteilnahmen={this.getTeilnahmenByProjektId} />
                               )
                             }
 
