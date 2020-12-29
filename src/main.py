@@ -68,7 +68,8 @@ projekt = api.inherit('Projekt', nbo, automat, {
     'halbjahr': fields.Integer(attribute='_halbjahr', description='Die ID des Semesters des Projekts'),
     'art': fields.Integer(attribute='_art', description='Die ID der Projektart'),
     'anzahlTeilnehmer': fields.String(attribute='_anzahlTeilnehmer', description='Die Anzahl der angemeldeten Teilnehmer'),
-    'teilnehmerListe': fields.String(attribute='_teilnehmerListe', description='Liste mit IDs der Teilnehmer')
+    'teilnehmerListe': fields.String(attribute='_teilnehmerListe', description='Liste mit IDs der Teilnehmer'),
+    'ects': fields.Integer(attribute='_ects', description='Die ECTS des Projekts')
 })
 
 # Moduloption aus projekt entfernt !!INFO!!
@@ -443,7 +444,7 @@ class ProjektGenehmigungOperation(Resource):
 
 
         if proposal is not None:
-            p = adm.create_wartelisteProjekt(proposal.get_name(),proposal.get_max_teilnehmer(),proposal.get_projektbeschreibung(),proposal.get_betreuer(),proposal.get_externer_partner(),proposal.get_woechentlich(),proposal.get_anzahl_block_vor(),proposal.get_anzahl_block_in(),proposal.get_praeferierte_block(),proposal.get_bes_raum(),proposal.get_raum(),proposal.get_sprache(),proposal.get_dozent(),proposal.get_anzahlTeilnehmer(),proposal.get_teilnehmerListe())
+            p = adm.create_wartelisteProjekt(proposal.get_name(),proposal.get_max_teilnehmer(),proposal.get_projektbeschreibung(),proposal.get_betreuer(),proposal.get_externer_partner(),proposal.get_woechentlich(),proposal.get_anzahl_block_vor(),proposal.get_anzahl_block_in(),proposal.get_praeferierte_block(),proposal.get_bes_raum(),proposal.get_raum(),proposal.get_sprache(),proposal.get_dozent(),proposal.get_anzahlTeilnehmer(),proposal.get_teilnehmerListe(),proposal.get_ects())
             return p, 200
         else:
             return '', 500

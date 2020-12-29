@@ -129,7 +129,23 @@ export default class ElectivAPI {
 		//immer Zustand 1 (neues Projekt) holen
 		return this.#fetchAdvanced(this.#getProjekteByZustandURL(zustand),{method: 'GET'}).then((responseJSON) => {
 			let projektBOs = ProjektBO.fromJSON(responseJSON);
-			console.info(projektBOs)
+			// console.info(projektBOs.toString())
+			console.log(projektBOs)
+
+			var projektBOssorted = [];
+			
+			function compare(a,b) {
+				if (a.ects < b.ects) {
+					projektBOssorted.push(b);
+					console.log(b);
+				}
+				if (a.ects > b.ects) {
+					projektBOssorted.push(a);
+					console.log(a)
+				}
+			}
+			projektBOs.sort( compare );
+			console.log(projektBOssorted);
 			return new Promise(function (resolve){
 				resolve(projektBOs);
 			})
