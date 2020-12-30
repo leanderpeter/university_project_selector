@@ -59,8 +59,7 @@ class StudentMapper(Mapper):
         result = None
 
         cursor = self._connection.cursor()
-        command = "SELECT id, name, email, google_user_id, mat_nr, kuerzel FROM studenten WHERE google_user_id='{}'".format(
-            google_user_id)
+        command = "SELECT id, name, email, google_user_id, mat_nr, kuerzel FROM studenten WHERE google_user_id='{}'".format(google_user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

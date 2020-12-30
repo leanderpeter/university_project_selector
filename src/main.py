@@ -41,7 +41,7 @@ nbo = api.inherit('NamedBusinessObject', bo, {
 person = api.inherit('Person', nbo, {
     'email': fields.String(attribute='_email', description='Email der Person'),
     'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID der Person'),
-    'rolle': fields.Integer(attribute='_rolle', description='Rolle der Person')
+    'rolle': fields.String(attribute='_rolle', description='Rolle der Person')
 })
 
 student = api.inherit('Student', person, {
@@ -228,6 +228,22 @@ class PersonOperationen(Resource):
     def put(self, person_id):
         pass
 
+@electivApp.route('/personbygoogle/<string:google_user_id>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class PersonByGoogleIDOperationen(Resource):
+    @electivApp.marshal_list_with(person)
+    @secured
+
+    def get(self, google_user_id):
+        adm = ProjektAdministration()
+        person = adm.get_person_by_google_user_id(google_user_id)
+        return person
+
+    def delete(self, student_id):
+        pass
+
+    def put(self, student_id):
+        pass
 
 @electivApp.route('/studentbygoogle/<string:google_user_id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
