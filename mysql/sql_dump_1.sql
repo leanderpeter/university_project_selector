@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`personen` (
   `name` VARCHAR(128) NOT NULL DEFAULT '',
   `email` VARCHAR(128) NULL DEFAULT '',
   `google_user_id` VARCHAR(128) NULL DEFAULT '',
-  `rolle` INT(5) NULL DEFAULT '0',
+  `rolle` VARCHAR(128) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`studenten` (
   `name` VARCHAR(128) NOT NULL DEFAULT '',
   `email` VARCHAR(128) NULL DEFAULT '',
   `google_user_id` VARCHAR(128) NULL DEFAULT '',
-  `rolle` INT(5) NULL DEFAULT '0',
+  `rolle` VARCHAR(128) NOT NULL,
   `mat_nr` INT(10) NULL DEFAULT NULL,
   `kuerzel` VARCHAR(128) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
@@ -197,8 +197,8 @@ UNLOCK TABLES;
 
 LOCK TABLES `personen` WRITE;
 /*!40000 ALTER TABLE `personen` DISABLE KEYS */;
-INSERT INTO `electivApp`.`personen` (`id`, `name`, `email`, `rolle`) VALUES ('1', 'Prof. Dr. Thies', 'thies@hdm.de', '1');
-INSERT INTO `electivApp`.`personen` (`id`, `name`, `email`, `rolle`) VALUES ('2', 'Prof. Dr. Kunz', 'kunz@mail.de', '1');
+INSERT INTO `electivApp`.`personen` (`id`, `name`, `email`, `rolle`) VALUES ('1', 'Prof. Dr. Thies', 'thies@hdm.de', 'Dozent');
+INSERT INTO `electivApp`.`personen` (`id`, `name`, `email`, `rolle`) VALUES ('2', 'Prof. Dr. Kunz', 'kunz@mail.de', 'Dozent');
 /*!40000 ALTER TABLE `personen` ENABLE KEYS */;
 UNLOCK TABLES;
 
