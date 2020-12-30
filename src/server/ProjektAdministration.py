@@ -24,26 +24,31 @@ class ProjektAdministration(object):
     def __init__(self):
         pass
 
-    def create_person(self, name, email, google_user_id):
+    def create_person(self, name, email, google_user_id, rolle):
         '''creat person'''
 
         user = Person()
         user.set_name(name)
         user.set_email(email)
         user.set_google_user_id(google_user_id)
+        if rolle == "Dozent":
+            user.set_rolle(Person.ROLLE_DOZENT)
+        elif rolle == "Admin":
+            user.set_rolle(Person.ROLLE_ADMIN)
         user.set_id(1)
 
         with PersonMapper() as mapper:
             return mapper.insert(user)
 
-    def create_student(self, name, email, google_user_id, rolle):
-        '''creat person'''
+    def create_student(self, name, email, google_user_id, kuerzel, mat_nr):
+        '''creat student'''
 
         user = Student()
         user.set_name(name)
         user.set_email(email)
         user.set_google_user_id(google_user_id)
-        user.set_rolle(rolle)
+        user.set_kuerzel(kuerzel)
+        user.set_mat_nr(mat_nr)
         user.set_id(1)
 
         with StudentMapper() as mapper:
@@ -79,6 +84,12 @@ class ProjektAdministration(object):
 
     def save_person(self, user):
         '''save given user'''
+        rolle = user.get_rolle()
+        if rolle == "Dozent":
+            user.set_rolle(Person.ROLLE_DOZENT)
+        elif rolle == "Admin":
+            user.set_rolle(Person.ROLLE_ADMIN)
+            
         with PersonMapper() as mapper:
             mapper.update(user)
 
@@ -204,7 +215,7 @@ class ProjektAdministration(object):
             return mapper.delete(lehrangebotId, teilnehmerId)
 
     def create_teilnahme(self, lehrangebotId, teilnehmerId):
-        '''creat person'''
+        '''creat teilnahme'''
 
         teilnahme = Teilnahme()
         teilnahme.set_teilnehmer(teilnehmerId)
@@ -248,6 +259,6 @@ class ProjektAdministration(object):
         projekt.set_aktueller_zustand(zus)
         return projekt
 
-    def get_state(self, projekt):
-        return self.projekt.get_aktueller_zustand()
+"""     def get_state(self, projekt):
+        return self.projekt.get_aktueller_zustand() """
 

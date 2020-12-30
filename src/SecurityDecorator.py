@@ -53,21 +53,40 @@ def secured(function):
                     google_user_id = claims.get("user_id")
                     # print(google_user_id)
                     email = claims.get("email")
-
-                    student = adm.get_student_by_google_user_id(google_user_id)
-                    if student is not None:
-                        ''' 
-                        User is already in the system but some variation in the variables have occured.
-                        To prevent corrupt data or errors we update the data from the user.
-                        '''
-                        student.set_name(name)
-                        student.set_email(email)
-                        adm.save_student(student)
+                    if rolle == "Student":
+                        student = adm.get_student_by_google_user_id(google_user_id)
+                        if student is not None:
+                            ''' 
+                            User is already in the system but some variation in the variables have occured.
+                            To prevent corrupt data or errors we update the data from the user.
+                            '''
+                            student.set_name(name)
+                            student.set_email(email)
+                            student.set_kuerzel(kuerzel)
+                            student.set_mat_nr(mat_nr)
+                            adm.save_student(student)
+                        else:
+                            '''
+                            System dont know the user -> user object is created and saved into the DB
+                            '''
+                            student = adm.create_student(name, email, google_user_id, kuerzel, mat_nr)
                     else:
-                        '''
-                        System dont know the user -> user object is created and saved into the DB
-                        '''
-                        student = adm.create_student(name, email, google_user_id, rolle)
+                        person = adm.get_person_by_google_user_id(google_user_id)
+                        if person is not None:
+                                ''' 
+                                User is already in the system but some variation in the variables have occured.
+                                To prevent corrupt data or errors we update the data from the user.
+                                '''
+                                person.set_name(name)
+                                person.set_email(email)
+                                person.set_rolle(rolle)
+                                adm.save_person(person)
+                        else:
+                            '''
+                            System dont know the user -> user object is created and saved into the DB
+                            '''
+                            person = adm.create_person(name, email, google_user_id, rolle)
+
                     print(request.method, request.path, 'asked by:', name, email)
 
                     objects = function(*args, **kwargs)

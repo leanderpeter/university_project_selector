@@ -18,7 +18,7 @@ class SignIn extends Component {
 		console.log("Click!")
 		document.cookie = `rolle= ${this.state.rolle};path=/`
 		document.cookie = `name= ${document.getElementById('name').value};path=/`
-		if (this.state.rolle === 0){
+		if (this.state.rolle === 'Student'){
 			document.cookie = `kuerzel= ${document.getElementById('kuerzel').value};path=/`
 			document.cookie = `mat_nr= ${document.getElementById('mat_nr').value};path=/`
 		}
@@ -48,15 +48,15 @@ class SignIn extends Component {
 						<FormControl className={classes.formControl}>
 							<InputLabel>Rolle</InputLabel>
 								<Select required onChange={this.handleChange}>
-									<MenuItem value={0}>Student</MenuItem>
-									<MenuItem value={1}>Dozent</MenuItem>
-									<MenuItem value={2}>Admin</MenuItem>
+									<MenuItem value='Student'>Student</MenuItem>
+									<MenuItem value='Dozent'>Dozent</MenuItem>
+									<MenuItem value='Admin'>Admin</MenuItem>
 								</Select>
 						</FormControl>
 						<form className={classes.form} noValidate autoComplete="off">
   							<TextField id="name" label="Name"/>
 						</form>
-						{ rolle === 0 ?
+						{ rolle === 'Student' ?
 						<>
 						<form className={classes.form} noValidate autoComplete="off">
 							<TextField id="kuerzel" label="Kürzel" />

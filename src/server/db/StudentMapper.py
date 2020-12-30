@@ -59,47 +59,18 @@ class StudentMapper(Mapper):
         result = None
 
         cursor = self._connection.cursor()
-        command = "SELECT id, name, email, google_user_id, rolle, mat_nr, kuerzel FROM studenten WHERE google_user_id='{}'".format(
+        command = "SELECT id, name, email, google_user_id, mat_nr, kuerzel FROM studenten WHERE google_user_id='{}'".format(
             google_user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, name, email, google_user_id, rolle, mat_nr, kuerzel) = tuples[0]
+            (id, name, email, google_user_id, mat_nr, kuerzel) = tuples[0]
             student = Student()
             student.set_id(id)
             student.set_name(name)
             student.set_email(email)
             student.set_google_user_id(google_user_id)
-            student.set_rolle(rolle)
-            student.set_mat_nr(mat_nr)
-            student.set_kuerzel(kuerzel)
-            result = student
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
-
-        self._connection.commit()
-        cursor.close()
-
-        return result
-    def find_by_id(self, id):
-        result = None
-
-        cursor = self._connection.cursor()
-        command = "SELECT id, name, email, google_user_id, rolle, mat_nr, kuerzel FROM studenten WHERE id='{}'".format(id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        try:
-            (id, name, email, google_user_id, rolle, mat_nr, kuerzel) = tuples[0]
-            student = Student()
-            student.set_id(id)
-            student.set_name(name)
-            student.set_email(email)
-            student.set_google_user_id(google_user_id)
-            student.set_rolle(rolle)
             student.set_mat_nr(mat_nr)
             student.set_kuerzel(kuerzel)
             result = student
@@ -113,24 +84,21 @@ class StudentMapper(Mapper):
 
         return result
 
-
-
     def find_by_id(self, id):
         result = None
 
         cursor = self._connection.cursor()
-        command = "SELECT id, name, email, google_user_id, rolle, mat_nr, kuerzel FROM studenten WHERE id='{}'".format(id)
+        command = "SELECT id, name, email, google_user_id, mat_nr, kuerzel FROM studenten WHERE id='{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, name, email, google_user_id, rolle, mat_nr, kuerzel) = tuples[0]
+            (id, name, email, google_user_id, mat_nr, kuerzel) = tuples[0]
             student = Student()
             student.set_id(id)
             student.set_name(name)
             student.set_email(email)
             student.set_google_user_id(google_user_id)
-            student.set_rolle(rolle)
             student.set_mat_nr(mat_nr)
             student.set_kuerzel(kuerzel)
             result = student
@@ -167,8 +135,8 @@ class StudentMapper(Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 student.set_id(1)
 
-        command = "INSERT INTO studenten (id, name, email, google_user_id, rolle) VALUES (%s,%s,%s,%s,%s)"
-        data = (student.get_id(), student.get_name(), student.get_email(), student.get_google_user_id(), student.get_rolle())
+        command = "INSERT INTO studenten (id, name, email, google_user_id, rolle, kuerzel, mat_nr) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        data = (student.get_id(), student.get_name(), student.get_email(), student.get_google_user_id(), str(student.get_rolle()), student.get_kuerzel(), student.get_mat_nr())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -183,8 +151,8 @@ class StudentMapper(Mapper):
         '''
         cursor = self._connection.cursor()
 
-        command = "UPDATE studenten " + "SET name=%s, email=%s, rolle=%s WHERE google_user_id=%s"
-        data = (student.get_name(), student.get_email(), student.get_rolle(), student.get_google_user_id())
+        command = "UPDATE studenten " + "SET name=%s, email=%s, rolle=%s, kuerzel=%s, mat_nr=%s WHERE google_user_id=%s"
+        data = (student.get_name(), student.get_email(), str(student.get_rolle()),student.get_kuerzel(), student.get_mat_nr(), student.get_google_user_id())
 
         cursor.execute(command, data)
 

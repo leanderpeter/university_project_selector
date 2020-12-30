@@ -21,19 +21,22 @@ class PersonMapper(Mapper):
 
         cursor = self._connection.cursor()
 
-        command = "SELECT id, name, email, google_user_id  FROM personen"
+        command = "SELECT id, name, email, google_user_id, rolle FROM personen"
 
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, name, email, google_user_id) = tuples[0]
+            (id, name, email, google_user_id, rolle) = tuples[0]
             person = Person()
             person.set_id(id)
             person.set_name(name)
             person.set_email(email)
-
             person.set_google_user_id(google_user_id)
+            if rolle == "Dozent":
+                person.set_rolle(Person.ROLLE_DOZENT)
+            elif rolle == "Admin":
+                person.set_rolle(Person.ROLLE_ADMIN) 
             result = person
 
         except IndexError:
@@ -65,7 +68,10 @@ class PersonMapper(Mapper):
             person.set_name(name)
             person.set_email(email)
             person.set_google_user_id(google_user_id)
-            person.set_rolle(rolle)
+            if rolle == "Dozent":
+                person.set_rolle(Person.ROLLE_DOZENT)
+            elif rolle == "Admin":
+                person.set_rolle(Person.ROLLE_ADMIN) 
             result = person
 
         except IndexError:
@@ -93,12 +99,16 @@ class PersonMapper(Mapper):
             person.set_name(name)
             person.set_email(email)
             person.set_google_user_id(google_user_id)
-            person.set_rolle(rolle)
+            if rolle == "Dozent":
+                person.set_rolle(Person.ROLLE_DOZENT)
+            elif rolle == "Admin":
+                person.set_rolle(Person.ROLLE_ADMIN) 
             result = person
         except IndexError:
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
             keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
             result = None
+        return result
 
     def insert(self, person):
         """Insert a user object in the DB
@@ -123,8 +133,8 @@ class PersonMapper(Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 person.set_id(1)
 
-        command = "INSERT INTO personen (id, name, email, google_user_id) VALUES (%s,%s,%s,%s)"
-        data = (person.get_id(), person.get_name(), person.get_email(), person.get_google_user_id())
+        command = "INSERT INTO personen (id, name, email, google_user_id, rolle) VALUES (%s,%s,%s,%s,%s)"
+        data = (person.get_id(), person.get_name(), person.get_email(), person.get_google_user_id(), str(person.get_rolle()))
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -140,7 +150,7 @@ class PersonMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = "UPDATE personen " + "SET name=%s, email=%s, rolle=%s WHERE google_user_id=%s"
-        data = (person.get_name(), person.get_email(), person.get_rolle(), person.get_google_user_id())
+        data = (person.get_name(), person.get_email(), str(person.get_rolle()), person.get_google_user_id())
 
         cursor.execute(command, data)
 
