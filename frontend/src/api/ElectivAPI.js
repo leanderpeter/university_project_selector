@@ -55,6 +55,9 @@ export default class ElectivAPI {
 	//getPerson: id
 	#getPersonURL = (id) => `${this.#ElectivServerBaseURL}/person/${id}`;
 
+	//getPerson: google_user_id
+	#getPersonByGoogleIDURL = (google_user_id) => `${this.#ElectivServerBaseURL}/personbygoogle/${google_user_id}`;
+
 	//getStudent: google_user_id
 	#getStudentByGoogleIDURL = (google_user_id) => `${this.#ElectivServerBaseURL}/studentbygoogle/${google_user_id}`;
 	
@@ -222,6 +225,16 @@ export default class ElectivAPI {
 		})
 	}
 
+	getPersonByGoogleID(google_user_id){
+		return this.#fetchAdvanced(this.#getPersonByGoogleIDURL(google_user_id)).then((responseJSON) => {
+			let personBO = PersonBO.fromJSON(responseJSON);
+			console.info(personBO)
+			return new Promise(function (resolve){
+				resolve(personBO)
+			})
+		})
+	}
+
 
 	getStudentByGoogleID(google_user_id){
 		return this.#fetchAdvanced(this.#getStudentByGoogleIDURL(google_user_id)).then((responseJSON) => {
@@ -235,15 +248,6 @@ export default class ElectivAPI {
 
 	getStudentByID(id){
 		return this.#fetchAdvanced(this.#getStudentByIDURL(id)).then((responseJSON) => {
-			let studentBO = StudentBO.fromJSON(responseJSON);
-			console.info(studentBO)
-			return new Promise(function (resolve){
-				resolve(studentBO)
-			})
-		})
-	}
-	getStudentById(id){
-		return this.#fetchAdvanced(this.#getStudentByIdURL(id)).then((responseJSON) => {
 			let studentBO = StudentBO.fromJSON(responseJSON);
 			console.info(studentBO)
 			return new Promise(function (resolve){

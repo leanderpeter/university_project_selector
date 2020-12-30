@@ -14,7 +14,6 @@ class SignIn extends Component {
 
 	// Handles the click event of the sign in button and calls the prop onSignIn handler
 	handleSignInButtonClicked = () => {
-		this.props.onSignIn();
 		console.log("Click!")
 		document.cookie = `rolle= ${this.state.rolle};path=/`
 		document.cookie = `name= ${document.getElementById('name').value};path=/`
@@ -22,6 +21,7 @@ class SignIn extends Component {
 			document.cookie = `kuerzel= ${document.getElementById('kuerzel').value};path=/`
 			document.cookie = `mat_nr= ${document.getElementById('mat_nr').value};path=/`
 		}
+		this.props.onSignIn();
 	}
 
 	handleChange = (rolle) => {

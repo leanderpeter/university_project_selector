@@ -36,6 +36,7 @@ class App extends React.Component {
       authError: null,
       authLoading: false,
       currentStudent: null,
+      currentPerson: null
     };
   }
   // creating error boundry. receiving all errors below the component tree
@@ -64,7 +65,7 @@ class App extends React.Component {
           authError: null,
           authLoading: false
         })}).then(() => {
-        this.getStudentByGoogleID()
+        this.getUserByGoogleID()
       }).catch(e => {
         this.setState({
           authError: e,
@@ -92,9 +93,12 @@ class App extends React.Component {
     firebase.auth().signInWithRedirect(provider);
   }
 
-    //aktuell eingeloggten Student vom Backend abfragen
-  getStudentByGoogleID = () => {
-    ElectivAPI.getAPI().getStudentByGoogleID(this.state.currentUser.uid)
+  //aktuell eingeloggten Student vom Backend abfragen
+  getUserByGoogleID = () => {
+    let rolle = this.getCookie("rolle")
+    
+    if (rolle === "Student") {
+      ElectivAPI.getAPI().getStudentByGoogleID(this.state.currentUser.uid)
         .then(studentBO =>
             this.setState({
                 currentStudent: studentBO,
@@ -103,7 +107,7 @@ class App extends React.Component {
             })
             ).catch(e =>
                 this.setState({
-                    student: null,
+                    currentStudent: null,
                     error: e,
                     loadingInProgress: false,
                 }));
@@ -111,9 +115,46 @@ class App extends React.Component {
             error: null,
             loadingInProgress: true
         });
-    }  
-
-
+    }
+    else{
+      ElectivAPI.getAPI().getPersonByGoogleID(this.state.currentUser.uid)
+        .then(personBO =>
+            this.setState({
+                currentPerson: personBO,
+                error: null,
+                loadingInProgress: false,
+            })
+            ).catch(e =>
+                this.setState({
+                    currentPerson: null,
+                    error: e,
+                    loadingInProgress: false,
+                }));
+        this.setState({
+            error: null,
+            loadingInProgress: true
+        });
+    }
+    setTimeout(()=>{
+      console.log(this.state);
+    },1000);
+    }
+    
+    //openbook getcookie von Galileo
+    getCookie = (name) => {
+      var i=0;  //Suchposition im Cookie
+      var suche = name + "=";
+      while (i<document.cookie.length) {
+         if (document.cookie.substring(i, i + suche.length) == suche) {
+            var ende = document.cookie.indexOf(";", i + suche.length);
+            ende = (ende > -1) ? ende : document.cookie.length;
+            var cook = document.cookie.substring(i + suche.length, ende);
+            return unescape(cook);
+         }
+         i++;
+      }
+      return "";
+   }
 
 
   // lifecycle method
