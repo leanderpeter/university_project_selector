@@ -36,7 +36,28 @@ class BewertungMapper(Mapper):
 
     def find_all(self):
         """Reads all tuple and returns them as an object"""
-        pass
+        result = []
+
+        cursor = self._connection.cursor()
+        
+        cursor.execute("SELECT * from bewertungen")
+        tuples = cursor.fetchall()
+
+        try:
+            (id, note) = tuples[0]
+            bewertung = Bewertung()
+            bewertung.set_id(id)
+            bewertung.set_note(note)
+            result.append(bewertung)
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+			keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
+
+        self._connection.commit()
+        cursor.close()
+        return result
 
     def find_by_key(self):
         """Reads a tuple with a given ID"""

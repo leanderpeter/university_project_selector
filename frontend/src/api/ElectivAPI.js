@@ -67,6 +67,9 @@ export default class ElectivAPI {
 	//Bewertung nach Id bekommen
 	#getBewertungURL = (id) => `${this.#ElectivServerBaseURL}/bewertung/${id}`;
 
+	//Alle Bewertungen (Noten) bekommen
+	#getBewertungenURL = () => `${this.#ElectivServerBaseURL}/bewertungen`;
+
 	//Alle Module bekommen
 	#getModuleURL = () => `${this.#ElectivServerBaseURL}/module`;
 
@@ -88,7 +91,8 @@ export default class ElectivAPI {
 	//Teilnahmen eines Projekts bekommen
     #getTeilnahmenByProjektIdURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/projekt/${id}`
   
-
+	//Alle Semester bekommen
+	#getStudentenURL = () => `${this.#ElectivServerBaseURL}/studenten`;
 
 	/*
 	Singleton/Einzelstuck instanz erhalten
@@ -294,6 +298,17 @@ export default class ElectivAPI {
 			})
 		})
 	}
+	getBewertungen(){
+		return this.#fetchAdvanced(this.#getBewertungenURL()).then((responseJSON) => {
+			let bewertungBOs = BewertungBO.fromJSON(responseJSON);
+			console.info(bewertungBOs)
+			return new Promise(function (resolve){
+				resolve(bewertungBOs)
+			})
+		})
+	}
+
+	
 
 	getModule(){
 		return this.#fetchAdvanced(this.#getModuleURL()).then((responseJSON) => {
@@ -353,6 +368,15 @@ export default class ElectivAPI {
 			console.info(semesterBOs)
 			return new Promise(function (resolve){
 				resolve(semesterBOs)
+			})
+		})
+	}
+	getStudenten(){
+		return this.#fetchAdvanced(this.#getStudentenURL()).then((responseJSON) => {
+			let studentBOs = StudentBO.fromJSON(responseJSON);
+			console.info(studentBOs)
+			return new Promise(function (resolve){
+				resolve(studentBOs)
 			})
 		})
 	}

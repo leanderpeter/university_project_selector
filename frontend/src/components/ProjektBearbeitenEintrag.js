@@ -48,6 +48,7 @@ class ProjektBearbeitenEintrag extends Component {
 
         this.state = {
             teilnahmen : [],
+            bewertungen: [],
             studentID: null,
             studentName: null,
             mat_nr: null,
@@ -90,6 +91,26 @@ class ProjektBearbeitenEintrag extends Component {
           error: null
         });
       }
+
+    getBewertungen=()=>{
+      ElectivAPI.getAPI().getBewertungen()
+      .then(bewertungBOs =>
+        this.setState({
+            bewertungen: bewertungBOs,
+            error: null,
+            loadingInProgress: false,
+        })).catch(e =>
+            this.setState({
+                bewertung: [],
+                error: e,
+                loadingInProgress: false,
+            }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingProjekteError: null
+      });
+    }
     
     
     getBewertung = () => {
@@ -111,6 +132,7 @@ class ProjektBearbeitenEintrag extends Component {
             loadingInProgress: true
         });
       }
+
     
 
     
@@ -121,6 +143,7 @@ class ProjektBearbeitenEintrag extends Component {
     componentDidMount() {
       this.getStudentById();
       this.getBewertung();
+      this.getBewertungen();
       
     }
 
@@ -129,13 +152,26 @@ class ProjektBearbeitenEintrag extends Component {
 
     render(){
         const {classes, expandedState} = this.props;
-        const {studentID,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
+        const {bewertungen, studentID,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
 
         return(
               <StyledTableRow >
                 <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
                 <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
-                <StyledTableCell align="center">{note}</StyledTableCell> 
+                <StyledTableCell align="center">
+                <InputLabel>{note}</InputLabel>
+                <Select   style={{display:"flex", minWidth:"5rem",paddingRight:"10px", paddingLeft:"10px",}} value={note }  >
+                  {
+                  bewertungen.map(bewertung =>
+                  <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
+                  )
+                  }
+                </Select>   
+                  
+                  
+                 
+                
+                </StyledTableCell> 
                 <StyledTableCell align="center">
                   <Button className={classes.teilnahmeAbwaehlenButton} style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" onClick={this.teilnahmeAbwaehlenButtonClicked}>entfernen</Button>
                            

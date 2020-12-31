@@ -246,6 +246,23 @@ class StudentByGoogleIDOperationen(Resource):
     def put(self, student_id):
         pass
 
+@electivApp.route('/studenten')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class Student1Operationen(Resource):
+    @electivApp.marshal_list_with(student)
+    
+
+    def get(self):
+        adm = ProjektAdministration()
+        studenten = adm.get_alle_studenten()
+        return studenten
+
+    def delete(self, id):
+        pass
+
+    def put(self, id):
+        pass
+
 @electivApp.route('/student/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class StudentIDOperationen(Resource):
@@ -262,6 +279,7 @@ class StudentIDOperationen(Resource):
 
     def put(self, student_id):
         pass
+
 
 @electivApp.route('/student/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -349,6 +367,24 @@ class BewertungOperationen(Resource):
 
     def put(self, bewertung_id):
         pass
+
+@electivApp.route('/bewertungen')
+@electivApp.response(500, 'Something went wrong')
+class BewertungenOperationen(Resource):
+    @electivApp.marshal_list_with(bewertung)
+    @secured
+    
+    def get(self, id):
+        adm = ProjektAdministration()
+        bewertungen = adm.get_alle_bewertungen()
+        return bewertungen
+
+    def delete(self, bewertung_id):
+        pass
+
+    def put(self, bewertung_id):
+        pass
+
 
 @electivApp.route('/modul/<int:projekt_id>')
 @electivApp.response(500, 'Something went wrong')

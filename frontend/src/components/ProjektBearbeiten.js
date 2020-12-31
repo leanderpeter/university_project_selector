@@ -67,7 +67,7 @@ class ProjektBearbeiten extends Component {
         this.getTeilnahmenByProjektId=this.getTeilnahmenByProjektId.bind(this)
     }
     
-    //AO`PI Anbindung: erstes Dropdown der Seite, um die Projekte des Dozenten zu erhalten
+    //API Anbindung: erstes Dropdown der Seite, um die Projekte des Dozenten zu erhalten
     getProjekte=()=>{
       ElectivAPI.getAPI().getProjekte()
       .then(projektBOs =>

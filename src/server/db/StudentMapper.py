@@ -17,25 +17,27 @@ class StudentMapper(Mapper):
         return: Student objects
         '''
 
-        result = None
+        result = []
 
         cursor = self._connection.cursor()
 
-        command = "SELECT id, name, email, google_user_id  FROM studenten"
+        command = "SELECT id, name, email, google_user_id, rolle, mat_nr, kuerzel FROM studenten"
 
         cursor.execute(command)
         tuples = cursor.fetchall()
 
     #Falsch: muss for schleife
         try:
-            (id, name, email, google_user_id) = tuples[0]
+            (id, name, email, google_user_id,  rolle, mat_nr, kuerzel) = tuples[0]
             student = Student()
             student.set_id(id)
             student.set_name(name)
             student.set_email(email)
-
             student.set_google_user_id(google_user_id)
-            result = student
+            student.set_rolle(rolle)
+            student.set_mat_nr(mat_nr)
+            student.set_kuerzel(kuerzel)
+            result.append(student)
 
         except IndexError:
             """empty sequence"""
