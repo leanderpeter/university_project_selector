@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
+import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography, Paper } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear'
 import { withRouter } from 'react-router-dom';
 import { ElectivAPI } from '../api';
@@ -262,8 +262,9 @@ class Notenlisten extends Component {
               />
           </Grid>
         </Grid>
+        <Grid item>
         { semesterwahl && modulwahl ?
-            <TableContainer>
+            <TableContainer component={Paper}>
                   <Table className={classes.table} aria-label="customized table">
                       <TableHead>
                           <StyledTableRow>
@@ -291,10 +292,9 @@ class Notenlisten extends Component {
                     </Table>
               </TableContainer>
             :
-            <Grid container justify-content='center 'alignItems='center'>
-              <Grid item xs><Typography variant='body1' className={classes.warnung}> Bitte wählen Sie zunächst ein Semester aus</Typography></Grid>
-            </Grid>
+            <Typography className={classes.warnung}> Bitte wählen Sie zunächst ein Semester und ein Modul aus</Typography>
             }
+        </Grid>
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`} onReload={this.getProjekte} />
     </div>
@@ -311,11 +311,18 @@ const styles = theme => ({
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1),
   },
+  table: {
+    minWidth: 700,
+  },
   formControl: {
     minWidth: 150,
   },
   filter: {
     marginTop: theme.spacing(2)
+  },
+  warnung: {
+    color: 'red',
+    paddingTop: theme.spacing(1)
   }
 });
 
