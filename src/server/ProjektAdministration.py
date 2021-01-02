@@ -171,7 +171,7 @@ class ProjektAdministration(object):
 
     def get_alle_bewertungen(self):
         with BewertungMapper() as mapper:
-            return mapper.find_all(id)
+            return mapper.find_all()
 
     def get_bewertung_by_id(self, id):
         with BewertungMapper() as mapper:

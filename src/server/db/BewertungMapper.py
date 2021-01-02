@@ -42,18 +42,15 @@ class BewertungMapper(Mapper):
         
         cursor.execute("SELECT * from bewertungen")
         tuples = cursor.fetchall()
+        print(tuples)
 
-        try:
-            (id, note) = tuples[0]
+        for (id,note) in tuples:
             bewertung = Bewertung()
             bewertung.set_id(id)
             bewertung.set_note(note)
             result.append(bewertung)
-
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-			keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
+        
+    
 
         self._connection.commit()
         cursor.close()
@@ -74,3 +71,5 @@ class BewertungMapper(Mapper):
     def delete(self):
         """Delete an object from the DB"""
         pass
+
+
