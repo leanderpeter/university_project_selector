@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography, Paper } from '@material-ui/core';
+import { withStyles, TextField, InputAdornment, IconButton, Button, Grid, Typography, Paper } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear'
 import { withRouter } from 'react-router-dom';
 import { ElectivAPI } from '../api';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import SaveIcon from '@material-ui/icons/Save';
 import Select from '@material-ui/core/Select';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -56,8 +57,6 @@ class Notenliste extends Component {
       semesterwahl: null,
 			error: null,
 			loadingInProgress: false,
-			expandedModulID: expandedID,
-			showModulform: false
 		};
   }
     // API Anbindung um alle Module vom Backend zu bekommen 
@@ -128,22 +127,21 @@ class Notenliste extends Component {
     }, 0);
   };
 
+  printNotenliste= () => {
+    window.print()
+  }
+
+  handleReload= () => {
+    this.getModule();
+    this.getSemester();
+  }
+
 	// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 	componentDidMount() {
     this.getModule();
     this.getSemester();
 	}
 
-  onExpandedStateChange = modul => {
-    let newID = null;
-    
-    if (modul.getID() !== this.state.expandedModulID) {
-      newID = modul.getID()
-    }
-    this.setState({
-      expandedModulID: newID,
-    });
-  }
 
     // API Anbindung um Teilnahmen des Students vom Backend zu bekommen 
     getTeilnahmen_by_modul_und_semester = () => {
@@ -170,7 +168,7 @@ class Notenliste extends Component {
 	render() {
     
     const { classes } = this.props;
-    const { module, semester, semesterwahl, modulwahl, teilnahmen,  expandedModulID, loadingInProgress, error } = this.state;
+    const { module, semester, semesterwahl, modulwahl, teilnahmen, loadingInProgress, error } = this.state;
     return (
     <div className={classes.root}>
         <Grid className={classes.header} container spacing={1} justify='flex-start' alignItems='space-between'>
@@ -196,7 +194,7 @@ class Notenliste extends Component {
             </FormControl>
           }
           </Grid>
-          <Grid item xs>
+          <Grid item xs className={classes.marginLeft}>
           { module ?
             <FormControl className={classes.formControl}>
               <InputLabel>Modul</InputLabel> 
@@ -219,6 +217,10 @@ class Notenliste extends Component {
         </Grid>
         <Grid item>
         { semesterwahl && modulwahl ?
+          <>
+            
+            {teilnahmen.length > 0 ?
+            <>
             <TableContainer component={Paper}>
                   <Table className={classes.table} aria-label="customized table">
                       <TableHead>
@@ -246,13 +248,34 @@ class Notenliste extends Component {
                             }
                       </TableBody>
                     </Table>
+                <LoadingProgress show={loadingInProgress} />
+                <ContextErrorMessage error={error} contextErrorMsg={`Die Notenliste konnte nicht geladen werden`} onReload={this.getTeilnahmen_by_modul_und_semester} />
               </TableContainer>
+              <Button variant="contained" color="primary" size="medium" className={classes.button} startIcon={<SaveIcon />} onClick={this.printNotenliste}>
+                Notenliste
+              </Button> 
+              </> 
+              :
+              <>
+              { error ?
+              <>
+              <LoadingProgress show={loadingInProgress} />
+              <ContextErrorMessage error={error} contextErrorMsg={`Die Notenliste konnte nicht geladen werden`} onReload={this.getTeilnahmen_by_modul_und_semester} />
+              </>
+              :
+              <Typography className={classes.warnung}> Leider gibt es für dieses Modul keine Teilnahmen oder es wurde noch keine Teilnahme benotet</Typography>
+              }
+              </>
+              }
+            </>
             :
+            <>
             <Typography className={classes.warnung}> Bitte wählen Sie zunächst ein Semester und ein Modul aus</Typography>
+            <LoadingProgress show={loadingInProgress} />
+            <ContextErrorMessage error={error} contextErrorMsg={`Semester und Module konnten nicht geladen werden`} onReload={this.handleReload}/>
+            </>
             }
         </Grid>
-        <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`} onReload={this.getProjekte} />
     </div>
     );
     }
@@ -270,8 +293,16 @@ const styles = theme => ({
   table: {
     minWidth: 700,
   },
+  button:{
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(3),
+    float: 'right'
+},
   formControl: {
     minWidth: 150,
+  },
+  marginLeft: {
+    marginLeft: theme.spacing(2)
   },
   warnung: {
     color: 'red',
