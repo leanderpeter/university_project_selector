@@ -17,7 +17,7 @@ import TableRow from '@material-ui/core/TableRow';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
-import EdvListeEintrag from './EdvListeEintrag';
+import NotenlisteEintrag from './NotenlisteEintrag';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -37,7 +37,7 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-class Notenlisten extends Component {
+class Notenliste extends Component {
 
 	constructor(props) {
 		super(props);
@@ -53,9 +53,7 @@ class Notenlisten extends Component {
       module: [],
       semester: [],
       teilnahmen : [],
-      filteredModule: [],
       semesterwahl: null,
-			edvFilter: '',
 			error: null,
 			loadingInProgress: false,
 			expandedModulID: expandedID,
@@ -68,7 +66,6 @@ class Notenlisten extends Component {
       .then(modulBOs =>
           this.setState({
               module: modulBOs,
-              filteredModule: [...modulBOs],
               error: null,
               loadingInProgress: false,
           })).catch(e =>
@@ -167,34 +164,13 @@ class Notenlisten extends Component {
           loadingInProgress: true,
           loadingTeilnahmeError: null
       });
-    }
-
-
-  filterFieldValueChange = event => {
-    const value = event.target.value.toString();
-    this.setState({
-      filteredModule: this.state.module.filter(modul => {
-        let modulContainsValue = modul.getEdv_nr().toString().includes(value);
-        return modulContainsValue;
-      }),
-      edvFilter: value,
-      expandedModulID: null
-    });
-  }
-
-  clearFilterFieldButtonClicked = () => {
-    this.setState({
-      filteredModule: [...this.state.module],
-      edvFilter: ''
-    });
-  }
-    
+    }    
 
 	/** Renders the component */
 	render() {
     
     const { classes } = this.props;
-    const { module, semester, semesterwahl, modulwahl, teilnahmen, filteredModule, edvFilter,  expandedModulID, loadingInProgress, error } = this.state;
+    const { module, semester, semesterwahl, modulwahl, teilnahmen,  expandedModulID, loadingInProgress, error } = this.state;
     return (
     <div className={classes.root}>
         <Grid className={classes.header} container spacing={1} justify='flex-start' alignItems='space-between'>
@@ -226,7 +202,7 @@ class Notenlisten extends Component {
               <InputLabel>Modul</InputLabel> 
                 <Select onChange={this.handleModulChange}>
                   { module.map(modul =>
-                    <MenuItem value={modul.getID()}><em>{modul.getname()}</em></MenuItem>
+                    <MenuItem value={modul.getID()}><em>{modul.getname()} ({modul.getEdv_nr()})</em></MenuItem>
                     )
                   }
                 </Select>
@@ -240,27 +216,6 @@ class Notenlisten extends Component {
             </FormControl>
           }
           </Grid>
-          <Grid item className={classes.filter}>
-              <Typography>
-              Filter Notenlisten nach EDV-Nummer:
-              </Typography>
-          </Grid>
-          <Grid item xs={2} className={classes.filter}>
-              <TextField
-              fullWidth
-              id='edvFilter'
-              type='text'
-              value={edvFilter}
-              onChange={this.filterFieldValueChange}
-              InputProps={{
-                  endAdornment: <InputAdornment position='end'>
-                  <IconButton onClick={this.clearFilterFieldButtonClicked}>
-                      <ClearIcon />
-                  </IconButton>
-                  </InputAdornment>,
-              }}
-              />
-          </Grid>
         </Grid>
         <Grid item>
         { semesterwahl && modulwahl ?
@@ -270,6 +225,7 @@ class Notenlisten extends Component {
                           <StyledTableRow>
                               <StyledTableCell align="left">Student</StyledTableCell>
                               <StyledTableCell align="left">Matrikelnummer</StyledTableCell>
+                              <StyledTableCell align="left">Dozent</StyledTableCell>
                               <StyledTableCell align="center">Note</StyledTableCell>
                           </StyledTableRow>
                       </TableHead>
@@ -279,7 +235,7 @@ class Notenlisten extends Component {
                                 <>
                                 {
                                     teilnahmen.map(teilnahme => 
-                                        <EdvListeEintrag key={teilnahme.getID()} teilnahme = {teilnahme}
+                                        <NotenlisteEintrag key={teilnahme.getID()} teilnahme = {teilnahme}
                                         onExpandedStateChange={this.onExpandedStateChange}
                                         show={this.props.show}
                                     />) 
@@ -317,9 +273,6 @@ const styles = theme => ({
   formControl: {
     minWidth: 150,
   },
-  filter: {
-    marginTop: theme.spacing(2)
-  },
   warnung: {
     color: 'red',
     paddingTop: theme.spacing(1)
@@ -327,12 +280,12 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-Notenlisten.propTypes = {
+Notenliste.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   /** @ignore */
   location: PropTypes.object.isRequired,
 }
 
-export default withRouter(withStyles(styles)(Notenlisten));
+export default withRouter(withStyles(styles)(Notenliste));
 	

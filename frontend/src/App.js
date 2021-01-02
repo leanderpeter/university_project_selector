@@ -12,7 +12,7 @@ import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import MeineProjekte from './components/MeineProjekte';
 import ProjektBearbeiten from './components/ProjektBearbeiten';
-import Notenlisten from './components/Notenlisten';
+import Notenliste from './components/Notenliste';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import ElectivAPI from './api/ElectivAPI';
@@ -162,8 +162,8 @@ class App extends React.Component {
                   :
                   <></>
                   }
-                  <Route path='/notenlisten' component={Notenlisten}>
-                    <Notenlisten/>
+                  <Route path='/notenliste' component={Notenliste}>
+                    <Notenliste/>
                   </Route>
                 </>
                 :

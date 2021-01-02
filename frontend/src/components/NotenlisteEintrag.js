@@ -27,7 +27,7 @@ const StyledTableCell = withStyles((theme) => ({
     },
   }))(TableRow);
 
-class EdvListeEintrag extends Component {
+class NotenlisteEintrag extends Component {
 
     constructor(props){
         super(props);
@@ -36,6 +36,8 @@ class EdvListeEintrag extends Component {
             studentName: null,
             mat_nr: null,
             note: null,
+            projekt: null,
+            dozentName: null,
             loadingInProgress: false,
             error: null
         };
@@ -65,40 +67,84 @@ class EdvListeEintrag extends Component {
       }  
   
 
-      getBewertung = () => {
-        ElectivAPI.getAPI().getBewertung(this.props.teilnahme.resultat)
-        .then(bewertungBO =>
-            this.setState({
-                note: bewertungBO.getnote(),
-                error: null,
-                loadingInProgress: false,
-            }))
-            .catch(e =>
-                this.setState({
-                    note: null,
-                    error: null,
-                    loadingInProgress: false,
-                }));
-        this.setState({
+    getBewertung = () => {
+      ElectivAPI.getAPI().getBewertung(this.props.teilnahme.resultat)
+      .then(bewertungBO =>
+          this.setState({
+              note: bewertungBO.getnote(),
+              error: null,
+              loadingInProgress: false,
+          }))
+          .catch(e =>
+              this.setState({
+                  note: null,
+                  error: null,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true
+      });
+    }
+
+    getProjekt = () => {
+      ElectivAPI.getAPI().getProjekt(this.props.teilnahme.lehrangebot)
+      .then(projektBO =>
+          this.setState({
+            projekt: projektBO,
+            loadingInProgress: false,
             error: null,
-            loadingInProgress: true
-        });
-      }
+          })).then(()=>{
+            this.getPerson()
+          })
+          .catch(e =>
+              this.setState({
+                projekt: null,
+                loadingInProgress: false,
+                error: e,
+              }));
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }
+
+    getPerson = () => {
+      ElectivAPI.getAPI().getPerson(this.state.projekt.dozent)
+      .then(personBO =>
+          this.setState({
+              dozentName: personBO.getname(),
+              error: null,
+              loadingInProgress: false,
+          }))
+          .catch(e =>
+              this.setState({
+                  dozentName: null,
+                  error: e,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true
+      });
+    }
 
     componentDidMount() {
         this.getStudentByID();
         this.getBewertung();
+        this.getProjekt();
     }
 
     render(){
         const {classes, expandedState, teilnahme} = this.props;
-        const { studentName, mat_nr, note, loadingInProgress, error } = this.state;
+        const { studentName, mat_nr, note, dozentName, loadingInProgress, error } = this.state;
         
         return(
           <>
               <StyledTableRow key={this.props.teilnahme.id}>
                 <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
                 <StyledTableCell align="left">{mat_nr}</StyledTableCell> 
+                <StyledTableCell align="left">{dozentName}</StyledTableCell>
                 <StyledTableCell align="center">{note}</StyledTableCell> 
               </StyledTableRow>
               <StyledTableRow> 
@@ -128,7 +174,7 @@ const styles = theme => ({
     });
 
 /** PropTypes */
-EdvListeEintrag.propTypes = {
+NotenlisteEintrag.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** Projekt to be rendered */
@@ -145,4 +191,4 @@ EdvListeEintrag.propTypes = {
     show: PropTypes.bool.isRequired
   }
   
-  export default withStyles(styles)(EdvListeEintrag);
+  export default withStyles(styles)(NotenlisteEintrag);
