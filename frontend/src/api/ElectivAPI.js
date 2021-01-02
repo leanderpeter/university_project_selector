@@ -131,21 +131,7 @@ export default class ElectivAPI {
 			let projektBOs = ProjektBO.fromJSON(responseJSON);
 			// console.info(projektBOs.toString())
 			console.log(projektBOs)
-
-			var projektBOssorted = [];
-			
-			function compare(a,b) {
-				if (a.ects < b.ects) {
-					projektBOssorted.push(b);
-					console.log(b);
-				}
-				if (a.ects > b.ects) {
-					projektBOssorted.push(a);
-					console.log(a)
-				}
-			}
-			projektBOs.sort( compare );
-			console.log(projektBOssorted);
+			projektBOs.sort((a,b) => (a.ects > b.ects) ? 1: -1); //Sortier alle Objecte im array nach ects, aufsteigend
 			return new Promise(function (resolve){
 				resolve(projektBOs);
 			})
