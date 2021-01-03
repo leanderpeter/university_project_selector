@@ -152,7 +152,7 @@ class ProjektBearbeitenEintrag extends Component {
 
     render(){
         const {classes, expandedState} = this.props;
-        const {bewertungen, studentID,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
+        const {bewertungen,studentID,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
 
         return(
               <StyledTableRow >

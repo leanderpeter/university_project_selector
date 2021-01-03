@@ -63,7 +63,7 @@ class ProjektAdministration(object):
         with PersonMapper() as mapper:
             return mapper.find_by_google_user_id(id)
 
-    def get_alle_studenten(self, ):
+    def get_alle_studenten(self):
         """return alle Studenten """
         with StudentMapper() as mapper:
             return mapper.find_all()

@@ -57,6 +57,7 @@ class ProjektBearbeiten extends Component {
 
         this.state = {
             teilnahmen:[],
+            studenten:[],
             projekte:[],
             "currentProjekt": null,
             error: null,
@@ -110,6 +111,25 @@ class ProjektBearbeiten extends Component {
           loadingProjekteError: null
       });
     }
+    getStudenten=()=>{
+      ElectivAPI.getAPI().getStudenten()
+      .then(studentBOs =>
+        this.setState({
+            studenten: studentBOs,
+            error: null,
+            loadingInProgress: false,
+        })).catch(e =>
+            this.setState({
+                student: [],
+                error: e,
+                loadingInProgress: false,
+            }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingProjekteError: null
+      });
+    }
 
 
 
@@ -117,6 +137,7 @@ class ProjektBearbeiten extends Component {
 
 componentDidMount() {
   this.getProjekte();
+  this.getStudenten();
   
   
 }
@@ -136,7 +157,7 @@ handleChange = currentProjekt => (event) => {
         
         
         const { classes } = this.props;
-        const { projekte, currentProjekt, teilnahmen, error, loadingInProgress} = this.state;
+        const {studenten, projekte, currentProjekt, teilnahmen, error, loadingInProgress} = this.state;
         
         return(
             <div className={classes.root}>
@@ -152,7 +173,15 @@ handleChange = currentProjekt => (event) => {
                                   <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
                                   )
                                   }
-                                </Select>                                                                
+                                </Select> 
+                
+                                <Select   style={{display:"flex", minWidth:"5rem",paddingRight:"10px", paddingLeft:"10px",}} >
+                                  {
+                                  studenten.map(student =>
+                                  <MenuItem value={student.getID()}><em>{student.getname()}</em></MenuItem>
+                                  )
+                                  }
+                                </Select>                                                               
 
                 </FormControl>
                 Projekt ID: {currentProjekt}

@@ -13,22 +13,20 @@ class StudentMapper(Mapper):
 
     def find_all(self):
         '''
-        reading of all user objects in the system (DB)
+        reading all students objects in the system (DB)
         return: Student objects
         '''
 
         result = []
 
         cursor = self._connection.cursor()
-
-        command = "SELECT id, name, email, google_user_id, rolle, mat_nr, kuerzel FROM studenten"
-
-        cursor.execute(command)
+        
+        cursor.execute("SELECT * from studenten")
         tuples = cursor.fetchall()
+        print(tuples)
+        
 
-    #Falsch: muss for schleife
-        try:
-            (id, name, email, google_user_id,  rolle, mat_nr, kuerzel) = tuples[0]
+        for (id, name, email, google_user_id,  rolle, mat_nr, kuerzel) in tuples:
             student = Student()
             student.set_id(id)
             student.set_name(name)
@@ -38,15 +36,15 @@ class StudentMapper(Mapper):
             student.set_mat_nr(mat_nr)
             student.set_kuerzel(kuerzel)
             result.append(student)
-
-        except IndexError:
-            """empty sequence"""
-            result = None
-
+       
         self._connection.commit()
         cursor.close()
-
         return result
+
+
+    
+
+       
 
     def find_by_name(self):
         pass
