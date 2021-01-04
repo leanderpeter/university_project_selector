@@ -80,7 +80,7 @@ teilnahme = api.inherit('Teilnahme', bo, {
     'resultat': fields.Integer(attribute='_resultat', description='Die ID der Note einer Teilnahme')
 })
 
-projektart = api.inherit('Projektart', bo, {
+projektart = api.inherit('Projektart', nbo, {
     'sws': fields.Integer(attribute='_sws',description='Semesterwochenstunden'),
     'ects': fields.Integer(attribute='_ects',description='Ects fuer ein Projekt')
     })
@@ -453,15 +453,15 @@ class ProjektGenehmigungOperation(Resource):
         else:
             return '', 500
 
-@electivApp.route('/projektart/<int:id>')
+@electivApp.route('/projektart')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class Projektartby(Resource):
     @electivApp.marshal_list_with(projektart)
     # @secured
 
-    def get(self, id):
+    def get(self):
         adm = ProjektAdministration()
-        projektart = adm.get_projektart_by_id(id)
+        projektart = adm.get_alle_projektarten()
         return projektart
 
 if __name__ == '__main__':

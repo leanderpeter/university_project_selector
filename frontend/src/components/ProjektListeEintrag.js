@@ -27,7 +27,7 @@ class ProjektListeEintrag extends Component {
 		this.state = {
 			projekt: props.projekt,
 			showProjektForm: false,
-			showProjektDeleteDialog: false
+			showProjektDeleteDialog: false,
 		};
 	}
 
@@ -97,6 +97,7 @@ class ProjektListeEintrag extends Component {
     ElectivAPI.getAPI().deleteTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
 }
 
+
 	/** Renders the component */
   render() {
     const { classes, expandedState } = this.props;
@@ -124,6 +125,7 @@ class ProjektListeEintrag extends Component {
           <AccordionDetails>
             <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
             <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
+            <Typography variant='body1' color={'textSecondary'}>Projektart {projekt.getArt()}</Typography>
             
           </AccordionDetails>
           <AccordionDetails>

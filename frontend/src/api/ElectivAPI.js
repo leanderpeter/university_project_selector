@@ -5,6 +5,7 @@ import TeilnahmeBO from './TeilnahmeBO';
 import BewertungBO from './BewertungBO';
 import ModulBO from './ModulBO';
 import SemesterBO from './SemesterBO';
+import ProjektartBO from './ProjektartBO';
 
 /*
 Singleton Abstarktion des backend REST interfaces. Es handelt sich um eine access methode
@@ -90,10 +91,8 @@ export default class ElectivAPI {
 
     //erhalte Projektarten nach ID
     #getProjektartByArtURL = (id) => `${this.#ElectivServerBaseURL}/projektart/${id}`
-
-
-  
-
+	//erhalte alle Projektarten
+    #getProjektartURL = () => `${this.#ElectivServerBaseURL}/projektart/`
 
 	/*
 	Singleton/Einzelstuck instanz erhalten
@@ -137,6 +136,24 @@ export default class ElectivAPI {
 			// projektBOs.sort((a,b) => (a.ects > b.ects) ? 1: -1); //Sortier alle Objecte im array nach ects, aufsteigend
 			return new Promise(function (resolve){
 				resolve(projektBOs);
+			})
+		})
+	}
+
+	getProjektart() {
+		return this.#fetchAdvanced(this.#getProjektartURL(), {method: 'GET'}).then((responseJSON) => {
+			let projektartBos = ProjektartBO.fromJSON(responseJSON);
+			return new Promise(function (resolve){
+				resolve(projektartBos);
+			})
+		})
+	}
+
+	getProjektartById(id) {
+		return this.#fetchAdvanced(this.#getProjektartByArtURL(id),{method: 'GET'}).then((responseJSON) => {
+			let projektartBO = ProjektartBO.fromJSON(responseJSON);
+			return new Promise(function (resolve){
+				resolve(projektartBO);
 			})
 		})
 	}

@@ -33,7 +33,7 @@ class ProjektListe extends Component {
 			error: null,
 			loadingInProgress: false,
 			expandedProjektID: expandedID,
-			showProjekteForm: false
+			showProjekteForm: false,
 		};
 	}
 
@@ -59,10 +59,23 @@ class ProjektListe extends Component {
 			error: null
 		});
 	}
+
+  getProjektart = () => {
+    ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
+      this.setState({
+        projektarten: projektartBOs
+      })).catch(e => 
+    this.setState({
+      projektarten: []
+    }));
+  }
+
+
+
 	// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 	componentDidMount() {
 		this.getProjekte();
-    console.log(this.projekte);
+    this.getProjektart();
 	}
 
   onExpandedStateChange = projekt => {
@@ -127,7 +140,7 @@ class ProjektListe extends Component {
           filteredProjekte.map(projekt =>
             <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent}
-            />) 
+            />)
         }
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`} onReload={this.getProjekte} />
