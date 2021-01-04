@@ -34,6 +34,7 @@ class ProjektListe extends Component {
 			loadingInProgress: false,
 			expandedProjektID: expandedID,
 			showProjekteForm: false,
+      projektarten: []
 		};
 	}
 
@@ -101,7 +102,7 @@ class ProjektListe extends Component {
 	render() {
 
     const { classes , currentStudent } = this.props;
-    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm } = this.state;
+    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm, projektarten } = this.state;
 
     return (
       <div className={classes.root}>
@@ -135,13 +136,13 @@ class ProjektListe extends Component {
         </Grid>
         { 
           // Show the list of ProjektListeEintrag components
-          // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters
-          
+          // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters        
           filteredProjekte.map(projekt =>
             <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent}
             />)
         }
+
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`} onReload={this.getProjekte} />
         

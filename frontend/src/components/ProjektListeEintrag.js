@@ -28,6 +28,7 @@ class ProjektListeEintrag extends Component {
 			projekt: props.projekt,
 			showProjektForm: false,
 			showProjektDeleteDialog: false,
+      projektarten: []
 		};
 	}
 
@@ -97,12 +98,31 @@ class ProjektListeEintrag extends Component {
     ElectivAPI.getAPI().deleteTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
 }
 
+  getProjektart = () => {
+    ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
+      this.setState({
+        projektarten: projektartBOs
+      })).catch(e => 
+    this.setState({
+      //projektarten: []
+    }));
+  }
+
+  componentDidMount() {
+    this.getProjektart();
+  }
 
 	/** Renders the component */
   render() {
     const { classes, expandedState } = this.props;
     // Use the states projekt
-    const { projekt } = this.state;
+    const { projekt, projektarten } = this.state;
+
+    // console.log(projektarten[0][1])
+
+    for (var i=0;i<projektarten.length;i++) {for(var x in projektarten[i]){console.log(x + ": " + projektarten[i][x]);}}
+
+    // console.log(projektarten[1][1])
 
     return (
       <div>
@@ -125,7 +145,13 @@ class ProjektListeEintrag extends Component {
           <AccordionDetails>
             <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
             <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
-            <Typography variant='body1' color={'textSecondary'}>Projektart {projekt.getArt()}</Typography>
+            <Typography variant='body1' color={'textSecondary'}>Dieses Projekt ist ein: </Typography>
+            
+          </AccordionDetails>
+          <AccordionDetails>
+            <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
+            <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
+            <Typography variant='body1' color={'textSecondary'}>Dieses Projekt ist ein: </Typography>
             
           </AccordionDetails>
           <AccordionDetails>

@@ -457,7 +457,7 @@ class ProjektGenehmigungOperation(Resource):
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class Projektartby(Resource):
     @electivApp.marshal_list_with(projektart)
-    # @secured
+    @secured
 
     def get(self):
         adm = ProjektAdministration()
