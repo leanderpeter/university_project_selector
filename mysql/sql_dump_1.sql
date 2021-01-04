@@ -192,8 +192,15 @@ LOCK TABLES `teilnahmen` WRITE;
 INSERT INTO `electivApp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`,`anrechnung`, `resultat`) VALUES ('1', '1232', '1', '1', '1');
 INSERT INTO `electivApp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`, `anrechnung`, `resultat`) VALUES ('2', '1232', '1', '1', '1');
 INSERT INTO `electivApp`.`teilnahmen` (`id`, `lehrangebot`, `teilnehmer`, `anrechnung`, `resultat`) VALUES ('3', '1232', '1', '1', '2');
-
 /*!40000 ALTER TABLE `teilnahmen` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `projektarten` WRITE;
+/*!40000 ALTER TABLE `projektarten` DISABLE KEYS */;
+INSERT INTO `electivApp`.`projektarten` (`id`, `name`, `ects`,`sws`) VALUES (1, 'Fachspezifisches Projek', 5, 3); 
+INSERT INTO `electivApp`.`projektarten` (`id`, `name`, `ects`,`sws`) VALUES (2, 'Interdisziplinäres Projekt', 10, 5);
+INSERT INTO `electivApp`.`projektarten` (`id`, `name`, `ects`,`sws`) VALUES (3, 'Transdisziplinäres Projekt', 20, 10);
+/*!40000 ALTER TABLE `projektarten` ENABLE KEYS */;
 UNLOCK TABLES;
 
 LOCK TABLES `personen` WRITE;

@@ -13,7 +13,7 @@ export default class ProjektBO extends NamedBusinessObject{
   `date` varchar(100) NOT NULL DEFAULT '',
   `max_subscriber` int(11) NOT NULL DEFAULT '0',
 	*/
-	constructor(amax_teilnehmer, aprojektbeschreibung, abetreuer, aexterner_partner, awoechentlich, aanzahl_block_vor, aanzahl_block_in, apraeferierte_block, abes_raum, araum, asprache, adozent, azustand, ahalbjahr, aart, amoduloption, aanzahlTeilnehmer,ateilnehmerListe,aects){
+	constructor(amax_teilnehmer, aprojektbeschreibung, abetreuer, aexterner_partner, awoechentlich, aanzahl_block_vor, aanzahl_block_in, apraeferierte_block, abes_raum, araum, asprache, adozent, azustand, ahalbjahr, aart, amoduloption, aanzahlTeilnehmer,ateilnehmerListe){
 		super();
 		this.max_teilnehmer = amax_teilnehmer;
 		this.beschreibung = aprojektbeschreibung;
@@ -33,7 +33,6 @@ export default class ProjektBO extends NamedBusinessObject{
 		this.moduloption = amoduloption;
 		this.anzahlTeilnehmer = aanzahlTeilnehmer;
 		this.teilnehmerListe = ateilnehmerListe;
-		this.ects = aects
 	}
 
 
