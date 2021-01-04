@@ -102,7 +102,8 @@ class ProjektListe extends Component {
 	render() {
 
     const { classes , currentStudent } = this.props;
-    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm, projektarten } = this.state;
+    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm, projektarten, projekte } = this.state;
+
 
     return (
       <div className={classes.root}>

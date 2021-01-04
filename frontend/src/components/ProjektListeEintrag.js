@@ -28,7 +28,8 @@ class ProjektListeEintrag extends Component {
 			projekt: props.projekt,
 			showProjektForm: false,
 			showProjektDeleteDialog: false,
-      projektarten: []
+      projektarten: [],
+      pArten: null
 		};
 	}
 
@@ -110,19 +111,24 @@ class ProjektListeEintrag extends Component {
 
   componentDidMount() {
     this.getProjektart();
+    this.data = this.getProjektart();
   }
 
 	/** Renders the component */
   render() {
     const { classes, expandedState } = this.props;
     // Use the states projekt
-    const { projekt, projektarten } = this.state;
+    const { projekt, projektarten} = this.state;
 
-    // console.log(projektarten[0][1])
+    //for (var i=0;i<projektarten.length;i++) {for(var x in projektarten[i]){console.log(x + ": " + projektarten[i][x]);}}
 
-    for (var i=0;i<projektarten.length;i++) {for(var x in projektarten[i]){console.log(x + ": " + projektarten[i][x]);}}
+    //var y = projektarten[projekt.getArt()]
+    // console.log(y)
 
-    // console.log(projektarten[1][1])
+    var pArten = projektarten[projekt.getArt() - 1]
+    
+
+    console.log(pArten)
 
     return (
       <div>

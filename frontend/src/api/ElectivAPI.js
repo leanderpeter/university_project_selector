@@ -248,7 +248,7 @@ export default class ElectivAPI {
 	getStudentByGoogleID(google_user_id){
 		return this.#fetchAdvanced(this.#getStudentByGoogleIDURL(google_user_id)).then((responseJSON) => {
 			let studentBO = StudentBO.fromJSON(responseJSON);
-			console.info(studentBO)
+			// console.info(studentBO)
 			return new Promise(function (resolve){
 				resolve(studentBO)
 			})
