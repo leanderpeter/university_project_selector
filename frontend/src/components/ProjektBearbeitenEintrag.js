@@ -47,6 +47,7 @@ class ProjektBearbeitenEintrag extends Component {
         super(props);
 
         this.state = {
+            
             teilnahmen : [],
             bewertungen: [],
             studentID: null,
@@ -135,7 +136,17 @@ class ProjektBearbeitenEintrag extends Component {
 
     
 
-    
+      handleChange = async (resultat) => { 
+
+                this.props.teilnahme.setResultat(resultat.target.value); 
+        
+                console.log(`Option selected:`, resultat.target.value); 
+        
+                await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme).then(()=>{
+                  this.getBewertung()
+                }); 
+        
+              };
     
 
     
@@ -157,10 +168,10 @@ class ProjektBearbeitenEintrag extends Component {
         return(
               <StyledTableRow >
                 <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
-                <StyledTableCell align="center">{mat_nr} hallo</StyledTableCell> 
+                <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
                 <StyledTableCell align="center">
                 <InputLabel>{note}</InputLabel>
-                <Select   style={{display:"flex", minWidth:"5rem",paddingRight:"10px", paddingLeft:"10px",}} value={note }  >
+                <Select   style={{display:"flex", minWidth:"5rem",paddingRight:"10px", paddingLeft:"10px",}} value={note } onChange={this.handleChange}   >
                   {
                   bewertungen.map(bewertung =>
                   <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>

@@ -67,8 +67,28 @@ class ProjektBearbeiten extends Component {
         };
         this.getTeilnahmenByProjektId=this.getTeilnahmenByProjektId.bind(this)
     }
-    
-    //API Anbindung: erstes Dropdown der Seite, um die Projekte des Dozenten zu erhalten
+    //hole alle Projekte im richtigen Zustand vom Backend
+    getProjekte = () => {
+      ElectivAPI.getAPI().getProjekteByZustand("in Bewertung")
+        .then(projekteBOs =>
+          this.setState({								//neuer status wenn fetch komplett
+            projekte: projekteBOs, 
+            loadingInProgress: false,				// deaktiviere ladeindikator
+            error: null,
+          })).catch(e =>
+            this.setState({
+              projekte: [],
+              loadingInProgress: false,
+              error: e
+            }));
+      // setze laden auf wahr
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }
+  
+    /*//um alle Projekte zu erhalten aber nicht im richtigen Zustand
     getProjekte=()=>{
       ElectivAPI.getAPI().getProjekte()
       .then(projektBOs =>
@@ -88,6 +108,7 @@ class ProjektBearbeiten extends Component {
           loadingProjekteError: null
       });
     }
+  */
 
     getTeilnahmenByProjektId=(id)=>{
       ElectivAPI.getAPI().getTeilnahmenByProjektId(id)
@@ -131,7 +152,13 @@ class ProjektBearbeiten extends Component {
       });
     }
 
-
+bewertungAbgeschlossenButtonClicked = event => {
+  //Logik fuer bewertung abgeschlossen Button
+  ElectivAPI.getAPI().setZustandAtProjekt(this.state.currentProjekt, "Bewertung abgeschlossen").then(()=>{
+    this.getProjekte()
+    this.getTeilnahmenByProjektId()
+  }); 
+}
 
 
 
@@ -215,7 +242,7 @@ handleChange = currentProjekt => (event) => {
 
                 
             
-            <Button style={{backgroundColor:"lightgrey", display:"flex",margin:"auto", }} variant="contained" >speichern</Button>
+            <Button style={{backgroundColor:"lightgrey", display:"flex",margin:"auto", }} variant="contained" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
               
             
             </Paper>
