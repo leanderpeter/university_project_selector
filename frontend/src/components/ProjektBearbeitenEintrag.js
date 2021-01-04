@@ -157,7 +157,7 @@ class ProjektBearbeitenEintrag extends Component {
         return(
               <StyledTableRow >
                 <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
-                <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
+                <StyledTableCell align="center">{mat_nr} hallo</StyledTableCell> 
                 <StyledTableCell align="center">
                 <InputLabel>{note}</InputLabel>
                 <Select   style={{display:"flex", minWidth:"5rem",paddingRight:"10px", paddingLeft:"10px",}} value={note }  >
@@ -166,11 +166,7 @@ class ProjektBearbeitenEintrag extends Component {
                   <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
                   )
                   }
-                </Select>   
-                  
-                  
-                 
-                
+                </Select>          
                 </StyledTableCell> 
                 <StyledTableCell align="center">
                   <Button className={classes.teilnahmeAbwaehlenButton} style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" onClick={this.teilnahmeAbwaehlenButtonClicked}>entfernen</Button>
