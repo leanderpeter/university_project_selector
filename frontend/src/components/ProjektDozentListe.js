@@ -150,12 +150,12 @@ class ProjektDozentListe extends Component {
           
           filteredProjekte.map(projekt =>
             <ProjektDozentListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
-              onExpandedStateChange={this.onExpandedStateChange} currentPerson= {currentPerson}
+              onExpandedStateChange={this.onExpandedStateChange} currentPerson= {currentPerson} 
             />) 
         }
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`} onReload={this.getProjekte} />
-        <ProjektForm show={showProjekteForm} currentPerson={currentPerson} onClose={this.projektFormClosed} />
+        <ProjektForm show={showProjekteForm} currentPerson={currentPerson} onClose={this.projektFormClosed} getProjekte= {this.getProjekte}/>
       </div>
     );
   }
