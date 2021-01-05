@@ -18,7 +18,7 @@ class ProjektForm extends Component {
 	constructor(props) {
 		super(props);
 
-		let nm = '', mt = '', bs = '', bt = '', ep = '', wt = '', av = '', ai = '', pb = '', br = '', rm = '', sp = '', dz = '', at = '', tl = '';
+		let nm = '', mt = '', bs = '', bt = '', ep = '', wt = '', av = '', ai = '', pb = '', br = '', rm = '', sp = '', dz = '', at = '', tl = '',ec = '';
 		if (props.projekt) {
 			nm = props.projekt.getname();
 			mt = props.projekt.getmax_teilnehmer();
@@ -35,6 +35,7 @@ class ProjektForm extends Component {
 			dz = props.projekt.getdozent();
 			at = props.projekt.getAnzahlTeilnehmer();
 			tl = props.projekt.getTeilnehmerListe();
+			ec = props.projekt.getECTS();
 		}
 
 		//init state
@@ -111,6 +112,10 @@ class ProjektForm extends Component {
 			teilnehmerListeValidationFailed: false,
 			teilnehmerListeEdited: false,
 
+			ects: ec,
+			ectsValidationFailed: false,
+			ectsEdited: false,
+
 			addingInProgress: false,
 			updatingInProgress: false,
 			addingError: null,
@@ -140,7 +145,8 @@ class ProjektForm extends Component {
 			this.state.halbjahr,
 			this.state.anzahlTeilnehmer,
 			this.state.teilnehmerListe,
-			this.state.name
+			this.state.name,
+			this.state.ects
 			);
 			newProjekt.setname(this.state.name);
 		ElectivAPI.getAPI().addProjekt(newProjekt).then(projekt => {
@@ -257,6 +263,10 @@ class ProjektForm extends Component {
 			teilnehmerListeValidationFailed,
 			teilnehmerListeEdited,
 
+			ects,
+			ectsValidationFailed,
+			ectsEdited,
+
 			addingInProgress,
 			updatingInProgress,
 			addingError,
@@ -332,6 +342,9 @@ class ProjektForm extends Component {
                 onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
               <TextField type='text' required fullWidth margin='normal' id='teilnehmerListe' label='teilnehmerListe:' value={teilnehmerListe}
+                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
+                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
+              <TextField type='text' required fullWidth margin='normal' id='ects' label='ects:' value={ects}
                 onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
               <TextField type='text' required fullWidth margin='normal' label='Maximale Teilnehmeranzahl:' value={'max_teilnehmer'}

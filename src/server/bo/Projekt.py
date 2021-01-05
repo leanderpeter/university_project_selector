@@ -26,6 +26,7 @@ class Projekt(NamedBusinessObject, Automat):
         self._art = None
         self._anzahlTeilnehmer = None
         self._teilnehmerListe = None
+        self._ects = None
 
     def get_max_teilnehmer(self):
         return self._max_teilnehmer
@@ -129,6 +130,12 @@ class Projekt(NamedBusinessObject, Automat):
     def set_teilnehmerListe(self, teilnehmerListe):
         self._teilnehmerListe = teilnehmerListe
 
+    def get_ects(self):
+        return self._ects
+
+    def set_ects(self, ects):
+        self._ects = ects
+
     def __str__(self):
         '''Create and return simple string of the BO'''
         return "Projekt: {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, '{}'".format(
@@ -148,7 +155,8 @@ class Projekt(NamedBusinessObject, Automat):
                                                                               self._teilnehmerListe,
                                                                               self.get_name(),
                                                                               self.get_id(),
-                                                                              self.get_aktueller_zustand())
+                                                                              self.get_aktueller_zustand(),
+                                                                              self.get_ects())
 
 
     @staticmethod
@@ -173,11 +181,13 @@ class Projekt(NamedBusinessObject, Automat):
         obj.set_anzahlTeilnehmer(dictionary["anzahlTeilnehmer"])
         obj.set_teilnehmerListe(dictionary["teilnehmerListe"])
         obj.set_name(dictionary["name"]) # from NBO
+        obj.set_ects(dictionary["ects"])
         return obj
 
     def to_dict(self):
         """Umwandeln Projekt() in ein Python dict()"""
         result = {
+            "ects": self.get_ects(),
             "max_teilnehmer": self.get_max_teilnehmer(),
             "beschreibung": self.get_projektbeschreibung(),
             "betreuer": self.get_betreuer(),

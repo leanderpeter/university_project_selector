@@ -23,25 +23,21 @@ class ProjektListeEintrag extends Component {
 	constructor(props) {
 		super(props);
 
-		// Status initalisieren
-		this.state = {
-			projekt: props.projekt,
-			showProjektForm: false,
-			showProjektDeleteDialog: false
-		};
+        this.state = {
+                projekt: props.projekt,
+                showProjektForm: false,
+                showProjektDeleteDialog: false,
+                teilnahmeButtonDisabled:false,
+                teilnahmeAbwaehlenButtonDisabled:true,
+                teilnahmeChanged : false
+
+            };
+
 	}
 
 	// Handles events wenn sich der status der oeffnung aendert
 	expansionPanelStateChanged = () => {
 		this.props.onExpandedStateChange(this.props.projekt);
-    this.setState({teilnahmeAbwaehlenButtonDisabled:true});
-		// Teilnahme Button deaktivieren, sofern Teilnehmer bereits in Projekt eingeschrieben
-		if( this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
-        this.setState({teilnahmeButtonDisabled:true});
-        this.setState({teilnahmeAbwaehlenButtonDisabled:false});
-    }
-    
-    
 	}
 
 	// Kummert sich um das loschen des Projekts
@@ -88,13 +84,14 @@ class ProjektListeEintrag extends Component {
       this.state.projekt.anzahlTeilnehmer = this.state.projekt.anzahlTeilnehmer + 1;
     	ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
   }
-  
+
   teilnahmeAbwaehlenButtonClicked = event => {
     //Logik fuer Teilnahme Button
     this.setState({teilnahmeButtonDisabled:false});
     this.setState({teilnahmeAbwaehlenButtonDisabled:true});
     this.state.projekt.anzahlTeilnehmer = this.state.projekt.anzahlTeilnehmer - 1;
     ElectivAPI.getAPI().deleteTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
+    this.setState({teilnahmeChanged:true})
 }
 
 	/** Renders the component */
@@ -103,7 +100,10 @@ class ProjektListeEintrag extends Component {
     // Use the states projekt
     const { projekt } = this.state;
 
-    // console.log(this.state);
+    	if(this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
+            this.state.teilnahmeButtonDisabled = true;
+            this.state.teilnahmeAbwaehlenButtonDisabled = false;
+		}
     return (
       <div>
         <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
@@ -117,6 +117,14 @@ class ProjektListeEintrag extends Component {
                 </Typography>
               </Grid>
               <Grid item xs />
+
+              <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
+                  Teilnahme abwählen
+               </Button>
+               <Button className={classes.teilnahmeButton} variant='contained' color='primary' size="small" startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
+                  Teilnahme
+               </Button>
+
               <Grid item>
               	<Typography variant='body2' color={'textSecondary'}>Details</Typography>
             	</Grid>
@@ -125,19 +133,14 @@ class ProjektListeEintrag extends Component {
           <AccordionDetails>
             <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
             <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
-            
+
           </AccordionDetails>
           <AccordionDetails>
-          
-        <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
-          Teilnahme abwählen
-        </Button>  
-        <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
-          Teilnahme
-        </Button>
+
+
           </AccordionDetails>
         </Accordion>
-              
+
       </div>
     );
   }
@@ -150,13 +153,13 @@ const styles = theme => ({
   },
   teilnahmeButton: {
     position: 'absolute',
-    right: theme.spacing(31),
-    bottom: theme.spacing(0),
+    right: theme.spacing(40),
+    bottom: theme.spacing(3)
   },
   teilnahmeAbwaehlenButton: {
     position: 'absolute',
-    right: theme.spacing(3),
-    bottom: theme.spacing(0),
+    right: theme.spacing(14),
+    bottom: theme.spacing(3)
   }
 });
 

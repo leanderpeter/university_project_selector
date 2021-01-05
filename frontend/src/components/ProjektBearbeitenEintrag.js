@@ -20,6 +20,7 @@ import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import TableFooter from '@material-ui/core/TableFooter';
 import StudentBO from '../api/StudentBO'
 
+import ProjektBearbeiten from './ProjektBearbeiten';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -46,7 +47,10 @@ class ProjektBearbeitenEintrag extends Component {
         super(props);
 
         this.state = {
+            
             teilnahmen : [],
+            bewertungen: [],
+            studentID: null,
             studentName: null,
             mat_nr: null,
             note: null,
@@ -56,12 +60,18 @@ class ProjektBearbeitenEintrag extends Component {
     }
 
   
-
+    teilnahmeAbwaehlenButtonClicked = event => {
+      //Logik fuer Teilnahme abwaehlen Button
+      this.setState({teilnahmeAbwaehlenButtonDisabled:true});
+      ElectivAPI.getAPI().deleteTeilnahme(this.props.teilnahme.lehrangebot, this.state.studentID).then(()=>this.props.reloadteilnahmen(this.props.teilnahme.lehrangebot));
+      
+    }
     
     getStudentById = () => {
         ElectivAPI.getAPI().getStudentById(this.props.teilnahme.getteilnehmer())
         .then(studentBO =>
             this.setState({
+              studentID: studentBO.getID(),
               studentName: studentBO.getname(),
               mat_nr:studentBO.getmat_nr(),
               loadingInProgress: false,
@@ -82,6 +92,26 @@ class ProjektBearbeitenEintrag extends Component {
           error: null
         });
       }
+
+    getBewertungen=()=>{
+      ElectivAPI.getAPI().getBewertungen()
+      .then(bewertungBOs =>
+        this.setState({
+            bewertungen: bewertungBOs,
+            error: null,
+            loadingInProgress: false,
+        })).catch(e =>
+            this.setState({
+                bewertung: [],
+                error: e,
+                loadingInProgress: false,
+            }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingProjekteError: null
+      });
+    }
     
     
     getBewertung = () => {
@@ -103,9 +133,20 @@ class ProjektBearbeitenEintrag extends Component {
             loadingInProgress: true
         });
       }
-    
 
     
+
+      handleChange = async (resultat) => { 
+
+                this.props.teilnahme.setResultat(resultat.target.value); 
+        
+                console.log(`Option selected:`, resultat.target.value); 
+        
+                await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme).then(()=>{
+                  this.getBewertung()
+                }); 
+        
+              };
     
 
     
@@ -113,6 +154,7 @@ class ProjektBearbeitenEintrag extends Component {
     componentDidMount() {
       this.getStudentById();
       this.getBewertung();
+      this.getBewertungen();
       
     }
 
@@ -121,15 +163,25 @@ class ProjektBearbeitenEintrag extends Component {
 
     render(){
         const {classes, expandedState} = this.props;
-        const {studentName, mat_nr, note,  loadingInProgress, error } = this.state;
+        const {bewertungen,studentID,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
 
         return(
               <StyledTableRow >
                 <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
                 <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
-                <StyledTableCell align="center">{note}</StyledTableCell> 
-                <StyledTableCell align="center"><Button style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" >entfernen</Button>
-                              
+                <StyledTableCell align="center">
+                <InputLabel>{note}</InputLabel>
+                <Select   style={{display:"flex", minWidth:"5rem",paddingRight:"10px", paddingLeft:"10px",}} value={note } onChange={this.handleChange}   >
+                  {
+                  bewertungen.map(bewertung =>
+                  <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
+                  )
+                  }
+                </Select>          
+                </StyledTableCell> 
+                <StyledTableCell align="center">
+                  <Button className={classes.teilnahmeAbwaehlenButton} style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" onClick={this.teilnahmeAbwaehlenButtonClicked}>entfernen</Button>
+                           
                     
                 </StyledTableCell>
                   <LoadingProgress show={loadingInProgress}></LoadingProgress>

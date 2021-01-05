@@ -63,6 +63,11 @@ class ProjektAdministration(object):
         with PersonMapper() as mapper:
             return mapper.find_by_google_user_id(id)
 
+    def get_alle_studenten(self):
+        """return alle Studenten """
+        with StudentMapper() as mapper:
+            return mapper.find_all()
+
     def get_student_by_google_user_id(self, id):
         '''read and return user with specific user id'''
         with StudentMapper() as mapper:
@@ -164,6 +169,10 @@ class ProjektAdministration(object):
         with ModulMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def get_alle_bewertungen(self):
+        with BewertungMapper() as mapper:
+            return mapper.find_all()
+
     def get_bewertung_by_id(self, id):
         with BewertungMapper() as mapper:
             return mapper.find_by_id(id)
@@ -212,7 +221,7 @@ class ProjektAdministration(object):
         with TeilnahmeMapper() as mapper:
             return mapper.insert(teilnahme)
 
-    def create_wartelisteProjekt(self, name, max_teilnehmer, projektbeschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe):
+    def create_wartelisteProjekt(self, name, max_teilnehmer, projektbeschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe, ects):
         '''Ein warteliste Projekt erstellen'''
         projekt = Projekt()
         projekt.set_max_teilnehmer(max_teilnehmer)
@@ -232,6 +241,7 @@ class ProjektAdministration(object):
         projekt.set_id(1)
         projekt.set_name(name)
         projekt.set_aktueller_zustand(Zustand('Neu'))
+        projekt.set_ects(ects)
         print(projekt)
 
         with ProjektMapper() as mapper:
