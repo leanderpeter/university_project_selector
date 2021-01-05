@@ -103,7 +103,6 @@ class ProjektListeEintrag extends Component {
     // Use the states projekt
     const { projekt } = this.state;
 
-    // console.log(this.state);
     return (
       <div>
         <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
