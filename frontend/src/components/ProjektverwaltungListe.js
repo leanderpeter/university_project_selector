@@ -110,7 +110,7 @@ class ProjektverwaltungListe extends Component {
         <Grid className={classes.projektFilter} container spacing={1} justify='flex-start' alignItems='center'>
           <Grid item>
             <Typography>
-              Nicht genehmigten Projekte:
+              Nicht genehmigte Projekte:
               </Typography>
           </Grid>
           <Grid item xs={4}>
