@@ -24,8 +24,7 @@ class ProjektListeEintrag extends Component {
 		super(props);
 
 
-
-		if(props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
+		if(this.props.currentStudent != null && props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
             this.state = {
                 projekt: props.projekt,
                 showProjektForm: false,
