@@ -9,8 +9,17 @@ class SignIn extends Component {
 
 		this.state = {
 			rolle: null,
+			rolleEdited: false,
+			nameValidationFailed: false,
+			nameEdited: false,
+			kuerzelValidationFailed: false,
+			kuerzelEdited: false,
+			mat_nrValidationFailed: false,
+			mat_nrEdited: false
 		};
 	}
+
+
 
 	// Handles the click event of the sign in button and calls the prop onSignIn handler
 	handleSignInButtonClicked = () => {
@@ -26,17 +35,63 @@ class SignIn extends Component {
 
 	handleChange = (rolle) => {
 		this.setState({
-			rolle: rolle.target.value
+			rolle: rolle.target.value,
+			rolleEdited: true
 		})
 		setTimeout(()=>{
-			console.log('Gewählte Rolle:', this.state.rolle)
+			if (this.state.rolle === "Student"){
+				this.setState({
+					kuerzelEdited: false,
+					mat_nrEdited: false
+				})
+			}
+			else {
+				this.setState({
+					kuerzelEdited: true,
+					mat_nrEdited: true
+				})
+			}
+		},0);
+		setTimeout(()=>{
+			console.log(this.state)
 		},500);
 	};
+
+	// Validierung der textfeldaenderungen 
+	textFieldValueChange = (event) => {
+		const value = event.target.value;
+
+		let error = false;
+		if (value.trim().lenght === 0) {
+			error = true;
+		}
+		this.setState({
+			[event.target.id + 'ValidationFailed']: error,
+			[event.target.id + 'Edited']: true
+		});
+	}
+
+	numberValueChange = (event) => {
+		const value = event.target.value;
+		const re = /^[0-9]{1,6}$/;
+
+		let error = false;
+		if (value.trim().lenght === 0) {
+			error = true;
+		}
+		if (re.test(event.target.value) === false) {
+			error = true;
+		}
+		this.setState({
+			[event.target.id + 'ValidationFailed']: error,
+			[event.target.id + 'Edited']: true
+		});
+	}
 
 
 	// renders the component/signIn page
 	render() {
-		const {rolle} = this.state;
+		const {rolle,rolleEdited, nameValidationFailed, nameEdited, kuerzelValidationFailed, kuerzelEdited, mat_nrValidationFailed, mat_nrEdited} = this.state;
 		const { classes } = this.props;
 
 		return <div>
@@ -53,16 +108,16 @@ class SignIn extends Component {
 									<MenuItem value='Admin'>Admin</MenuItem>
 								</Select>
 						</FormControl>
-						<form className={classes.form} noValidate autoComplete="off">
-  							<TextField id="name" label="Name"/>
+						<form className={classes.form} autoComplete="off">
+  							<TextField id="name" label="Name" error={nameValidationFailed} onChange = {this.textFieldValueChange}/>
 						</form>
 						{ rolle === 'Student' ?
 						<>
-						<form className={classes.form} noValidate autoComplete="off">
-							<TextField id="kuerzel" label="Kürzel" />
+						<form className={classes.form} autoComplete="off">
+							<TextField id="kuerzel" label="Kürzel" error={kuerzelValidationFailed} onChange = {this.textFieldValueChange}/>
 				  		</form>
-						<form className={classes.form} noValidate autoComplete="off">
-						<TextField id="mat_nr" label="Matrikelnummer" />
+						<form className={classes.form} autoComplete="off">
+						<TextField id="mat_nr" label="Matrikelnummer" error={mat_nrValidationFailed} onChange = {this.numberValueChange}/>
 					 	</form>
 						</>
 						:
@@ -73,15 +128,15 @@ class SignIn extends Component {
 				<Typography className={classes.root} align='center'>Für die Nutzung der weiteren Funktionen müssen Sie sich authentifizieren.</Typography>
 				<Grid container justify='center'>
 					<Grid item>
-						<Button style={{marginBottom:"5%"}}variant='contained' color='primary' onClick={this.handleSignInButtonClicked}>
-							Sign in with Google
+						<Button style={{marginBottom:"2em"}}variant='contained' color='primary' onClick={this.handleSignInButtonClicked}
+						 disabled = { !rolleEdited || nameValidationFailed || !nameEdited || kuerzelValidationFailed || !kuerzelEdited || mat_nrValidationFailed || !mat_nrEdited}>
+							Anmelden
       					</Button>
 					</Grid>
 				</Grid>
 				</Card>
 				</Paper>
 			</div>
-
 	}
 }
 
