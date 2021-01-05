@@ -165,7 +165,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { currentUser, appError, authError, authLoading, currentStudent } = this.state;
+    const { currentUser, appError, authError, authLoading, currentStudent, currentPerson } = this.state;
 
     return (
       <ThemeProvider theme={Theme}>
@@ -180,31 +180,31 @@ class App extends React.Component {
                 <>
                   <Redirect from='/' to='projekte' />
                   <Route path='/projekte' component ={ProjektListe}>
-                    <ProjektListe currentStudent={currentStudent}/>
+                    <ProjektListe currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                   <Route path='/about' component={About} />
 
                   <Route path='/projekteDozent' component={ProjektDozentListe}>
-                    <ProjektDozentListe currentStudent={currentStudent}/>
+                    <ProjektDozentListe currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
 
                   <Route path='/projektverwaltung' component={ProjektverwaltungListe}>
-                    <ProjektverwaltungListe currentStudent={currentStudent}/>
+                    <ProjektverwaltungListe currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                   <Route path='/projektbearbeiten' component={ProjektBearbeiten}>
-                    <ProjektBearbeiten currentStudent={currentStudent}/>
+                    <ProjektBearbeiten currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                   
                   {currentStudent ?
                   <Route path='/meineprojekte' component={MeineProjekte}>
-                    <MeineProjekte currentStudent={currentStudent}/>
+                    <MeineProjekte currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                   
                   :
                   <></>
                   }
                   <Route path='/notenlisten' component={Notenlisten}>
-                    <Notenlisten/>
+                    <Notenlisten currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                 </>
                 :

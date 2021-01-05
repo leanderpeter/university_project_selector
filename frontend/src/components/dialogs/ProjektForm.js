@@ -134,7 +134,7 @@ class ProjektForm extends Component {
 			this.state.bes_raum,
 			this.state.raum,
 			this.state.sprache,
-			this.state.dozent,
+			this.props.currentPerson.id,
 			this.state.aktueller_zustand,
 			this.state.art,
 			this.state.halbjahr,
@@ -182,6 +182,25 @@ class ProjektForm extends Component {
 		this.setState({
 			[event.target.id]: event.target.value,
 			[event.target.id + 'ValidationFailed']: error,
+			[event.target.id + 'Edited']: true
+		});
+	}
+
+	numberValueChange = (event) => {
+		const value = event.target.value;
+		const re = /^[0-9]{1,3}$/;
+
+		let er = false;
+		if (value.trim().lenght === 0) {
+			er = true;
+		}
+		if (re.test(event.target.value) === false) {
+			er = true;
+		}
+
+		this.setState({
+			[event.target.id]: event.target.value,
+			[event.target.id + 'ValidationFailed']: er,
 			[event.target.id + 'Edited']: true
 		});
 	}
@@ -277,7 +296,7 @@ class ProjektForm extends Component {
 
 		return (
       show ?
-        <Dialog open={show} onClose={this.handleClose} maxWidth='xs'>
+        <Dialog open={show} onClose={this.handleClose} maxWidth='sm'>
           <DialogTitle id='form-dialog-title'>{title}
             <IconButton className={classes.closeButton} onClick={this.handleClose}>
               <CloseIcon />
@@ -288,54 +307,41 @@ class ProjektForm extends Component {
               {header}
             </DialogContentText>
             <form className={classes.root} noValidate autoComplete='off'>
-              <TextField autoFocus type='text' required fullWidth margin='normal' id='name' label='Projektname:' value={name}
+              <TextField autoFocus type='text' required fullWidth margin='small' id='name' label='Projektname:' variant="outlined" value={name}
                 onChange={this.textFieldValueChange} error={nameValidationFailed} 
                 helperText={nameValidationFailed ? 'The name must contain at least one character' : ' '} />
-          
-              <TextField type='text' required fullWidth margin='normal' id='max_teilnehmer' label='Maximale Teilnehmeranzahl:' value={max_teilnehmer}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
+              <TextField type='text' required fullWidth margin='small' id='max_teilnehmer' label='Maximale Teilnehmeranzahl:' variant="outlined" value={max_teilnehmer}
+                onChange={this.numberValueChange} error={max_teilnehmerValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='beschreibung' label='Projektbeschreibung:' value={beschreibung}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
+              <TextField type='text' required fullWidth margin='small' id='beschreibung' label='Projektbeschreibung:' multiline rows= {4} variant="outlined" value={beschreibung}
+                onChange={this.textFieldValueChange} error={beschreibungValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='betreuer' label='Betreuer:' value={betreuer}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
+              <TextField type='text' required fullWidth margin='small' id='betreuer' label='Betreuer:' variant="outlined" value={betreuer}
+                onChange={this.textFieldValueChange} error={betreuerValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='externer_partner' label='Externe Partner:' value={externer_partner}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
+              <TextField type='text' required fullWidth margin='small' id='externer_partner' label='Externe Partner:' variant="outlined" value={externer_partner}
+                onChange={this.textFieldValueChange} error={externer_partnerValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='woechentlich' label='Woechentlich:' value={woechentlich}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
+              <TextField type='text' required fullWidth margin='small' id='woechentlich' label='Woechentlich:' variant="outlined" value={woechentlich}
+                onChange={this.textFieldValueChange} error={woechentlichValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='anzahl_block_vor' label='anzahl_block_vor:' value={anzahl_block_vor}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
+              <TextField type='text' required fullWidth margin='small' id='anzahl_block_vor' label='anzahl_block_vor:'variant="outlined"  value={anzahl_block_vor}
+                onChange={this.textFieldValueChange} error={anzahl_block_vorValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='anzahl_block_in' label='anzahl_block_in:' value={anzahl_block_in}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
+              <TextField type='text' required fullWidth margin='small' id='anzahl_block_in' label='anzahl_block_in:' variant="outlined" value={anzahl_block_in}
+                onChange={this.textFieldValueChange} error={anzahl_block_inValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='praeferierte_block' label='praeferierte_block:' value={praeferierte_block}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
+              <TextField type='text' required fullWidth margin='small' id='praeferierte_block' label='praeferierte_block:' variant="outlined" value={praeferierte_block}
+                onChange={this.textFieldValueChange} error={praeferierte_blockValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='bes_raum' label='bes_raum:' value={bes_raum}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
+              <TextField type='text' required fullWidth margin='small' id='bes_raum' label='bes_raum:' variant="outlined" value={bes_raum}
+                onChange={this.textFieldValueChange} error={bes_raumValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='raum' label='raum:' value={raum}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
+              <TextField type='text' required fullWidth margin='small' id='raum' label='raum:' variant="outlined" value={raum}
+                onChange={this.textFieldValueChange} error={raumValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='sprache' label='sprache:' value={sprache}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='dozent' label='dozent:' value={dozent}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='anzahlTeilnehmer' label='anzahlTeilnehmer:' value={anzahlTeilnehmer}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='teilnehmerListe' label='teilnehmerListe:' value={teilnehmerListe}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' label='Maximale Teilnehmeranzahl:' value={'max_teilnehmer'}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
+              <TextField type='text' required fullWidth margin='small' id='sprache' label='sprache:' variant="outlined" value={sprache}
+                onChange={this.textFieldValueChange} error={spracheValidationFailed}
                 helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
             </form>
             <LoadingProgress show={addingInProgress || updatingInProgress} />
