@@ -29,6 +29,7 @@ class ProjektListeEintrag extends Component {
 			showProjektForm: false,
 			showProjektDeleteDialog: false
 		};
+
 	}
 
 	// Handles events wenn sich der status der oeffnung aendert
@@ -40,8 +41,8 @@ class ProjektListeEintrag extends Component {
         this.setState({teilnahmeButtonDisabled:true});
         this.setState({teilnahmeAbwaehlenButtonDisabled:false});
     }
-    
-    
+
+
 	}
 
 	// Kummert sich um das loschen des Projekts
@@ -88,7 +89,7 @@ class ProjektListeEintrag extends Component {
       this.state.projekt.anzahlTeilnehmer = this.state.projekt.anzahlTeilnehmer + 1;
     	ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
   }
-  
+
   teilnahmeAbwaehlenButtonClicked = event => {
     //Logik fuer Teilnahme Button
     this.setState({teilnahmeButtonDisabled:false});
@@ -116,6 +117,14 @@ class ProjektListeEintrag extends Component {
                 </Typography>
               </Grid>
               <Grid item xs />
+
+              <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
+                  Teilnahme abwählen
+               </Button>
+               <Button className={classes.teilnahmeButton} variant='contained' color='primary' size="small" startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
+                  Teilnahme
+               </Button>
+
               <Grid item>
               	<Typography variant='body2' color={'textSecondary'}>Details</Typography>
             	</Grid>
@@ -124,19 +133,14 @@ class ProjektListeEintrag extends Component {
           <AccordionDetails>
             <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
             <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
-            
+
           </AccordionDetails>
           <AccordionDetails>
-          
-        <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
-          Teilnahme abwählen
-        </Button>  
-        <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
-          Teilnahme
-        </Button>
+
+
           </AccordionDetails>
         </Accordion>
-              
+
       </div>
     );
   }
@@ -149,13 +153,13 @@ const styles = theme => ({
   },
   teilnahmeButton: {
     position: 'absolute',
-    right: theme.spacing(31),
-    bottom: theme.spacing(0),
+    right: theme.spacing(40),
+    bottom: theme.spacing(3),
   },
   teilnahmeAbwaehlenButton: {
     position: 'absolute',
-    right: theme.spacing(3),
-    bottom: theme.spacing(0),
+    right: theme.spacing(14),
+    bottom: theme.spacing(3),
   }
 });
 
