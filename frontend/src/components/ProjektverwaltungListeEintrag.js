@@ -80,6 +80,12 @@ class ProjektverwaltungListeEintrag extends Component {
                 </Typography>
               </Grid>
               <Grid item xs />
+              <Button className={classes.projektAnnehmenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.annehmenButtonClicked} disabled={this.state.projektAnnehmenButton}>
+                 Annehmen
+              </Button>
+              <Button className={classes.projektAblehnenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.ablehnenButtonClicked} disabled={this.state.projektAblehnenButton}>
+                Ablehnen
+              </Button>
               <Grid item>
                 <Typography variant='body2' color={'textSecondary'}>Details</Typography>
               </Grid>
@@ -91,12 +97,7 @@ class ProjektverwaltungListeEintrag extends Component {
 
           </AccordionDetails>
           <AccordionDetails>
-            <Button className={classes.projektAnnehmenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.annehmenButtonClicked} disabled={this.state.projektAnnehmenButton}>
-              Annehmen
-        </Button>
-            <Button className={classes.projektAblehnenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.ablehnenButtonClicked} disabled={this.state.projektAblehnenButton}>
-              Ablehnen
-        </Button>
+
 
           </AccordionDetails>
         </Accordion>
@@ -114,13 +115,13 @@ const styles = theme => ({
   },
   projektAnnehmenButton: {
     position: 'absolute',
-    right: theme.spacing(22),
-    bottom: theme.spacing(0),
+    right: theme.spacing(30),
+    bottom: theme.spacing(1)
   },
   projektAblehnenButton: {
     position: 'absolute',
-    right: theme.spacing(3),
-    bottom: theme.spacing(0),
+    right: theme.spacing(14),
+    bottom: theme.spacing(1)
   }
 });
 

@@ -57,15 +57,38 @@ class ProjektBearbeiten extends Component {
 
         this.state = {
             teilnahmen:[],
+            studenten:[],
             projekte:[],
             "currentProjekt": null,
             error: null,
-            loadingInProgress: false, 
+            loadingInProgress: false,
+
             
         };
+        this.getTeilnahmenByProjektId=this.getTeilnahmenByProjektId.bind(this)
     }
-    
-    //AO`PI Anbindung: erstes Dropdown der Seite, um die Projekte des Dozenten zu erhalten
+    //hole alle Projekte im richtigen Zustand vom Backend
+    getProjekte = () => {
+      ElectivAPI.getAPI().getProjekteByZustand("in Bewertung")
+        .then(projekteBOs =>
+          this.setState({								//neuer status wenn fetch komplett
+            projekte: projekteBOs, 
+            loadingInProgress: false,				// deaktiviere ladeindikator
+            error: null,
+          })).catch(e =>
+            this.setState({
+              projekte: [],
+              loadingInProgress: false,
+              error: e
+            }));
+      // setze laden auf wahr
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }
+  
+    /*//um alle Projekte zu erhalten aber nicht im richtigen Zustand
     getProjekte=()=>{
       ElectivAPI.getAPI().getProjekte()
       .then(projektBOs =>
@@ -85,6 +108,7 @@ class ProjektBearbeiten extends Component {
           loadingProjekteError: null
       });
     }
+  */
 
     getTeilnahmenByProjektId=(id)=>{
       ElectivAPI.getAPI().getTeilnahmenByProjektId(id)
@@ -108,13 +132,39 @@ class ProjektBearbeiten extends Component {
           loadingProjekteError: null
       });
     }
+    getStudenten=()=>{
+      ElectivAPI.getAPI().getStudenten()
+      .then(studentBOs =>
+        this.setState({
+            studenten: studentBOs,
+            error: null,
+            loadingInProgress: false,
+        })).catch(e =>
+            this.setState({
+                student: [],
+                error: e,
+                loadingInProgress: false,
+            }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingProjekteError: null
+      });
+    }
 
-
+bewertungAbgeschlossenButtonClicked = event => {
+  //Logik fuer bewertung abgeschlossen Button
+  ElectivAPI.getAPI().setZustandAtProjekt(this.state.currentProjekt, "Bewertung abgeschlossen").then(()=>{
+    this.getProjekte()
+    this.getTeilnahmenByProjektId()
+  }); 
+}
 
 
 
 componentDidMount() {
   this.getProjekte();
+  this.getStudenten();
   
   
 }
@@ -134,7 +184,7 @@ handleChange = currentProjekt => (event) => {
         
         
         const { classes } = this.props;
-        const { projekte, currentProjekt, teilnahmen, error, loadingInProgress} = this.state;
+        const {studenten, projekte, currentProjekt, teilnahmen, error, loadingInProgress} = this.state;
         
         return(
             <div className={classes.root}>
@@ -150,7 +200,15 @@ handleChange = currentProjekt => (event) => {
                                   <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
                                   )
                                   }
-                                </Select>                                                                
+                                </Select> 
+                
+                                <Select   style={{display:"flex", minWidth:"5rem",paddingRight:"10px", paddingLeft:"10px",}} >
+                                  {
+                                  studenten.map(student =>
+                                  <MenuItem value={student.getID()}><em>{student.getname()}</em></MenuItem>
+                                  )
+                                  }
+                                </Select>                                                               
 
                 </FormControl>
                 Projekt ID: {currentProjekt}
@@ -170,7 +228,7 @@ handleChange = currentProjekt => (event) => {
                             
                             {
                               teilnahmen.map(teilnahme =>
-                              <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme}  />
+                                <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme} reloadteilnahmen={this.getTeilnahmenByProjektId} />
                               )
                             }
 
@@ -184,7 +242,7 @@ handleChange = currentProjekt => (event) => {
 
                 
             
-            <Button style={{backgroundColor:"lightgrey", display:"flex",margin:"auto", }} variant="contained" >speichern</Button>
+            <Button style={{backgroundColor:"lightgrey", display:"flex",margin:"auto", }} variant="contained" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
               
             
             </Paper>

@@ -150,7 +150,8 @@ class ProjektForm extends Component {
 			this.state.halbjahr,
 			this.state.anzahlTeilnehmer,
 			this.state.teilnehmerListe,
-			this.state.name
+			this.state.name,
+			this.state.ects
 			);
 			newProjekt.setname(this.state.name);
 		await ElectivAPI.getAPI().addProjekt(newProjekt).then(projekt => {

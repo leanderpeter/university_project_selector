@@ -12,7 +12,7 @@ import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import MeineProjekte from './components/MeineProjekte';
 import ProjektBearbeiten from './components/ProjektBearbeiten';
-import Notenlisten from './components/Notenlisten';
+import Notenliste from './components/Notenliste';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import ElectivAPI from './api/ElectivAPI';
@@ -49,7 +49,6 @@ class App extends React.Component {
   // handles all user login states with firebase
   handleAuthStateChange = user => {
     if (user) {
-      console.log('ich werde aufgerufen')
       this.setState({
         authLoading: true, 
       });
@@ -96,7 +95,7 @@ class App extends React.Component {
   //aktuell eingeloggten Student vom Backend abfragen
   getUserByGoogleID = () => {
     let rolle = this.getCookie("rolle")
-    
+
     if (rolle === "Student") {
       ElectivAPI.getAPI().getStudentByGoogleID(this.state.currentUser.uid)
         .then(studentBO =>
@@ -203,8 +202,8 @@ class App extends React.Component {
                   :
                   <></>
                   }
-                  <Route path='/notenlisten' component={Notenlisten}>
-                    <Notenlisten currentStudent={currentStudent} currentPerson= {currentPerson}/>
+                  <Route path='/notenliste' component={Notenliste}>
+                    <Notenliste currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                 </>
                 :

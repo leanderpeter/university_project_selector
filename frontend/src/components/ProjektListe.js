@@ -42,7 +42,7 @@ class ProjektListe extends Component {
 		ElectivAPI.getAPI().getProjekteByZustand("Genehmigt")
       .then(projekteBOs => 
 				this.setState({								//neuer status wenn fetch komplett
-					projekte: projekteBOs,					
+					projekte: projekteBOs,				
 					filteredProjekte: [...projekteBOs],		//speicher eine kopie
 					loadingInProgress: false,				// deaktiviere ladeindikator
           error: null,
@@ -53,6 +53,7 @@ class ProjektListe extends Component {
 						error: e
           }));
 		// setze laden auf wahr
+    // console.log(this.projekte.toString());
 		this.setState({
 			loadingInProgress: true,
 			error: null
@@ -61,6 +62,7 @@ class ProjektListe extends Component {
 	// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 	componentDidMount() {
 		this.getProjekte();
+    console.log(this.projekte);
 	}
 
   onExpandedStateChange = projekt => {
@@ -84,6 +86,7 @@ class ProjektListe extends Component {
 
 	/** Renders the component */
 	render() {
+
     const { classes , currentStudent } = this.props;
     const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm } = this.state;
 

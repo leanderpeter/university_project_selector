@@ -36,7 +36,25 @@ class BewertungMapper(Mapper):
 
     def find_all(self):
         """Reads all tuple and returns them as an object"""
-        pass
+        result = []
+
+        cursor = self._connection.cursor()
+        
+        cursor.execute("SELECT * from bewertungen")
+        tuples = cursor.fetchall()
+        print(tuples)
+
+        for (id,note) in tuples:
+            bewertung = Bewertung()
+            bewertung.set_id(id)
+            bewertung.set_note(note)
+            result.append(bewertung)
+        
+    
+
+        self._connection.commit()
+        cursor.close()
+        return result
 
     def find_by_key(self):
         """Reads a tuple with a given ID"""
@@ -53,3 +71,5 @@ class BewertungMapper(Mapper):
     def delete(self):
         """Delete an object from the DB"""
         pass
+
+

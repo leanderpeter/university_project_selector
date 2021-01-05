@@ -91,7 +91,7 @@ class SignIn extends Component {
 
 	// renders the component/signIn page
 	render() {
-		const {rolle,rolleEdited, nameValidationFailed, nameEdited, kuerzelValidationFailed, kuerzelEdited, mat_nrValidationFailed, mat_nrEdited} = this.state;
+		const {rolle, rolleEdited, nameValidationFailed, nameEdited, kuerzelValidationFailed, kuerzelEdited, mat_nrValidationFailed, mat_nrEdited} = this.state;
 		const { classes } = this.props;
 
 		return <div>

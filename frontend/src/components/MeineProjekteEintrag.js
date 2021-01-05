@@ -209,7 +209,7 @@ class MeineProjekteEintrag extends Component {
                                     </FormControl>                                  
                                     :
                                     <FormControl className={classes.formControl}>
-                                      <InputLabel>EDV-Nummer</InputLabel>
+                                      <InputLabel>Modul</InputLabel>
                                         <Select value="">
                                           <MenuItem value=""><em>Noch nicht benotet</em></MenuItem>
                                         </Select>
