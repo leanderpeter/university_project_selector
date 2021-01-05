@@ -30,7 +30,9 @@ class SignIn extends Component {
 			document.cookie = `kuerzel= ${document.getElementById('kuerzel').value};path=/`
 			document.cookie = `mat_nr= ${document.getElementById('mat_nr').value};path=/`
 		}
-		this.props.onSignIn();
+		setTimeout(()=>{
+			this.props.onSignIn();
+		},0);
 	}
 
 	handleChange = (rolle) => {
