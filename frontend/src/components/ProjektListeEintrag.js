@@ -23,26 +23,32 @@ class ProjektListeEintrag extends Component {
 	constructor(props) {
 		super(props);
 
-		// Status initalisieren
-		this.state = {
-			projekt: props.projekt,
-			showProjektForm: false,
-			showProjektDeleteDialog: false
-		};
+
+
+		if(props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
+            this.state = {
+                projekt: props.projekt,
+                showProjektForm: false,
+                showProjektDeleteDialog: false,
+                teilnahmeButtonDisabled:true,
+                teilnahmeAbwaehlenButtonDisabled:false
+            };
+		}else{
+		    this.state = {
+                projekt: props.projekt,
+                showProjektForm: false,
+                showProjektDeleteDialog: false,
+                teilnahmeButtonDisabled:false,
+                teilnahmeAbwaehlenButtonDisabled:true
+            };
+		}
+
 
 	}
 
 	// Handles events wenn sich der status der oeffnung aendert
 	expansionPanelStateChanged = () => {
 		this.props.onExpandedStateChange(this.props.projekt);
-    this.setState({teilnahmeAbwaehlenButtonDisabled:true});
-		// Teilnahme Button deaktivieren, sofern Teilnehmer bereits in Projekt eingeschrieben
-		if( this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
-        this.setState({teilnahmeButtonDisabled:true});
-        this.setState({teilnahmeAbwaehlenButtonDisabled:false});
-    }
-
-
 	}
 
 	// Kummert sich um das loschen des Projekts
