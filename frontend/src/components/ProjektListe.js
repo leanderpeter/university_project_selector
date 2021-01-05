@@ -18,7 +18,6 @@ class ProjektListe extends Component {
 
 	constructor(props) {
 		super(props);
-
 		let expandedID = null;
 
 		if (this.props.location.expandProjekt){
@@ -97,12 +96,11 @@ class ProjektListe extends Component {
 
 
 
-
 	/** Renders the component */
 	render() {
 
     const { classes , currentStudent } = this.props;
-    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm, projektarten, projekte } = this.state;
+    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm} = this.state;
 
 
     return (
@@ -140,7 +138,7 @@ class ProjektListe extends Component {
           // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters        
           filteredProjekte.map(projekt =>
             <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
-              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent}
+              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} 
             />)
         }
 

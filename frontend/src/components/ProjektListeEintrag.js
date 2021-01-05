@@ -22,7 +22,6 @@ class ProjektListeEintrag extends Component {
 
 	constructor(props) {
 		super(props);
-
 		// Status initalisieren
 		this.state = {
 			projekt: props.projekt,
@@ -109,26 +108,19 @@ class ProjektListeEintrag extends Component {
     }));
   }
 
+
   componentDidMount() {
     this.getProjektart();
-    this.data = this.getProjektart();
   }
+
+
 
 	/** Renders the component */
   render() {
     const { classes, expandedState } = this.props;
     // Use the states projekt
-    const { projekt, projektarten} = this.state;
-
-    //for (var i=0;i<projektarten.length;i++) {for(var x in projektarten[i]){console.log(x + ": " + projektarten[i][x]);}}
-
-    //var y = projektarten[projekt.getArt()]
-    // console.log(y)
-
-    var pArten = projektarten[projekt.getArt() - 1]
-    
-
-    console.log(pArten)
+    const { projekt, projektarten, getprojektartArray} = this.state;
+    var i = projektarten[(this.props.projekt.art)-1];
 
     return (
       <div>
@@ -151,7 +143,7 @@ class ProjektListeEintrag extends Component {
           <AccordionDetails>
             <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
             <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
-            <Typography variant='body1' color={'textSecondary'}>Dieses Projekt ist ein: </Typography>
+            <Typography variant='body1' color={'textSecondary'}>{JSON.stringify(i)} ECTS</Typography>
             
           </AccordionDetails>
           <AccordionDetails>
