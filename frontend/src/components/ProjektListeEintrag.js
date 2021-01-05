@@ -23,25 +23,15 @@ class ProjektListeEintrag extends Component {
 	constructor(props) {
 		super(props);
 
-
-		if(this.props.currentStudent != null && props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
-            this.state = {
-                projekt: props.projekt,
-                showProjektForm: false,
-                showProjektDeleteDialog: false,
-                teilnahmeButtonDisabled:true,
-                teilnahmeAbwaehlenButtonDisabled:false
-            };
-		}else{
-		    this.state = {
+        this.state = {
                 projekt: props.projekt,
                 showProjektForm: false,
                 showProjektDeleteDialog: false,
                 teilnahmeButtonDisabled:false,
-                teilnahmeAbwaehlenButtonDisabled:true
-            };
-		}
+                teilnahmeAbwaehlenButtonDisabled:true,
+                teilnahmeChanged : false
 
+            };
 
 	}
 
@@ -101,6 +91,7 @@ class ProjektListeEintrag extends Component {
     this.setState({teilnahmeAbwaehlenButtonDisabled:true});
     this.state.projekt.anzahlTeilnehmer = this.state.projekt.anzahlTeilnehmer - 1;
     ElectivAPI.getAPI().deleteTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
+    this.setState({teilnahmeChanged:true})
 }
 
 	/** Renders the component */
@@ -109,6 +100,10 @@ class ProjektListeEintrag extends Component {
     // Use the states projekt
     const { projekt } = this.state;
 
+    	if(this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
+            this.state.teilnahmeButtonDisabled = true;
+            this.state.teilnahmeAbwaehlenButtonDisabled = false;
+		}
     return (
       <div>
         <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
