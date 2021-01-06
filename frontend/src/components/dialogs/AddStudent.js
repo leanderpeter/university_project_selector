@@ -27,28 +27,47 @@ class AddStudent extends Component {
 
     getStudenten=()=>{
         ElectivAPI.getAPI().getStudenten()
-        .then(studentBOs =>
-          this.setState({
-              studenten: studentBOs,
-              filteredStudenten: [...studentBOs],
-              error: null,
-              loadingInProgress: false,
-          })).catch(e =>
-              this.setState({
-                  student: [],
-                  filteredStudenten: [],
-                  error: e,
-                  loadingInProgress: false,
-              }));
-        this.setState({
-            error: null,
-            loadingInProgress: true,
-            loadingProjekteError: null
-        });
+        .then(studentBOs=>{
+            var teilnahmeids = this.props.teilnahmen.map(teilnahme=>{
+                return teilnahme.teilnehmer
+            });
+            studentenvar = studentBOs
+            var a;
+            for (a in teilnahmeids){
+                var studentenids =  studentenvar.map(student=>{
+                    return student.id
+                });
+                if (studentenids.indexOf(teilnahmeids[a] != -1)) {
+                    studentenvar.splice(studentenids.indexOf(teilnahmeids[a]), 1)
+                }
+            }
+        })
+        .then(() =>     
+            this.setState({
+                studenten: studentenvar,
+                filteredStudenten: [...studentenvar],
+                error: null,
+                loadingInProgress: false,
+            })).catch(e =>
+                this.setState({
+                    student: [],
+                    filteredStudenten: [],
+                    error: e,
+                    loadingInProgress: false,
+                }));
+            this.setState({
+                error: null,
+                loadingInProgress: true,
+                loadingProjekteError: null
+            });
       }
 
     handleClose = () => {
 		this.props.onClose(null);
+    }
+
+    handleOpen = () => {
+        this.getStudenten();
     }
 
     filterFieldValueChange= event => {
@@ -71,16 +90,15 @@ class AddStudent extends Component {
     }
 
     componentDidMount() {
-        this.getStudenten();
       }
     
     render() {
-		const { classes, show } = this.props;
+		const { classes, show, currentProjekt } = this.props;
         const { filteredStudenten, studentFilter, error, loadingInProgress } = this.state;
         
         return (
             show ?
-                <Dialog open={show} onClose={this.handleClose} maxWidth='xs' fullWidth>
+                <Dialog open={show} onEntered={this.handleOpen} onClose={this.handleClose} maxWidth='xs' fullWidth>
                     <DialogTitle className={classes.dialogtitle}>Student hinzufügen
                         <IconButton className={classes.closeButton} onClick={this.handleClose}>
                         <CloseIcon />
@@ -104,7 +122,7 @@ class AddStudent extends Component {
                             <List className={classes.root}>
                                   {
                                   filteredStudenten.map(student => 
-                                    <AddStudentEintrag key={student.getID()} student = {student} 
+                                    <AddStudentEintrag key={student.getID()} student = {student} currentProjekt={currentProjekt}
                                     show={this.props.show}
                                 />)
                                   } 
@@ -119,6 +137,7 @@ class AddStudent extends Component {
     }
 }
 
+var studentenvar;
 /** Component specific styles */
 const styles = theme => ({
     root: {

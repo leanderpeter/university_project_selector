@@ -227,7 +227,7 @@ class ProjektBearbeiten extends Component {
                     
                     <LoadingProgress show={loadingInProgress} />
                     <ContextErrorMessage error={error} contextErrorMsg = {'Meine Projekte konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
-                    <AddStudent show={showAddStudent} onClose={this.addStudentClosed}/>
+                    <AddStudent show={showAddStudent} currentProjekt={currentProjekt} teilnahmen={teilnahmen} onClose={this.addStudentClosed}/>
                 </TableContainer>
                 <Fab size="medium"  className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
                   <AddIcon />

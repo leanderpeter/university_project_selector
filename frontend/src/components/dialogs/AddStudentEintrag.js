@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import {ListItemSecondaryAction, Typography, IconButton} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Divider from '@material-ui/core/Divider';
+import {ElectivAPI} from '../../api';
 
 
 
@@ -18,11 +19,18 @@ class AddStudentEintrag extends Component {
         super(props);
 
         this.state = {
-            student: null,
+            student: props.student,
+            addButtonDisabled: false,
             error: null,
             loadingInProgress: false
         };
     }
+
+    addTeilnahme = async () => {
+    	//Logik fuer Teilnahme Button
+      await ElectivAPI.getAPI().setTeilnahme(this.props.currentProjekt, this.state.student.id);
+      this.setState({addButtonDisabled:true});
+  }
 
     render(){
         const {classes, expandedState, student} = this.props;
@@ -35,7 +43,7 @@ class AddStudentEintrag extends Component {
               <Typography >{student.mat_nr}</Typography>
               <Typography className={classes.marginLeft}>{student.name}</Typography>
               <ListItemSecondaryAction>
-                <IconButton><AddIcon/></IconButton>
+                <IconButton disabled={this.state.addButtonDisabled}><AddIcon onClick={this.addTeilnahme} /></IconButton>
               </ListItemSecondaryAction>
             </ListItem>
             <ListItem>
