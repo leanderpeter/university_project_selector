@@ -18,7 +18,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import TableFooter from '@material-ui/core/TableFooter';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
+
+//import AddStudent Dialog
+import AddStudent from './dialogs/AddStudent';
 //import ProjektBearbeitenEintrag
 import ProjektBearbeitenEintrag from './ProjektBearbeitenEintrag';
 
@@ -48,8 +53,6 @@ const StyledTableRow = withStyles((theme) => ({
 
 
 
-
-
 class ProjektBearbeiten extends Component {
 
     constructor(props){
@@ -57,12 +60,11 @@ class ProjektBearbeiten extends Component {
 
         this.state = {
             teilnahmen:[],
-            studenten:[],
             projekte:[],
             "currentProjekt": null,
             error: null,
             loadingInProgress: false,
-
+            showAddStudent: false,
             
         };
         this.getTeilnahmenByProjektId=this.getTeilnahmenByProjektId.bind(this)
@@ -132,47 +134,41 @@ class ProjektBearbeiten extends Component {
           loadingProjekteError: null
       });
     }
-    getStudenten=()=>{
-      ElectivAPI.getAPI().getStudenten()
-      .then(studentBOs =>
-        this.setState({
-            studenten: studentBOs,
-            error: null,
-            loadingInProgress: false,
-        })).catch(e =>
-            this.setState({
-                student: [],
-                error: e,
-                loadingInProgress: false,
-            }));
+    
+
+    bewertungAbgeschlossenButtonClicked = event => {
+      //Logik fuer bewertung abgeschlossen Button
+      ElectivAPI.getAPI().setZustandAtProjekt(this.state.currentProjekt, "Bewertung abgeschlossen").then(()=>{
+        this.getProjekte()
+        this.getTeilnahmenByProjektId()
+      }); 
+    }
+
+    addStudentButtonClicked = event => {
+      event.stopPropagation();
       this.setState({
-          error: null,
-          loadingInProgress: true,
-          loadingProjekteError: null
+        showAddStudent: true
       });
     }
 
-bewertungAbgeschlossenButtonClicked = event => {
-  //Logik fuer bewertung abgeschlossen Button
-  ElectivAPI.getAPI().setZustandAtProjekt(this.state.currentProjekt, "Bewertung abgeschlossen").then(()=>{
-    this.getProjekte()
-    this.getTeilnahmenByProjektId()
-  }); 
-}
+    addStudentClosed = () => {
+        this.setState({
+          showAddStudent: false
+        });
+        this.getTeilnahmenByProjektId(this.state.currentProjekt);
+    }
 
 
+    componentDidMount() {
+      this.getProjekte();
+    }
 
-componentDidMount() {
-  this.getProjekte();
-  this.getStudenten();
-}
-
-handleChange = currentProjekt => (event) => {
-  this.setState({
-    currentProjekt:event.target.value
-  })
-  this.getTeilnahmenByProjektId(event.target.value)
-};
+    handleChange = currentProjekt => (event) => {
+      this.setState({
+        currentProjekt:event.target.value
+      })
+      this.getTeilnahmenByProjektId(event.target.value)
+    };
 
 
 
@@ -183,11 +179,10 @@ handleChange = currentProjekt => (event) => {
         
         
         const { classes } = this.props;
-        const {studenten, projekte, currentProjekt, teilnahmen, error, loadingInProgress} = this.state;
+        const {studenten, projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
         
         return(
             <div className={classes.root}>
-                <Paper>
                 
                 
                 <Typography style={{marginTop:"2%",textAlign:"center",position: "relative",}} >Projektname:
@@ -199,20 +194,14 @@ handleChange = currentProjekt => (event) => {
                                   <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
                                   )
                                   }
-                                </Select> 
-                
-                                <Select   style={{display:"flex", minWidth:"5rem",paddingRight:"10px", paddingLeft:"10px",}} >
-                                  {
-                                  studenten.map(student =>
-                                  <MenuItem value={student.getID()}><em>{student.getname()}</em></MenuItem>
-                                  )
-                                  }
-                                </Select>                                                               
-
+                                </Select>                                                              
                 </FormControl>
                 Projekt ID: {currentProjekt}
                 </Typography>
-                <TableContainer component={Paper} style={{marginTop:"5%", marginBottom:"5%"}}>
+
+                {currentProjekt?
+                <>
+                <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="customized table">
                         <TableHead>
                             <StyledTableRow>
@@ -235,16 +224,19 @@ handleChange = currentProjekt => (event) => {
                         </TableBody>
                         
                     </Table>
+                    
                     <LoadingProgress show={loadingInProgress} />
                     <ContextErrorMessage error={error} contextErrorMsg = {'Meine Projekte konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
+                    <AddStudent show={showAddStudent} onClose={this.addStudentClosed}/>
                 </TableContainer>
-
-                
-            
-            <Button style={{backgroundColor:"lightgrey", display:"flex",margin:"auto", }} variant="contained" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
-              
-            
-            </Paper>
+                <Fab size="medium"  className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
+                  <AddIcon />
+                </Fab>           
+                <Button style={{backgroundColor:"lightgrey", display:"flex",margin:"auto", }} variant="contained" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
+                </>
+              :
+              <></>
+              }   
             </div>
         )
     }
@@ -259,6 +251,9 @@ const styles = theme => ({
         padding: theme.spacing(1)
       },
       content: {
+        margin: theme.spacing(1),
+      },
+      addButton: {
         margin: theme.spacing(1),
       }
   });
