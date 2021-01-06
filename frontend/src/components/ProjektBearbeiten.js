@@ -165,9 +165,8 @@ bewertungAbgeschlossenButtonClicked = event => {
 componentDidMount() {
   this.getProjekte();
   this.getStudenten();
-  
-  
 }
+
 handleChange = currentProjekt => (event) => {
   this.setState({
     currentProjekt:event.target.value

@@ -67,8 +67,8 @@ class ProjektBearbeitenEintrag extends Component {
       
     }
     
-    getStudentById = () => {
-        ElectivAPI.getAPI().getStudentById(this.props.teilnahme.getteilnehmer())
+    getStudentByID = () => {
+        ElectivAPI.getAPI().getStudentByID(this.props.teilnahme.getteilnehmer())
         .then(studentBO =>
             this.setState({
               studentID: studentBO.getID(),
@@ -152,7 +152,7 @@ class ProjektBearbeitenEintrag extends Component {
     
 
     componentDidMount() {
-      this.getStudentById();
+      this.getStudentByID();
       this.getBewertung();
       this.getBewertungen();
       

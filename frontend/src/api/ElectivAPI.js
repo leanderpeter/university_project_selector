@@ -64,9 +64,6 @@ export default class ElectivAPI {
 	//getStudent: id
 	#getStudentByIDURL = (id) => `${this.#ElectivServerBaseURL}/student/${id}`;
 
-	//getStudent: id
-	#getStudentByIdURL = (id) => `${this.#ElectivServerBaseURL}/student/${id}`;
-
 	//Bewertung nach Id bekommen
 	#getBewertungURL = (id) => `${this.#ElectivServerBaseURL}/bewertung/${id}`;
 
