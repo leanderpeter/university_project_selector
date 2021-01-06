@@ -26,10 +26,10 @@ class AddStudentEintrag extends Component {
         };
     }
 
-    addTeilnahme = async () => {
-    	//Logik fuer Teilnahme Button
-      await ElectivAPI.getAPI().setTeilnahme(this.props.currentProjekt, this.state.student.id);
+    addTeilnahme =  () => {
+      //Logik fuer Teilnahme Button
       this.setState({addButtonDisabled:true});
+      ElectivAPI.getAPI().setTeilnahme(this.props.currentProjekt, this.state.student.id);
   }
 
     render(){
@@ -39,7 +39,6 @@ class AddStudentEintrag extends Component {
         return(
           <div>
             <ListItem className={classes.root}>
-              
               <Typography >{student.mat_nr}</Typography>
               <Typography className={classes.marginLeft}>{student.name}</Typography>
               <ListItemSecondaryAction>
@@ -58,6 +57,7 @@ class AddStudentEintrag extends Component {
 const styles = theme => ({
       root: {
         width: '100%',
+        marginTop: '16px'
       },
       marginLeft: {
         marginLeft: theme.spacing(2)

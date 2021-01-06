@@ -151,7 +151,8 @@ const styles = theme => ({
     },
     filter: {
         margin: theme.spacing(2),
-        marginTop: 0
+        marginTop: 0,
+        marginBottom: 0
     },
     dialogtitle: {
         paddingLeft: theme.spacing(2)
