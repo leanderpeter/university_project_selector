@@ -154,12 +154,12 @@ const styles = theme => ({
   },
   teilnahmeButton: {
     position: 'absolute',
-    right: theme.spacing(34),
+    right: theme.spacing(32),
     bottom: theme.spacing(3)
   },
   teilnahmeAbwaehlenButton: {
     position: 'absolute',
-    right: theme.spacing(8),
+    right: theme.spacing(6),
     bottom: theme.spacing(3),
 
   }
