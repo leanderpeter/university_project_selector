@@ -29,10 +29,11 @@ class ProjektListeEintrag extends Component {
                 showProjektDeleteDialog: false,
                 teilnahmeButtonDisabled:false,
                 teilnahmeAbwaehlenButtonDisabled:true,
-                teilnahmeChanged : false
+                teilnahmeChanged : false,
+                projektarten: [],
+                pArten: null
 
             };
-
 	}
 
 	// Handles events wenn sich der status der oeffnung aendert
@@ -94,11 +95,29 @@ class ProjektListeEintrag extends Component {
     this.setState({teilnahmeChanged:true})
 }
 
+  getProjektart = () => {
+    ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
+      this.setState({
+        projektarten: projektartBOs
+      })).catch(e => 
+    this.setState({
+      //projektarten: []
+    }));
+  }
+
+
+  componentDidMount() {
+    this.getProjektart();
+  }
+
+
+
 	/** Renders the component */
   render() {
     const { classes, expandedState } = this.props;
     // Use the states projekt
-    const { projekt } = this.state;
+    const { projekt, projektarten, getprojektartArray} = this.state;
+    var i = projektarten[(this.props.projekt.art)-1];
 
     	if(this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
             this.state.teilnahmeButtonDisabled = true;
@@ -134,7 +153,14 @@ class ProjektListeEintrag extends Component {
           <AccordionDetails>
             <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
             <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
-
+            <Typography variant='body1' color={'textSecondary'}>{JSON.stringify(i)} ECTS</Typography>
+            
+          </AccordionDetails>
+          <AccordionDetails>
+            <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
+            <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
+            <Typography variant='body1' color={'textSecondary'}>Dieses Projekt ist ein: </Typography>
+            
           </AccordionDetails>
           <AccordionDetails>
 

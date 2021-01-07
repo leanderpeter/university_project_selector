@@ -7,6 +7,7 @@ from .bo.Student import Student
 from .bo.Projekt import Projekt
 from .bo.Teilnahme import Teilnahme
 from .bo.Zustand import Zustand
+from .bo.Projektart import Projektart
 
 from .db.PersonMapper import PersonMapper
 from .db.StudentMapper import StudentMapper
@@ -17,6 +18,7 @@ from .db.ProjektWartelisteMapper import ProjektWartelisteMapper
 from .bo.Teilnahme import Teilnahme
 from .db.ModulMapper import ModulMapper
 from .db.SemesterMapper import SemesterMapper
+from .db.ProjektartMapper import ProjektartMapper
 
 
 
@@ -238,7 +240,7 @@ class ProjektAdministration(object):
         with TeilnahmeMapper() as mapper:
             return mapper.insert(teilnahme)
 
-    def create_wartelisteProjekt(self, name, max_teilnehmer, projektbeschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe, ects):
+    def create_wartelisteProjekt(self, name, max_teilnehmer, projektbeschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe):
         '''Ein warteliste Projekt erstellen'''
         projekt = Projekt()
         projekt.set_max_teilnehmer(max_teilnehmer)
@@ -258,7 +260,6 @@ class ProjektAdministration(object):
         projekt.set_id(1)
         projekt.set_name(name)
         projekt.set_aktueller_zustand(Zustand('Neu'))
-        projekt.set_ects(ects)
         print(projekt)
 
         with ProjektMapper() as mapper:
@@ -277,3 +278,10 @@ class ProjektAdministration(object):
 """     def get_state(self, projekt):
         return self.projekt.get_aktueller_zustand() """
 
+    def get_alle_projektarten(self):
+        with ProjektartMapper() as mapper:
+            return mapper.find_all()
+
+    def get_projektart_by_id(self, id):
+        with ProjektartMapper() as mapper:
+            return mapper.find_projektart_by_id(id)

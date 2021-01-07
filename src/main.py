@@ -68,8 +68,7 @@ projekt = api.inherit('Projekt', nbo, automat, {
     'halbjahr': fields.Integer(attribute='_halbjahr', description='Die ID des Semesters des Projekts'),
     'art': fields.Integer(attribute='_art', description='Die ID der Projektart'),
     'anzahlTeilnehmer': fields.String(attribute='_anzahlTeilnehmer', description='Die Anzahl der angemeldeten Teilnehmer'),
-    'teilnehmerListe': fields.String(attribute='_teilnehmerListe', description='Liste mit IDs der Teilnehmer'),
-    'ects': fields.Integer(attribute='_ects', description='Die ECTS des Projekts')
+    'teilnehmerListe': fields.String(attribute='_teilnehmerListe', description='Liste mit IDs der Teilnehmer')
 })
 
 # Moduloption aus projekt entfernt !!INFO!!
@@ -80,6 +79,11 @@ teilnahme = api.inherit('Teilnahme', bo, {
     'anrechnung': fields.Integer(attribute='_anrechnung', description='Das Modul auf das die Teilnahme angerechnet wurde'),
     'resultat': fields.Integer(attribute='_resultat', description='Die ID der Note einer Teilnahme')
 })
+
+projektart = api.inherit('Projektart', nbo, {
+    'sws': fields.Integer(attribute='_sws',description='Semesterwochenstunden'),
+    'ects': fields.Integer(attribute='_ects',description='Ects fuer ein Projekt')
+    })
 
 bewertung = api.inherit('Bewertung', bo, {
     'note': fields.Float(attribute='_note', description='Die Note der Teilnahme'),
@@ -487,10 +491,21 @@ class ProjektGenehmigungOperation(Resource):
 
 
         if proposal is not None:
-            p = adm.create_wartelisteProjekt(proposal.get_name(),proposal.get_max_teilnehmer(),proposal.get_projektbeschreibung(),proposal.get_betreuer(),proposal.get_externer_partner(),proposal.get_woechentlich(),proposal.get_anzahl_block_vor(),proposal.get_anzahl_block_in(),proposal.get_praeferierte_block(),proposal.get_bes_raum(),proposal.get_raum(),proposal.get_sprache(),proposal.get_dozent(),proposal.get_anzahlTeilnehmer(),proposal.get_teilnehmerListe(),proposal.get_ects())
+            p = adm.create_wartelisteProjekt(proposal.get_name(),proposal.get_max_teilnehmer(),proposal.get_projektbeschreibung(),proposal.get_betreuer(),proposal.get_externer_partner(),proposal.get_woechentlich(),proposal.get_anzahl_block_vor(),proposal.get_anzahl_block_in(),proposal.get_praeferierte_block(),proposal.get_bes_raum(),proposal.get_raum(),proposal.get_sprache(),proposal.get_dozent(),proposal.get_anzahlTeilnehmer(),proposal.get_teilnehmerListe())
             return p, 200
         else:
             return '', 500
+
+@electivApp.route('/projektart')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class Projektartby(Resource):
+    @electivApp.marshal_list_with(projektart)
+    @secured
+
+    def get(self):
+        adm = ProjektAdministration()
+        projektart = adm.get_alle_projektarten()
+        return projektart
 
 if __name__ == '__main__':
     app.run(debug=True)

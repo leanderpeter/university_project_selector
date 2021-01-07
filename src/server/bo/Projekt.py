@@ -26,7 +26,6 @@ class Projekt(NamedBusinessObject, Automat):
         self._art = None
         self._anzahlTeilnehmer = None
         self._teilnehmerListe = None
-        self._ects = None
 
     def get_max_teilnehmer(self):
         return self._max_teilnehmer
@@ -155,8 +154,7 @@ class Projekt(NamedBusinessObject, Automat):
                                                                               self._teilnehmerListe,
                                                                               self.get_name(),
                                                                               self.get_id(),
-                                                                              self.get_aktueller_zustand(),
-                                                                              self.get_ects())
+                                                                              self.get_aktueller_zustand())
 
 
     @staticmethod
@@ -186,7 +184,6 @@ class Projekt(NamedBusinessObject, Automat):
     def to_dict(self):
         """Umwandeln Projekt() in ein Python dict()"""
         result = {
-            "ects": self.get_ects(),
             "max_teilnehmer": self.get_max_teilnehmer(),
             "beschreibung": self.get_projektbeschreibung(),
             "betreuer": self.get_betreuer(),

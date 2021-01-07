@@ -5,6 +5,7 @@ import TeilnahmeBO from './TeilnahmeBO';
 import BewertungBO from './BewertungBO';
 import ModulBO from './ModulBO';
 import SemesterBO from './SemesterBO';
+import ProjektartBO from './ProjektartBO';
 
 /*
 Singleton Abstarktion des backend REST interfaces. Es handelt sich um eine access methode
@@ -94,6 +95,11 @@ export default class ElectivAPI {
 	//Alle Semester bekommen
 	#getStudentenURL = () => `${this.#ElectivServerBaseURL}/studenten`;
 
+    //erhalte Projektarten nach ID
+    #getProjektartByArtURL = (id) => `${this.#ElectivServerBaseURL}/projektart${id}`
+	//erhalte alle Projektarten
+    #getProjektartURL = () => `${this.#ElectivServerBaseURL}/projektart`
+
 	/*
 	Singleton/Einzelstuck instanz erhalten
 	*/
@@ -133,11 +139,27 @@ export default class ElectivAPI {
 		//immer Zustand 1 (neues Projekt) holen
 		return this.#fetchAdvanced(this.#getProjekteByZustandURL(zustand),{method: 'GET'}).then((responseJSON) => {
 			let projektBOs = ProjektBO.fromJSON(responseJSON);
-			// console.info(projektBOs.toString())
-			console.log(projektBOs)
-			projektBOs.sort((a,b) => (a.ects > b.ects) ? 1: -1); //Sortier alle Objecte im array nach ects, aufsteigend
+			// projektBOs.sort((a,b) => (a.ects > b.ects) ? 1: -1); //Sortier alle Objecte im array nach ects, aufsteigend
 			return new Promise(function (resolve){
 				resolve(projektBOs);
+			})
+		})
+	}
+
+	getProjektart() {
+		return this.#fetchAdvanced(this.#getProjektartURL(), {method: 'GET'}).then((responseJSON) => {
+			let projektartBos = ProjektartBO.fromJSON(responseJSON);
+			return new Promise(function (resolve){
+				resolve(projektartBos);
+			})
+		})
+	}
+
+	getProjektartById(id) {
+		return this.#fetchAdvanced(this.#getProjektartByArtURL(id),{method: 'GET'}).then((responseJSON) => {
+			let projektartBO = ProjektartBO.fromJSON(responseJSON);
+			return new Promise(function (resolve){
+				resolve(projektartBO);
 			})
 		})
 	}
@@ -242,7 +264,7 @@ export default class ElectivAPI {
 	getStudentByGoogleID(google_user_id){
 		return this.#fetchAdvanced(this.#getStudentByGoogleIDURL(google_user_id)).then((responseJSON) => {
 			let studentBO = StudentBO.fromJSON(responseJSON);
-			console.info(studentBO)
+			// console.info(studentBO)
 			return new Promise(function (resolve){
 				resolve(studentBO)
 			})
