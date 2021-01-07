@@ -103,6 +103,7 @@ class ProjektListeEintrag extends Component {
     	if(this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
             this.state.teilnahmeButtonDisabled = true;
             this.state.teilnahmeAbwaehlenButtonDisabled = false;
+            console.log(this.state);
 		}
     return (
       <div>
@@ -126,7 +127,7 @@ class ProjektListeEintrag extends Component {
                </Button>
 
               <Grid item>
-              	<Typography variant='body2' color={'textSecondary'}>Details</Typography>
+              	<Typography variant='body2' color={'textSecondary'}></Typography>
             	</Grid>
             </Grid>
           </AccordionSummary>
@@ -153,13 +154,14 @@ const styles = theme => ({
   },
   teilnahmeButton: {
     position: 'absolute',
-    right: theme.spacing(40),
+    right: theme.spacing(32),
     bottom: theme.spacing(3)
   },
   teilnahmeAbwaehlenButton: {
     position: 'absolute',
-    right: theme.spacing(14),
-    bottom: theme.spacing(3)
+    right: theme.spacing(6),
+    bottom: theme.spacing(3),
+
   }
 });
 
