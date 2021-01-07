@@ -124,6 +124,11 @@ class ProjektAdministration(object):
         with ProjektMapper() as mapper:
             return mapper.find_projekte_by_zustand(zustand_id)
 
+    def get_projekte_by_zustaende(self, zustand_id):
+        with ProjektMapper() as mapper:
+            return mapper.find_projekte_by_zustaende(zustand_id)
+
+
     def set_zustand_at_projekt(self, projekt_id, zustand_id):
         with ProjektMapper() as mapper:
             return mapper.set_zustand_at_projekt(projekt_id,zustand_id)
