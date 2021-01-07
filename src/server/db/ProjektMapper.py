@@ -88,17 +88,17 @@ class ProjektMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = (
-        "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art, ECTS from projekte WHERE aktueller_zustand IN ({})".format(zustand))
+        "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art from projekte WHERE aktueller_zustand IN ({})".format(zustand))
         print(command)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
              anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art,
-             ects) in tuples:
+             ) in tuples:
             projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
-                                          raum, sprache, dozent, aktueller_zustand, halbjahr, art, ects)
+                                          raum, sprache, dozent, aktueller_zustand, halbjahr, art)
             result.append(projekt)
 
         self._connection.commit()
