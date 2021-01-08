@@ -78,6 +78,7 @@ class ProjektListeEintrag extends Component {
 	}
 
 	teilnahmeButtonClicked = event => {
+	  event.stopPropagation()
     	//Logik fuer Teilnahme Button
       this.setState({teilnahmeButtonDisabled:true});
       this.setState({teilnahmeAbwaehlenButtonDisabled:false});
@@ -86,6 +87,7 @@ class ProjektListeEintrag extends Component {
   }
 
   teilnahmeAbwaehlenButtonClicked = event => {
+    event.stopPropagation()
     //Logik fuer Teilnahme Button
     this.setState({teilnahmeButtonDisabled:false});
     this.setState({teilnahmeAbwaehlenButtonDisabled:true});
@@ -93,6 +95,16 @@ class ProjektListeEintrag extends Component {
     ElectivAPI.getAPI().deleteTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
     this.setState({teilnahmeChanged:true})
 }
+
+/**
+   <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
+                  Teilnahme abwählen
+               </Button>
+               <Button className={classes.teilnahmeButton} variant='contained' color='primary' size="small" startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
+                  Teilnahme
+               </Button>
+
+*/
 
 	/** Renders the component */
   render() {
@@ -103,6 +115,7 @@ class ProjektListeEintrag extends Component {
     	if(this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
             this.state.teilnahmeButtonDisabled = true;
             this.state.teilnahmeAbwaehlenButtonDisabled = false;
+            console.log(this.state);
 		}
     return (
       <div>
@@ -118,6 +131,7 @@ class ProjektListeEintrag extends Component {
               </Grid>
               <Grid item xs />
 
+
               <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
                   Teilnahme abwählen
                </Button>
@@ -126,7 +140,7 @@ class ProjektListeEintrag extends Component {
                </Button>
 
               <Grid item>
-              	<Typography variant='body2' color={'textSecondary'}>Details</Typography>
+              	<Typography variant='body2' color={'textSecondary'}></Typography>
             	</Grid>
             </Grid>
           </AccordionSummary>
@@ -153,13 +167,14 @@ const styles = theme => ({
   },
   teilnahmeButton: {
     position: 'absolute',
-    right: theme.spacing(40),
+    right: theme.spacing(32),
     bottom: theme.spacing(3)
   },
   teilnahmeAbwaehlenButton: {
     position: 'absolute',
-    right: theme.spacing(14),
-    bottom: theme.spacing(3)
+    right: theme.spacing(6),
+    bottom: theme.spacing(3),
+
   }
 });
 
