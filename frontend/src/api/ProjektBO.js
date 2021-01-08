@@ -184,13 +184,13 @@ export default class ProjektBO extends NamedBusinessObject{
 	Erhalte aktuellen Zustand
 	*/
 	getAktuellerZustand(){
-		return this.aktuellerZustand;
+		return this.aktueller_zustand;
 	}
 	/*
 	Setze aktuellen Zustand
 	*/
 	setAktuellerZustand(azustand){
-		this.aktuellerZustand = azustand;  
+		this.aktueller_zustand = azustand;  
 	}
 
 		/*

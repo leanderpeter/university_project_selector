@@ -18,6 +18,7 @@ import Select from '@material-ui/core/Select';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import TableFooter from '@material-ui/core/TableFooter';
+import ProjektartBO from '../api/ProjektartBO';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -47,6 +48,8 @@ class MeineProjekteEintrag extends Component {
             projekt: null,
             projektID: null,
             projektName: null,
+            projektZustand: null,
+            ECTS: null,
             semester: null,
             module: null,
             dozentName: null,
@@ -63,6 +66,7 @@ class MeineProjekteEintrag extends Component {
             projekt: projektBO,
             projektID: projektBO.id,
             projektName: projektBO.name,
+            projektZustand: projektBO.aktueller_zustand,
             loadingInProgress: false,
             error: null,
           })).then(()=>{
@@ -70,6 +74,7 @@ class MeineProjekteEintrag extends Component {
             this.getBewertung()
             this.getModule_by_projekt_id()
             this.getSemester_by_id()
+            this.getECTS()
           })
           .catch(e =>
               this.setState({
@@ -85,7 +90,28 @@ class MeineProjekteEintrag extends Component {
       });
     }
 
+    getECTS = () => {
+      ElectivAPI.getAPI().getProjektartById(this.state.projekt.art)
+      .then(ProjektartBO =>
+          this.setState({
+              ECTS: ProjektartBO.ects,
+              error: null,
+              loadingInProgress: false,
+          }))
+          .catch(e =>
+              this.setState({
+                  ECTS: null,
+                  error: e,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true
+      });
+    }
+
     getBewertung = () => {
+      if (this.props.teilnahme.resultat !== null){
       ElectivAPI.getAPI().getBewertung(this.props.teilnahme.resultat)
       .then(bewertungBO =>
           this.setState({
@@ -96,13 +122,14 @@ class MeineProjekteEintrag extends Component {
           .catch(e =>
               this.setState({
                   note: null,
-                  error: null,
+                  error: e,
                   loadingInProgress: false,
               }));
       this.setState({
           error: null,
           loadingInProgress: true
       });
+    }
     }
 
     getSemester_by_id = () => {
@@ -116,7 +143,7 @@ class MeineProjekteEintrag extends Component {
           .catch(e =>
               this.setState({
                   semester: null,
-                  error: null,
+                  error: e,
                   loadingInProgress: false,
               }));
       this.setState({
@@ -136,7 +163,7 @@ class MeineProjekteEintrag extends Component {
           .catch(e =>
               this.setState({
                   module: null,
-                  error: null,
+                  error: e,
                   loadingInProgress: false,
               }));
       this.setState({
@@ -186,15 +213,20 @@ class MeineProjekteEintrag extends Component {
 
     render(){
         const {classes, expandedState, teilnahme} = this.props;
-        const {  projektID, projektName, semester, module, dozentName, note, loadingInProgress, error } = this.state;
+        const {  projektZustand, projektID, projektName, ECTS, semester, module, dozentName, note, loadingInProgress, error } = this.state;
 
         return(
           <>
                 <StyledTableRow key={projektID}>
                   <StyledTableCell align="left">{projektName}</StyledTableCell>
+                  <StyledTableCell align="center">{ECTS}</StyledTableCell>
                   <StyledTableCell align="center">{semester}</StyledTableCell>
                   <StyledTableCell align="center">{dozentName}</StyledTableCell> 
-                  <StyledTableCell align="center">{note}</StyledTableCell> 
+                  { projektZustand === 'Bewertung abgeschlossen' ?
+                  <StyledTableCell align="center">{note}</StyledTableCell>
+                  :
+                  <StyledTableCell align="center"></StyledTableCell> 
+                  }
                   <StyledTableCell align="right" className={classes.breite}>               
                                   { module && note ?
                                     <FormControl className={classes.formControl}>

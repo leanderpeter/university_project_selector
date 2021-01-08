@@ -96,7 +96,7 @@ export default class ElectivAPI {
 	#getStudentenURL = () => `${this.#ElectivServerBaseURL}/studenten`;
 
     //erhalte Projektarten nach ID
-    #getProjektartByArtURL = (id) => `${this.#ElectivServerBaseURL}/projektart${id}`
+    #getProjektartByIDURL = (id) => `${this.#ElectivServerBaseURL}/projektart/${id}`
 	//erhalte alle Projektarten
     #getProjektartURL = () => `${this.#ElectivServerBaseURL}/projektart`
 
@@ -156,7 +156,7 @@ export default class ElectivAPI {
 	}
 
 	getProjektartById(id) {
-		return this.#fetchAdvanced(this.#getProjektartByArtURL(id),{method: 'GET'}).then((responseJSON) => {
+		return this.#fetchAdvanced(this.#getProjektartByIDURL(id),{method: 'GET'}).then((responseJSON) => {
 			let projektartBO = ProjektartBO.fromJSON(responseJSON);
 			return new Promise(function (resolve){
 				resolve(projektartBO);

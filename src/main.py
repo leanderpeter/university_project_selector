@@ -498,13 +498,24 @@ class ProjektGenehmigungOperation(Resource):
 
 @electivApp.route('/projektart')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class Projektartby(Resource):
+class Projektart(Resource):
     @electivApp.marshal_list_with(projektart)
     @secured
 
     def get(self):
         adm = ProjektAdministration()
         projektart = adm.get_alle_projektarten()
+        return projektart
+
+@electivApp.route('/projektart/<int:id>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ProjektartByID(Resource):
+    @electivApp.marshal_list_with(projektart)
+    @secured
+
+    def get(self, id):
+        adm = ProjektAdministration()
+        projektart = adm.get_projektart_by_id(id)
         return projektart
 
 if __name__ == '__main__':
