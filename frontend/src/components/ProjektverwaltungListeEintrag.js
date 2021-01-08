@@ -29,6 +29,7 @@ class ProjektverwaltungListeEintrag extends Component {
   }
 
   annehmenButtonClicked = event => {
+  event.stopPropagation()
     //Logik fuer annehmen Button
     this.setState({ projektAnnehmenButton: true });
     this.setState({ projektAblehnenButton: true });
@@ -36,6 +37,7 @@ class ProjektverwaltungListeEintrag extends Component {
   }
 
   ablehnenButtonClicked = event => {
+  event.stopPropagation()
     //Logik fuer ablehnen Button
     this.setState({ projektAnnehmenButton: true });
     this.setState({ projektAblehnenButton: true });
