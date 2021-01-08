@@ -22,6 +22,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
 
+
 //import AddStudent Dialog
 import AddStudent from './dialogs/AddStudent';
 //import ProjektBearbeitenEintrag
@@ -60,6 +61,7 @@ class ProjektBearbeiten extends Component {
 
         this.state = {
             teilnahmen:[],
+            currentDozentName: null,
             projekte:[],
             "currentProjekt": null,
             error: null,
@@ -71,7 +73,7 @@ class ProjektBearbeiten extends Component {
     }
     //hole alle Projekte im richtigen Zustand vom Backend
     getProjekte = () => {
-      ElectivAPI.getAPI().getProjekteByZustand("in Bewertung")
+      ElectivAPI.getAPI().getProjekteByZustandByDozent("in Bewertung",this.props.currentPerson.getID())
         .then(projekteBOs =>
           this.setState({								//neuer status wenn fetch komplett
             projekte: projekteBOs, 
@@ -161,6 +163,10 @@ class ProjektBearbeiten extends Component {
 
     componentDidMount() {
       this.getProjekte();
+      this.setState({
+        currentDozentName: this.props.currentPerson.getname(),
+        
+    })
     }
 
     handleChange = currentProjekt => (event) => {
@@ -179,16 +185,22 @@ class ProjektBearbeiten extends Component {
         
         
         const { classes } = this.props;
-        const {studenten, projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
+        const {currentDozentName,studenten, projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
         
         return(
             <div className={classes.root}>
                 
                 
-                <Typography style={{marginTop:"2%",textAlign:"center",position: "relative",}} >Projektname:
-                <FormControl style={{paddingLeft: "5px",paddingRight:"50px"}}className={classes.formControl}>
                 
-                                <Select   style={{display:"flex", minWidth:"5rem",paddingRight:"10px", paddingLeft:"10px",}} value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
+                <Typography  >
+                
+                Projekte von {currentDozentName}, Projekt ID: {currentProjekt}
+                <Typography >
+                Projektname:
+               
+                <FormControl style={{paddingLeft: "5px",paddingRight:"5px"}}className={classes.formControl}>
+                
+                                <Select   style={{ minWidth:"5rem",paddingRight:"5px", paddingLeft:"10px",}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
                                   {
                                   projekte.map(projekt =>
                                   <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
@@ -196,8 +208,10 @@ class ProjektBearbeiten extends Component {
                                   }
                                 </Select>                                                              
                 </FormControl>
-                Projekt ID: {currentProjekt}
+        
                 </Typography>
+                </Typography>
+                
 
                 {currentProjekt?
                 <>
@@ -232,7 +246,7 @@ class ProjektBearbeiten extends Component {
                 <Fab size="medium"  className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
                   <AddIcon />
                 </Fab>           
-                <Button style={{backgroundColor:"lightgrey", display:"flex",margin:"auto", }} variant="contained" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
+                <Button  variant="contained" color="primary" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
                 </>
               :
               <></>

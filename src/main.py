@@ -128,6 +128,18 @@ class Projektverwaltungoperation(Resource):
         print(projekte)
         return projekte
 
+@electivApp.route('/projekte/zustand/<string:zustand_id>/dozent/<int:dozent_id>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ProjektByZustandByDozentoperation(Resource):
+    @electivApp.marshal_list_with(projekt)
+    
+
+    def get(self, zustand_id, dozent_id):
+        adm = ProjektAdministration()
+        projekte = adm.get_projekte_by_zustand_by_dozent(zustand_id,dozent_id)
+        print(projekte)
+        return projekte
+
 @electivApp.route('/projekte/zustand')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class Projektverwaltungzustandoperation(Resource):

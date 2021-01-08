@@ -19,7 +19,9 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import TableFooter from '@material-ui/core/TableFooter';
 import StudentBO from '../api/StudentBO'
+import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 
+//Projekt Bearbeiten Datei importieren
 import ProjektBearbeiten from './ProjektBearbeiten';
 
 
@@ -180,7 +182,7 @@ class ProjektBearbeitenEintrag extends Component {
                 </Select>          
                 </StyledTableCell> 
                 <StyledTableCell align="center">
-                  <Button className={classes.teilnahmeAbwaehlenButton} style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" onClick={this.teilnahmeAbwaehlenButtonClicked}>entfernen</Button>
+                  <Button className={classes.teilnahmeAbwaehlenButton}  variant="contained" color="primary" onClick={this.teilnahmeAbwaehlenButtonClicked}><HighlightOffOutlinedIcon/></Button>
                            
                     
                 </StyledTableCell>

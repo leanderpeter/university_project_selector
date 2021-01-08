@@ -39,6 +39,9 @@ export default class ElectivAPI {
 	//Projekt nach ID bekommen
 	#getProjektURL = (id) => `${this.#ElectivServerBaseURL}/projekt/${id}`;
 
+	//Projekte nach Dozent ID und Zustand bekommen
+	#getProjekteByZustandByDozentURL = (zustand_id,dozent_id) => `${this.#ElectivServerBaseURL}/projekte/zustand/${zustand_id}/dozent/${dozent_id}`;
+
 	//alle Teilnahmen eines Students anzeigen
 	#getTeilnahmenURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/${id}`;
 
@@ -132,6 +135,19 @@ export default class ElectivAPI {
 	getProjekteByZustand(zustand) {
 		//immer Zustand 1 (neues Projekt) holen
 		return this.#fetchAdvanced(this.#getProjekteByZustandURL(zustand),{method: 'GET'}).then((responseJSON) => {
+			let projektBOs = ProjektBO.fromJSON(responseJSON);
+			// console.info(projektBOs.toString())
+			console.log(projektBOs)
+			projektBOs.sort((a,b) => (a.ects > b.ects) ? 1: -1); //Sortier alle Objecte im array nach ects, aufsteigend
+			return new Promise(function (resolve){
+				resolve(projektBOs);
+			})
+		})
+	}
+
+	getProjekteByZustandByDozent(zustand_id,dozent_id) {
+		//immer Zustand 1 (neues Projekt) holen
+		return this.#fetchAdvanced(this.#getProjekteByZustandByDozentURL(zustand_id,dozent_id),{method: 'GET'}).then((responseJSON) => {
 			let projektBOs = ProjektBO.fromJSON(responseJSON);
 			// console.info(projektBOs.toString())
 			console.log(projektBOs)
