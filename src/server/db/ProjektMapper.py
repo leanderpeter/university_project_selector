@@ -81,6 +81,53 @@ class ProjektMapper(Mapper):
         cursor.close()
 
         return result
+    
+    def find_projekte_by_zustand_by_dozent(self, zustand_id,dozent_id):
+
+        result = []
+        cursor = self._connection.cursor()
+        
+        command = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art, ECTS from projekte WHERE electivapp.projekte.aktueller_zustand = %s AND electivapp.projekte.dozent = %s")
+        data = (zustand_id, dozent_id)
+        cursor.execute(command, data)
+        tuples = cursor.fetchall()
+
+        for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
+             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art, ects) in tuples:
+            
+            projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
+                                          woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
+                                          raum, sprache, dozent, aktueller_zustand, halbjahr, art, ects)
+            result.append(projekt)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_projekte_by_zustaende(self, zustand):
+        print(zustand)
+        result = []
+        cursor = self._connection.cursor()
+
+        command = (
+        "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art, ECTS from projekte WHERE aktueller_zustand IN ({})".format(zustand))
+        print(command)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
+             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art,
+             ects) in tuples:
+            projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
+                                          woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
+                                          raum, sprache, dozent, aktueller_zustand, halbjahr, art, ects)
+            result.append(projekt)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
 
 
 

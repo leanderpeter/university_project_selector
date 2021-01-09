@@ -29,6 +29,7 @@ class ProjektverwaltungListeEintrag extends Component {
   }
 
   annehmenButtonClicked = event => {
+  event.stopPropagation()
     //Logik fuer annehmen Button
     this.setState({ projektAnnehmenButton: true });
     this.setState({ projektAblehnenButton: true });
@@ -36,6 +37,7 @@ class ProjektverwaltungListeEintrag extends Component {
   }
 
   ablehnenButtonClicked = event => {
+  event.stopPropagation()
     //Logik fuer ablehnen Button
     this.setState({ projektAnnehmenButton: true });
     this.setState({ projektAblehnenButton: true });
@@ -80,25 +82,35 @@ class ProjektverwaltungListeEintrag extends Component {
                 </Typography>
               </Grid>
               <Grid item xs />
+              <Button className={classes.projektAnnehmenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.annehmenButtonClicked} disabled={this.state.projektAnnehmenButton}>
+                 Annehmen
+              </Button>
+              <Button className={classes.projektAblehnenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.ablehnenButtonClicked} disabled={this.state.projektAblehnenButton}>
+                Ablehnen
+              </Button>
               <Grid item>
                 <Typography variant='body2' color={'textSecondary'}>Details</Typography>
               </Grid>
             </Grid>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
-            <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
+            <Typography variant='body1' color={'textSecondary'}>
+                <b>Beschreibung: </b> {projekt.getbeschreibung()} <br />
+                <b>Raum: </b>{projekt.getraum()}<br />
+                <b>Maximale Teilnehmer: </b>{projekt.getmax_teilnehmer()}<br />
+                <b>Betreuer: </b>{projekt.getbetreuer()}<br />
+                <b>Externer Partner: </b>{projekt.getexterner_partner()}<br />
+                <b>Wöchentlich: </b>{projekt.getwoechentlich() == "1" ? "Ja" : "Nein"}<br />
+                <b>Anzahl Block vor: </b>{projekt.getanzahl_block_vor()}<br />
+                <b>Anzahl Block in: </b>{projekt.getanzahl_block_in()}<br />
+                <b>Sprache: </b>{projekt.getasprache}<br />
+                <b>ECTS: </b>{projekt.getaects}<br />
+                <b>Präferierter Block: </b>{projekt.getpraeferierte_block()}<br />
+
+            </Typography>
 
           </AccordionDetails>
-          <AccordionDetails>
-            <Button className={classes.projektAnnehmenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.annehmenButtonClicked} disabled={this.state.projektAnnehmenButton}>
-              Annehmen
-        </Button>
-            <Button className={classes.projektAblehnenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.ablehnenButtonClicked} disabled={this.state.projektAblehnenButton}>
-              Ablehnen
-        </Button>
 
-          </AccordionDetails>
         </Accordion>
         <ProjektForm show={showProjektForm} projekt={projekt} onClose={this.projektFormClosed} />
 
@@ -114,13 +126,13 @@ const styles = theme => ({
   },
   projektAnnehmenButton: {
     position: 'absolute',
-    right: theme.spacing(22),
-    bottom: theme.spacing(0),
+    right: theme.spacing(30),
+    bottom: theme.spacing(1)
   },
   projektAblehnenButton: {
     position: 'absolute',
-    right: theme.spacing(3),
-    bottom: theme.spacing(0),
+    right: theme.spacing(14),
+    bottom: theme.spacing(1)
   }
 });
 

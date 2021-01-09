@@ -12,7 +12,7 @@ import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import MeineProjekte from './components/MeineProjekte';
 import ProjektBearbeiten from './components/ProjektBearbeiten';
-import Notenlisten from './components/Notenlisten';
+import Notenliste from './components/Notenliste';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import ElectivAPI from './api/ElectivAPI';
@@ -36,6 +36,7 @@ class App extends React.Component {
       authError: null,
       authLoading: false,
       currentStudent: null,
+      currentPerson: null
     };
   }
   // creating error boundry. receiving all errors below the component tree
@@ -48,7 +49,6 @@ class App extends React.Component {
   // handles all user login states with firebase
   handleAuthStateChange = user => {
     if (user) {
-      console.log('ich werde aufgerufen')
       this.setState({
         authLoading: true, 
       });
@@ -64,7 +64,7 @@ class App extends React.Component {
           authError: null,
           authLoading: false
         })}).then(() => {
-        this.getStudentByGoogleID()
+        this.getUserByGoogleID()
       }).catch(e => {
         this.setState({
           authError: e,
@@ -92,9 +92,12 @@ class App extends React.Component {
     firebase.auth().signInWithRedirect(provider);
   }
 
-    //aktuell eingeloggten Student vom Backend abfragen
-  getStudentByGoogleID = () => {
-    ElectivAPI.getAPI().getStudentByGoogleID(this.state.currentUser.uid)
+  //aktuell eingeloggten Student vom Backend abfragen
+  getUserByGoogleID = () => {
+    let rolle = this.getCookie("rolle")
+
+    if (rolle === "Student") {
+      ElectivAPI.getAPI().getStudentByGoogleID(this.state.currentUser.uid)
         .then(studentBO =>
             this.setState({
                 currentStudent: studentBO,
@@ -103,7 +106,7 @@ class App extends React.Component {
             })
             ).catch(e =>
                 this.setState({
-                    student: null,
+                    currentStudent: null,
                     error: e,
                     loadingInProgress: false,
                 }));
@@ -111,9 +114,46 @@ class App extends React.Component {
             error: null,
             loadingInProgress: true
         });
-    }  
-
-
+    }
+    else{
+      ElectivAPI.getAPI().getPersonByGoogleID(this.state.currentUser.uid)
+        .then(personBO =>
+            this.setState({
+                currentPerson: personBO,
+                error: null,
+                loadingInProgress: false,
+            })
+            ).catch(e =>
+                this.setState({
+                    currentPerson: null,
+                    error: e,
+                    loadingInProgress: false,
+                }));
+        this.setState({
+            error: null,
+            loadingInProgress: true
+        });
+    }
+    setTimeout(()=>{
+      console.log(this.state);
+    },1000);
+    }
+    
+    //openbook getcookie von Galileo
+    getCookie = (name) => {
+      var i=0;  //Suchposition im Cookie
+      var suche = name + "=";
+      while (i<document.cookie.length) {
+         if (document.cookie.substring(i, i + suche.length) == suche) {
+            var ende = document.cookie.indexOf(";", i + suche.length);
+            ende = (ende > -1) ? ende : document.cookie.length;
+            var cook = document.cookie.substring(i + suche.length, ende);
+            return unescape(cook);
+         }
+         i++;
+      }
+      return "";
+   }
 
 
   // lifecycle method
@@ -124,7 +164,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { currentUser, appError, authError, authLoading, currentStudent } = this.state;
+    const { currentUser, appError, authError, authLoading, currentStudent, currentPerson } = this.state;
 
     return (
       <ThemeProvider theme={Theme}>
@@ -139,31 +179,31 @@ class App extends React.Component {
                 <>
                   <Redirect from='/' to='projekte' />
                   <Route path='/projekte' component ={ProjektListe}>
-                    <ProjektListe currentStudent={currentStudent}/>
+                    <ProjektListe currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                   <Route path='/about' component={About} />
 
                   <Route path='/projekteDozent' component={ProjektDozentListe}>
-                    <ProjektDozentListe currentStudent={currentStudent}/>
+                    <ProjektDozentListe currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
 
                   <Route path='/projektverwaltung' component={ProjektverwaltungListe}>
-                    <ProjektverwaltungListe currentStudent={currentStudent}/>
+                    <ProjektverwaltungListe currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                   <Route path='/projektbearbeiten' component={ProjektBearbeiten}>
-                    <ProjektBearbeiten currentStudent={currentStudent}/>
+                    <ProjektBearbeiten currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                   
                   {currentStudent ?
                   <Route path='/meineprojekte' component={MeineProjekte}>
-                    <MeineProjekte currentStudent={currentStudent}/>
+                    <MeineProjekte currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                   
                   :
                   <></>
                   }
-                  <Route path='/notenlisten' component={Notenlisten}>
-                    <Notenlisten/>
+                  <Route path='/notenliste' component={Notenliste}>
+                    <Notenliste currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                 </>
                 :

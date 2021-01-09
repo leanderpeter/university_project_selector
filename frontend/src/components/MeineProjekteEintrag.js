@@ -195,28 +195,26 @@ class MeineProjekteEintrag extends Component {
                   <StyledTableCell align="center">{semester}</StyledTableCell>
                   <StyledTableCell align="center">{dozentName}</StyledTableCell> 
                   <StyledTableCell align="center">{note}</StyledTableCell> 
-                  <StyledTableCell align="center">                
-                                  {
-                                    module && note ?
+                  <StyledTableCell align="right" className={classes.breite}>               
+                                  { module && note ?
                                     <FormControl className={classes.formControl}>
-                                      <InputLabel>EDV-Nummer</InputLabel> 
+                                      <InputLabel>Modul</InputLabel> 
                                         <Select value = {teilnahme.anrechnung} onChange={this.handleChange}>
                                           {
                                           module.map(modul =>
-                                          <MenuItem value={modul.getID()}><em>{modul.getEdv_nr()}</em></MenuItem>
+                                          <MenuItem value={modul.getID()}><em>{modul.getname()}</em></MenuItem>
                                           )
                                           }
                                         </Select>                                                                
-                                      </FormControl>                                  
+                                    </FormControl>                                  
                                     :
                                     <FormControl className={classes.formControl}>
-                                      <InputLabel>EDV-Nummer</InputLabel>
+                                      <InputLabel>Modul</InputLabel>
                                         <Select value="">
                                           <MenuItem value=""><em>Noch nicht benotet</em></MenuItem>
                                         </Select>
                                     </FormControl>
                                   }
-
                   </StyledTableCell>
                   </StyledTableRow>
                   <StyledTableRow> 
@@ -244,13 +242,17 @@ const styles = theme => ({
       },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 120,
+        minWidth: 200,
+        textAlign: "left"
     },
     button: {
         margin: theme.spacing(1),
         },
     laden: {
       padding: 0
+    },
+    breite: {
+      width: 220
     }
     });
 

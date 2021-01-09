@@ -40,6 +40,9 @@ export default class ElectivAPI {
 	//Projekt nach ID bekommen
 	#getProjektURL = (id) => `${this.#ElectivServerBaseURL}/projekt/${id}`;
 
+	//Projekte nach Dozent ID und Zustand bekommen
+	#getProjekteByZustandByDozentURL = (zustand_id,dozent_id) => `${this.#ElectivServerBaseURL}/projekte/zustand/${zustand_id}/dozent/${dozent_id}`;
+
 	//alle Teilnahmen eines Students anzeigen
 	#getTeilnahmenURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/${id}`;
 
@@ -56,17 +59,20 @@ export default class ElectivAPI {
 	//getPerson: id
 	#getPersonURL = (id) => `${this.#ElectivServerBaseURL}/person/${id}`;
 
+	//getPerson: google_user_id
+	#getPersonByGoogleIDURL = (google_user_id) => `${this.#ElectivServerBaseURL}/personbygoogle/${google_user_id}`;
+
 	//getStudent: google_user_id
 	#getStudentByGoogleIDURL = (google_user_id) => `${this.#ElectivServerBaseURL}/studentbygoogle/${google_user_id}`;
 	
 	//getStudent: id
 	#getStudentByIDURL = (id) => `${this.#ElectivServerBaseURL}/student/${id}`;
 
-	//getStudent: id
-	#getStudentByIdURL = (id) => `${this.#ElectivServerBaseURL}/student/${id}`;
-
 	//Bewertung nach Id bekommen
 	#getBewertungURL = (id) => `${this.#ElectivServerBaseURL}/bewertung/${id}`;
+
+	//Alle Bewertungen (Noten) bekommen
+	#getBewertungenURL = () => `${this.#ElectivServerBaseURL}/bewertungen`;
 
 	//Alle Module bekommen
 	#getModuleURL = () => `${this.#ElectivServerBaseURL}/module`;
@@ -93,6 +99,9 @@ export default class ElectivAPI {
     #getProjektartByArtURL = (id) => `${this.#ElectivServerBaseURL}/projektart${id}`
 	//erhalte alle Projektarten
     #getProjektartURL = () => `${this.#ElectivServerBaseURL}/projektart`
+  
+	//Alle Semester bekommen
+	#getStudentenURL = () => `${this.#ElectivServerBaseURL}/studenten`;
 
 	/*
 	Singleton/Einzelstuck instanz erhalten
@@ -154,6 +163,15 @@ export default class ElectivAPI {
 			let projektartBO = ProjektartBO.fromJSON(responseJSON);
 			return new Promise(function (resolve){
 				resolve(projektartBO);
+	getProjekteByZustandByDozent(zustand_id,dozent_id) {
+		//immer Zustand 1 (neues Projekt) holen
+		return this.#fetchAdvanced(this.#getProjekteByZustandByDozentURL(zustand_id,dozent_id),{method: 'GET'}).then((responseJSON) => {
+			let projektBOs = ProjektBO.fromJSON(responseJSON);
+			// console.info(projektBOs.toString())
+			console.log(projektBOs)
+			projektBOs.sort((a,b) => (a.ects > b.ects) ? 1: -1); //Sortier alle Objecte im array nach ects, aufsteigend
+			return new Promise(function (resolve){
+				resolve(projektBOs);
 			})
 		})
 	}
@@ -244,6 +262,16 @@ export default class ElectivAPI {
 		})
 	}
 
+	getPersonByGoogleID(google_user_id){
+		return this.#fetchAdvanced(this.#getPersonByGoogleIDURL(google_user_id)).then((responseJSON) => {
+			let personBO = PersonBO.fromJSON(responseJSON);
+			console.info(personBO)
+			return new Promise(function (resolve){
+				resolve(personBO)
+			})
+		})
+	}
+
 
 	getStudentByGoogleID(google_user_id){
 		return this.#fetchAdvanced(this.#getStudentByGoogleIDURL(google_user_id)).then((responseJSON) => {
@@ -257,15 +285,6 @@ export default class ElectivAPI {
 
 	getStudentByID(id){
 		return this.#fetchAdvanced(this.#getStudentByIDURL(id)).then((responseJSON) => {
-			let studentBO = StudentBO.fromJSON(responseJSON);
-			console.info(studentBO)
-			return new Promise(function (resolve){
-				resolve(studentBO)
-			})
-		})
-	}
-	getStudentById(id){
-		return this.#fetchAdvanced(this.#getStudentByIdURL(id)).then((responseJSON) => {
 			let studentBO = StudentBO.fromJSON(responseJSON);
 			console.info(studentBO)
 			return new Promise(function (resolve){
@@ -316,6 +335,17 @@ export default class ElectivAPI {
 			})
 		})
 	}
+	getBewertungen(){
+		return this.#fetchAdvanced(this.#getBewertungenURL()).then((responseJSON) => {
+			let bewertungBOs = BewertungBO.fromJSON(responseJSON);
+			console.info(bewertungBOs)
+			return new Promise(function (resolve){
+				resolve(bewertungBOs)
+			})
+		})
+	}
+
+	
 
 	getModule(){
 		return this.#fetchAdvanced(this.#getModuleURL()).then((responseJSON) => {
@@ -375,6 +405,15 @@ export default class ElectivAPI {
 			console.info(semesterBOs)
 			return new Promise(function (resolve){
 				resolve(semesterBOs)
+			})
+		})
+	}
+	getStudenten(){
+		return this.#fetchAdvanced(this.#getStudentenURL()).then((responseJSON) => {
+			let studentBOs = StudentBO.fromJSON(responseJSON);
+			console.info(studentBOs)
+			return new Promise(function (resolve){
+				resolve(studentBOs)
 			})
 		})
 	}

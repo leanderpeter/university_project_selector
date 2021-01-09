@@ -109,7 +109,7 @@ class ProjektDozentListe extends Component {
 
 	/** Renders the component */
 	render() {
-    const { classes , currentStudent } = this.props;
+    const { classes , currentPerson } = this.props;
     const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm } = this.state;
 
     return (
@@ -150,12 +150,12 @@ class ProjektDozentListe extends Component {
           
           filteredProjekte.map(projekt =>
             <ProjektDozentListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
-              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent}
+              onExpandedStateChange={this.onExpandedStateChange} currentPerson= {currentPerson} 
             />) 
         }
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`} onReload={this.getProjekte} />
-        <ProjektForm show={showProjekteForm} onClose={this.projektFormClosed} />
+        <ProjektForm show={showProjekteForm} currentPerson={currentPerson} onClose={this.projektFormClosed} getProjekte= {this.getProjekte}/>
       </div>
     );
   }

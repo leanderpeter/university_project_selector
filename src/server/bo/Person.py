@@ -1,20 +1,23 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from server.bo import BusinessObject as bo
 from server.bo.NamedBusinessObject import NamedBusinessObject
+from server.bo.Rolle import Rolle
 
 
 class Person(NamedBusinessObject):
+    ROLLE_STUDENT = Rolle("Student")
+    ROLLE_DOZENT = Rolle("Dozent")
+    ROLLE_ADMIN = Rolle("Admin")
     '''
     Here all the information for the instance of a user are given. The user has atm the values: name, email role, and user-id (given from google firebase)
     '''
 
     def __init__(self):
         super().__init__()
-        self._email = ""
+        self._email = None
         self._google_user_id = None
-        self._rolle = 0
+        self._rolle = None
 
     def get_email(self):
         '''return the email'''
@@ -40,7 +43,7 @@ class Person(NamedBusinessObject):
 
     def __str__(self):
         '''Simple textual user instance'''
-        return "Person: {}, {}, {}, {}".format(self.get_id(), self._name, self._email, self._google_user_id)
+        return "Person: {}, {}, {}, {}, {}".format(self.get_id(), self._name, self._email, self._google_user_id, self._rolle)
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -50,4 +53,6 @@ class Person(NamedBusinessObject):
         obj.set_name(dictionary["name"])
         obj.set_email(dictionary["email"])
         obj.set_google_user_id(dictionary["google_user_id"])
+        obj.set_rolle(dictionary["rolle"])
         return obj
+

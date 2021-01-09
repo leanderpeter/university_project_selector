@@ -19,7 +19,10 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import TableFooter from '@material-ui/core/TableFooter';
 import StudentBO from '../api/StudentBO'
+import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 
+//Projekt Bearbeiten Datei importieren
+import ProjektBearbeiten from './ProjektBearbeiten';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -46,7 +49,10 @@ class ProjektBearbeitenEintrag extends Component {
         super(props);
 
         this.state = {
+            
             teilnahmen : [],
+            bewertungen: [],
+            studentID: null,
             studentName: null,
             mat_nr: null,
             note: null,
@@ -56,12 +62,18 @@ class ProjektBearbeitenEintrag extends Component {
     }
 
   
-
+    teilnahmeAbwaehlenButtonClicked = event => {
+      //Logik fuer Teilnahme abwaehlen Button
+      this.setState({teilnahmeAbwaehlenButtonDisabled:true});
+      ElectivAPI.getAPI().deleteTeilnahme(this.props.teilnahme.lehrangebot, this.state.studentID).then(()=>this.props.reloadteilnahmen(this.props.teilnahme.lehrangebot));
+      
+    }
     
-    getStudentById = () => {
-        ElectivAPI.getAPI().getStudentById(this.props.teilnahme.getteilnehmer())
+    getStudentByID = () => {
+        ElectivAPI.getAPI().getStudentByID(this.props.teilnahme.getteilnehmer())
         .then(studentBO =>
             this.setState({
+              studentID: studentBO.getID(),
               studentName: studentBO.getname(),
               mat_nr:studentBO.getmat_nr(),
               loadingInProgress: false,
@@ -82,6 +94,26 @@ class ProjektBearbeitenEintrag extends Component {
           error: null
         });
       }
+
+    getBewertungen=()=>{
+      ElectivAPI.getAPI().getBewertungen()
+      .then(bewertungBOs =>
+        this.setState({
+            bewertungen: bewertungBOs,
+            error: null,
+            loadingInProgress: false,
+        })).catch(e =>
+            this.setState({
+                bewertung: [],
+                error: e,
+                loadingInProgress: false,
+            }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingProjekteError: null
+      });
+    }
     
     
     getBewertung = () => {
@@ -103,16 +135,28 @@ class ProjektBearbeitenEintrag extends Component {
             loadingInProgress: true
         });
       }
-    
 
     
+
+      handleChange = async (resultat) => { 
+
+                this.props.teilnahme.setResultat(resultat.target.value); 
+        
+                console.log(`Option selected:`, resultat.target.value); 
+        
+                await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme).then(()=>{
+                  this.getBewertung()
+                }); 
+        
+              };
     
 
     
 
     componentDidMount() {
-      this.getStudentById();
+      this.getStudentByID();
       this.getBewertung();
+      this.getBewertungen();
       
     }
 
@@ -121,15 +165,44 @@ class ProjektBearbeitenEintrag extends Component {
 
     render(){
         const {classes, expandedState} = this.props;
-        const {studentName, mat_nr, note,  loadingInProgress, error } = this.state;
+        const {bewertungen,studentID,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
 
         return(
               <StyledTableRow >
                 <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
                 <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
-                <StyledTableCell align="center">{note}</StyledTableCell> 
-                <StyledTableCell align="center"><Button style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" >entfernen</Button>
-                              
+                <StyledTableCell align="center">
+                {note ?
+                                    <FormControl className={classes.formControl} >
+                                      <InputLabel>{note}</InputLabel>
+                                      
+                                        
+                                          <Select value={note } onChange={this.handleChange}  >
+                                          
+                                          {
+                                          bewertungen.map(bewertung =>
+                                          <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
+                                          )
+                                          }
+                                        </Select>                                                                
+                                    </FormControl>                                  
+                                    :
+                                    <FormControl className={classes.formControl}>
+                                      <InputLabel>Nicht benotet</InputLabel>
+                                      <Select value={note } onChange={this.handleChange}   >
+                                          {
+                                          bewertungen.map(bewertung =>
+                                          <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
+                                          )
+                                          }
+                                        </Select>
+                                    </FormControl>
+                                  }
+                         
+                </StyledTableCell> 
+                <StyledTableCell align="center">
+                  <Button className={classes.teilnahmeAbwaehlenButton}  variant="contained" color="primary" onClick={this.teilnahmeAbwaehlenButtonClicked}><HighlightOffOutlinedIcon/></Button>
+                           
                     
                 </StyledTableCell>
                   <LoadingProgress show={loadingInProgress}></LoadingProgress>
@@ -153,11 +226,14 @@ const styles = theme => ({
       },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 120,
+        minWidth: 115,
     },
     button: {
         margin: theme.spacing(1),
         },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
     });
 
 /** PropTypes */

@@ -5,6 +5,13 @@ import CloseIcon from '@material-ui/icons/Close';
 import { ElectivAPI, ProjektBO } from '../../api';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+
 
 /*
 Dieses Form zeigt ein Dialog zum erstllen/updaten von ProjektBO's. Falls ein Projekt bereits besteht wird das Formular als edit konfiguireirt.
@@ -18,7 +25,7 @@ class ProjektForm extends Component {
 	constructor(props) {
 		super(props);
 
-		let nm = '', mt = '', bs = '', bt = '', ep = '', wt = '', av = '', ai = '', pb = '', br = '', rm = '', sp = '', dz = '', at = '', tl = '',ec = '';
+		let nm = '', mt = '', bs = '', bt = '', ep = '',wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '';
 		if (props.projekt) {
 			nm = props.projekt.getname();
 			mt = props.projekt.getmax_teilnehmer();
@@ -35,7 +42,6 @@ class ProjektForm extends Component {
 			dz = props.projekt.getdozent();
 			at = props.projekt.getAnzahlTeilnehmer();
 			tl = props.projekt.getTeilnehmerListe();
-			ec = props.projekt.getECTS();
 		}
 
 		//init state
@@ -64,14 +70,17 @@ class ProjektForm extends Component {
 			woechentlichValidationFailed: false,
 			woechentlichEdited: false,
 
+			boolBlock_vor: false,
 			anzahl_block_vor: av,
 			anzahl_block_vorValidationFailed: false,
 			anzahl_block_vorEdited: false,
 
+			boolBlock_in: false,
 			anzahl_block_in: ai,
 			anzahl_block_inValidationFailed: false,
 			anzahl_block_inEdited: false,
 
+			boolBlockpraef: false,
 			praeferierte_block: pb,
 			praeferierte_blockValidationFailed: false,
 			praeferierte_blockEdited: false,
@@ -92,7 +101,7 @@ class ProjektForm extends Component {
 			dozentValidationFailed: false,
 			dozentEdited: false,
 
-			aktueller_zustand: 2,
+			aktueller_zustand: "Neu",
 			dozentValidationFailed: false,
 			dozentEdited: false,
 
@@ -112,10 +121,6 @@ class ProjektForm extends Component {
 			teilnehmerListeValidationFailed: false,
 			teilnehmerListeEdited: false,
 
-			ects: ec,
-			ectsValidationFailed: false,
-			ectsEdited: false,
-
 			addingInProgress: false,
 			updatingInProgress: false,
 			addingError: null,
@@ -126,7 +131,7 @@ class ProjektForm extends Component {
 	}
 
 	// Projekt hinzufugen
-	addProjekt = () => {
+	addProjekt = async () => {
 		let newProjekt = new ProjektBO(
 			this.state.max_teilnehmer, 
 			this.state.beschreibung, 
@@ -139,7 +144,7 @@ class ProjektForm extends Component {
 			this.state.bes_raum,
 			this.state.raum,
 			this.state.sprache,
-			this.state.dozent,
+			this.props.currentPerson.id,
 			this.state.aktueller_zustand,
 			this.state.art,
 			this.state.halbjahr,
@@ -149,7 +154,7 @@ class ProjektForm extends Component {
 			this.state.ects
 			);
 			newProjekt.setname(this.state.name);
-		ElectivAPI.getAPI().addProjekt(newProjekt).then(projekt => {
+		await ElectivAPI.getAPI().addProjekt(newProjekt).then(projekt => {
 			// Backend erfolgreich
 			// reinitialisierung fuer ein neues leere Projekt
 			this.setState(this.baseState);
@@ -166,6 +171,7 @@ class ProjektForm extends Component {
 			updatingInProgress: true,
 			updatingError: null
 		});
+		this.props.getProjekte();
 	}
 
 	updateProjekt = () => {
@@ -189,6 +195,37 @@ class ProjektForm extends Component {
 			[event.target.id]: event.target.value,
 			[event.target.id + 'ValidationFailed']: error,
 			[event.target.id + 'Edited']: true
+		});
+	}
+
+	numberValueChange = (event) => {
+		const value = event.target.value;
+		const re = /^[0-9]{1,3}$/;
+
+		let error = false;
+		if (value.trim().lenght === 0) {
+			error = true;
+		}
+		if (re.test(event.target.value) === false) {
+			error = true;
+		}
+
+		this.setState({
+			[event.target.id]: event.target.value,
+			[event.target.id + 'ValidationFailed']: error,
+			[event.target.id + 'Edited']: true
+		});
+	}
+
+	checkboxValueChange = (event) => {
+		this.setState({
+			[event.target.id]: event.target.checked,
+		});
+	}
+
+	radioValueChange = (event) => {
+		this.setState({
+			sprache: event.target.value,
 		});
 	}
 
@@ -227,14 +264,17 @@ class ProjektForm extends Component {
 			woechentlichValidationFailed,
 			woechentlichEdited,
 
+			boolBlock_vor,
 			anzahl_block_vor,
 			anzahl_block_vorValidationFailed,
 			anzahl_block_vorEdited,
 
+			boolBlock_in,
 			anzahl_block_in,
 			anzahl_block_inValidationFailed,
 			anzahl_block_inEdited,
 
+			boolBlockpraef,
 			praeferierte_block,
 			praeferierte_blockValidationFailed,
 			praeferierte_blockEdited,
@@ -250,22 +290,6 @@ class ProjektForm extends Component {
 			sprache,
 			spracheValidationFailed,
 			spracheEdited,
-
-			dozent,
-			dozentValidationFailed,
-			dozentEdited,
-
-			anzahlTeilnehmer,
-			anzahlTeilnehmerValidationFailed,
-			anzahlTeilnehmerEdited,
-
-			teilnehmerListe,
-			teilnehmerListeValidationFailed,
-			teilnehmerListeEdited,
-
-			ects,
-			ectsValidationFailed,
-			ectsEdited,
 
 			addingInProgress,
 			updatingInProgress,
@@ -287,7 +311,7 @@ class ProjektForm extends Component {
 
 		return (
       show ?
-        <Dialog open={show} onClose={this.handleClose} maxWidth='xs'>
+        <Dialog open={show} onClose={this.handleClose} maxWidth='sm'>
           <DialogTitle id='form-dialog-title'>{title}
             <IconButton className={classes.closeButton} onClick={this.handleClose}>
               <CloseIcon />
@@ -298,58 +322,132 @@ class ProjektForm extends Component {
               {header}
             </DialogContentText>
             <form className={classes.root} noValidate autoComplete='off'>
-              <TextField autoFocus type='text' required fullWidth margin='normal' id='name' label='Projektname:' value={name}
-                onChange={this.textFieldValueChange} error={nameValidationFailed} 
-                helperText={nameValidationFailed ? 'The name must contain at least one character' : ' '} />
-          
-              <TextField type='text' required fullWidth margin='normal' id='max_teilnehmer' label='Maximale Teilnehmeranzahl:' value={max_teilnehmer}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='beschreibung' label='Projektbeschreibung:' value={beschreibung}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='betreuer' label='Betreuer:' value={betreuer}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='externer_partner' label='Externe Partner:' value={externer_partner}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='woechentlich' label='Woechentlich:' value={woechentlich}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='anzahl_block_vor' label='anzahl_block_vor:' value={anzahl_block_vor}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='anzahl_block_in' label='anzahl_block_in:' value={anzahl_block_in}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='praeferierte_block' label='praeferierte_block:' value={praeferierte_block}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='bes_raum' label='bes_raum:' value={bes_raum}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='raum' label='raum:' value={raum}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='sprache' label='sprache:' value={sprache}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='dozent' label='dozent:' value={dozent}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='anzahlTeilnehmer' label='anzahlTeilnehmer:' value={anzahlTeilnehmer}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='teilnehmerListe' label='teilnehmerListe:' value={teilnehmerListe}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' id='ects' label='ects:' value={ects}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-              <TextField type='text' required fullWidth margin='normal' label='Maximale Teilnehmeranzahl:' value={'max_teilnehmer'}
-                onChange={this.textFieldValueChange} error={max_teilnehmerValidationFailed}
-                helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
+				<TextField autoFocus type='text' required fullWidth margin='small' id='name' label='Projektname:' variant="outlined" value={name}
+				onChange={this.textFieldValueChange} error={nameValidationFailed} 
+				helperText={nameValidationFailed ? 'The name must contain at least one character' : ' '} />
+				<TextField type='text' required fullWidth margin='small' id='max_teilnehmer' label='Maximale Teilnehmeranzahl:' variant="outlined" value={max_teilnehmer}
+				onChange={this.numberValueChange} error={max_teilnehmerValidationFailed}
+				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
+				
+				<FormControl component="fieldset">
+					<RadioGroup  row aria-label="position" defaultValue="deutsch" onChange={this.radioValueChange}>
+						<FormControlLabel
+						value="deutsch" 
+						control={<Radio color="primary" />}
+						label="deutsch"
+						labelPlacement="top"
+						/>
+						<FormControlLabel
+						value="englisch"
+						control={<Radio color="primary" />}
+						label="englisch"
+						labelPlacement="top"
+						/>
+					</RadioGroup>
+				</FormControl>
+
+				<FormGroup row>
+				<FormControlLabel control={
+					<Checkbox
+						checked={woechentlich}
+						onChange={this.checkboxValueChange}
+						id="woechentlich"
+						color="primary"
+					/>
+					}
+					label="Wöchentliche Termine"
+					labelPlacement="start"
+				/>
+				</FormGroup>
+				<FormGroup row>
+				<FormControlLabel control={
+					<Checkbox
+						checked={bes_raum}
+						onChange={this.checkboxValueChange}
+						id="bes_raum"
+						color="primary"
+					/>
+					}
+					label="Besonderer Raum notwendig"
+					labelPlacement="start"
+				/>
+				</FormGroup>
+				{ bes_raum === true ?
+					<TextField type='text' required fullWidth margin='small' id='raum' label='raum:' variant="outlined" value={raum}
+					onChange={this.textFieldValueChange} error={raumValidationFailed}
+					helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
+				:
+				<></>
+				}
+				<FormGroup row>
+				<FormControlLabel control={
+					<Checkbox
+						checked={boolBlock_vor}
+						onChange={this.checkboxValueChange}
+						id="boolBlock_vor"
+						color="primary"
+					/>
+					}
+					label="Blocktage vor Beginn der Vorlesungszeit"
+					labelPlacement="start"
+				/>
+				</FormGroup>
+				{ boolBlock_vor === true ?
+					<TextField type='text' required fullWidth margin='small' id='anzahl_block_vor' label='Anzahl Blocktage'variant="outlined"  value={anzahl_block_vor}
+					onChange={this.numberValueChange} error={anzahl_block_vorValidationFailed}
+					helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
+				:
+				<></>
+				}
+				<FormGroup row>
+				<FormControlLabel control={
+					<Checkbox
+						checked={boolBlock_in}
+						onChange={this.checkboxValueChange}
+						id="boolBlock_in"
+						color="primary"
+					/>
+					}
+					label="Blocktage in der Prüfungszeit"
+					labelPlacement="start"
+				/>
+				</FormGroup>
+				{ boolBlock_in === true ?
+					<TextField type='text' required fullWidth margin='small' id='anzahl_block_in' label='Anzahl Blocktage'variant="outlined"  value={anzahl_block_in}
+					onChange={this.numberValueChange} error={anzahl_block_inValidationFailed}
+					helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
+				:
+				<></>
+				}
+				<FormGroup row>
+				<FormControlLabel control={
+					<Checkbox
+						checked={boolBlockpraef}
+						onChange={this.checkboxValueChange}
+						id="boolBlockpraef"
+						color="primary"
+					/>
+					}
+					label="Blocktage (Samstage) in der Vorlesungszeit"
+					labelPlacement="start"
+				/>
+				</FormGroup>
+				{ boolBlockpraef === true ?
+					<TextField type='text' required fullWidth margin='small' id='praeferierte_block' label='Präferierte Tage' variant="outlined" value={praeferierte_block}
+					onChange={this.textFieldValueChange} error={praeferierte_blockValidationFailed}
+					helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
+				:
+				<></>
+				}
+				<TextField type='text' fullWidth margin='small' id='betreuer' label='Betreuer:' variant="outlined" value={betreuer}
+				onChange={this.textFieldValueChange} error={betreuerValidationFailed}
+				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
+				<TextField type='text' fullWidth margin='small' id='externer_partner' label='Externe Partner:' variant="outlined" value={externer_partner}
+				onChange={this.textFieldValueChange} error={externer_partnerValidationFailed}
+				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
+				<TextField type='text' required fullWidth margin='small' id='beschreibung' label='Projektbeschreibung:' multiline rows= {4} variant="outlined" value={beschreibung}
+				onChange={this.textFieldValueChange} error={beschreibungValidationFailed}
+				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
             </form>
             <LoadingProgress show={addingInProgress || updatingInProgress} />
             {
@@ -370,7 +468,8 @@ class ProjektForm extends Component {
                 <Button disabled={nameValidationFailed || max_teilnehmerValidationFailed} variant='contained' onClick={this.updateProjekt} color='primary'>
                   Update
               </Button>
-                : <Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited} variant='contained' onClick={this.addProjekt} color='primary'>
+				: <Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited || beschreibungValidationFailed || !beschreibungEdited}  
+				variant='contained' onClick={this.addProjekt} color='primary'>
                   Add
              </Button>
             }

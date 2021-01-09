@@ -41,7 +41,7 @@ nbo = api.inherit('NamedBusinessObject', bo, {
 person = api.inherit('Person', nbo, {
     'email': fields.String(attribute='_email', description='Email der Person'),
     'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID der Person'),
-    'rolle': fields.Integer(attribute='_rolle', description='Rolle der Person')
+    'rolle': fields.String(attribute='_rolle', description='Rolle der Person')
 })
 
 student = api.inherit('Student', person, {
@@ -129,6 +129,18 @@ class Projektverwaltungoperation(Resource):
     def get(self, id):
         adm = ProjektAdministration()
         projekte = adm.get_projekte_by_zustand('"{}"'.format(id))
+        print(projekte)
+        return projekte
+
+@electivApp.route('/projekte/zustand/<string:zustand_id>/dozent/<int:dozent_id>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ProjektByZustandByDozentoperation(Resource):
+    @electivApp.marshal_list_with(projekt)
+    
+
+    def get(self, zustand_id, dozent_id):
+        adm = ProjektAdministration()
+        projekte = adm.get_projekte_by_zustand_by_dozent(zustand_id,dozent_id)
         print(projekte)
         return projekte
 
@@ -233,6 +245,22 @@ class PersonOperationen(Resource):
     def put(self, person_id):
         pass
 
+@electivApp.route('/personbygoogle/<string:google_user_id>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class PersonByGoogleIDOperationen(Resource):
+    @electivApp.marshal_list_with(person)
+    @secured
+
+    def get(self, google_user_id):
+        adm = ProjektAdministration()
+        person = adm.get_person_by_google_user_id(google_user_id)
+        return person
+
+    def delete(self, student_id):
+        pass
+
+    def put(self, student_id):
+        pass
 
 @electivApp.route('/studentbygoogle/<string:google_user_id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -251,6 +279,18 @@ class StudentByGoogleIDOperationen(Resource):
     def put(self, student_id):
         pass
 
+@electivApp.route('/studenten')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class StudentenOperationen(Resource):
+    @electivApp.marshal_list_with(student)
+    
+
+    def get(self):
+        adm = ProjektAdministration()
+        studenten = adm.get_alle_studenten()
+        return studenten
+
+
 @electivApp.route('/student/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class StudentIDOperationen(Resource):
@@ -267,6 +307,7 @@ class StudentIDOperationen(Resource):
 
     def put(self, student_id):
         pass
+
 
 @electivApp.route('/student/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -355,6 +396,20 @@ class BewertungOperationen(Resource):
     def put(self, bewertung_id):
         pass
 
+@electivApp.route('/bewertungen')
+@electivApp.response(500, 'Something went wrong')
+class BewertungenOperationen(Resource):
+    @electivApp.marshal_list_with(bewertung)
+    @secured
+    
+    def get(self):
+        adm = ProjektAdministration()
+        bewertungen = adm.get_alle_bewertungen()
+        return bewertungen
+
+    
+
+
 @electivApp.route('/modul/<int:projekt_id>')
 @electivApp.response(500, 'Something went wrong')
 class ModulByProjektIDOperationen(Resource):
@@ -427,9 +482,9 @@ class ProjektGenehmigungOperation(Resource):
     def get(self):
         adm = ProjektAdministration()
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
-        zus = "Neu"
+        zus = "Neu,Abgelehnt"
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
-        projekte = adm.get_projekte_by_zustand('"{}"'.format(zus))
+        projekte = adm.get_projekte_by_zustaende('"Neu","Abgelehnt"')
         return projekte
 
     def delete(self):
