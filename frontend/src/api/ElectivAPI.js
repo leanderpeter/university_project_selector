@@ -99,15 +99,13 @@ export default class ElectivAPI {
     #getTeilnahmenByProjektIdURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/projekt/${id}`
 
     //erhalte Projektarten nach ID
-    #getProjektartByIDURL = (id) => `${this.#ElectivServerBaseURL}/projektart/${id}`
+	#getProjektartByIDURL = (id) => `${this.#ElectivServerBaseURL}/projektart/${id}`
+	
 	//erhalte alle Projektarten
     #getProjektartURL = () => `${this.#ElectivServerBaseURL}/projektart`
   
 	//Alle Semester bekommen
 	#getStudentenURL = () => `${this.#ElectivServerBaseURL}/studenten`;
-
-    //erhalte Projektarten nach ID
-    #getProjektartByIDURL = (id) => `${this.#ElectivServerBaseURL}/projektart/${id}`
 
 	/*
 	Singleton/Einzelstuck instanz erhalten
