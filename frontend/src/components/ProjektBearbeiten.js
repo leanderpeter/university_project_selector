@@ -201,6 +201,7 @@ class ProjektBearbeiten extends Component {
                 <FormControl style={{paddingLeft: "5px",paddingRight:"5px"}}className={classes.formControl}>
                 
                                 <Select   style={{ minWidth:"5rem",paddingRight:"5px", paddingLeft:"10px",}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
+                                
                                   {
                                   projekte.map(projekt =>
                                   <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
