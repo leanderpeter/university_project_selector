@@ -177,7 +177,7 @@ class ProjektBearbeitenEintrag extends Component {
                                       <InputLabel>{note}</InputLabel>
                                       
                                         
-                                          <Select value={note } onChange={this.handleChange} displayEmptyclassName={classes.selectEmpty} inputProps={{ 'aria-label': 'Without label' }}  style={{textAlign:"center"}} >
+                                          <Select value={note } onChange={this.handleChange}  >
                                           
                                           {
                                           bewertungen.map(bewertung =>
