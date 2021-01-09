@@ -77,6 +77,9 @@ export default class ElectivAPI {
 	//Module nach Id bekommen
 	#getModule_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/modul/${id}`;
 
+	//für ein Projekt wählbare Module in DB 'projekte_hat_module' einfügen 
+	#postProjekte_hat_moduleURL = (projekt_id, module) => `${this.#ElectivServerBaseURL}/module?projekt_id=${projekt_id}&module=${module}`;
+
 	#updateTeilnahmeURL = (id) => `${this.#ElectivServerBaseURL}/teilnahme2/${id}`;
 
 	//Alle Semester bekommen
@@ -186,7 +189,7 @@ export default class ElectivAPI {
 			body: JSON.stringify(projektBO)
 		}).then((responseJSON) => {
 			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
-			let responseProjektBO = ProjektBO.fromJSON(responseJSON)[0];
+			let responseProjektBO = ProjektBO.fromJSON(responseJSON);
 			return new Promise(function (resolve) {
 				resolve(responseProjektBO);
 			})
@@ -333,8 +336,6 @@ export default class ElectivAPI {
 		})
 	}
 
-	
-
 	getModule(){
 		return this.#fetchAdvanced(this.#getModuleURL()).then((responseJSON) => {
 			let modulBOs = ModulBO.fromJSON(responseJSON);
@@ -354,6 +355,11 @@ export default class ElectivAPI {
 			})
 		})
 	}
+
+	postProjekte_hat_module(projekt_id, module){
+	   return this.#fetchAdvanced(this.#postProjekte_hat_moduleURL(projekt_id, module),{method: 'POST'})
+   }
+
 	getStudentenByProjektId(id){
 		return this.#fetchAdvanced(this.#getStudentenByProjektIdURL(id)).then((responseJSON) => {
 			let studentBOs = StudentBO.fromJSON(responseJSON);

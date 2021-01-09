@@ -5,6 +5,7 @@ from flask_cors import CORS
 # Des Weiteren wird das auf Flask aufbauende Flask-RestX verwendet
 from flask_restx import Api, Resource, fields
 from flask import request
+import json
 
 # Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.ProjektAdministration import ProjektAdministration
@@ -419,7 +420,6 @@ class ModulByProjektIDOperationen(Resource):
 @electivApp.response(500, 'Something went wrong')
 class ModulOperationen(Resource):
     @electivApp.marshal_list_with(modul)
-    @secured
 
     def get(self):
         adm = ProjektAdministration()
@@ -431,6 +431,12 @@ class ModulOperationen(Resource):
 
     def put(self, id):
         pass
+    
+    def post (self):
+        projekt_id = request.args.get("projekt_id")
+        module = json.loads(request.args.get("module"))
+        adm = ProjektAdministration()
+        adm.create_projekte_hat_module(projekt_id, module)
 
 @electivApp.route('/semester')
 @electivApp.response(500, 'Something went wrong')

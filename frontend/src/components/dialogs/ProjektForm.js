@@ -131,15 +131,19 @@ class ProjektForm extends Component {
 			addingError: null,
 			updatingError: null,
 
+			modulwahl: [],
+			moduleEdited: false,
+
 			semester: [],
-			projektarten: []
+			projektarten: [],
+			module: []
 		};
 		// State speichern falls cancel 
 		this.baseState = this.state;
 	}
 
 	// Projekt hinzufugen
-	addProjekt = async () => {
+	addProjekt =  () => {
 		let newProjekt = new ProjektBO(
 			this.state.max_teilnehmer, 
 			this.state.beschreibung, 
@@ -161,7 +165,9 @@ class ProjektForm extends Component {
 			this.state.name,
 			);
 			newProjekt.setname(this.state.name);
-		await ElectivAPI.getAPI().addProjekt(newProjekt).then(projekt => {
+		ElectivAPI.getAPI().addProjekt(newProjekt).then(projekt => {
+			this.props.getProjekte();
+			ElectivAPI.getAPI().postProjekte_hat_module(projekt.id, JSON.stringify(this.state.modulwahl))}).then(projekt => {
 			// Backend erfolgreich
 			// reinitialisierung fuer ein neues leere Projekt
 			this.setState(this.baseState);
@@ -178,7 +184,6 @@ class ProjektForm extends Component {
 			updatingInProgress: true,
 			updatingError: null
 		});
-		this.props.getProjekte();
 	}
 
 	updateProjekt = () => {
@@ -270,9 +275,32 @@ class ProjektForm extends Component {
 		}));
 	  }
 
+
+	// API Anbindung um alle Module vom Backend zu bekommen 
+    getModule = () => {
+      ElectivAPI.getAPI().getModule()
+      .then(modulBOs =>
+          this.setState({
+              module: modulBOs,
+              error: null,
+              loadingInProgress: false,
+          })).catch(e =>
+              this.setState({
+                  module: [],
+                  error: e,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingTeilnahmeError: null
+      });
+  }
+
 	handleSemesterChange = (semester) => {
 		this.setState({
 		  halbjahr: semester.target.value,
+		  halbjahrEdited: true
 		})
 		setTimeout(() => {
 			console.log('Ausgewählte Semester ID:',this.state.halbjahr)   
@@ -282,11 +310,22 @@ class ProjektForm extends Component {
 	handleArtChange = (projektart) => {
 		this.setState({
 			art: projektart.target.value,
+			artEdited: true
 		})
 		setTimeout(() => {
 			console.log('Ausgewählte Projektart ID:',this.state.art)
 		  }, 0);
 	  };
+	
+	handleModulChange = (event) => {
+		this.setState({
+			modulwahl: event.target.value,
+			moduleEdited: true
+		})
+		setTimeout(() => {
+			console.log('Ausgewählte ModulIDs:',this.state.modulwahl)
+		  }, 0);
+	}
 
 	handleClose = () => {
 		// State zurucksetzen
@@ -297,8 +336,7 @@ class ProjektForm extends Component {
 	getInfos = () => {
 		this.getSemester();
 		this.getProjektart();
-		/* 
-		this.getModule(); */
+		this.getModule();
 	}
 
 	// Rendering
@@ -363,10 +401,16 @@ class ProjektForm extends Component {
 			updatingError,
 
 			semester,
+			halbjahr,
 			halbjahrEdited,
 			
 			projektarten,
+			art,
 			artEdited,
+
+			module,
+			modulwahl,
+			moduleEdited,
 
 		} = this.state;
 		let title = '';
@@ -381,19 +425,6 @@ class ProjektForm extends Component {
 			header = 'Projektdaten einfugen';
 		}
 
-		const module = [
-			"Oliver Hansen",
-			"Van Henry",
-			"April Tucker",
-			"Ralph Hubbard",
-			"Omar Alexander",
-			"Carlos Abbott",
-			"Miriam Wagner",
-			"Bradley Wilkerson",
-			"Virginia Andrews",
-			"Kelly Snyder"
-		  ];
-
 		return (
       show ?
         <Dialog open={show} onEnter={this.getInfos} onClose={this.handleClose} maxWidth='sm'>
@@ -407,10 +438,10 @@ class ProjektForm extends Component {
               {header}
             </DialogContentText>
             <form className={classes.root} noValidate autoComplete='off'>
-				<TextField autoFocus type='text' required fullWidth margin='small' id='name' label='Projektname:' variant="outlined" value={name}
+				<TextField autoFocus type='text' required fullWidth margin='small' id='name' label='Projektname' variant="outlined" value={name}
 				onChange={this.textFieldValueChange} error={nameValidationFailed} 
 				helperText={nameValidationFailed ? 'The name must contain at least one character' : ' '} />
-				<TextField className={classes.max_teilnehmer} type='text' required margin='small' id='max_teilnehmer' label='Maximale Teilnehmeranzahl:' variant="outlined" value={max_teilnehmer}
+				<TextField className={classes.max_teilnehmer} type='text' required margin='small' id='max_teilnehmer' label='Maximale Teilnehmeranzahl' variant="outlined" value={max_teilnehmer}
 				onChange={this.numberValueChange} error={max_teilnehmerValidationFailed}
 				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
 				
@@ -433,9 +464,9 @@ class ProjektForm extends Component {
 				<br/>
 				{
             	semester ?
-				<FormControl variant="outlined" className={classes.formControl}>
+				<FormControl required variant="outlined" className={classes.formControl}>
 				<InputLabel>Semester</InputLabel> 
-					<Select value = {semester.id} label="Semester" onChange={this.handleSemesterChange}>
+					<Select  value = {semester.id} label="Semester" onChange={this.handleSemesterChange}>
 					{
 					semester.map(semester =>
 					<MenuItem value={semester.getID()}><em>{semester.getname()}</em></MenuItem>
@@ -444,7 +475,7 @@ class ProjektForm extends Component {
 					</Select>                                                                
 				</FormControl>                                  
 				:
-				<FormControl variant="outlined" className={classes.formControl}>
+				<FormControl required variant="outlined" className={classes.formControl}>
 				<InputLabel>Semester</InputLabel>
 					<Select value="" label="Semester">
 					<MenuItem value=""><em>Semester noch nicht geladen</em></MenuItem>
@@ -454,9 +485,9 @@ class ProjektForm extends Component {
 				
 				{
             	projektarten ?
-				<FormControl variant="outlined" className={classes.formControlpa}>
+				<FormControl required variant="outlined" className={classes.formControlpa}>
 				<InputLabel>Projektart</InputLabel> 
-					<Select value = {projektarten.id} label="Projektart" onChange={this.handleArtChange}>
+					<Select  value = {projektarten.id} label="Projektart" onChange={this.handleArtChange}>
 					{
 					projektarten.map(projektart =>
 					<MenuItem value={projektart.getID()}><em>{projektart.getname()}</em></MenuItem>
@@ -465,7 +496,7 @@ class ProjektForm extends Component {
 					</Select>                                                                
 				</FormControl>                                  
 				:
-				<FormControl variant="outlined" className={classes.formControl}>
+				<FormControl required variant="outlined" className={classes.formControl}>
 				<InputLabel>Projektart</InputLabel>
 					<Select value="" label="Projektart">
 					<MenuItem value=""><em>Projektarten noch nicht geladen</em></MenuItem>
@@ -475,35 +506,40 @@ class ProjektForm extends Component {
 				<br/>
 				{
             	module ?
-				<FormControl variant="outlined" className={classes.formControlmo}>
-				<InputLabel>Module</InputLabel> 
+				<FormControl required variant="outlined" className={classes.formControlmo}>
+				<InputLabel>Anrechenbare Module</InputLabel> 
 					<Select 
-					value = {module} 
-					multiple label="Module" 
-					onChange={this.handleArtChange}
+					required
+					value = {modulwahl} 
+					multiple label="Anrechenbare Module" 
+					onChange={this.handleModulChange}
 					renderValue={(selected) => (
 						<div className={classes.chips}>
 						  {selected.map((value) => (
-							<Chip key={value} label={value} className={classes.chip} />
+							<Chip key={value} label={module[value-1].name} className={classes.chip} />
 						  ))}
 						</div>
 					  )}>
 					{
 					module.map(modul =>
-						<MenuItem key={modul/* .getID() */} value={modul/* .getID() */}>
-							<Checkbox checked={modul.indexOf(modul) > -1} />
-							<ListItemText primary={modul/* .getname() */} />
+						<MenuItem key={modul.getID()} value={modul.getID()}>
+							<Checkbox checked={modulwahl.indexOf(modul.getID()) > -1} />
+							<ListItemText>{modul.getname()} ({modul.getEdv_nr()})</ListItemText>
 						</MenuItem>
 					)
 					}
 					</Select>                                                                
 				</FormControl>                                  
 				:
-				<FormControl variant="outlined" className={classes.formControl}>
-				<InputLabel>Projektart</InputLabel>
-					<Select value="" label="Projektart">
-					<MenuItem value=""><em>Projektarten noch nicht geladen</em></MenuItem>
-					</Select>
+				<FormControl required variant="outlined" className={classes.formControlmo}>
+				<InputLabel>Anrechenbare Module</InputLabel> 
+					<Select 
+					value = ""
+					multiple label="Anrechenbare Module">
+						<MenuItem key="" value="">
+							Module nicht geladen
+						</MenuItem>
+					</Select>                                                                
 				</FormControl>
 				}
 				<br/>
@@ -535,7 +571,7 @@ class ProjektForm extends Component {
 				/>
 				</FormGroup>
 				{ bes_raum === true ?
-					<TextField type='text' required fullWidth margin='small' id='raum' label='raum:' variant="outlined" value={raum}
+					<TextField type='text' required fullWidth margin='small' id='raum' label='Raum' variant="outlined" value={raum}
 					onChange={this.textFieldValueChange} error={raumValidationFailed}
 					helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
 				:
@@ -601,13 +637,13 @@ class ProjektForm extends Component {
 				:
 				<></>
 				}
-				<TextField type='text' fullWidth margin='small' id='betreuer' label='Betreuer:' variant="outlined" value={betreuer}
+				<TextField type='text' fullWidth margin='small' id='betreuer' label='Betreuer' variant="outlined" value={betreuer}
 				onChange={this.textFieldValueChange} error={betreuerValidationFailed}
 				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-				<TextField type='text' fullWidth margin='small' id='externer_partner' label='Externe Partner:' variant="outlined" value={externer_partner}
+				<TextField type='text' fullWidth margin='small' id='externer_partner' label='Externe Partner' variant="outlined" value={externer_partner}
 				onChange={this.textFieldValueChange} error={externer_partnerValidationFailed}
 				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-				<TextField type='text' required fullWidth margin='small' id='beschreibung' label='Projektbeschreibung:' multiline rows= {4} variant="outlined" value={beschreibung}
+				<TextField type='text' required fullWidth margin='small' id='beschreibung' label='Projektbeschreibung' multiline rows= {4} variant="outlined" value={beschreibung}
 				onChange={this.textFieldValueChange} error={beschreibungValidationFailed}
 				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
             </form>
@@ -630,7 +666,7 @@ class ProjektForm extends Component {
                 <Button disabled={nameValidationFailed || max_teilnehmerValidationFailed} variant='contained' onClick={this.updateProjekt} color='primary'>
                   Update
               </Button>
-				: <Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited || beschreibungValidationFailed || !beschreibungEdited || halbjahrEdited || artEdited}  
+				: <Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited || beschreibungValidationFailed || !beschreibungEdited ||!halbjahrEdited || !artEdited || !moduleEdited}  
 				variant='contained' onClick={this.addProjekt} color='primary'>
                   Add
              </Button>
@@ -667,9 +703,16 @@ const styles = theme => ({
 	marginLeft: theme.spacing(3)
   },
   formControlmo: {
-	minWidth: 235,
-	marginTop: theme.spacing(1),
-	marginBottom: theme.spacing(1),
+	width: 435,
+	marginTop: theme.spacing(2),
+	marginBottom: theme.spacing(2),
+  },
+  chips: {
+	  display: 'flex',
+	  flexWrap: 'wrap'
+  },
+  chip: {
+	  margin: 2
   }
 });
 
