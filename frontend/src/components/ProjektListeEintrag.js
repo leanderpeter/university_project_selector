@@ -25,6 +25,7 @@ class ProjektListeEintrag extends Component {
 
         this.state = {
                 projekt: props.projekt,
+                projektarten: [],
                 showProjektForm: false,
                 showProjektDeleteDialog: false,
                 teilnahmeButtonDisabled:false,
@@ -79,6 +80,7 @@ class ProjektListeEintrag extends Component {
 	}
 
 	teilnahmeButtonClicked = event => {
+	  event.stopPropagation()
     	//Logik fuer Teilnahme Button
       this.setState({teilnahmeButtonDisabled:true});
       this.setState({teilnahmeAbwaehlenButtonDisabled:false});
@@ -87,6 +89,7 @@ class ProjektListeEintrag extends Component {
   }
 
   teilnahmeAbwaehlenButtonClicked = event => {
+    event.stopPropagation()
     //Logik fuer Teilnahme Button
     this.setState({teilnahmeButtonDisabled:false});
     this.setState({teilnahmeAbwaehlenButtonDisabled:true});
@@ -111,19 +114,33 @@ class ProjektListeEintrag extends Component {
   }
 
 
+/**
+   <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
+                  Teilnahme abwählen
+               </Button>
+               <Button className={classes.teilnahmeButton} variant='contained' color='primary' size="small" startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
+                  Teilnahme
+               </Button>
+
+*/
 
 	/** Renders the component */
   render() {
     const { classes, expandedState } = this.props;
     // Use the states projekt
-    const { projekt, projektarten, getprojektartArray} = this.state;
-    var i = projektarten[(this.props.projekt.art)-1];
+    const { projekt, projektarten} = this.state;
+    
+
 
     	if(this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
             this.state.teilnahmeButtonDisabled = true;
             this.state.teilnahmeAbwaehlenButtonDisabled = false;
             console.log(this.state);
 		}
+
+    //var i = projektarten[0];
+    console.log(projektarten[0])
+
     return (
       <div>
         <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
@@ -137,6 +154,7 @@ class ProjektListeEintrag extends Component {
                 </Typography>
               </Grid>
               <Grid item xs />
+
 
               <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
                   Teilnahme abwählen
@@ -153,14 +171,12 @@ class ProjektListeEintrag extends Component {
           <AccordionDetails>
             <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
             <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
-            <Typography variant='body1' color={'textSecondary'}>{JSON.stringify(i)} ECTS</Typography>
-            
+            <Typography variant='body1' color={'textSecondary'}> ECTS</Typography>            
           </AccordionDetails>
           <AccordionDetails>
             <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
             <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
             <Typography variant='body1' color={'textSecondary'}>Dieses Projekt ist ein: </Typography>
-            
           </AccordionDetails>
           <AccordionDetails>
 

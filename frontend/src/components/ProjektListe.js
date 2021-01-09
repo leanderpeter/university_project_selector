@@ -66,7 +66,7 @@ class ProjektListe extends Component {
         projektarten: projektartBOs
       })).catch(e => 
     this.setState({
-      projektarten: []
+      //projektarten: []
     }));
   }
 
@@ -100,7 +100,7 @@ class ProjektListe extends Component {
 	render() {
 
     const { classes , currentStudent } = this.props;
-    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm} = this.state;
+    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm, projektarten} = this.state;
 
 
     return (

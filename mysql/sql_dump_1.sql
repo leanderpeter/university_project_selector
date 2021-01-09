@@ -42,7 +42,6 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`projekte` (
   `aktueller_zustand` VARCHAR(128) NULL DEFAULT NULL,
   `halbjahr` INT NULL DEFAULT NULL,
   `art` INT NULL DEFAULT NULL,
-  `ECTS` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_projekte_personen1_idx` (`dozent` ASC) VISIBLE,
   INDEX `fk_projekte_semester1_idx` (`halbjahr` ASC) VISIBLE,
@@ -175,15 +174,15 @@ DEFAULT CHARACTER SET = utf8;
 
 LOCK TABLES `projekte` WRITE;
 /*!40000 ALTER TABLE `projekte` DISABLE KEYS */;
-INSERT INTO `projekte` VALUES (1232,'Sofware for Monkeys', 30, 'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch', 1,NULL, 2,1,5), 
-(3,'Marketing for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 2,NULL, 3,2,10),
-(4,'Programmieren for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 2,3,15),
-(5,'BWL for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Genehmigt', 3,1,5),
-(6,'Rechnungswesen for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Genehmigt', 2,2,10),
-(7,'UX for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Genehmigt', 3,3,15),
-(8,'Datenbanken for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Genehmigt', 2,1,5),
-(9,'Web Technologie for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Genehmigt', 3,2,10),
-(10,'Datenschutz for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Neu', 2,3,15);               
+INSERT INTO `projekte` VALUES (1232,'Sofware for Monkeys', 30, 'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch', 1,'in Bewertung', 2,NULL), 
+(3,'Marketing for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 2,NULL, 3,NULL),
+(4,'Programmieren for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, NULL, 2,NULL),
+(5,'BWL for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Genehmigt', 3,NULL),
+(6,'Rechnungswesen for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Genehmigt', 2,NULL),
+(7,'UX for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Genehmigt', 3,NULL),
+(8,'Datenbanken for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Genehmigt', 2,NULL),
+(9,'Web Technologie for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Genehmigt', 3,NULL),
+(10,'Datenschutz for Monkeys', 30, 'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch', 1, 'Neu', 2,NULL);               
 /*!40000 ALTER TABLE `projekte` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,6 +208,22 @@ INSERT INTO `electivApp`.`personen` (`id`, `name`, `email`, `rolle`) VALUES ('1'
 INSERT INTO `electivApp`.`personen` (`id`, `name`, `email`, `rolle`) VALUES ('2', 'Prof. Dr. Kunz', 'kunz@mail.de', 'Dozent');
 /*!40000 ALTER TABLE `personen` ENABLE KEYS */;
 UNLOCK TABLES;
+
+LOCK TABLES `studenten` WRITE;
+/*!40000 ALTER TABLE `studenten` DISABLE KEYS */;
+INSERT INTO `electivApp`.`studenten` (`id`, `name`, `email`, `rolle`, `mat_nr`) VALUES ('1', 'Hans Peter', '', 'Student', '38371');
+INSERT INTO `electivApp`.`studenten` (`id`, `name`, `rolle`, `mat_nr`) VALUES ('2', 'Peter Zwegat', 'Student', '38672');
+INSERT INTO `electivApp`.`studenten` (`id`, `name`, `rolle`, `mat_nr`) VALUES ('3', 'Thomas Müller', 'Student', '35215');
+INSERT INTO `electivApp`.`studenten` (`id`, `name`, `rolle`, `mat_nr`) VALUES ('4', 'Raphael Schmidt', 'Student', '31313');
+INSERT INTO `electivApp`.`studenten` (`id`, `name`, `rolle`, `mat_nr`) VALUES ('5', 'Hannah Heinrich', 'Student', '38761');
+INSERT INTO `electivApp`.`studenten` (`id`, `name`, `rolle`, `mat_nr`) VALUES ('6', 'Sara Sonnenberg', 'Student', '37777');
+INSERT INTO `electivApp`.`studenten` (`id`, `name`, `rolle`, `mat_nr`) VALUES ('7', 'Maria Kuhn', 'Student', '38765');
+INSERT INTO `electivApp`.`studenten` (`id`, `name`, `rolle`, `mat_nr`) VALUES ('8', 'Lena Rüdiger', 'Student', '38616');
+INSERT INTO `electivApp`.`studenten` (`id`, `name`, `rolle`, `mat_nr`) VALUES ('9', 'Natascha Ivanov', 'Student', '33333');
+INSERT INTO `electivApp`.`studenten` (`id`, `name`, `rolle`, `mat_nr`) VALUES ('10', 'Magdalena Seeberger', 'Student', '38471');
+/*!40000 ALTER TABLE `studenten` ENABLE KEYS */;
+UNLOCK TABLES;
+
 
 LOCK TABLES `bewertungen` WRITE;
 /*!40000 ALTER TABLE `bewertungen` DISABLE KEYS */;

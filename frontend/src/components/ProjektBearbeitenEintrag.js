@@ -19,7 +19,9 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import TableFooter from '@material-ui/core/TableFooter';
 import StudentBO from '../api/StudentBO'
+import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 
+//Projekt Bearbeiten Datei importieren
 import ProjektBearbeiten from './ProjektBearbeiten';
 
 
@@ -170,17 +172,36 @@ class ProjektBearbeitenEintrag extends Component {
                 <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
                 <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
                 <StyledTableCell align="center">
-                <InputLabel>{note}</InputLabel>
-                <Select   style={{display:"flex", minWidth:"5rem",paddingRight:"10px", paddingLeft:"10px",}} value={note } onChange={this.handleChange}   >
-                  {
-                  bewertungen.map(bewertung =>
-                  <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
-                  )
-                  }
-                </Select>          
+                {note ?
+                                    <FormControl className={classes.formControl} >
+                                      <InputLabel>{note}</InputLabel>
+                                      
+                                        
+                                          <Select value={note } onChange={this.handleChange}  >
+                                          
+                                          {
+                                          bewertungen.map(bewertung =>
+                                          <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
+                                          )
+                                          }
+                                        </Select>                                                                
+                                    </FormControl>                                  
+                                    :
+                                    <FormControl className={classes.formControl}>
+                                      <InputLabel>Nicht benotet</InputLabel>
+                                      <Select value={note } onChange={this.handleChange}   >
+                                          {
+                                          bewertungen.map(bewertung =>
+                                          <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
+                                          )
+                                          }
+                                        </Select>
+                                    </FormControl>
+                                  }
+                         
                 </StyledTableCell> 
                 <StyledTableCell align="center">
-                  <Button className={classes.teilnahmeAbwaehlenButton} style={{backgroundColor:"lightblue", display:"flex",margin:"auto"}} variant="contained" onClick={this.teilnahmeAbwaehlenButtonClicked}>entfernen</Button>
+                  <Button className={classes.teilnahmeAbwaehlenButton}  variant="contained" color="primary" onClick={this.teilnahmeAbwaehlenButtonClicked}><HighlightOffOutlinedIcon/></Button>
                            
                     
                 </StyledTableCell>
@@ -205,11 +226,14 @@ const styles = theme => ({
       },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 120,
+        minWidth: 115,
     },
     button: {
         margin: theme.spacing(1),
         },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
     });
 
 /** PropTypes */

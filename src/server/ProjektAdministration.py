@@ -126,6 +126,9 @@ class ProjektAdministration(object):
         with ProjektMapper() as mapper:
             return mapper.find_projekte_by_zustand(zustand_id)
 
+    def get_projekte_by_zustand_by_dozent(self, zustand_id, dozent_id):
+        with ProjektMapper() as mapper:
+            return mapper.find_projekte_by_zustand_by_dozent(zustand_id,dozent_id)
     def get_projekte_by_zustaende(self, zustand_id):
         with ProjektMapper() as mapper:
             return mapper.find_projekte_by_zustaende(zustand_id)
@@ -280,7 +283,11 @@ class ProjektAdministration(object):
         projekt = Projekt()
         projekt.set_aktueller_zustand(zus)
         return projekt
-
+    """ 
+    def get_state(self, projekt):
+        return self.projekt.get_aktueller_zustand() 
+    """
+    
     def get_alle_projektarten(self):
         with ProjektartMapper() as mapper:
             return mapper.find_all()

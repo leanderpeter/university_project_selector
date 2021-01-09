@@ -40,6 +40,9 @@ export default class ElectivAPI {
 	//Projekt nach ID bekommen
 	#getProjektURL = (id) => `${this.#ElectivServerBaseURL}/projekt/${id}`;
 
+	//Projekte nach Dozent ID und Zustand bekommen
+	#getProjekteByZustandByDozentURL = (zustand_id,dozent_id) => `${this.#ElectivServerBaseURL}/projekte/zustand/${zustand_id}/dozent/${dozent_id}`;
+
 	//alle Teilnahmen eines Students anzeigen
 	#getTeilnahmenURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/${id}`;
 
@@ -94,14 +97,17 @@ export default class ElectivAPI {
 	
 	//Teilnahmen eines Projekts bekommen
     #getTeilnahmenByProjektIdURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/projekt/${id}`
+
+    //erhalte Projektarten nach ID
+    #getProjektartByIDURL = (id) => `${this.#ElectivServerBaseURL}/projektart/${id}`
+	//erhalte alle Projektarten
+    #getProjektartURL = () => `${this.#ElectivServerBaseURL}/projektart`
   
 	//Alle Semester bekommen
 	#getStudentenURL = () => `${this.#ElectivServerBaseURL}/studenten`;
 
     //erhalte Projektarten nach ID
     #getProjektartByIDURL = (id) => `${this.#ElectivServerBaseURL}/projektart/${id}`
-	//erhalte alle Projektarten
-    #getProjektartURL = () => `${this.#ElectivServerBaseURL}/projektart`
 
 	/*
 	Singleton/Einzelstuck instanz erhalten
@@ -163,6 +169,19 @@ export default class ElectivAPI {
 			let projektartBO = ProjektartBO.fromJSON(responseJSON);
 			return new Promise(function (resolve){
 				resolve(projektartBO);
+			})
+		})
+	}
+
+	getProjekteByZustandByDozent(zustand_id,dozent_id) {
+		//immer Zustand 1 (neues Projekt) holen
+		return this.#fetchAdvanced(this.#getProjekteByZustandByDozentURL(zustand_id,dozent_id),{method: 'GET'}).then((responseJSON) => {
+			let projektBOs = ProjektBO.fromJSON(responseJSON);
+			// console.info(projektBOs.toString())
+			console.log(projektBOs)
+			projektBOs.sort((a,b) => (a.ects > b.ects) ? 1: -1); //Sortier alle Objecte im array nach ects, aufsteigend
+			return new Promise(function (resolve){
+				resolve(projektBOs);
 			})
 		})
 	}
