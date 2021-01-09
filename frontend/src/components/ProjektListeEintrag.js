@@ -25,6 +25,7 @@ class ProjektListeEintrag extends Component {
 
         this.state = {
                 projekt: props.projekt,
+                projektarten: [],
                 showProjektForm: false,
                 showProjektDeleteDialog: false,
                 teilnahmeButtonDisabled:false,
@@ -126,14 +127,19 @@ class ProjektListeEintrag extends Component {
   render() {
     const { classes, expandedState } = this.props;
     // Use the states projekt
-    const { projekt, projektarten, getprojektartArray} = this.state;
-    //var i = projektarten[(this.props.projekt.art)-1];
+    const { projekt, projektarten} = this.state;
+    
+
 
     	if(this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
             this.state.teilnahmeButtonDisabled = true;
             this.state.teilnahmeAbwaehlenButtonDisabled = false;
             console.log(this.state);
 		}
+
+    //var i = projektarten[0];
+    console.log(projektarten[0])
+
     return (
       <div>
         <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
