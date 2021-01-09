@@ -482,9 +482,9 @@ class ProjektGenehmigungOperation(Resource):
     def get(self):
         adm = ProjektAdministration()
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
-        zus = "Neu,Abgelehnt"
+        zus = "Neu"
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
-        projekte = adm.get_projekte_by_zustaende('"Neu","Abgelehnt"')
+        projekte = adm.get_projekte_by_zustaende('"Neu"')
         return projekte
 
     def delete(self):

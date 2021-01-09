@@ -103,6 +103,9 @@ export default class ElectivAPI {
 	//Alle Semester bekommen
 	#getStudentenURL = () => `${this.#ElectivServerBaseURL}/studenten`;
 
+    //erhalte Projektarten nach ID
+    #getProjektartByIDURL = (id) => `${this.#ElectivServerBaseURL}/projektart/${id}`
+
 	/*
 	Singleton/Einzelstuck instanz erhalten
 	*/
@@ -159,10 +162,14 @@ export default class ElectivAPI {
 	}
 
 	getProjektartById(id) {
-		return this.#fetchAdvanced(this.#getProjektartByArtURL(id),{method: 'GET'}).then((responseJSON) => {
+		return this.#fetchAdvanced(this.#getProjektartByIDURL(id),{method: 'GET'}).then((responseJSON) => {
 			let projektartBO = ProjektartBO.fromJSON(responseJSON);
 			return new Promise(function (resolve){
 				resolve(projektartBO);
+			})
+		})
+	}
+
 	getProjekteByZustandByDozent(zustand_id,dozent_id) {
 		//immer Zustand 1 (neues Projekt) holen
 		return this.#fetchAdvanced(this.#getProjekteByZustandByDozentURL(zustand_id,dozent_id),{method: 'GET'}).then((responseJSON) => {

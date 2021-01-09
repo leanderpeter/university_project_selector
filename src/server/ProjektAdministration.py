@@ -277,10 +277,11 @@ class ProjektAdministration(object):
         projekt = Projekt()
         projekt.set_aktueller_zustand(zus)
         return projekt
-
-"""     def get_state(self, projekt):
-        return self.projekt.get_aktueller_zustand() """
-
+    """ 
+    def get_state(self, projekt):
+        return self.projekt.get_aktueller_zustand() 
+    """
+    
     def get_alle_projektarten(self):
         with ProjektartMapper() as mapper:
             return mapper.find_all()
