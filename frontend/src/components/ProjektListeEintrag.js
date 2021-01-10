@@ -139,14 +139,16 @@ class ProjektListeEintrag extends Component {
             this.state.teilnahmeAbwaehlenButtonDisabled = false;
 		}
 
+
     if (this.state.projektarten.length > 0){
-      //console.log(this.state.projektarten[0].ects);
-      //console.log(this.state.projektarten[projekt.getArt()].ects);
+      //console.log(this.state.projektarten[0].name);
+      //console.log(this.state.projektarten[projekt.getArt()-1].ects);
     }
     //console.log(JSON.stringify(this.state.projektarten.ects))
     //console.log(projektarten[projekt.getArt()])
     
     //console.log(projekt.getArt())
+
     
     return (
       <div>
@@ -186,7 +188,11 @@ class ProjektListeEintrag extends Component {
                 <b>Anzahl Block vor: </b>{projekt.getanzahl_block_vor()}<br />
                 <b>Anzahl Block in: </b>{projekt.getanzahl_block_in()}<br />
                 <b>Sprache: </b>{projekt.getsprache()}<br />
-                <b>ECTS: </b>{}<br />
+                {projektarten ?
+                <b>ECTS: </b>{this.state.projektarten[projekt.getArt()-1].ects}<br />
+                :
+                <b>ECTS noch nicht geladen</b><br />
+                }
                 <b>Präferierter Block: </b>{projekt.getpraeferierte_block()}<br />
 
             </Typography>
