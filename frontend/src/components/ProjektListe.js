@@ -33,7 +33,6 @@ class ProjektListe extends Component {
 			loadingInProgress: false,
 			expandedProjektID: expandedID,
 			showProjekteForm: false,
-      projektarten: []
 		};
 	}
 
@@ -60,22 +59,13 @@ class ProjektListe extends Component {
 		});
 	}
 
-  getProjektart = () => {
-    ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
-      this.setState({
-        projektarten: projektartBOs
-      })).catch(e => 
-    this.setState({
-      //projektarten: []
-    }));
-  }
+
 
 
 
 	// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 	componentDidMount() {
 		this.getProjekte();
-    this.getProjektart();
 	}
 
   onExpandedStateChange = projekt => {
@@ -100,7 +90,7 @@ class ProjektListe extends Component {
 	render() {
 
     const { classes , currentStudent } = this.props;
-    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm, projektarten} = this.state;
+    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm} = this.state;
 
 
     return (

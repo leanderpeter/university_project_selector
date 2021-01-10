@@ -61,7 +61,7 @@ projekt = api.inherit('Projekt', nbo, automat, {
                                        description='Anzahl Blocktage vor der Vorlesungszeit'),
     'anzahl_block_in': fields.Integer(attribute='_anzahl_block_in',
                                       description='Anzahl Blocktage in der Vorlesungszeit'),
-    'praeferierte_block': fields.String(attribute='_ praeferierte_block', description=' Praeferierte Blocktage'),
+    'praeferierte_block': fields.String(attribute='_praeferierte_block', description=' Praeferierte Blocktage'),
     'bes_raum': fields.Integer(attribute='_bes_raum', description='Bool ob ein besonderer Raum notwendig ist'),
     'raum': fields.String(attribute='_raum', description='Raum des Projekts'),
     'sprache': fields.String(attribute='_sprache', description='Sprache des Projekts'),
@@ -125,12 +125,11 @@ class ProjektListeOperationen(Resource):
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class Projektverwaltungoperation(Resource):
     @electivApp.marshal_list_with(projekt)
-    @secured
+    # @secured
 
     def get(self, id):
         adm = ProjektAdministration()
         projekte = adm.get_projekte_by_zustand('"{}"'.format(id))
-        print(projekte)
         return projekte
 
 @electivApp.route('/projekte/zustand/<string:zustand_id>/dozent/<int:dozent_id>')
