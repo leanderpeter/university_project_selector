@@ -17,6 +17,11 @@ from SecurityDecorator import secured
 
 # ..weitere Imports notwendig z.B. BO-Klassen und SecurityDecorator
 
+
+class NullableInteger(fields.Integer):
+    __schema_type__ = ['integer', 'null']
+    __schema_example__ = 'nullable integer'
+
 """Flask wird hiermit instanziert"""
 app = Flask(__name__)
 
@@ -77,7 +82,7 @@ projekt = api.inherit('Projekt', nbo, automat, {
 teilnahme = api.inherit('Teilnahme', bo, {
     'teilnehmer': fields.Integer(attribute='_teilnehmer', description='Die ID des Studenten der Teilnahme'),
     'lehrangebot': fields.Integer(attribute='_lehrangebot', description='Die ID des Projekts der Teilnahme'),
-    'anrechnung': fields.Integer(attribute='_anrechnung', description='Das Modul auf das die Teilnahme angerechnet wurde'),
+    'anrechnung': NullableInteger(attribute='_anrechnung', description='Das Modul auf das die Teilnahme angerechnet wurde'),
     'resultat': fields.Integer(attribute='_resultat', description='Die ID der Note einer Teilnahme')
 })
 
@@ -90,10 +95,6 @@ bewertung = api.inherit('Bewertung', bo, {
     'note': fields.Float(attribute='_note', description='Die Note der Teilnahme'),
 })
 
-bewertung = api.inherit('Bewertung', bo, {
-    'note': fields.Float(attribute='_note', description='Die Note der Teilnahme'),
-})
-
 modul = api.inherit('Modul', nbo, {
     'edv_nr': fields.Integer(attribute='_edv_nr', description='Die EDV Nummer eines Moduls'),
 })
@@ -101,6 +102,8 @@ modul = api.inherit('Modul', nbo, {
 semester = api.inherit('Semester', nbo, {
 })
 
+
+    
 @electivApp.route('/projekte')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektListeOperationen(Resource):
