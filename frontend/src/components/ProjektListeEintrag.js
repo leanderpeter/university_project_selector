@@ -124,7 +124,7 @@ class ProjektListeEintrag extends Component {
                </Button>
 
 */
-
+//small comment
 	/** Renders the component */
   render() {
     const { classes, expandedState } = this.props;
