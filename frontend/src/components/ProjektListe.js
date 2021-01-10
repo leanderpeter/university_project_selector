@@ -18,7 +18,6 @@ class ProjektListe extends Component {
 
 	constructor(props) {
 		super(props);
-
 		let expandedID = null;
 
 		if (this.props.location.expandProjekt){
@@ -33,7 +32,7 @@ class ProjektListe extends Component {
 			error: null,
 			loadingInProgress: false,
 			expandedProjektID: expandedID,
-			showProjekteForm: false
+			showProjekteForm: false,
 		};
 	}
 
@@ -59,10 +58,14 @@ class ProjektListe extends Component {
 			error: null
 		});
 	}
+
+
+
+
+
 	// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 	componentDidMount() {
 		this.getProjekte();
-    console.log(this.projekte);
 	}
 
   onExpandedStateChange = projekt => {
@@ -83,12 +86,12 @@ class ProjektListe extends Component {
 
 
 
-
 	/** Renders the component */
 	render() {
 
     const { classes , currentStudent } = this.props;
-    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm } = this.state;
+    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm} = this.state;
+
 
     return (
       <div className={classes.root}>
@@ -122,13 +125,13 @@ class ProjektListe extends Component {
         </Grid>
         { 
           // Show the list of ProjektListeEintrag components
-          // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters
-          
+          // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters        
           filteredProjekte.map(projekt =>
             <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
-              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent}
-            />) 
+              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} 
+            />)
         }
+
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`} onReload={this.getProjekte} />
         

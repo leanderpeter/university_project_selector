@@ -5,6 +5,7 @@ from flask_cors import CORS
 # Des Weiteren wird das auf Flask aufbauende Flask-RestX verwendet
 from flask_restx import Api, Resource, fields
 from flask import request
+import json
 
 # Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.ProjektAdministration import ProjektAdministration
@@ -15,6 +16,11 @@ from server.bo.Projekt import Projekt
 from SecurityDecorator import secured
 
 # ..weitere Imports notwendig z.B. BO-Klassen und SecurityDecorator
+
+
+class NullableInteger(fields.Integer):
+    __schema_type__ = ['integer', 'null']
+    __schema_example__ = 'nullable integer'
 
 """Flask wird hiermit instanziert"""
 app = Flask(__name__)
@@ -60,7 +66,7 @@ projekt = api.inherit('Projekt', nbo, automat, {
                                        description='Anzahl Blocktage vor der Vorlesungszeit'),
     'anzahl_block_in': fields.Integer(attribute='_anzahl_block_in',
                                       description='Anzahl Blocktage in der Vorlesungszeit'),
-    'praeferierte_block': fields.String(attribute='_ praeferierte_block', description=' Praeferierte Blocktage'),
+    'praeferierte_block': fields.String(attribute='_praeferierte_block', description=' Praeferierte Blocktage'),
     'bes_raum': fields.Integer(attribute='_bes_raum', description='Bool ob ein besonderer Raum notwendig ist'),
     'raum': fields.String(attribute='_raum', description='Raum des Projekts'),
     'sprache': fields.String(attribute='_sprache', description='Sprache des Projekts'),
@@ -68,8 +74,7 @@ projekt = api.inherit('Projekt', nbo, automat, {
     'halbjahr': fields.Integer(attribute='_halbjahr', description='Die ID des Semesters des Projekts'),
     'art': fields.Integer(attribute='_art', description='Die ID der Projektart'),
     'anzahlTeilnehmer': fields.String(attribute='_anzahlTeilnehmer', description='Die Anzahl der angemeldeten Teilnehmer'),
-    'teilnehmerListe': fields.String(attribute='_teilnehmerListe', description='Liste mit IDs der Teilnehmer'),
-    'ects': fields.Integer(attribute='_ects', description='Die ECTS des Projekts')
+    'teilnehmerListe': fields.String(attribute='_teilnehmerListe', description='Liste mit IDs der Teilnehmer')
 })
 
 # Moduloption aus projekt entfernt !!INFO!!
@@ -77,13 +82,14 @@ projekt = api.inherit('Projekt', nbo, automat, {
 teilnahme = api.inherit('Teilnahme', bo, {
     'teilnehmer': fields.Integer(attribute='_teilnehmer', description='Die ID des Studenten der Teilnahme'),
     'lehrangebot': fields.Integer(attribute='_lehrangebot', description='Die ID des Projekts der Teilnahme'),
-    'anrechnung': fields.Integer(attribute='_anrechnung', description='Das Modul auf das die Teilnahme angerechnet wurde'),
+    'anrechnung': NullableInteger(attribute='_anrechnung', description='Das Modul auf das die Teilnahme angerechnet wurde'),
     'resultat': fields.Integer(attribute='_resultat', description='Die ID der Note einer Teilnahme')
 })
 
-bewertung = api.inherit('Bewertung', bo, {
-    'note': fields.Float(attribute='_note', description='Die Note der Teilnahme'),
-})
+projektart = api.inherit('Projektart', nbo, {
+    'sws': fields.Integer(attribute='_sws',description='Semesterwochenstunden'),
+    'ects': fields.Integer(attribute='_ects',description='Ects fuer ein Projekt')
+    })
 
 bewertung = api.inherit('Bewertung', bo, {
     'note': fields.Float(attribute='_note', description='Die Note der Teilnahme'),
@@ -96,6 +102,8 @@ modul = api.inherit('Modul', nbo, {
 semester = api.inherit('Semester', nbo, {
 })
 
+
+    
 @electivApp.route('/projekte')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektListeOperationen(Resource):
@@ -120,12 +128,11 @@ class ProjektListeOperationen(Resource):
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class Projektverwaltungoperation(Resource):
     @electivApp.marshal_list_with(projekt)
-    @secured
+    # @secured
 
     def get(self, id):
         adm = ProjektAdministration()
         projekte = adm.get_projekte_by_zustand('"{}"'.format(id))
-        print(projekte)
         return projekte
 
 @electivApp.route('/projekte/zustand/<string:zustand_id>/dozent/<int:dozent_id>')
@@ -427,7 +434,6 @@ class ModulByProjektIDOperationen(Resource):
 @electivApp.response(500, 'Something went wrong')
 class ModulOperationen(Resource):
     @electivApp.marshal_list_with(modul)
-    @secured
 
     def get(self):
         adm = ProjektAdministration()
@@ -439,6 +445,12 @@ class ModulOperationen(Resource):
 
     def put(self, id):
         pass
+    
+    def post (self):
+        projekt_id = request.args.get("projekt_id")
+        module = json.loads(request.args.get("module"))
+        adm = ProjektAdministration()
+        adm.create_projekte_hat_module(projekt_id, module)
 
 @electivApp.route('/semester')
 @electivApp.response(500, 'Something went wrong')
@@ -478,7 +490,7 @@ class ProjektGenehmigungOperation(Resource):
     def get(self):
         adm = ProjektAdministration()
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
-        zus = "Neu,Abgelehnt"
+        zus = "Neu"
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
         projekte = adm.get_projekte_by_zustaende('"Neu","Abgelehnt"')
         return projekte
@@ -495,14 +507,35 @@ class ProjektGenehmigungOperation(Resource):
         '''
         adm = ProjektAdministration()
         proposal = Projekt.from_dict(api.payload)
-        # print(proposal)
 
 
         if proposal is not None:
-            p = adm.create_wartelisteProjekt(proposal.get_name(),proposal.get_max_teilnehmer(),proposal.get_projektbeschreibung(),proposal.get_betreuer(),proposal.get_externer_partner(),proposal.get_woechentlich(),proposal.get_anzahl_block_vor(),proposal.get_anzahl_block_in(),proposal.get_praeferierte_block(),proposal.get_bes_raum(),proposal.get_raum(),proposal.get_sprache(),proposal.get_dozent(),proposal.get_anzahlTeilnehmer(),proposal.get_teilnehmerListe(),proposal.get_ects())
+            p = adm.create_wartelisteProjekt(proposal.get_id(), proposal.get_name(),proposal.get_max_teilnehmer(),proposal.get_projektbeschreibung(),proposal.get_betreuer(),proposal.get_externer_partner(),proposal.get_woechentlich(),proposal.get_anzahl_block_vor(),proposal.get_anzahl_block_in(),proposal.get_praeferierte_block(),proposal.get_bes_raum(),proposal.get_raum(),proposal.get_sprache(),proposal.get_dozent(), proposal.get_art(), proposal.get_halbjahr(), proposal.get_anzahlTeilnehmer(),proposal.get_teilnehmerListe())
             return p, 200
         else:
             return '', 500
+
+@electivApp.route('/projektart')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class Projektart(Resource):
+    @electivApp.marshal_list_with(projektart)
+    @secured
+
+    def get(self):
+        adm = ProjektAdministration()
+        projektart = adm.get_alle_projektarten()
+        return projektart
+
+@electivApp.route('/projektart/<int:id>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ProjektartByID(Resource):
+    @electivApp.marshal_list_with(projektart)
+    @secured
+
+    def get(self, id):
+        adm = ProjektAdministration()
+        projektart = adm.get_projektart_by_id(id)
+        return projektart
 
 if __name__ == '__main__':
     app.run(debug=True)

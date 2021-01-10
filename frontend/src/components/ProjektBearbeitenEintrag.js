@@ -143,14 +143,15 @@ class ProjektBearbeitenEintrag extends Component {
     
 
       handleChange = async (resultat) => { 
-
                 this.props.teilnahme.setResultat(resultat.target.value); 
-        
+                let neu = resultat
+                console.log(JSON.stringify(this.props.teilnahme))
                 console.log(`Option selected:`, resultat.target.value); 
-        
-                await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme).then(()=>{
-                  this.getBewertung()
-                }); 
+                  
+                await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme)
+
+                
+                this.getBewertung()
         
               };
     
@@ -176,7 +177,7 @@ class ProjektBearbeitenEintrag extends Component {
                 <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
                 <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
                 <StyledTableCell align="center">
-                {note ?
+                {note && bewertungen?
                     <FormControl className={classes.formControl} >
                       <Grid container spacing={2} display="flex" margin="auto">
                   

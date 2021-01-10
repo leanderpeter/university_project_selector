@@ -80,7 +80,7 @@ class Notenliste extends Component {
       });
   }
 
-    // API Anbindung um alle Module vom Backend zu bekommen 
+    // API Anbindung um alle Senester vom Backend zu bekommen 
     getSemester = () => {
       ElectivAPI.getAPI().getSemester()
       .then(semesterBOs =>
@@ -104,7 +104,6 @@ class Notenliste extends Component {
   handleSemesterChange = (semester) => {
     this.setState({
       semesterwahl: semester.target.value,
-      expandedModulID: null
     })
     setTimeout(() => {
       console.log('Ausgewählte Semester ID:',this.state.semesterwahl)   

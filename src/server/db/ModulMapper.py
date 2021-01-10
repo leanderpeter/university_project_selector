@@ -78,6 +78,16 @@ class ModulMapper(Mapper):
         cursor.close()
 
         return result
+    
+    def projekte_hat_module(self, projekt_id, modul):
+        cursor = self._connection.cursor()
+        command = "INSERT INTO projekte_hat_module (projekt_id, modul_id) VALUES (%s,%s)"
+        data = (projekt_id, modul)
+
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
 
     def find_by_key(self):
         """Reads a tuple with a given ID"""

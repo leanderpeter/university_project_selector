@@ -5,6 +5,7 @@ import TeilnahmeBO from './TeilnahmeBO';
 import BewertungBO from './BewertungBO';
 import ModulBO from './ModulBO';
 import SemesterBO from './SemesterBO';
+import ProjektartBO from './ProjektartBO';
 
 /*
 Singleton Abstarktion des backend REST interfaces. Es handelt sich um eine access methode
@@ -79,6 +80,9 @@ export default class ElectivAPI {
 	//Module nach Id bekommen
 	#getModule_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/modul/${id}`;
 
+	//für ein Projekt wählbare Module in DB 'projekte_hat_module' einfügen 
+	#postProjekte_hat_moduleURL = (projekt_id, module) => `${this.#ElectivServerBaseURL}/module?projekt_id=${projekt_id}&module=${module}`;
+
 	#updateTeilnahmeURL = (id) => `${this.#ElectivServerBaseURL}/teilnahme2/${id}`;
 
 	//Alle Semester bekommen
@@ -93,6 +97,12 @@ export default class ElectivAPI {
 	
 	//Teilnahmen eines Projekts bekommen
     #getTeilnahmenByProjektIdURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/projekt/${id}`
+
+    //erhalte Projektarten nach ID
+	#getProjektartByIDURL = (id) => `${this.#ElectivServerBaseURL}/projektart/${id}`
+	
+	//erhalte alle Projektarten
+    #getProjektartURL = () => `${this.#ElectivServerBaseURL}/projektart`
   
 	//Alle Semester bekommen
 	#getStudentenURL = () => `${this.#ElectivServerBaseURL}/studenten`;
@@ -136,11 +146,27 @@ export default class ElectivAPI {
 		//immer Zustand 1 (neues Projekt) holen
 		return this.#fetchAdvanced(this.#getProjekteByZustandURL(zustand),{method: 'GET'}).then((responseJSON) => {
 			let projektBOs = ProjektBO.fromJSON(responseJSON);
-			// console.info(projektBOs.toString())
-			console.log(projektBOs)
-			projektBOs.sort((a,b) => (a.ects > b.ects) ? 1: -1); //Sortier alle Objecte im array nach ects, aufsteigend
+			// projektBOs.sort((a,b) => (a.ects > b.ects) ? 1: -1); //Sortier alle Objecte im array nach ects, aufsteigend
 			return new Promise(function (resolve){
 				resolve(projektBOs);
+			})
+		})
+	}
+
+	getProjektart() {
+		return this.#fetchAdvanced(this.#getProjektartURL(), {method: 'GET'}).then((responseJSON) => {
+			let projektartBos = ProjektartBO.fromJSON(responseJSON);
+			return new Promise(function (resolve){
+				resolve(projektartBos);
+			})
+		})
+	}
+
+	getProjektartById(id) {
+		return this.#fetchAdvanced(this.#getProjektartByIDURL(id),{method: 'GET'}).then((responseJSON) => {
+			let projektartBO = ProjektartBO.fromJSON(responseJSON);
+			return new Promise(function (resolve){
+				resolve(projektartBO);
 			})
 		})
 	}
@@ -180,7 +206,7 @@ export default class ElectivAPI {
 			body: JSON.stringify(projektBO)
 		}).then((responseJSON) => {
 			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
-			let responseProjektBO = ProjektBO.fromJSON(responseJSON)[0];
+			let responseProjektBO = ProjektBO.fromJSON(responseJSON);
 			return new Promise(function (resolve) {
 				resolve(responseProjektBO);
 			})
@@ -258,7 +284,7 @@ export default class ElectivAPI {
 	getStudentByGoogleID(google_user_id){
 		return this.#fetchAdvanced(this.#getStudentByGoogleIDURL(google_user_id)).then((responseJSON) => {
 			let studentBO = StudentBO.fromJSON(responseJSON);
-			console.info(studentBO)
+			// console.info(studentBO)
 			return new Promise(function (resolve){
 				resolve(studentBO)
 			})
@@ -327,8 +353,6 @@ export default class ElectivAPI {
 		})
 	}
 
-	
-
 	getModule(){
 		return this.#fetchAdvanced(this.#getModuleURL()).then((responseJSON) => {
 			let modulBOs = ModulBO.fromJSON(responseJSON);
@@ -348,6 +372,11 @@ export default class ElectivAPI {
 			})
 		})
 	}
+
+	postProjekte_hat_module(projekt_id, module){
+	   return this.#fetchAdvanced(this.#postProjekte_hat_moduleURL(projekt_id, module),{method: 'POST'})
+   }
+
 	getStudentenByProjektId(id){
 		return this.#fetchAdvanced(this.#getStudentenByProjektIdURL(id)).then((responseJSON) => {
 			let studentBOs = StudentBO.fromJSON(responseJSON);
