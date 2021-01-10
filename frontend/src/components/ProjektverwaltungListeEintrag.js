@@ -80,9 +80,9 @@ class ProjektverwaltungListeEintrag extends Component {
   render() {
     const { classes, expandedState } = this.props;
     // Use the states projekt
-    const { projekt, showProjektForm, projektarten } = this.state;
+    const { projekt, projektarten, showProjektForm } = this.state;
 
-    console.log(projektarten[0])
+
 
 
     return (

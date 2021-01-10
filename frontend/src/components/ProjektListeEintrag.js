@@ -136,15 +136,6 @@ class ProjektListeEintrag extends Component {
 		}
 
 
-    if (this.state.projektarten.length > 0){
-      //console.log(this.state.projektarten[0].name);
-      //console.log(this.state.projektarten[projekt.getArt()-1].ects);
-    }
-    //console.log(JSON.stringify(this.state.projektarten.ects))
-    //console.log(projektarten[projekt.getArt()])
-    
-    //console.log(projekt.getArt())
-
     
 
     
