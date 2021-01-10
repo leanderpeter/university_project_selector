@@ -190,8 +190,7 @@ class ProjektBearbeiten extends Component {
         
         return(
           <div className={classes.root}>
-            {currentPerson ?
-              <>
+            
                   <Grid container spacing={2} display="flex" margin="auto">
                       
                       <Grid item xs={12} sm={6}>
@@ -207,7 +206,7 @@ class ProjektBearbeiten extends Component {
                         
                           <FormControl className={classes.formControl}>
                           
-                                          <Select   style={{ minWidth:"5rem", paddingLeft:"7px",}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
+                                          <Select  className={classes.formControl} style={{ minWidth:"5rem", paddingLeft:"7px",}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
                                             
                                             {
                                             projekte.map(projekt =>
@@ -264,10 +263,7 @@ class ProjektBearbeiten extends Component {
                   <></>
                   }   
 
-              </>
-              :
-              <></>
-              }
+             
           </div>
         )
     }
