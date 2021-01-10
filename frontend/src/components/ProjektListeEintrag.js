@@ -107,10 +107,6 @@ class ProjektListeEintrag extends Component {
     }));
   }
 
-  getArten(){
-    var i = ElectivAPI.getAPI().getProjektart();
-    return i
-  }
 
 
   componentDidMount() {
@@ -148,6 +144,8 @@ class ProjektListeEintrag extends Component {
     //console.log(projektarten[projekt.getArt()])
     
     //console.log(projekt.getArt())
+
+    
 
     
     return (
@@ -188,9 +186,11 @@ class ProjektListeEintrag extends Component {
                 <b>Anzahl Block vor: </b>{projekt.getanzahl_block_vor()}<br />
                 <b>Anzahl Block in: </b>{projekt.getanzahl_block_in()}<br />
                 <b>Sprache: </b>{projekt.getsprache()}<br />
-                {projektarten ?
+                {projektarten.length > 0 && projekt ? 
                 <>
-                <b>ECTS: </b>{this.state.projektarten[projekt.getArt()-1].ects}<br />
+                <b>Projektart: </b>{projektarten[projekt.art-1].name}<br />
+                <b>SWS: </b>{projektarten[projekt.art-1].sws}<br />
+                <b>ECTS: </b>{projektarten[projekt.art-1].ects}<br />
                 </>
                 :
                 <>
