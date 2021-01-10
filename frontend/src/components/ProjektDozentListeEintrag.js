@@ -79,10 +79,11 @@ class ProjektDozentListeEintrag extends Component {
 
 	}
 
-	teilnahmeButtonClicked = event => {
-    	//Logik fuer Teilnahme Button
-    	this.setState({teilnahmeButtonDisabled:true});
-    	ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
+	bearbeitenButtonClicked = event => {
+    event.stopPropagation();
+    this.setState({
+      showProjektForm: true
+    });
 	}
 
 	/** Renders the component */
@@ -116,8 +117,8 @@ class ProjektDozentListeEintrag extends Component {
             
           </AccordionDetails>
           <AccordionDetails>
-          <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
-          Teilnahme
+          <Button id='btn' className={classes.bearbeitenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.bearbeitenButtonClicked}>
+          Bearbeiten
         </Button>
             
           </AccordionDetails>
@@ -134,7 +135,7 @@ const styles = theme => ({
   root: {
     width: '100%',
   },
-  teilnahmeButton: {
+  bearbeitenButton: {
     position: 'absolute',
     right: theme.spacing(3),
     bottom: theme.spacing(0),

@@ -30,7 +30,8 @@ class ProjektForm extends Component {
 	constructor(props) {
 		super(props);
 
-		let nm = '', mt = '', bs = '', bt = '', ep = '',wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '', hj = '', pa = '' ;
+		let nm = '', mt = '', bs = '', bt = '', ep = '',wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '', hj = null, pa = null ;
+		let boolvor = false, boolin = false, boolpraef = false;
 		if (props.projekt) {
 			nm = props.projekt.getname();
 			mt = props.projekt.getmax_teilnehmer();
@@ -49,7 +50,17 @@ class ProjektForm extends Component {
 			tl = props.projekt.getTeilnehmerListe();
 			hj = props.projekt.getHalbjahr();
 			pa = props.projekt.getArt();
+			if(av !== null && av > 0){
+				boolvor = true 
+			}
+			if(ai !== null && ai > 0){
+				boolin = true 
+			}
+			if(pb !== null && pb !== ''){
+				boolpraef = true 
+			}
 		}
+		
 
 		//init state
 		this.state = {
@@ -77,17 +88,17 @@ class ProjektForm extends Component {
 			woechentlichValidationFailed: false,
 			woechentlichEdited: false,
 
-			boolBlock_vor: false,
+			boolBlock_vor: boolvor,
 			anzahl_block_vor: av,
 			anzahl_block_vorValidationFailed: false,
 			anzahl_block_vorEdited: false,
 
-			boolBlock_in: false,
+			boolBlock_in: boolin,
 			anzahl_block_in: ai,
 			anzahl_block_inValidationFailed: false,
 			anzahl_block_inEdited: false,
 
-			boolBlockpraef: false,
+			boolBlockpraef: boolpraef,
 			praeferierte_block: pb,
 			praeferierte_blockValidationFailed: false,
 			praeferierte_blockEdited: false,
@@ -297,6 +308,30 @@ class ProjektForm extends Component {
       });
   }
 
+	getModule_by_projekt_id = () => {
+		ElectivAPI.getAPI().getModule_by_projekt_id(this.props.projekt.id)
+		.then(modulBOs => {
+			let modulIDs = [];
+			modulBOs.forEach(modul=>{
+				modulIDs.push(modul.id)
+			})
+			this.setState({
+				modulwahl: modulIDs,
+				error: null,
+				loadingInProgress: false,
+			})})
+			.catch(e =>
+				this.setState({
+					modulwahl: null,
+					error: e,
+					loadingInProgress: false,
+				}));
+		this.setState({
+			error: null,
+			loadingInProgress: true
+		});
+	}
+
 	handleSemesterChange = (semester) => {
 		this.setState({
 		  halbjahr: semester.target.value,
@@ -337,6 +372,9 @@ class ProjektForm extends Component {
 		this.getSemester();
 		this.getProjektart();
 		this.getModule();
+		if (this.props.projekt) {
+			this.getModule_by_projekt_id();
+		}
 	}
 
 	// Rendering
@@ -446,7 +484,7 @@ class ProjektForm extends Component {
 				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
 				
 				<FormControl component="fieldset">
-					<RadioGroup  row aria-label="position" defaultValue="deutsch" onChange={this.radioValueChange}>
+					<RadioGroup  row aria-label="position" value= {sprache} defaultValue="deutsch" onChange={this.radioValueChange}>
 						<FormControlLabel
 						value="deutsch" 
 						control={<Radio color="primary" />}
@@ -466,7 +504,7 @@ class ProjektForm extends Component {
             	semester ?
 				<FormControl required variant="outlined" className={classes.formControl}>
 				<InputLabel>Semester</InputLabel> 
-					<Select  value = {semester.id} label="Semester" onChange={this.handleSemesterChange}>
+					<Select  value = {halbjahr} label="Semester" onChange={this.handleSemesterChange}>
 					{
 					semester.map(semester =>
 					<MenuItem value={semester.getID()}><em>{semester.getname()}</em></MenuItem>
@@ -487,7 +525,7 @@ class ProjektForm extends Component {
             	projektarten ?
 				<FormControl required variant="outlined" className={classes.formControlpa}>
 				<InputLabel>Projektart</InputLabel> 
-					<Select  value = {projektarten.id} label="Projektart" onChange={this.handleArtChange}>
+					<Select  value = {art} label="Projektart" onChange={this.handleArtChange}>
 					{
 					projektarten.map(projektart =>
 					<MenuItem value={projektart.getID()}><em>{projektart.getname()}</em></MenuItem>
@@ -570,7 +608,7 @@ class ProjektForm extends Component {
 					labelPlacement="end"
 				/>
 				</FormGroup>
-				{ bes_raum === true ?
+				{ bes_raum === true || bes_raum === 1 ?
 					<TextField type='text' required fullWidth margin='small' id='raum' label='Raum' variant="outlined" value={raum}
 					onChange={this.textFieldValueChange} error={raumValidationFailed}
 					helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
