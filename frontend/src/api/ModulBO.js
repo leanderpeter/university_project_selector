@@ -5,8 +5,7 @@ export default class ModulBO extends NamedBusinessObject{
 	constructor(aedv_nr){
         super();
         this.edv_nr = aedv_nr;
-    }
-    
+    } 
 	/*
 	Erhalte 
 	*/

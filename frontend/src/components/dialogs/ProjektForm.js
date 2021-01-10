@@ -11,6 +11,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import Chip from "@material-ui/core/Chip";
+import ListItemText from "@material-ui/core/ListItemText";
 
 
 /*
@@ -25,7 +30,7 @@ class ProjektForm extends Component {
 	constructor(props) {
 		super(props);
 
-		let nm = '', mt = '', bs = '', bt = '', ep = '',wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '';
+		let nm = '', mt = '', bs = '', bt = '', ep = '',wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '', hj = '', pa = '' ;
 		if (props.projekt) {
 			nm = props.projekt.getname();
 			mt = props.projekt.getmax_teilnehmer();
@@ -42,6 +47,8 @@ class ProjektForm extends Component {
 			dz = props.projekt.getdozent();
 			at = props.projekt.getAnzahlTeilnehmer();
 			tl = props.projekt.getTeilnehmerListe();
+			hj = props.projekt.getHalbjahr();
+			pa = props.projekt.getArt();
 		}
 
 		//init state
@@ -105,13 +112,11 @@ class ProjektForm extends Component {
 			dozentValidationFailed: false,
 			dozentEdited: false,
 
-			halbjahr: null,
-			dozentValidationFailed: false,
-			dozentEdited: false,
+			halbjahr: hj,
+			halbjahrEdited: false,
 
-			art: null,
-			dozentValidationFailed: false,
-			dozentEdited: false,
+			art: pa,
+			artEdited: false,
 
 			anzahlTeilnehmer: at,
 			anzahlTeilnehmerValidationFailed: false,
@@ -124,14 +129,21 @@ class ProjektForm extends Component {
 			addingInProgress: false,
 			updatingInProgress: false,
 			addingError: null,
-			updatingError: null
+			updatingError: null,
+
+			modulwahl: [],
+			moduleEdited: false,
+
+			semester: [],
+			projektarten: [],
+			module: []
 		};
 		// State speichern falls cancel 
 		this.baseState = this.state;
 	}
 
 	// Projekt hinzufugen
-	addProjekt = async () => {
+	addProjekt =  () => {
 		let newProjekt = new ProjektBO(
 			this.state.max_teilnehmer, 
 			this.state.beschreibung, 
@@ -151,10 +163,11 @@ class ProjektForm extends Component {
 			this.state.anzahlTeilnehmer,
 			this.state.teilnehmerListe,
 			this.state.name,
-			this.state.ects
 			);
 			newProjekt.setname(this.state.name);
-		await ElectivAPI.getAPI().addProjekt(newProjekt).then(projekt => {
+		ElectivAPI.getAPI().addProjekt(newProjekt).then(projekt => {
+			this.props.getProjekte();
+			ElectivAPI.getAPI().postProjekte_hat_module(projekt.id, JSON.stringify(this.state.modulwahl))}).then(projekt => {
 			// Backend erfolgreich
 			// reinitialisierung fuer ein neues leere Projekt
 			this.setState(this.baseState);
@@ -171,7 +184,6 @@ class ProjektForm extends Component {
 			updatingInProgress: true,
 			updatingError: null
 		});
-		this.props.getProjekte();
 	}
 
 	updateProjekt = () => {
@@ -229,10 +241,102 @@ class ProjektForm extends Component {
 		});
 	}
 
+	getSemester = () => {
+		ElectivAPI.getAPI().getSemester()
+		.then(semesterBOs =>
+			this.setState({
+				semester: semesterBOs,
+				error: null,
+				loadingInProgress: false,
+			})).catch(e =>
+				this.setState({
+					semester: [],
+					error: e,
+					loadingInProgress: false,
+				}));
+		this.setState({
+			error: null,
+			loadingInProgress: true,
+			loadingTeilnahmeError: null
+		});
+	}
+
+	getProjektart = () => {
+		ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
+		  this.setState({
+			projektarten: projektartBOs
+		  })).then(()=>{
+			  console.log(this.state.projektarten)
+
+		  }) 
+			.catch(e => 
+		this.setState({
+		  projektarten: []
+		}));
+	  }
+
+
+	// API Anbindung um alle Module vom Backend zu bekommen 
+    getModule = () => {
+      ElectivAPI.getAPI().getModule()
+      .then(modulBOs =>
+          this.setState({
+              module: modulBOs,
+              error: null,
+              loadingInProgress: false,
+          })).catch(e =>
+              this.setState({
+                  module: [],
+                  error: e,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingTeilnahmeError: null
+      });
+  }
+
+	handleSemesterChange = (semester) => {
+		this.setState({
+		  halbjahr: semester.target.value,
+		  halbjahrEdited: true
+		})
+		setTimeout(() => {
+			console.log('Ausgewählte Semester ID:',this.state.halbjahr)   
+		  }, 0);
+	  };
+
+	handleArtChange = (projektart) => {
+		this.setState({
+			art: projektart.target.value,
+			artEdited: true
+		})
+		setTimeout(() => {
+			console.log('Ausgewählte Projektart ID:',this.state.art)
+		  }, 0);
+	  };
+	
+	handleModulChange = (event) => {
+		this.setState({
+			modulwahl: event.target.value,
+			moduleEdited: true
+		})
+		setTimeout(() => {
+			console.log('Ausgewählte ModulIDs:',this.state.modulwahl)
+		  }, 0);
+	}
+
 	handleClose = () => {
 		// State zurucksetzen
 		this.setState(this.baseState);
 		this.props.onClose(null);
+	}
+
+	getInfos = () => {
+		this.getSemester();
+		this.getProjektart();
+		this.getModule();
 	}
 
 	// Rendering
@@ -294,7 +398,19 @@ class ProjektForm extends Component {
 			addingInProgress,
 			updatingInProgress,
 			addingError,
-			updatingError
+			updatingError,
+
+			semester,
+			halbjahr,
+			halbjahrEdited,
+			
+			projektarten,
+			art,
+			artEdited,
+
+			module,
+			modulwahl,
+			moduleEdited,
 
 		} = this.state;
 		let title = '';
@@ -311,7 +427,7 @@ class ProjektForm extends Component {
 
 		return (
       show ?
-        <Dialog open={show} onClose={this.handleClose} maxWidth='sm'>
+        <Dialog open={show} onEnter={this.getInfos} onClose={this.handleClose} maxWidth='sm'>
           <DialogTitle id='form-dialog-title'>{title}
             <IconButton className={classes.closeButton} onClick={this.handleClose}>
               <CloseIcon />
@@ -322,10 +438,10 @@ class ProjektForm extends Component {
               {header}
             </DialogContentText>
             <form className={classes.root} noValidate autoComplete='off'>
-				<TextField autoFocus type='text' required fullWidth margin='small' id='name' label='Projektname:' variant="outlined" value={name}
+				<TextField autoFocus type='text' required fullWidth margin='small' id='name' label='Projektname' variant="outlined" value={name}
 				onChange={this.textFieldValueChange} error={nameValidationFailed} 
 				helperText={nameValidationFailed ? 'The name must contain at least one character' : ' '} />
-				<TextField type='text' required fullWidth margin='small' id='max_teilnehmer' label='Maximale Teilnehmeranzahl:' variant="outlined" value={max_teilnehmer}
+				<TextField className={classes.max_teilnehmer} type='text' required margin='small' id='max_teilnehmer' label='Maximale Teilnehmeranzahl' variant="outlined" value={max_teilnehmer}
 				onChange={this.numberValueChange} error={max_teilnehmerValidationFailed}
 				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
 				
@@ -345,6 +461,88 @@ class ProjektForm extends Component {
 						/>
 					</RadioGroup>
 				</FormControl>
+				<br/>
+				{
+            	semester ?
+				<FormControl required variant="outlined" className={classes.formControl}>
+				<InputLabel>Semester</InputLabel> 
+					<Select  value = {semester.id} label="Semester" onChange={this.handleSemesterChange}>
+					{
+					semester.map(semester =>
+					<MenuItem value={semester.getID()}><em>{semester.getname()}</em></MenuItem>
+					)
+					}
+					</Select>                                                                
+				</FormControl>                                  
+				:
+				<FormControl required variant="outlined" className={classes.formControl}>
+				<InputLabel>Semester</InputLabel>
+					<Select value="" label="Semester">
+					<MenuItem value=""><em>Semester noch nicht geladen</em></MenuItem>
+					</Select>
+				</FormControl>
+				}
+				
+				{
+            	projektarten ?
+				<FormControl required variant="outlined" className={classes.formControlpa}>
+				<InputLabel>Projektart</InputLabel> 
+					<Select  value = {projektarten.id} label="Projektart" onChange={this.handleArtChange}>
+					{
+					projektarten.map(projektart =>
+					<MenuItem value={projektart.getID()}><em>{projektart.getname()}</em></MenuItem>
+					)
+					}
+					</Select>                                                                
+				</FormControl>                                  
+				:
+				<FormControl required variant="outlined" className={classes.formControl}>
+				<InputLabel>Projektart</InputLabel>
+					<Select value="" label="Projektart">
+					<MenuItem value=""><em>Projektarten noch nicht geladen</em></MenuItem>
+					</Select>
+				</FormControl>
+				}
+				<br/>
+				{
+            	module ?
+				<FormControl required variant="outlined" className={classes.formControlmo}>
+				<InputLabel>Anrechenbare Module</InputLabel> 
+					<Select 
+					required
+					value = {modulwahl} 
+					multiple label="Anrechenbare Module" 
+					onChange={this.handleModulChange}
+					renderValue={(selected) => (
+						<div className={classes.chips}>
+						  {selected.map((value) => (
+							<Chip key={value} label={module[value-1].name} className={classes.chip} />
+						  ))}
+						</div>
+					  )}>
+					{
+					module.map(modul =>
+						<MenuItem key={modul.getID()} value={modul.getID()}>
+							<Checkbox checked={modulwahl.indexOf(modul.getID()) > -1} />
+							<ListItemText>{modul.getname()} ({modul.getEdv_nr()})</ListItemText>
+						</MenuItem>
+					)
+					}
+					</Select>                                                                
+				</FormControl>                                  
+				:
+				<FormControl required variant="outlined" className={classes.formControlmo}>
+				<InputLabel>Anrechenbare Module</InputLabel> 
+					<Select 
+					value = ""
+					multiple label="Anrechenbare Module">
+						<MenuItem key="" value="">
+							Module nicht geladen
+						</MenuItem>
+					</Select>                                                                
+				</FormControl>
+				}
+				<br/>
 
 				<FormGroup row>
 				<FormControlLabel control={
@@ -356,7 +554,7 @@ class ProjektForm extends Component {
 					/>
 					}
 					label="Wöchentliche Termine"
-					labelPlacement="start"
+					labelPlacement="end"
 				/>
 				</FormGroup>
 				<FormGroup row>
@@ -369,11 +567,11 @@ class ProjektForm extends Component {
 					/>
 					}
 					label="Besonderer Raum notwendig"
-					labelPlacement="start"
+					labelPlacement="end"
 				/>
 				</FormGroup>
 				{ bes_raum === true ?
-					<TextField type='text' required fullWidth margin='small' id='raum' label='raum:' variant="outlined" value={raum}
+					<TextField type='text' required fullWidth margin='small' id='raum' label='Raum' variant="outlined" value={raum}
 					onChange={this.textFieldValueChange} error={raumValidationFailed}
 					helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
 				:
@@ -389,7 +587,7 @@ class ProjektForm extends Component {
 					/>
 					}
 					label="Blocktage vor Beginn der Vorlesungszeit"
-					labelPlacement="start"
+					labelPlacement="end"
 				/>
 				</FormGroup>
 				{ boolBlock_vor === true ?
@@ -409,7 +607,7 @@ class ProjektForm extends Component {
 					/>
 					}
 					label="Blocktage in der Prüfungszeit"
-					labelPlacement="start"
+					labelPlacement="end"
 				/>
 				</FormGroup>
 				{ boolBlock_in === true ?
@@ -429,7 +627,7 @@ class ProjektForm extends Component {
 					/>
 					}
 					label="Blocktage (Samstage) in der Vorlesungszeit"
-					labelPlacement="start"
+					labelPlacement="end"
 				/>
 				</FormGroup>
 				{ boolBlockpraef === true ?
@@ -439,13 +637,13 @@ class ProjektForm extends Component {
 				:
 				<></>
 				}
-				<TextField type='text' fullWidth margin='small' id='betreuer' label='Betreuer:' variant="outlined" value={betreuer}
+				<TextField type='text' fullWidth margin='small' id='betreuer' label='Betreuer' variant="outlined" value={betreuer}
 				onChange={this.textFieldValueChange} error={betreuerValidationFailed}
 				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-				<TextField type='text' fullWidth margin='small' id='externer_partner' label='Externe Partner:' variant="outlined" value={externer_partner}
+				<TextField type='text' fullWidth margin='small' id='externer_partner' label='Externe Partner' variant="outlined" value={externer_partner}
 				onChange={this.textFieldValueChange} error={externer_partnerValidationFailed}
 				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
-				<TextField type='text' required fullWidth margin='small' id='beschreibung' label='Projektbeschreibung:' multiline rows= {4} variant="outlined" value={beschreibung}
+				<TextField type='text' required fullWidth margin='small' id='beschreibung' label='Projektbeschreibung' multiline rows= {4} variant="outlined" value={beschreibung}
 				onChange={this.textFieldValueChange} error={beschreibungValidationFailed}
 				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
             </form>
@@ -468,7 +666,7 @@ class ProjektForm extends Component {
                 <Button disabled={nameValidationFailed || max_teilnehmerValidationFailed} variant='contained' onClick={this.updateProjekt} color='primary'>
                   Update
               </Button>
-				: <Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited || beschreibungValidationFailed || !beschreibungEdited}  
+				: <Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited || beschreibungValidationFailed || !beschreibungEdited ||!halbjahrEdited || !artEdited || !moduleEdited}  
 				variant='contained' onClick={this.addProjekt} color='primary'>
                   Add
              </Button>
@@ -491,7 +689,34 @@ const styles = theme => ({
     top: theme.spacing(1),
     color: theme.palette.grey[500],
   },
+  max_teilnehmer: {
+	  width: 250,
+	  marginRight: theme.spacing(2)
+  },
+  formControl: {
+	minWidth: 170,
+	marginBottom: theme.spacing(1),
+  },
+  formControlpa: {
+	minWidth: 240,
+	marginBottom: theme.spacing(1),
+	marginLeft: theme.spacing(3)
+  },
+  formControlmo: {
+	width: 435,
+	marginTop: theme.spacing(2),
+	marginBottom: theme.spacing(2),
+  },
+  chips: {
+	  display: 'flex',
+	  flexWrap: 'wrap'
+  },
+  chip: {
+	  margin: 2
+  }
 });
+
+
 
 /** PropTypes */
 ProjektForm.propTypes = {

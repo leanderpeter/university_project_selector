@@ -26,12 +26,20 @@ export default class ProjektartBO extends NamedBusinessObject{
 		this.ects = aects;
 	}
 
-	// Array 
-	static fromJSON(projektart){
-		let result = null;
-		let c = projektart;
-		Object.setPrototypeOf(c, ProjektartBO.prototype);
-		result = c;
-		return result
+	static fromJSON(projektart) {
+		let results = null;
+		if (Array.isArray(projektart)) {
+			results = [];
+			projektart.forEach((c) => {
+				Object.setPrototypeOf(c, ProjektartBO.prototype);
+				results.push(c);
+			})
+		} else {
+			// Es gibt wohl nur ein Objekt
+			let c = projektart;
+			Object.setPrototypeOf(c, ProjektartBO.prototype);
+			results = c;
+		}
+		return results;
 	}
 }

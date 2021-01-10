@@ -191,6 +191,12 @@ class ProjektAdministration(object):
         with ModulMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def create_projekte_hat_module(self, projekt_id, module):
+        for modul in module:
+            with ModulMapper() as mapper:
+                mapper.projekte_hat_module(projekt_id, modul)
+
+
     def get_alle_bewertungen(self):
         with BewertungMapper() as mapper:
             return mapper.find_all()

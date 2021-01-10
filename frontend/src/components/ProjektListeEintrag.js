@@ -30,10 +30,11 @@ class ProjektListeEintrag extends Component {
                 showProjektDeleteDialog: false,
                 teilnahmeButtonDisabled:false,
                 teilnahmeAbwaehlenButtonDisabled:true,
-                teilnahmeChanged : false
+                teilnahmeChanged : false,
+                projektarten: [],
+                pArten: null
 
             };
-
 	}
 
 	// Handles events wenn sich der status der oeffnung aendert

@@ -125,12 +125,13 @@ class MeineProjekte extends Component {
         
         return(
             <div className={classes.root}>
-                <Typography>Projekte von {currentStudentName}, Matrikelnummer: {currentStudentmat_nr}</Typography>
+                <Typography className={classes.header}>Projekte von {currentStudentName}, Matrikelnummer: {currentStudentmat_nr}</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="customized table">
                         <TableHead>
                             <StyledTableRow>
                                 <StyledTableCell>Projekte</StyledTableCell>
+                                <StyledTableCell align="center">ECTS</StyledTableCell>
                                 <StyledTableCell align="center">Semester</StyledTableCell>
                                 <StyledTableCell align="center">Dozent</StyledTableCell>
                                 <StyledTableCell align="center">Note</StyledTableCell>
@@ -181,19 +182,14 @@ const styles = theme => ({
       table: {
         minWidth: 700,
       },
+      header:{
+        marginBottom: theme.spacing(2),
+
+      },
       button:{
           marginTop: theme.spacing(2),
           marginBottom: theme.spacing(3),
           float: 'right'
-      },
-      page: {
-        flexDirection: 'row',
-        backgroundColor: '#E4E4E4'
-      },
-      section: {
-        margin: 10,
-        padding: 10,
-        flexGrow: 1
       }
   });
 
