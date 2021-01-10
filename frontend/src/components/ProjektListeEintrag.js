@@ -189,9 +189,13 @@ class ProjektListeEintrag extends Component {
                 <b>Anzahl Block in: </b>{projekt.getanzahl_block_in()}<br />
                 <b>Sprache: </b>{projekt.getsprache()}<br />
                 {projektarten ?
+                <>
                 <b>ECTS: </b>{this.state.projektarten[projekt.getArt()-1].ects}<br />
+                </>
                 :
+                <>
                 <b>ECTS noch nicht geladen</b><br />
+                </>
                 }
                 <b>Präferierter Block: </b>{projekt.getpraeferierte_block()}<br />
 
