@@ -76,7 +76,6 @@ class ProjektMapper(Mapper):
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
                                           raum, sprache, dozent, aktueller_zustand, halbjahr, art)
             result.append(projekt)
-
         self._connection.commit()
         cursor.close()
 

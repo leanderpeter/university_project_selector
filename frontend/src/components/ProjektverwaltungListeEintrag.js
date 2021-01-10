@@ -103,12 +103,11 @@ class ProjektverwaltungListeEintrag extends Component {
                 <b>Wöchentlich: </b>{projekt.getwoechentlich() == "1" ? "Ja" : "Nein"}<br />
                 <b>Anzahl Block vor: </b>{projekt.getanzahl_block_vor()}<br />
                 <b>Anzahl Block in: </b>{projekt.getanzahl_block_in()}<br />
-                <b>Sprache: </b>{projekt.getasprache}<br />
+                <b>Sprache: </b>{projekt.getsprache()}<br />
                 <b>ECTS: </b>{projekt.getaects}<br />
                 <b>Präferierter Block: </b>{projekt.getpraeferierte_block()}<br />
 
             </Typography>
-
           </AccordionDetails>
 
         </Accordion>

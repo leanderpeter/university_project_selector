@@ -107,6 +107,11 @@ class ProjektListeEintrag extends Component {
     }));
   }
 
+  getArten(){
+    var i = ElectivAPI.getAPI().getProjektart();
+    return i
+  }
+
 
   componentDidMount() {
     this.getProjektart();
@@ -129,17 +134,20 @@ class ProjektListeEintrag extends Component {
     // Use the states projekt
     const { projekt, projektarten} = this.state;
     
-
-
     	if(this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id)> -1){
             this.state.teilnahmeButtonDisabled = true;
             this.state.teilnahmeAbwaehlenButtonDisabled = false;
-            console.log(this.state);
 		}
 
-    //var i = projektarten[0];
-    console.log(projektarten[0])
-
+    if (this.state.projektarten.length > 0){
+      //console.log(this.state.projektarten[0].ects);
+      //console.log(this.state.projektarten[projekt.getArt()].ects);
+    }
+    //console.log(JSON.stringify(this.state.projektarten.ects))
+    //console.log(projektarten[projekt.getArt()])
+    
+    //console.log(projekt.getArt())
+    
     return (
       <div>
         <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
@@ -168,21 +176,20 @@ class ProjektListeEintrag extends Component {
             </Grid>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
-            <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
-            <Typography variant='body1' color={'textSecondary'}> ECTS</Typography>
-            
-          </AccordionDetails>
-          <AccordionDetails>
-            <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
-            <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
-            <Typography variant='body1' color={'textSecondary'}>Dieses Projekt ist ein: </Typography>
-            
+            <Typography variant='body1' color={'textSecondary'}>
+                <b>Beschreibung: </b> {projekt.getbeschreibung()} <br />
+                <b>Raum: </b>{projekt.getraum()}<br />
+                <b>Maximale Teilnehmer: </b>{projekt.getmax_teilnehmer()}<br />
+                <b>Betreuer: </b>{projekt.getbetreuer()}<br />
+                <b>Externer Partner: </b>{projekt.getexterner_partner()}<br />
+                <b>Wöchentlich: </b>{projekt.getwoechentlich() == "1" ? "Ja" : "Nein"}<br />
+                <b>Anzahl Block vor: </b>{projekt.getanzahl_block_vor()}<br />
+                <b>Anzahl Block in: </b>{projekt.getanzahl_block_in()}<br />
+                <b>Sprache: </b>{projekt.getsprache()}<br />
+                <b>ECTS: </b>{}<br />
+                <b>Präferierter Block: </b>{projekt.getpraeferierte_block()}<br />
 
-          </AccordionDetails>
-          <AccordionDetails>
-
-
+            </Typography>
           </AccordionDetails>
         </Accordion>
 

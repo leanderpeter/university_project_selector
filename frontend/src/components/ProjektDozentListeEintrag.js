@@ -111,14 +111,23 @@ class ProjektDozentListeEintrag extends Component {
             </Grid>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography variant='body1' color={'textSecondary'}>{projekt.getbeschreibung()}</Typography>
-            <Typography variant='body1' color={'textSecondary'}>Findet statt in Raum {projekt.getraum()}</Typography>
-            
+            <Typography variant='body1' color={'textSecondary'}>
+                <b>Beschreibung: </b> {projekt.getbeschreibung()} <br />
+                <b>Raum: </b>{projekt.getraum()}<br />
+                <b>Maximale Teilnehmer: </b>{projekt.getmax_teilnehmer()}<br />
+                <b>Betreuer: </b>{projekt.getbetreuer()}<br />
+                <b>Externer Partner: </b>{projekt.getexterner_partner()}<br />
+                <b>Wöchentlich: </b>{projekt.getwoechentlich() == "1" ? "Ja" : "Nein"}<br />
+                <b>Anzahl Block vor: </b>{projekt.getanzahl_block_vor()}<br />
+                <b>Anzahl Block in: </b>{projekt.getanzahl_block_in()}<br />
+                <b>Sprache: </b>{projekt.getsprache()}<br />
+                <b>ECTS: </b>{projekt.getaects}<br />
+                <b>Präferierter Block: </b>{projekt.getpraeferierte_block()}<br />
+
+            </Typography>
           </AccordionDetails>
           <AccordionDetails>
-          <Button id='btn' className={classes.teilnahmeButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
-          Teilnahme
-        </Button>
+
             
           </AccordionDetails>
         </Accordion>
