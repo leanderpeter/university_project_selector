@@ -49,12 +49,12 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`projekte` (
   CONSTRAINT `fk_projekte_personen1`
     FOREIGN KEY (`dozent`)
     REFERENCES `electivApp`.`personen` (`id`),
-  CONSTRAINT `fk_projekte_projektarten1`
-    FOREIGN KEY (`art`)
-    REFERENCES `electivApp`.`projektarten` (`id`),
   CONSTRAINT `fk_projekte_semester1`
     FOREIGN KEY (`halbjahr`)
-    REFERENCES `electivApp`.`semester` (`id`))
+    REFERENCES `electivApp`.`semester` (`id`),
+  CONSTRAINT `fk_projekte_projektarten1`
+    FOREIGN KEY (`art`)
+    REFERENCES `electivApp`.`projektarten` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
