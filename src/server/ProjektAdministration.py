@@ -249,9 +249,11 @@ class ProjektAdministration(object):
         with TeilnahmeMapper() as mapper:
             return mapper.insert(teilnahme)
 
-    def create_wartelisteProjekt(self, name, max_teilnehmer, projektbeschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, anzahlTeilnehmer, teilnehmerListe):
+    def create_wartelisteProjekt(self, id, name, max_teilnehmer, projektbeschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, art, halbjahr, anzahlTeilnehmer, teilnehmerListe):
         '''Ein warteliste Projekt erstellen'''
         projekt = Projekt()
+        projekt.set_id(id)
+        projekt.set_name(name)
         projekt.set_max_teilnehmer(max_teilnehmer)
         projekt.set_projektbeschreibung(projektbeschreibung)
         projekt.set_betreuer(betreuer)
@@ -264,10 +266,10 @@ class ProjektAdministration(object):
         projekt.set_raum(raum)
         projekt.set_sprache(sprache)
         projekt.set_dozent(dozent)
+        projekt.set_art(art)
+        projekt.set_halbjahr(halbjahr)
         projekt.set_anzahlTeilnehmer(anzahlTeilnehmer)
         projekt.set_teilnehmerListe(teilnehmerListe)
-        projekt.set_id(1)
-        projekt.set_name(name)
         projekt.set_aktueller_zustand(Zustand('Neu'))
         print(projekt)
 

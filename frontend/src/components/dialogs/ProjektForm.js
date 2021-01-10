@@ -145,6 +145,8 @@ class ProjektForm extends Component {
 	// Projekt hinzufugen
 	addProjekt =  () => {
 		let newProjekt = new ProjektBO(
+			0,
+			this.state.name,
 			this.state.max_teilnehmer, 
 			this.state.beschreibung, 
 			this.state.betreuer, 
@@ -158,13 +160,11 @@ class ProjektForm extends Component {
 			this.state.sprache,
 			this.props.currentPerson.id,
 			this.state.aktueller_zustand,
-			this.state.art,
 			this.state.halbjahr,
+			this.state.art,
 			this.state.anzahlTeilnehmer,
 			this.state.teilnehmerListe,
-			this.state.name,
 			);
-			newProjekt.setname(this.state.name);
 		ElectivAPI.getAPI().addProjekt(newProjekt).then(projekt => {
 			this.props.getProjekte();
 			ElectivAPI.getAPI().postProjekte_hat_module(projekt.id, JSON.stringify(this.state.modulwahl))}).then(projekt => {
