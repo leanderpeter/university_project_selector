@@ -76,7 +76,6 @@ class ProjektMapper(Mapper):
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
                                           raum, sprache, dozent, aktueller_zustand, halbjahr, art)
             result.append(projekt)
-
         self._connection.commit()
         cursor.close()
 
@@ -87,7 +86,7 @@ class ProjektMapper(Mapper):
         result = []
         cursor = self._connection.cursor()
         
-        command = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art from projekte WHERE electivapp.projekte.aktueller_zustand = %s AND electivapp.projekte.dozent = %s")
+        command = ("SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art from projekte WHERE electivApp.projekte.aktueller_zustand = %s AND electivApp.projekte.dozent = %s")
         data = (zustand_id, dozent_id)
         cursor.execute(command, data)
         tuples = cursor.fetchall()

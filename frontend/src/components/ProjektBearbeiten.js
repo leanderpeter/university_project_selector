@@ -62,6 +62,7 @@ class ProjektBearbeiten extends Component {
         this.state = {
             teilnahmen:[],
             currentDozentName: null,
+            currentDozentId: null,
             projekte:[],
             "currentProjekt": null,
             error: null,
@@ -165,7 +166,7 @@ class ProjektBearbeiten extends Component {
       this.getProjekte();
       this.setState({
         currentDozentName: this.props.currentPerson.getname(),
-        
+        currentDozentId: this.props.currentPerson.getID(),
     })
     }
 
@@ -185,74 +186,85 @@ class ProjektBearbeiten extends Component {
         
         
         const { classes } = this.props;
-        const {currentDozentName,studenten, projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
+        const {currentPerson, currentDozentName,currentDozentId,studenten, projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
         
         return(
-            <div className={classes.root}>
-                
-                
-                
-                <Typography  >
-                
-                Projekte von {currentDozentName}, Projekt ID: {currentProjekt}
-                <Typography >
-                Projektname:
-               
-                <FormControl style={{paddingLeft: "5px",paddingRight:"5px"}}className={classes.formControl}>
-                
-                                <Select   style={{ minWidth:"5rem",paddingRight:"5px", paddingLeft:"10px",}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
-                                
-                                  {
-                                  projekte.map(projekt =>
-                                  <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
-                                  )
-                                  }
-                                </Select>                                                              
-                </FormControl>
-        
-                </Typography>
-                </Typography>
-                
+          <div className={classes.root}>
+            
+                  <Grid container spacing={2} display="flex" margin="auto">
+                      
+                      <Grid item xs={12} sm={6}>
+                        <Typography>Projekte von: {currentDozentName}</Typography>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Typography>Dozent ID: {currentDozentId}</Typography>
+                      </Grid>
+                      
+                      <Grid item xs={12} sm={6} >
+                        <Typography >
+                          Projektname:
+                        
+                          <FormControl className={classes.formControl}>
+                          
+                                          <Select  className={classes.formControl} style={{ minWidth:"5rem", paddingLeft:"7px",}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
+                                            
+                                            {
+                                            projekte.map(projekt =>
+                                            <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
+                                            )
+                                            }
+                                          </Select>                                                              
+                          </FormControl>
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Typography>Projekt ID: {currentProjekt}</Typography>
+                      </Grid>
+                      
+                    </Grid>
 
-                {currentProjekt?
-                <>
-                <TableContainer component={Paper}>
-                    <Table className={classes.table} aria-label="customized table">
-                        <TableHead>
-                            <StyledTableRow>
+                  {currentProjekt?
+                    <>
+                        <Grid item xs={12} >
+                            <Typography>
+                              <Fab size="small"  className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
+                                <AddIcon />
+                              </Fab> Teilnehmer hinzufügen  
+                            </Typography>
+                        </Grid>
+                        <TableContainer component={Paper}>
+                          <Table className={classes.table} aria-label="customized table">
+                            <TableHead>
+                              <StyledTableRow>
                                 <StyledTableCell align="center">Student</StyledTableCell>
                                 <StyledTableCell align="center">Matrikelnr.</StyledTableCell>
                                 <StyledTableCell align="center">Note</StyledTableCell>
                                 <StyledTableCell align="center">Teilnahme</StyledTableCell>
-                            </StyledTableRow>
-                        </TableHead>
-                        <TableBody>
-                           
-                            
-                            {
-                              teilnahmen.map(teilnahme =>
-                                <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme} reloadteilnahmen={this.getTeilnahmenByProjektId} />
-                              )
-                            }
+                              </StyledTableRow>
+                            </TableHead>
+                              <TableBody>
+                                {
+                                  teilnahmen.map(teilnahme =>
+                                    <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme} reloadteilnahmen={this.getTeilnahmenByProjektId} />
+                                  )
+                                }
+                              </TableBody> 
+                          </Table>
+                              <LoadingProgress show={loadingInProgress} />
+                              <ContextErrorMessage error={error} contextErrorMsg = {'Projekte Bearbeiten konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
+                              <AddStudent show={showAddStudent} currentProjekt={currentProjekt} teilnahmen={teilnahmen} onClose={this.addStudentClosed}/>
+                        </TableContainer>
+                      
+                      <Grid style={{display: "flex", paddingTop:"2%"}}>
+                        <Button style={{margin:"auto"}} variant="contained" color="primary" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
+                      </Grid>
+                    </>
+                  :
+                  <></>
+                  }   
 
-                    
-                        </TableBody>
-                        
-                    </Table>
-                    
-                    <LoadingProgress show={loadingInProgress} />
-                    <ContextErrorMessage error={error} contextErrorMsg = {'Meine Projekte konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
-                    <AddStudent show={showAddStudent} currentProjekt={currentProjekt} teilnahmen={teilnahmen} onClose={this.addStudentClosed}/>
-                </TableContainer>
-                <Fab size="medium"  className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
-                  <AddIcon />
-                </Fab>           
-                <Button  variant="contained" color="primary" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
-                </>
-              :
-              <></>
-              }   
-            </div>
+             
+          </div>
         )
     }
 }
@@ -270,6 +282,7 @@ const styles = theme => ({
       },
       addButton: {
         margin: theme.spacing(1),
+        
       }
   });
 

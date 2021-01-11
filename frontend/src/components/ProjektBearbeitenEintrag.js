@@ -19,10 +19,14 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import TableFooter from '@material-ui/core/TableFooter';
 import StudentBO from '../api/StudentBO'
-import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
+import {  Grid   } from '@material-ui/core';
+
 
 //Projekt Bearbeiten Datei importieren
 import ProjektBearbeiten from './ProjektBearbeiten';
+import { Typography } from '@material-ui/core';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -139,14 +143,15 @@ class ProjektBearbeitenEintrag extends Component {
     
 
       handleChange = async (resultat) => { 
-
                 this.props.teilnahme.setResultat(resultat.target.value); 
-        
+                let neu = resultat
+                console.log(JSON.stringify(this.props.teilnahme))
                 console.log(`Option selected:`, resultat.target.value); 
-        
-                await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme).then(()=>{
-                  this.getBewertung()
-                }); 
+                  
+                await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme)
+
+                
+                this.getBewertung()
         
               };
     
@@ -172,36 +177,43 @@ class ProjektBearbeitenEintrag extends Component {
                 <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
                 <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
                 <StyledTableCell align="center">
-                {note ?
-                                    <FormControl className={classes.formControl} >
-                                      <InputLabel>{note}</InputLabel>
-                                      
-                                        
-                                          <Select value={note } onChange={this.handleChange}  >
+                {note && bewertungen?
+                    <FormControl className={classes.formControl} >
+                      <Grid container spacing={2} display="flex" margin="auto">
+                  
+                            <Grid item xs={12} sm={6}>{note}</Grid>
+                            <Grid item xs={12} sm={6}>
+                                      <Select value={note } onChange={this.handleChange}  >
                                           
                                           {
                                           bewertungen.map(bewertung =>
                                           <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
                                           )
                                           }
-                                        </Select>                                                                
-                                    </FormControl>                                  
-                                    :
-                                    <FormControl className={classes.formControl}>
-                                      <InputLabel>Nicht benotet</InputLabel>
-                                      <Select value={note } onChange={this.handleChange}   >
-                                          {
-                                          bewertungen.map(bewertung =>
-                                          <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
-                                          )
-                                          }
-                                        </Select>
-                                    </FormControl>
-                                  }
+                                        </Select>  
+                            </Grid>
+                      </Grid>
+                    </FormControl>                                  
+                  :
+                  <FormControl className={classes.formControl}>
+                    <Grid container spacing={2} display="flex" margin="auto">
+                      <Grid item xs={12} sm={6}></Grid>   
+                      <Grid item xs={12} sm={6}>         
+                          <Select value={note } onChange={this.handleChange}   >
+                              {
+                              bewertungen.map(bewertung =>
+                              <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
+                              )
+                              }
+                          </Select>
+                      </Grid> 
+                    </Grid>
+                  </FormControl>
+                }
                          
                 </StyledTableCell> 
                 <StyledTableCell align="center">
-                  <Button className={classes.teilnahmeAbwaehlenButton}  variant="contained" color="primary" onClick={this.teilnahmeAbwaehlenButtonClicked}><HighlightOffOutlinedIcon/></Button>
+                  <IconButton className={classes.teilnahmeAbwaehlenButton}  variant="contained"  onClick={this.teilnahmeAbwaehlenButtonClicked}><DeleteIcon /></IconButton>
                            
                     
                 </StyledTableCell>
@@ -226,7 +238,7 @@ const styles = theme => ({
       },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 115,
+        
     },
     button: {
         margin: theme.spacing(1),
