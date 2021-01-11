@@ -166,7 +166,8 @@ class ProjektAdministration(object):
         pass
 
     def save_projekt(self, projekt):
-        pass
+        with ProjektMapper() as mapper: 
+            return mapper.update(projekt)
 
     def create_bewertung(self, ):
         pass
@@ -196,6 +197,11 @@ class ProjektAdministration(object):
             with ModulMapper() as mapper:
                 mapper.projekte_hat_module(projekt_id, modul)
 
+    def update_projekte_hat_module(self, projekt_id, module):
+        with ModulMapper() as mapper:
+            mapper.delete_by_id(projekt_id)
+            for modul in module:
+                mapper.projekte_hat_module(projekt_id, modul)
 
     def get_alle_bewertungen(self):
         with BewertungMapper() as mapper:

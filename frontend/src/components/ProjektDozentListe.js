@@ -59,7 +59,7 @@ class ProjektDozentListe extends Component {
 		this.setState({
 			loadingInProgress: true,
 			error: null
-		});
+    });
 	}
 	// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 	componentDidMount() {
@@ -140,7 +140,7 @@ class ProjektDozentListe extends Component {
           <Grid item xs />
           <Grid item>
             <Button variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.addProjektButtonClicked}>
-              Add Projekt
+              Projekt anlegen
           </Button>
           </Grid>
         </Grid>
@@ -150,7 +150,7 @@ class ProjektDozentListe extends Component {
           
           filteredProjekte.map(projekt =>
             <ProjektDozentListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
-              onExpandedStateChange={this.onExpandedStateChange} currentPerson= {currentPerson} 
+              onExpandedStateChange={this.onExpandedStateChange} currentPerson= {currentPerson} getProjekte= {this.getProjekte} projektFormClosed={this.projektFormClosed}
             />) 
         }
         <LoadingProgress show={loadingInProgress} />

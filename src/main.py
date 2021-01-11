@@ -441,9 +441,14 @@ class ModulOperationen(Resource):
     def delete(self, id):
         pass
 
-    def put(self, id):
-        pass
-    
+    @secured
+    def put(self):
+        projekt_id = request.args.get("projekt_id")
+        module = json.loads(request.args.get("module"))
+        adm = ProjektAdministration()
+        adm.update_projekte_hat_module(projekt_id, module)
+
+    @secured
     def post (self):
         projekt_id = request.args.get("projekt_id")
         module = json.loads(request.args.get("module"))
@@ -511,6 +516,21 @@ class ProjektGenehmigungOperation(Resource):
         if proposal is not None:
             p = adm.create_wartelisteProjekt(proposal.get_id(), proposal.get_name(),proposal.get_max_teilnehmer(),proposal.get_projektbeschreibung(),proposal.get_betreuer(),proposal.get_externer_partner(),proposal.get_woechentlich(),proposal.get_anzahl_block_vor(),proposal.get_anzahl_block_in(),proposal.get_praeferierte_block(),proposal.get_bes_raum(),proposal.get_raum(),proposal.get_sprache(),proposal.get_dozent(), proposal.get_art(), proposal.get_halbjahr(), proposal.get_anzahlTeilnehmer(),proposal.get_teilnehmerListe())
             return p, 200
+        else:
+            return '', 500
+
+    @electivApp.marshal_with(projekt)
+    @electivApp.expect(projekt)
+    def put(self):
+        '''
+        Einfugen eines Projekts im zustand pending. 
+        '''
+        adm = ProjektAdministration()
+        projekt = Projekt.from_dict(api.payload)
+
+        if projekt is not None:
+            response = adm.save_projekt(projekt)
+            return response, 200
         else:
             return '', 500
 

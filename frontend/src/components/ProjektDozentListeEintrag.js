@@ -40,7 +40,24 @@ class ProjektDozentListeEintrag extends Component {
 		    this.setState({teilnahmeButtonDisabled:true});
 		}
     */
-	}
+  }
+  
+  getProjekte = () => {
+    this.props.getProjekte();
+  }
+
+  projektFormClosed = (projekt) => {
+    if (projekt){
+      this.setState({
+        projekt: projekt,
+        showProjektForm: false
+      });
+    }else {
+      this.setState({
+        showProjektForm: false
+      });
+    }
+  }
 
 	// Kummert sich um das loschen des Projekts
 	deleteProjektHandler = (deletedProjekt) => {
@@ -52,19 +69,6 @@ class ProjektDozentListeEintrag extends Component {
 		//Edit Button Code
 	}
 
-	// Kummert sich um das close event vom ProjektForm
-	projektFormClosed = (projekt) => {
-		if ( projekt ) {
-			this.setState({
-				projekt: projekt,
-				showProjektForm: false
-			});
-		}else {
-			this.setState({
-				showProjektForm: false
-			});
-		}
-	}
 
 	// Handles click of Projekt delete Button
 	deleteProjektButtonClicked = (event) => {
@@ -88,7 +92,7 @@ class ProjektDozentListeEintrag extends Component {
 
 	/** Renders the component */
   render() {
-    const { classes, expandedState } = this.props;
+    const { classes, expandedState} = this.props;
     // Use the states projekt
     const { projekt, showProjektForm} = this.state;
 
@@ -117,14 +121,13 @@ class ProjektDozentListeEintrag extends Component {
             
           </AccordionDetails>
           <AccordionDetails>
-          <Button id='btn' className={classes.bearbeitenButton} variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.bearbeitenButtonClicked}>
+          <Button id='btn' className={classes.bearbeitenButton} variant='contained' color='primary' onClick={this.bearbeitenButtonClicked}>
           Bearbeiten
         </Button>
             
           </AccordionDetails>
         </Accordion>
-        <ProjektForm show={showProjektForm} projekt={projekt} onClose={this.projektFormClosed} />
-
+        <ProjektForm show={showProjektForm} projekt={projekt} onClose={this.projektFormClosed} getProjekte= {this.getProjekte}/>
       </div>
     );
   }

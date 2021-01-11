@@ -35,6 +35,9 @@ export default class ElectivAPI {
 	// ---------------------------------------------------------------------------------
 
 	#addProjektPendingURL = () => `${this.#ElectivServerBaseURL}/projektePending`;
+	
+	#updateProjektPendingURL = () => `${this.#ElectivServerBaseURL}/projektePending`;
+
 	#getProjektePendingURL = () => `${this.#ElectivServerBaseURL}/projektePending`;
 
 	//Projekt nach ID bekommen
@@ -82,6 +85,9 @@ export default class ElectivAPI {
 
 	//für ein Projekt wählbare Module in DB 'projekte_hat_module' einfügen 
 	#postProjekte_hat_moduleURL = (projekt_id, module) => `${this.#ElectivServerBaseURL}/module?projekt_id=${projekt_id}&module=${module}`;
+
+	//für ein Projekt wählbare Module in DB 'projekte_hat_module' einfügen 
+	#updateProjekte_hat_moduleURL = (projekt_id, module) => `${this.#ElectivServerBaseURL}/module?projekt_id=${projekt_id}&module=${module}`;
 
 	#updateTeilnahmeURL = (id) => `${this.#ElectivServerBaseURL}/teilnahme2/${id}`;
 
@@ -232,8 +238,21 @@ export default class ElectivAPI {
 		})
 	}
 
-	updateProjekt(){
-		//USW
+	updateProjekt(projektBO){
+		return this.#fetchAdvanced(this.#updateProjektPendingURL(), {
+			method: 'PUT',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(projektBO)
+		}).then((responseJSON) => {
+			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
+			let responseProjektBO = ProjektBO.fromJSON(responseJSON);
+			return new Promise(function (resolve) {
+				resolve(responseProjektBO);
+			})
+		})
 	}
 
 	deleteProjekt(){
@@ -376,6 +395,10 @@ export default class ElectivAPI {
 	postProjekte_hat_module(projekt_id, module){
 	   return this.#fetchAdvanced(this.#postProjekte_hat_moduleURL(projekt_id, module),{method: 'POST'})
    }
+
+   updateProjekte_hat_module(projekt_id, module){
+	   return this.#fetchAdvanced(this.#updateProjekte_hat_moduleURL(projekt_id, module),{method: 'PUT'})
+	}
 
 	getStudentenByProjektId(id){
 		return this.#fetchAdvanced(this.#getStudentenByProjektIdURL(id)).then((responseJSON) => {

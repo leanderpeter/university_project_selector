@@ -30,36 +30,8 @@ class ProjektForm extends Component {
 	constructor(props) {
 		super(props);
 
-		let nm = '', mt = '', bs = '', bt = '', ep = '',wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '', hj = null, pa = null ;
+		let nm = '', mt = null, bs = '', bt = '', ep = '',wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '', hj = 0, pa = 0;
 		let boolvor = false, boolin = false, boolpraef = false;
-		if (props.projekt) {
-			nm = props.projekt.getname();
-			mt = props.projekt.getmax_teilnehmer();
-			bs = props.projekt.getbeschreibung();
-			bt = props.projekt.getbetreuer();
-			ep = props.projekt.getexterner_partner();
-			wt = props.projekt.getwoechentlich();
-			av = props.projekt.getanzahl_block_vor();
-			ai = props.projekt.getanzahl_block_in();
-			pb = props.projekt.getpraeferierte_block();
-			br = props.projekt.getbes_raum();
-			rm = props.projekt.getraum();
-			sp = props.projekt.getsprache();
-			dz = props.projekt.getdozent();
-			at = props.projekt.getAnzahlTeilnehmer();
-			tl = props.projekt.getTeilnehmerListe();
-			hj = props.projekt.getHalbjahr();
-			pa = props.projekt.getArt();
-			if(av !== null && av > 0){
-				boolvor = true 
-			}
-			if(ai !== null && ai > 0){
-				boolin = true 
-			}
-			if(pb !== null && pb !== ''){
-				boolpraef = true 
-			}
-		}
 		
 
 		//init state
@@ -120,8 +92,6 @@ class ProjektForm extends Component {
 			dozentEdited: false,
 
 			aktueller_zustand: "Neu",
-			dozentValidationFailed: false,
-			dozentEdited: false,
 
 			halbjahr: hj,
 			halbjahrEdited: false,
@@ -189,7 +159,6 @@ class ProjektForm extends Component {
 				updatingError: e
 			})
 			);
-
 		// Ladeanimation einblenden
 		this.setState({
 			updatingInProgress: true,
@@ -198,15 +167,104 @@ class ProjektForm extends Component {
 	}
 
 	updateProjekt = () => {
+		let projekt = this.props.projekt;
+		projekt.setname(this.state.name);
+		projekt.setmax_teilnehmer(this.state.max_teilnehmer);
+		projekt.setbeschreibung(this.state.beschreibung);
+		projekt.setbetreuer(this.state.betreuer );
+		projekt.setexterner_partner(this.state.externer_partner);
+		projekt.setwoechentlich(this.state.woechentlich);
+		projekt.setanzahl_block_vor(this.state.anzahl_block_vor);
+		projekt.setanzahl_block_in(this.state.anzahl_block_in);
+		projekt.setpraeferierte_block(this.state.praeferierte_block);
+		projekt.setbes_raum(this.state.bes_raum);
+		projekt.setraum(this.state.raum);
+		projekt.setsprache(this.state.sprache);
+		projekt.setAktuellerZustand(this.state.aktueller_zustand);
+		projekt.setHalbjahr(this.state.halbjahr);
+		projekt.setArt(this.state.art);
+		projekt.setAnzahlTeilnehmer(this.state.anzahlTeilnehmer);
+		projekt.setTeilnehmerListe(this.state.teilnehmerListe);
+		ElectivAPI.getAPI().updateProjekt(projekt).then(projekt => {
+			this.props.getProjekte();
+			ElectivAPI.getAPI().updateProjekte_hat_module(projekt.id, JSON.stringify(this.state.modulwahl))}).then(projekt => {
+			// Backend erfolgreich
+			// reinitialisierung fuer ein neues leere Projekt
+			this.setState(this.baseState);
+			this.props.onClose(projekt); //Aufrufen parent in backend
+		}).catch(e => 
+			this.setState({
+				updatingInProgress: false,
+				updatingError: e
+			})
+			);
+		// Ladeanimation einblenden
+		this.setState({
+			updatingInProgress: true,
+			updatingError: null
+		});
+	}
 
+	getUpdateInfos = () => {
+		let nm = this.props.projekt.getname();
+		let mt = this.props.projekt.getmax_teilnehmer();
+		let bs = this.props.projekt.getbeschreibung();
+		let bt = this.props.projekt.getbetreuer();
+		let ep = this.props.projekt.getexterner_partner();
+		let wt = this.props.projekt.getwoechentlich();
+		let av = this.props.projekt.getanzahl_block_vor();
+		let ai = this.props.projekt.getanzahl_block_in();
+		let pb = this.props.projekt.getpraeferierte_block();
+		let br = this.props.projekt.getbes_raum();
+		let rm = this.props.projekt.getraum();
+		let sp = this.props.projekt.getsprache();
+		let dz = this.props.projekt.getdozent();
+		let at = this.props.projekt.getAnzahlTeilnehmer();
+		let tl = this.props.projekt.getTeilnehmerListe();
+		let hj = this.props.projekt.getHalbjahr();
+		let pa = this.props.projekt.getArt();
+		let boolvor = false;
+		let boolin = false;
+		let boolpraef = false;
+		if(av !== null && av > 0){
+			boolvor = true 
+		}
+		if(ai !== null && ai > 0){
+			boolin = true 
+		}
+		if(pb !== null && pb !== ''){
+			boolpraef = true 
+		}
+		this.setState({
+			name: nm,
+			max_teilnehmer: mt,
+			beschreibung: bs,
+			betreuer: bt,
+			externer_partner: ep,
+			woechentlich: wt,
+			boolBlock_vor: boolvor,
+			anzahl_block_vor: av,
+			boolBlock_in: boolin,
+			anzahl_block_in: ai,
+			boolBlockpraef: boolpraef,
+			praeferierte_block: pb,
+			bes_raum: br,
+			raum: rm,
+			sprache: sp,
+			dozent: dz,
+			aktueller_zustand: "Neu",
+			halbjahr: hj,
+			art: pa,
+			anzahlTeilnehmer: at,
+			teilnehmerListe: tl,
+		})
 	}
 
 	// ---------------------------------------------------------------
-	//update Projekt fehlt noch
 	//textFieldValueChange fehlt noch
 	// ---------------------------------------------------------------
 
-	// Validierung der textfeldaenderungen 
+	// Validierung der Textfeldaenderungen 
 	textFieldValueChange = (event) => {
 		const value = event.target.value;
 
@@ -373,6 +431,7 @@ class ProjektForm extends Component {
 		this.getProjektart();
 		this.getModule();
 		if (this.props.projekt) {
+			this.getUpdateInfos();
 			this.getModule_by_projekt_id();
 		}
 	}
@@ -456,8 +515,8 @@ class ProjektForm extends Component {
 
 		if (projekt) {
 			// Projekt objekt true, somit ein edit
-			title = 'Update Projekt';
-			header = 'Projekt ID: hier muss dann die ID hin';
+			title = `Projekt "${projekt.name}" bearbeiten`;
+			header = 'Projektdaten einfugen';
 		} else {
 			title = 'Erstelle ein neues Projekt';
 			header = 'Projektdaten einfugen';
@@ -536,7 +595,7 @@ class ProjektForm extends Component {
 				:
 				<FormControl required variant="outlined" className={classes.formControl}>
 				<InputLabel>Projektart</InputLabel>
-					<Select value="" label="Projektart">
+					<Select value={art} label="Projektart">
 					<MenuItem value=""><em>Projektarten noch nicht geladen</em></MenuItem>
 					</Select>
 				</FormControl>
@@ -696,17 +755,17 @@ class ProjektForm extends Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color='secondary'>
-              Cancel
+              Abbrechen
             </Button>
             {
               // If a Projekt is given, show an update button, else an add button
               projekt ?
-                <Button disabled={nameValidationFailed || max_teilnehmerValidationFailed} variant='contained' onClick={this.updateProjekt} color='primary'>
-                  Update
+                <Button disabled={nameValidationFailed || max_teilnehmerValidationFailed || beschreibungValidationFailed} variant='contained' onClick={this.updateProjekt} color='primary'>
+                  Speichern
               </Button>
 				: <Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited || beschreibungValidationFailed || !beschreibungEdited ||!halbjahrEdited || !artEdited || !moduleEdited}  
 				variant='contained' onClick={this.addProjekt} color='primary'>
-                  Add
+                  Hinzufügen
              </Button>
             }
           </DialogActions>
