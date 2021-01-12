@@ -25,8 +25,10 @@ export default class ElectivAPI {
 	#setZustandAtProjekt = (projektId, zustandId) => `${this.#ElectivServerBaseURL}/projekte/zustand?projektId=${projektId}&zustandId=${zustandId}`;
 	#addProjekteURL = () => `${this.#ElectivServerBaseURL}/projekte`;
 	#getProjekteByIDURL = (id) => `${this.#ElectivServerBaseURL}/projekte/${id}`;
-	//update 
-	//delete
+
+	//Projekt löschen
+	#deleteProjektURL = (id) => `${this.#ElectivServerBaseURL}/projekt/${id}`;
+
 	#searchProjektURL = (projektname) => `${this.#ElectivServerBaseURL}/projekte_by_name/${projektname}`;
 
 	// ------------------------Projekte bearbeiten/hinzufugen---------------------------
@@ -255,8 +257,8 @@ export default class ElectivAPI {
 		})
 	}
 
-	deleteProjekt(){
-		//USW
+	deleteProjekt(id){
+		return this.#fetchAdvanced(this.#deleteProjektURL(id),{method: 'DELETE'})
 	}
 
 	getPerson(id){

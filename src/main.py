@@ -171,8 +171,9 @@ class ProjektOperationen(Resource):
         projekt = adm.get_projekt_by_id(id)
         return projekt
 
-    def delete(self, projekt_id):
-        pass
+    def delete(self, id):
+        adm = ProjektAdministration()
+        adm.delete_projekt(id)
 
     def put(self, projekt_id):
         pass

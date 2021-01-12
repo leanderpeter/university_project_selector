@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
 import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
 import { ElectivAPI } from '../api';
 import ProjektForm from './dialogs/ProjektForm';
+import ProjektDelete from './dialogs/ProjektDelete';
 /*
 import CustomerDeleteDialog from './dialogs/CustomerDeleteDialog';
 import AccountList from './AccountList';
@@ -27,7 +31,7 @@ class ProjektDozentListeEintrag extends Component {
 			projekt: props.projekt,
       projektarten: [],
 			showProjektForm: false,
-			showProjektDeleteDialog: false
+      showProjektDeleteDialog: false,
 		};
 	}
 
@@ -60,36 +64,26 @@ class ProjektDozentListeEintrag extends Component {
     }
   }
 
-	// Kummert sich um das loschen des Projekts
-	deleteProjektHandler = (deletedProjekt) => {
-		//Delete CODE
-	}
-
-	// Kummert sich um den Edit Button
-	editProjektButtonClicked = (event) => {
-		//Edit Button Code
-	}
-
-
-	// Handles click of Projekt delete Button
-	deleteProjektButtonClicked = (event) => {
-		// DELETE ACTION CODE
-	}
-
-	// Handles Close event of Projektdeletedialog
-	deleteProjektDialogClosed = (projekt) => {
-		// MORE CODE!
-	}
-	setTeilnahmeAnProjekt = () => {
-
-	}
-
 	bearbeitenButtonClicked = event => {
     event.stopPropagation();
     this.setState({
       showProjektForm: true
     });
-	}
+  }
+  
+  projektDeleteButtonClicked =  event => {
+    event.stopPropagation();
+    this.setState({
+      showProjektDeleteDialog: true
+    });
+  }
+
+  projektDeleteClosed = () => {
+      this.setState({
+        showProjektDeleteDialog: false
+      });
+      this.getProjekte();
+  }
 
   getProjektart = () => {
     ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
@@ -110,7 +104,7 @@ class ProjektDozentListeEintrag extends Component {
   render() {
     const { classes, expandedState} = this.props;
     // Use the states projekt
-    const { projekt, projektarten, showProjektForm} = this.state;
+    const { projekt, projektarten, showProjektForm, showProjektDeleteDialog} = this.state;
 
     // console.log(this.state);
     return (
@@ -158,12 +152,22 @@ class ProjektDozentListeEintrag extends Component {
             </Typography>
           </AccordionDetails>
           <AccordionDetails>
-          <Button id='btn' className={classes.bearbeitenButton} variant='contained' color='primary' onClick={this.bearbeitenButtonClicked}>
-            Bearbeiten
-          </Button>
+          <Grid container justify="flex-end" alignItems="center" spacing={2}>
+            <Grid item>
+              <Tooltip title='Löschen' placement="left">
+                <IconButton className={classes.projektDeleteButton}  variant="contained"  onClick={this.projektDeleteButtonClicked}><DeleteIcon /></IconButton>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Button id='btn' className={classes.bearbeitenButton} variant='contained' color='primary' onClick={this.bearbeitenButtonClicked}>
+              Bearbeiten
+              </Button>
+            </Grid>
+          </Grid>
           </AccordionDetails>
         </Accordion>
         <ProjektForm show={showProjektForm} projekt={projekt} onClose={this.projektFormClosed} getProjekte= {this.getProjekte}/>
+        <ProjektDelete show={showProjektDeleteDialog} projekt={projekt} onClose={this.projektDeleteClosed} />
       </div>
     );
   }
@@ -174,12 +178,7 @@ const styles = theme => ({
   root: {
     width: '100%',
   },
-  bearbeitenButton: {
-    position: 'absolute',
-    right: theme.spacing(3),
-    bottom: theme.spacing(0),
-    margin: theme.spacing(2)
-  }
+
 });
 
 /** PropTypes */

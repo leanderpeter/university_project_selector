@@ -162,8 +162,10 @@ class ProjektAdministration(object):
     def get_projekte_von_user(self, ):
         pass
 
-    def delete_projekt(self, ):
-        pass
+    def delete_projekt(self, id):
+        with ProjektMapper() as mapper:
+            return mapper.delete(id)
+        
 
     def save_projekt(self, projekt):
         with ProjektMapper() as mapper: 

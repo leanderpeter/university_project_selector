@@ -233,8 +233,15 @@ class ProjektMapper(Mapper):
 
         return result
 
-    def delete(self):
-        pass
+    def delete(self, id):
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM projekte_hat_module WHERE projekt_id={}".format(id)
+        command2 = "DELETE FROM projekte WHERE id={}".format(id)
+        cursor.execute(command)
+        cursor.execute(command2)
+        self._connection.commit()
+        cursor.close()
 
     def count_teilnehmer_by_projekt(self, projektID):
         cursor = self._connection.cursor()
