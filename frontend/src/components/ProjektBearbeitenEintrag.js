@@ -145,12 +145,11 @@ class ProjektBearbeitenEintrag extends Component {
     //Bei Änderung der Bewertung in der Select Komponente wird die Bewertung im Backend geändert
     handleChange = async (resultat) => { 
               this.props.teilnahme.setResultat(resultat.target.value); 
-              let neu = resultat
-              console.log(JSON.stringify(this.props.teilnahme))
-              console.log(`Option selected:`, resultat.target.value); 
-                
+              this.setState({
+                note: resultat.target.value
+              })               
               await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme)
-              this.getBewertung()
+              //this.getBewertung()
     };
     
     componentDidMount() {
@@ -160,7 +159,7 @@ class ProjektBearbeitenEintrag extends Component {
     }
 
     render(){
-        const {classes, expandedState} = this.props;
+        const {classes} = this.props;
         const {bewertungen,studentID,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
 
         return(
@@ -171,6 +170,7 @@ class ProjektBearbeitenEintrag extends Component {
                 <StyledTableCell align="center">
                 {note && bewertungen?
                     <FormControl className={classes.formControl} >
+                      <InputLabel>Note</InputLabel> 
                       <Select value={note} onChange={this.handleChange}  >
                           
                           {
