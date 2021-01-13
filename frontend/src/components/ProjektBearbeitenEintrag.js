@@ -59,7 +59,7 @@ class ProjektBearbeitenEintrag extends Component {
             studentID: null,
             studentName: null,
             mat_nr: null,
-            note: null,
+            note: [],
             loadingInProgress: false,
             error: null
         };
@@ -179,11 +179,7 @@ class ProjektBearbeitenEintrag extends Component {
                 <StyledTableCell align="center">
                 {note && bewertungen?
                     <FormControl className={classes.formControl} >
-                      <Grid container spacing={2} display="flex" margin="auto">
-                  
-                            <Grid item xs={12} sm={6}>{note}</Grid>
-                            <Grid item xs={12} sm={6}>
-                                      <Select value={note } onChange={this.handleChange}  >
+                                      <Select value={note } onChange={this.handleChange}  label="Semester">
                                           
                                           {
                                           bewertungen.map(bewertung =>
@@ -191,8 +187,7 @@ class ProjektBearbeitenEintrag extends Component {
                                           )
                                           }
                                         </Select>  
-                            </Grid>
-                      </Grid>
+
                     </FormControl>                                  
                   :
                   <FormControl className={classes.formControl}>

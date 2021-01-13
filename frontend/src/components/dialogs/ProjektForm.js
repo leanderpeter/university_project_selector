@@ -275,7 +275,7 @@ class ProjektForm extends Component {
 		const value = event.target.value;
 
 		let error = false;
-		if (value.trim().lenght === 0) {
+		if (value.trim().length === 0) {
 			error = true;
 		}
 		this.setState({
@@ -290,7 +290,7 @@ class ProjektForm extends Component {
 		const re = /^[0-9]{1,3}$/;
 
 		let error = false;
-		if (value.trim().lenght === 0) {
+		if (value.trim().length === 0) {
 			error = true;
 		}
 		if (re.test(event.target.value) === false) {
