@@ -30,8 +30,14 @@ class ProjektForm extends Component {
 	constructor(props) {
 		super(props);
 
-		let nm = '', mt = null, bs = '', bt = '', ep = '',wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '', hj = 0, pa = 0;
+		let nm = '', mt = null, bs = '', bt = '', ep = '',wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '';
 		let boolvor = false, boolin = false, boolpraef = false;
+		if (props.projekt){
+			var  hj = 0, pa = 0;
+		}
+		else{
+			var hj = null, pa = null;
+		}
 		
 
 		//init state
@@ -763,7 +769,8 @@ class ProjektForm extends Component {
                 <Button disabled={nameValidationFailed || max_teilnehmerValidationFailed || beschreibungValidationFailed} variant='contained' onClick={this.updateProjekt} color='primary'>
                   Speichern
               </Button>
-				: <Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited || beschreibungValidationFailed || !beschreibungEdited ||!halbjahrEdited || !artEdited || !moduleEdited}  
+			: 
+			<Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited || beschreibungValidationFailed || !beschreibungEdited ||!halbjahrEdited || !artEdited || !moduleEdited}  
 				variant='contained' onClick={this.addProjekt} color='primary'>
                   Hinzufügen
              </Button>
