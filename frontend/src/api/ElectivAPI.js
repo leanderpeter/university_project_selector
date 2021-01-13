@@ -420,6 +420,7 @@ export default class ElectivAPI {
 		})
 	}
 	getStudenten(){
+		console.log(this.#getStudentenURL());
 		return this.#fetchAdvanced(this.#getStudentenURL()).then((responseJSON) => {
 			let studentBOs = StudentBO.fromJSON(responseJSON);
 			console.info(studentBOs)

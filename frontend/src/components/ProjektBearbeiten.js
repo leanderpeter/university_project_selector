@@ -92,28 +92,6 @@ class ProjektBearbeiten extends Component {
         error: null
       });
     }
-  
-    /*//um alle Projekte zu erhalten aber nicht im richtigen Zustand
-    getProjekte=()=>{
-      ElectivAPI.getAPI().getProjekte()
-      .then(projektBOs =>
-        this.setState({
-            projekte: projektBOs,
-            error: null,
-            loadingInProgress: false,
-        })).catch(e =>
-            this.setState({
-                projekt: [],
-                error: e,
-                loadingInProgress: false,
-            }));
-      this.setState({
-          error: null,
-          loadingInProgress: true,
-          loadingProjekteError: null
-      });
-    }
-  */
 
     getTeilnahmenByProjektId=(id)=>{
       ElectivAPI.getAPI().getTeilnahmenByProjektId(id)
@@ -190,17 +168,9 @@ class ProjektBearbeiten extends Component {
         
         return(
           <div className={classes.root}>
-            
-                  <Grid container spacing={2} display="flex" margin="auto">
-                      
-                      <Grid item xs={12} sm={6}>
-                        <Typography>Projekte von: {currentDozentName}</Typography>
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <Typography>Dozent ID: {currentDozentId}</Typography>
-                      </Grid>
-                      
-                      <Grid item xs={12} sm={6} >
+                  
+                  <Grid className={classes.grid} container spacing={2} display="flex" margin="auto">
+                    <Grid item xs={12} sm={6} >
                         <Typography >
                           Projektname:
                         
@@ -217,21 +187,21 @@ class ProjektBearbeiten extends Component {
                           </FormControl>
                         </Typography>
                       </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <Typography>Projekt ID: {currentProjekt}</Typography>
-                      </Grid>
+                      
+                      
                       
                     </Grid>
-
+                  
                   {currentProjekt?
                     <>
-                        <Grid item xs={12} >
-                            <Typography>
+                        <Grid item xs={12} sm={6} className={classes.grid} >
+                            <Typography>Teilnehmer: 
                               <Fab size="small"  className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
                                 <AddIcon />
-                              </Fab> Teilnehmer hinzufügen  
+                              </Fab> 
                             </Typography>
                         </Grid>
+                        
                         <TableContainer component={Paper}>
                           <Table className={classes.table} aria-label="customized table">
                             <TableHead>
@@ -255,13 +225,14 @@ class ProjektBearbeiten extends Component {
                               <AddStudent show={showAddStudent} currentProjekt={currentProjekt} teilnahmen={teilnahmen} onClose={this.addStudentClosed}/>
                         </TableContainer>
                       
-                      <Grid style={{display: "flex", paddingTop:"2%"}}>
-                        <Button style={{margin:"auto"}} variant="contained" color="primary" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
+                      <Grid style={{display: "flex", paddingTop:"2%",paddingBottom:"5%"}}>
+                        <Button style={{margin:"auto",}} variant="contained" color="primary" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
                       </Grid>
                     </>
                   :
                   <></>
-                  }   
+                  } 
+                  
 
              
           </div>
@@ -282,7 +253,9 @@ const styles = theme => ({
       },
       addButton: {
         margin: theme.spacing(1),
-        
+      },
+      grid:{
+        paddingLeft:"3%",
       }
   });
 

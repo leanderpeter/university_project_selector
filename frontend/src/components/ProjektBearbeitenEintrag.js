@@ -21,14 +21,12 @@ import TableFooter from '@material-ui/core/TableFooter';
 import StudentBO from '../api/StudentBO'
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import {  Grid   } from '@material-ui/core';
-
+import {  Grid, Typography  } from '@material-ui/core';
 
 //Projekt Bearbeiten Datei importieren
 import ProjektBearbeiten from './ProjektBearbeiten';
-import { Typography } from '@material-ui/core';
 
-
+//Css Style Klassen für die Tabellen Zellen
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.primary.main,
@@ -39,6 +37,7 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
+//Css Style Klassen für die Tabellen Zeilen
 const StyledTableRow = withStyles((theme) => ({
   root: {
     '&:nth-of-type(odd)': {
@@ -65,7 +64,7 @@ class ProjektBearbeitenEintrag extends Component {
         };
     }
 
-  
+    //Button um die Teilnahme eines Studenten für das aktuell ausgewählte Projekt zu entfernen
     teilnahmeAbwaehlenButtonClicked = event => {
       //Logik fuer Teilnahme abwaehlen Button
       this.setState({teilnahmeAbwaehlenButtonDisabled:true});
@@ -73,6 +72,7 @@ class ProjektBearbeitenEintrag extends Component {
       
     }
     
+    // API Anbindung teilnehmenden Studenten des Projekts nach der StudentenID vom Backend zu bekommen 
     getStudentByID = () => {
         ElectivAPI.getAPI().getStudentByID(this.props.teilnahme.getteilnehmer())
         .then(studentBO =>
@@ -99,6 +99,7 @@ class ProjektBearbeitenEintrag extends Component {
         });
       }
 
+    // API Anbindung um die möglichen Bewertungen vom Backende zu erhalten 
     getBewertungen=()=>{
       ElectivAPI.getAPI().getBewertungen()
       .then(bewertungBOs =>
@@ -119,7 +120,7 @@ class ProjektBearbeitenEintrag extends Component {
       });
     }
     
-    
+    // API Anbindung um die Bewertung des Students vom Backend zu bekommen
     getBewertung = () => {
         ElectivAPI.getAPI().getBewertung(this.props.teilnahme.resultat)
         .then(bewertungBO =>
@@ -141,64 +142,47 @@ class ProjektBearbeitenEintrag extends Component {
       }
 
     
-
-      handleChange = async (resultat) => { 
-                this.props.teilnahme.setResultat(resultat.target.value); 
-                let neu = resultat
-                console.log(JSON.stringify(this.props.teilnahme))
-                console.log(`Option selected:`, resultat.target.value); 
-                  
-                await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme)
-
+    //Bei Änderung der Bewertung in der Select Komponente wird die Bewertung im Backend geändert
+    handleChange = async (resultat) => { 
+              this.props.teilnahme.setResultat(resultat.target.value); 
+              let neu = resultat
+              console.log(JSON.stringify(this.props.teilnahme))
+              console.log(`Option selected:`, resultat.target.value); 
                 
-                this.getBewertung()
-        
-              };
+              await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme)
+              this.getBewertung()
+    };
     
-
-    
-
     componentDidMount() {
       this.getStudentByID();
       this.getBewertung();
       this.getBewertungen();
-      
     }
-
-    
-
 
     render(){
         const {classes, expandedState} = this.props;
         const {bewertungen,studentID,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
 
         return(
+              //Tabelleneinträge für die Tabelle in der ProjektBearbeiten.js File
               <StyledTableRow >
-                <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
+                <StyledTableCell align="center" component="th" scope="row">{studentName}</StyledTableCell>
                 <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
                 <StyledTableCell align="center">
                 {note && bewertungen?
                     <FormControl className={classes.formControl} >
-                      <Grid container spacing={2} display="flex" margin="auto">
-                  
-                            <Grid item xs={12} sm={6}>{note}</Grid>
-                            <Grid item xs={12} sm={6}>
-                                      <Select value={note } onChange={this.handleChange}  >
-                                          
-                                          {
-                                          bewertungen.map(bewertung =>
-                                          <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
-                                          )
-                                          }
-                                        </Select>  
-                            </Grid>
-                      </Grid>
+                      <Select value={note} onChange={this.handleChange}  >
+                          
+                          {
+                          bewertungen.map(bewertung =>
+                          <MenuItem  value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
+                          )
+                          }
+                        </Select>          
                     </FormControl>                                  
                   :
                   <FormControl className={classes.formControl}>
-                    <Grid container spacing={2} display="flex" margin="auto">
-                      <Grid item xs={12} sm={6}></Grid>   
-                      <Grid item xs={12} sm={6}>         
+                        
                           <Select value={note } onChange={this.handleChange}   >
                               {
                               bewertungen.map(bewertung =>
@@ -206,8 +190,7 @@ class ProjektBearbeitenEintrag extends Component {
                               )
                               }
                           </Select>
-                      </Grid> 
-                    </Grid>
+                      
                   </FormControl>
                 }
                          
@@ -223,6 +206,8 @@ class ProjektBearbeitenEintrag extends Component {
         );
     }
 }
+
+//Css Style Klassen
 const styles = theme => ({
     root: {
         width: '100%',
