@@ -125,7 +125,7 @@ class ProjektBearbeitenEintrag extends Component {
         ElectivAPI.getAPI().getBewertung(this.props.teilnahme.resultat)
         .then(bewertungBO =>
             this.setState({
-                note: bewertungBO.getnote(),
+                note: bewertungBO.getID(),
                 error: null,
                 loadingInProgress: false,
             }))
@@ -170,7 +170,7 @@ class ProjektBearbeitenEintrag extends Component {
                 <StyledTableCell align="center">
                 {note && bewertungen?
                     <FormControl className={classes.formControl} >
-                      <InputLabel>Note</InputLabel> 
+                      
                       <Select value={note} onChange={this.handleChange}  >
                           
                           {
@@ -223,6 +223,7 @@ const styles = theme => ({
       },
     formControl: {
         margin: theme.spacing(1),
+        minWidth: 50,
         
     },
     button: {

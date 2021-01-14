@@ -130,8 +130,10 @@ export default class ElectivAPI {
 			return res.json();
 		})
 	/*
-	Gebe alle Projekt BO's zuruck
+	Gebe alle BO's zuruck
 	*/
+	
+	//gibt alle Projekte als BO zurück
 	getProjekte() {
 		return this.#fetchAdvanced(this.#getProjekteURL(),{method: 'GET'}).then((responseJSON) => {
 			let projektBOs = ProjektBO.fromJSON(responseJSON);
@@ -142,6 +144,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//gibt alle Projekte mit der bestimmten Zustand als BO zurück
 	getProjekteByZustand(zustand) {
 		//immer Zustand 1 (neues Projekt) holen
 		return this.#fetchAdvanced(this.#getProjekteByZustandURL(zustand),{method: 'GET'}).then((responseJSON) => {
@@ -153,6 +156,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//gibt alle Projektarten als BO zurück
 	getProjektart() {
 		return this.#fetchAdvanced(this.#getProjektartURL(), {method: 'GET'}).then((responseJSON) => {
 			let projektartBos = ProjektartBO.fromJSON(responseJSON);
@@ -162,6 +166,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//gibt die Projektart mit der bestimmten ID als BO zurück
 	getProjektartById(id) {
 		return this.#fetchAdvanced(this.#getProjektartByIDURL(id),{method: 'GET'}).then((responseJSON) => {
 			let projektartBO = ProjektartBO.fromJSON(responseJSON);
@@ -171,6 +176,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//gibt alle Projekte mit dem bestimmten Projekt-Zustand von dem Dozenten als BO zurück
 	getProjekteByZustandByDozent(zustand_id,dozent_id) {
 		//immer Zustand 1 (neues Projekt) holen
 		return this.#fetchAdvanced(this.#getProjekteByZustandByDozentURL(zustand_id,dozent_id),{method: 'GET'}).then((responseJSON) => {
@@ -184,6 +190,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//setzt den Zustand eines Projekts mit der bestimmten ProjektID auf einen neuen Zustand
 	setZustandAtProjekt(projektId, zustandId) { 
 		//immer Zustand 1 (neues Projekt) holen
 		return this.#fetchAdvanced(this.#setZustandAtProjekt(projektId,zustandId),{method: 'PUT'}).then((responseJSON) => {
@@ -195,7 +202,7 @@ export default class ElectivAPI {
 		})
 	}
 
-
+	//fügt ein Projekt als BO hinzu
 	addProjekt(projektBO) {
 		return this.#fetchAdvanced(this.#addProjektPendingURL(), {
 			method: 'POST',
@@ -222,6 +229,8 @@ export default class ElectivAPI {
 			})
 		})
 	}
+
+	//gibt das Projekt mit der bestimmten ProjektID als BO zurück
 	getProjekt(id){
 		return this.#fetchAdvanced(this.#getProjektURL(id)).then((responseJSON) => {
 			let projektBO = ProjektBO.fromJSON(responseJSON);
@@ -240,6 +249,7 @@ export default class ElectivAPI {
 		//USW
 	}
 
+	//gibt die Person mit der bestimmten ID als BO zurück
 	getPerson(id){
 		return this.#fetchAdvanced(this.#getPersonURL(id)).then((responseJSON) => {
 			let personBO = PersonBO.fromJSON(responseJSON);
@@ -249,7 +259,8 @@ export default class ElectivAPI {
 			})
 		})
 	}
-	
+
+	//gibt alle Teilnahmen mit der bestimmten StudentenID als BO zurück
 	getTeilnahmen(studentID){
 		return this.#fetchAdvanced(this.#getTeilnahmenURL(studentID)).then((responseJSON) => {
 			let teilnahmeBOs = TeilnahmeBO.fromJSON(responseJSON);
@@ -260,6 +271,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//gibt alle Teilnahmen mit der bestimmten ModulID und SemesterID als BO zurück
 	getTeilnahmen_by_modul_und_semester(modul_id, semester_id){
 		return this.#fetchAdvanced(this.#getTeilnahmen_by_modul_und_semesterURL(modul_id, semester_id)).then((responseJSON) => {
 			let teilnahmeBOs = TeilnahmeBO.fromJSON(responseJSON);
@@ -270,6 +282,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//gibt die Person mit der bestimmten GoogleUserID als BO zurück
 	getPersonByGoogleID(google_user_id){
 		return this.#fetchAdvanced(this.#getPersonByGoogleIDURL(google_user_id)).then((responseJSON) => {
 			let personBO = PersonBO.fromJSON(responseJSON);
@@ -280,7 +293,7 @@ export default class ElectivAPI {
 		})
 	}
 
-
+	//gibt den Studenten mit der bestimmten GoogleUserID als BO zurück	
 	getStudentByGoogleID(google_user_id){
 		return this.#fetchAdvanced(this.#getStudentByGoogleIDURL(google_user_id)).then((responseJSON) => {
 			let studentBO = StudentBO.fromJSON(responseJSON);
@@ -291,6 +304,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//gibt den Studenten mit der bestimmten StudentenID als BO zurück
 	getStudentByID(id){
 		return this.#fetchAdvanced(this.#getStudentByIDURL(id)).then((responseJSON) => {
 			let studentBO = StudentBO.fromJSON(responseJSON);
@@ -301,6 +315,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//setzt die Teilnahme für eine bestimmte LehrangebotID mit der bestimmten StudentID
 	setTeilnahme(lehrangebotId, studentID){
         //TODO Set User ID
          return this.#fetchAdvanced(this.#postTeilnahmeURL(lehrangebotId, studentID),{method: 'POST'}).then((responseJSON) => {
@@ -309,6 +324,7 @@ export default class ElectivAPI {
 
 	}
 
+	//löscht den Teilnahme BO mit der bestimmten LehrangebotID und der bestimmten StudentID
 	deleteTeilnahme(lehrangebotId, studentID){
         //TODO Set User ID
          return this.#fetchAdvanced(this.#deleteTeilnahmeURL(lehrangebotId, studentID),{method: 'DELETE'}).then((responseJSON) => {
@@ -317,6 +333,7 @@ export default class ElectivAPI {
 
 	}
 
+	//updatet den Teilnahmen BO 
 	updateTeilnahme(teilnahmeBO){
          return this.#fetchAdvanced(this.#updateTeilnahmeURL(teilnahmeBO.getID()),{
 			method: 'PUT',
@@ -333,7 +350,7 @@ export default class ElectivAPI {
 		})
 	}
 
-
+	//gibt die Bewertung mit der bestimmten ID als BO zurück
 	getBewertung(id){
 		return this.#fetchAdvanced(this.#getBewertungURL(id)).then((responseJSON) => {
 			let bewertungBO = BewertungBO.fromJSON(responseJSON);
@@ -343,6 +360,8 @@ export default class ElectivAPI {
 			})
 		})
 	}
+
+	//gibt alle Bewertungen als BO zurück
 	getBewertungen(){
 		return this.#fetchAdvanced(this.#getBewertungenURL()).then((responseJSON) => {
 			let bewertungBOs = BewertungBO.fromJSON(responseJSON);
@@ -353,6 +372,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//gibt alle Module als BO zurück
 	getModule(){
 		return this.#fetchAdvanced(this.#getModuleURL()).then((responseJSON) => {
 			let modulBOs = ModulBO.fromJSON(responseJSON);
@@ -363,6 +383,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//gibt die Module mit der bestimmten ProjektID als BO zurück
 	getModule_by_projekt_id(id){
 		return this.#fetchAdvanced(this.#getModule_by_projekt_idURL(id)).then((responseJSON) => {
 			let modulBO = ModulBO.fromJSON(responseJSON);
@@ -373,10 +394,12 @@ export default class ElectivAPI {
 		})
 	}
 
+	
 	postProjekte_hat_module(projekt_id, module){
 	   return this.#fetchAdvanced(this.#postProjekte_hat_moduleURL(projekt_id, module),{method: 'POST'})
    }
 
+   //gibt die Studenten mit der bestimmten ProjektID als BO zurück
 	getStudentenByProjektId(id){
 		return this.#fetchAdvanced(this.#getStudentenByProjektIdURL(id)).then((responseJSON) => {
 			let studentBOs = StudentBO.fromJSON(responseJSON);
@@ -386,6 +409,8 @@ export default class ElectivAPI {
 			})
 		})
 	}
+
+	//gibt die Teilnahmen mit der bestimmten ProjektID als BO zurück
 	getTeilnahmenByProjektId(id){
 		return this.#fetchAdvanced(this.#getTeilnahmenByProjektIdURL(id)).then((responseJSON) => {
 			let teilnahmeBOs = TeilnahmeBO.fromJSON(responseJSON);
@@ -394,12 +419,9 @@ export default class ElectivAPI {
 				resolve(teilnahmeBOs)
 			})
 		})
-	}
+	}	
 
-
-	
-
-
+	//gibt die Semester mit der bestimmten SemesterID als BO zurück
 	getSemester_by_id(id){
 		return this.#fetchAdvanced(this.#getSemester_by_idURL(id)).then((responseJSON) => {
 			let semesterBO = SemesterBO.fromJSON(responseJSON);
@@ -409,7 +431,7 @@ export default class ElectivAPI {
 			})
 		})		
 	}
-
+	//gibt alle Semester als BO zurück
 	getSemester(){
 		return this.#fetchAdvanced(this.#getSemesterURL()).then((responseJSON) => {
 			let semesterBOs = SemesterBO.fromJSON(responseJSON);
@@ -419,6 +441,7 @@ export default class ElectivAPI {
 			})
 		})
 	}
+	//gibt alle Studenten als BO zurück
 	getStudenten(){
 		console.log(this.#getStudentenURL());
 		return this.#fetchAdvanced(this.#getStudentenURL()).then((responseJSON) => {

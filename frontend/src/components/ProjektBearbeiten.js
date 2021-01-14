@@ -1,27 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles, Button, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
+import { withStyles, Button, Grid, Typography,Fab,Select,TableFooter,FormControl,MenuItem,Paper,Table,TableRow,TableBody,TableHead,TableCell,TableContainer, InputLabel} from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
+
+//Icons importieren
 import SaveIcon from '@material-ui/icons/Save';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import TableFooter from '@material-ui/core/TableFooter';
-import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-
-
 
 //import AddStudent Dialog
 import AddStudent from './dialogs/AddStudent';
@@ -32,7 +19,7 @@ import ProjektBearbeitenEintrag from './ProjektBearbeitenEintrag';
 
 
 
-  
+//Css Style für Tabellen Zellen
 const StyledTableCell = withStyles((theme) => ({
     head: {
       backgroundColor: theme.palette.primary.main,
@@ -42,7 +29,7 @@ const StyledTableCell = withStyles((theme) => ({
       fontSize: 14,
     },
   }))(TableCell);
-
+//Css Style für Tabllen Zeilen
 const StyledTableRow = withStyles((theme) => ({
     root: {
       '&:nth-of-type(odd)': {
@@ -52,8 +39,6 @@ const StyledTableRow = withStyles((theme) => ({
   }))(TableRow);
 
 
-
-
 class ProjektBearbeiten extends Component {
 
     constructor(props){
@@ -61,8 +46,6 @@ class ProjektBearbeiten extends Component {
 
         this.state = {
             teilnahmen:[],
-            currentDozentName: null,
-            currentDozentId: null,
             projekte:[],
             "currentProjekt": null,
             error: null,
@@ -72,7 +55,8 @@ class ProjektBearbeiten extends Component {
         };
         this.getTeilnahmenByProjektId=this.getTeilnahmenByProjektId.bind(this)
     }
-    //hole alle Projekte im richtigen Zustand vom Backend
+
+    //API Anbindung holt alle Projekte im richtigen Zustand, vom jeweiligen Dozenten vom Backend
     getProjekte = () => {
       ElectivAPI.getAPI().getProjekteByZustandByDozent("in Bewertung",this.props.currentPerson.getID())
         .then(projekteBOs =>
@@ -92,17 +76,15 @@ class ProjektBearbeiten extends Component {
         error: null
       });
     }
-
+    // API Anbindung holt alle Teilnahmen der jeweiligen Projekt ID vom Backend
     getTeilnahmenByProjektId=(id)=>{
       ElectivAPI.getAPI().getTeilnahmenByProjektId(id)
       .then(teilnahmeBOs =>
         this.setState({
-            
             teilnahmen: teilnahmeBOs,
             error: null,
             loadingInProgress: false,
         })
-        
       ).catch(e =>
             this.setState({
                 teilnahme: [],
@@ -116,7 +98,7 @@ class ProjektBearbeiten extends Component {
       });
     }
     
-
+    //bei Klick Button Bewertung abgeben, wird der Zustand des Projektes in den nächsten Zustand versetzt
     bewertungAbgeschlossenButtonClicked = event => {
       //Logik fuer bewertung abgeschlossen Button
       ElectivAPI.getAPI().setZustandAtProjekt(this.state.currentProjekt, "Bewertung abgeschlossen").then(()=>{
@@ -125,13 +107,14 @@ class ProjektBearbeiten extends Component {
       }); 
     }
 
+    //bei Klick auf + Button wird ein Dialog fenster geöffnet für das Hinzufügen von Studenten
     addStudentButtonClicked = event => {
       event.stopPropagation();
       this.setState({
         showAddStudent: true
       });
     }
-
+    //bei Klick auf X Button wird der Dialog wieder geschlossen
     addStudentClosed = () => {
         this.setState({
           showAddStudent: false
@@ -142,12 +125,9 @@ class ProjektBearbeiten extends Component {
 
     componentDidMount() {
       this.getProjekte();
-      this.setState({
-        currentDozentName: this.props.currentPerson.getname(),
-        currentDozentId: this.props.currentPerson.getID(),
-    })
     }
 
+    //bei Änderung der Select Komponente wird das Projekt als das aktuelle Projekt ausgewählt  
     handleChange = currentProjekt => (event) => {
       this.setState({
         currentProjekt:event.target.value
@@ -155,51 +135,36 @@ class ProjektBearbeiten extends Component {
       this.getTeilnahmenByProjektId(event.target.value)
     };
 
-
-
-
     render(){
-
-        
-        
-        
         const { classes } = this.props;
-        const {currentPerson, currentDozentName,currentDozentId,studenten, projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
+        const { projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
         
         return(
+          //erster sichtbarer Teil wenn noch kein Projekt ausgewählt wurde
           <div className={classes.root}>
-                  
-                  <Grid className={classes.grid} container spacing={2} display="flex" margin="auto">
-                    <Grid item xs={12} sm={6} >
-                        <Typography >
-                          Projektname:
-                        
-                          <FormControl className={classes.formControl}>
-                          
-                                          <Select  className={classes.formControl} style={{ minWidth:"5rem", paddingLeft:"7px",}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
-                                            
-                                            {
-                                            projekte.map(projekt =>
-                                            <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
-                                            )
-                                            }
-                                          </Select>                                                              
-                          </FormControl>
-                        </Typography>
-                      </Grid>
-                      
-                      
-                      
-                    </Grid>
-                  
+            <Grid className={classes.grid} container spacing={2} display="flex" margin="auto">
+              <Grid item xs={12} sm={6} >
+                  <Typography >
+                    Projektname:
+                    <FormControl className={classes.formControl}>
+                        <Select  className={classes.formControl} style={{ minWidth:"5rem", paddingLeft:"7px",}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
+                          {
+                          projekte.map(projekt =>
+                          <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
+                          )
+                          }
+                        </Select>                                                              
+                    </FormControl>
+                  </Typography>
+              </Grid>
+            
+            {/*wenn ein Projekt ausgewählt wurde*/}
                   {currentProjekt?
                     <>
                         <Grid item xs={12} sm={6} className={classes.grid} >
-                            <Typography>Teilnehmer: 
-                              <Fab size="small"  className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
+                              <Fab size="small" align="right" className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
                                 <AddIcon />
                               </Fab> 
-                            </Typography>
                         </Grid>
                         
                         <TableContainer component={Paper}>
@@ -225,16 +190,14 @@ class ProjektBearbeiten extends Component {
                               <AddStudent show={showAddStudent} currentProjekt={currentProjekt} teilnahmen={teilnahmen} onClose={this.addStudentClosed}/>
                         </TableContainer>
                       
-                      <Grid style={{display: "flex", paddingTop:"2%",paddingBottom:"5%"}}>
-                        <Button style={{margin:"auto",}} variant="contained" color="primary" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
+                      <Grid style={{display: "flex", paddingTop:"2%",paddingBottom:"5%",align:"right"}}>
+                        <Button style={{align:"right",}} variant="contained" color="primary" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
                       </Grid>
                     </>
                   :
                   <></>
-                  } 
-                  
-
-             
+                  }   
+                  </Grid>           
           </div>
         )
     }
