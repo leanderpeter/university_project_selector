@@ -47,6 +47,7 @@ class ProjektBearbeiten extends Component {
         this.state = {
             teilnahmen:[],
             projekte:[],
+            adminProjekte:[],
             "currentProjekt": null,
             error: null,
             loadingInProgress: false,
@@ -55,7 +56,7 @@ class ProjektBearbeiten extends Component {
         };
         this.getTeilnahmenByProjektId=this.getTeilnahmenByProjektId.bind(this)
     }
-
+    //Funtion für den Dozenten 
     //API Anbindung holt alle Projekte im richtigen Zustand, vom jeweiligen Dozenten vom Backend
     getProjekte = () => {
       ElectivAPI.getAPI().getProjekteByZustandByDozent("in Bewertung",this.props.currentPerson.getID())
@@ -76,6 +77,30 @@ class ProjektBearbeiten extends Component {
         error: null
       });
     }
+    //Funtion für den Admin  
+    //API Anbindung holt alle Projekte im richtigen Zustand vom Backend
+    //hole alle Projekte vom Backend
+	getProjekteAdmin = () => {
+		ElectivAPI.getAPI().getProjekteByZustand("in Bewertung")
+      .then(projekteBOs => 
+				this.setState({								//neuer status wenn fetch komplett
+					adminProjekte: projekteBOs,	
+					loadingInProgress: false,				// deaktiviere ladeindikator
+          error: null,
+				})).catch(e =>
+					this.setState({
+						adminProjekte: [],
+						loadingInProgress: false,
+						error: e
+          }));
+		// setze laden auf wahr
+    // console.log(this.projekte.toString());
+		this.setState({
+			loadingInProgress: true,
+			error: null
+		});
+	}
+
     // API Anbindung holt alle Teilnahmen der jeweiligen Projekt ID vom Backend
     getTeilnahmenByProjektId=(id)=>{
       ElectivAPI.getAPI().getTeilnahmenByProjektId(id)
@@ -125,6 +150,7 @@ class ProjektBearbeiten extends Component {
 
     componentDidMount() {
       this.getProjekte();
+      this.getProjekteAdmin();
     }
 
     //bei Änderung der Select Komponente wird das Projekt als das aktuelle Projekt ausgewählt  
@@ -140,12 +166,12 @@ class ProjektBearbeiten extends Component {
         const { projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
         
         return(
-          //erster sichtbarer Teil wenn noch kein Projekt ausgewählt wurde
           <div className={classes.root}>
+            
+            {/*erster sichtbarer Teil wenn noch kein Projekt ausgewählt wurde*/}
             <Grid className={classes.grid} container spacing={2} display="flex" margin="auto">
               <Grid item xs={12} sm={6} >
-                  <Typography >
-                    Projektname:
+                  <Typography >Projektname:
                     <FormControl className={classes.formControl}>
                         <Select  className={classes.formControl} style={{ minWidth:"5rem", paddingLeft:"7px",}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
                           {
@@ -161,7 +187,8 @@ class ProjektBearbeiten extends Component {
             {/*wenn ein Projekt ausgewählt wurde*/}
                   {currentProjekt?
                     <>
-                        <Grid item xs={12} sm={6} className={classes.grid} >
+                        <Grid item xs/>
+                        <Grid item className={classes.grid} >
                               <Fab size="small" align="right" className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
                                 <AddIcon />
                               </Fab> 
@@ -190,9 +217,11 @@ class ProjektBearbeiten extends Component {
                               <AddStudent show={showAddStudent} currentProjekt={currentProjekt} teilnahmen={teilnahmen} onClose={this.addStudentClosed}/>
                         </TableContainer>
                       
-                      <Grid style={{display: "flex", paddingTop:"2%",paddingBottom:"5%",align:"right"}}>
-                        <Button style={{align:"right",}} variant="contained" color="primary" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
+                      <Grid item xs/>
+                      <Grid item>
+                        <Button variant="contained" color="primary" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
                       </Grid>
+                      
                     </>
                   :
                   <></>
@@ -218,7 +247,6 @@ const styles = theme => ({
         margin: theme.spacing(1),
       },
       grid:{
-        paddingLeft:"3%",
       }
   });
 
