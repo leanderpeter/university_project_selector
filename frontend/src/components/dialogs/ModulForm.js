@@ -36,8 +36,6 @@ class ModulForm extends Component {
         newModul.setID(0)
         newModul.setname(this.state.name)
         newModul.setEdv_nr(this.state.edv_nr)
-
-        console.log(newModul, "neues M")
         ElectivAPI.getAPI().addModul(newModul).then(modul => {
             this.props.getModule()
             this.setState(this.baseState);
@@ -56,7 +54,24 @@ class ModulForm extends Component {
     }
 
     updateModul = () => {
-
+        let modul = this.props.modul;
+        modul.setname(this.state.name)
+        modul.setEdv_nr(this.state.edv_nr)
+        ElectivAPI.getAPI().updateModul(modul).then(modul => {
+            this.props.getModule()
+            this.setState(this.baseState);
+            this.props.onClose(modul); //Aufrufen parent in backend
+		}).catch(e => 
+			this.setState({
+				updatingInProgress: false,
+				updatingError: e
+			})
+			);
+		// Ladeanimation einblenden
+		this.setState({
+			updatingInProgress: true,
+			updatingError: null
+		});
     }
 
     	// Validierung der Textfeldaenderungen 
@@ -91,20 +106,30 @@ class ModulForm extends Component {
 			[event.target.id + 'ValidationFailed']: error,
 			[event.target.id + 'Edited']: true
 		});
-	}
+    }
+    
+    getInfos = () => {
+        if (this.props.modul) {
+            let name = this.props.modul.getname();
+		    let edv_nr = this.props.modul.getEdv_nr();
+            this.setState({
+                name: name,
+                edv_nr: edv_nr,
+            })
+		}
+    }
 
 
     handleClose = () => {
+		this.setState(this.baseState);
 		this.props.onClose(null);
     }
 
 
     
     render() {
-		const { classes, show } = this.props;
-        const { 
-            modul, 
-            
+		const { classes, show, modul } = this.props;
+        const {             
             name, 
             nameValidationFailed, 
             nameEdited, 
@@ -132,7 +157,7 @@ class ModulForm extends Component {
 
         return (
             show ?
-                <Dialog open={show} onClose={this.handleClose} maxWidth='xs' fullWidth>
+                <Dialog open={show} onEnter={this.getInfos} onClose={this.handleClose} maxWidth='xs' fullWidth>
                     <DialogTitle className={classes.dialogtitle}>{title}
                         <IconButton className={classes.closeButton} onClick={this.handleClose}>
                         <CloseIcon />

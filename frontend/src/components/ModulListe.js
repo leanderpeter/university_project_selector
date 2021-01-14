@@ -147,13 +147,9 @@ modulFormClosed = modul => {
                 filteredModule.map(modul => 
                     <ModulListeEintrag key={modul.getID()} modul = {modul} show={this.props.show} getModule={this.getModule}/>)
                 }
-                <ListItem>
-                <LoadingProgress show={loadingInProgress} />
-                <ContextErrorMessage error={error} contextErrorMsg={`Modulliste konnte nicht geladen werden.`} onReload={null} />
-                </ListItem>
             </List>
         <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`}  />
+        <ContextErrorMessage error={error} contextErrorMsg={`Die Module konnten nicht geladen werden.`} onReload={this.getModule}/>
         </Paper>
         <ModulForm show={showModulForm} onClose={this.modulFormClosed} getModule= {this.getModule}/>
       </div>

@@ -447,9 +447,21 @@ class ModulOperationen(Resource):
         adm = ProjektAdministration()
         adm.delete_modul(id)
 
+    @electivApp.marshal_with(modul)
+    @electivApp.expect(modul)
     @secured
     def put(self):
-        pass
+        '''
+        Updaten eines Moduls
+        '''
+        adm = ProjektAdministration()
+        modul = Modul.from_dict(api.payload)
+
+        if modul is not None:
+            response = adm.save_modul(modul)
+            return response, 200
+        else:
+            return '', 500
 
     @electivApp.marshal_with(modul, code=200)
     @electivApp.expect(modul)
@@ -459,7 +471,7 @@ class ModulOperationen(Resource):
         modul = Modul.from_dict(api.payload)
 
         if modul is not None:
-            m = adm.create_modul(modul.get_id(), modul.get_name(), modul.get_edv_nr())
+            m = adm.create_modul(modul)
             return m, 200
         else: 
             return '', 500
@@ -548,6 +560,7 @@ class ProjektGenehmigungOperation(Resource):
 
     @electivApp.marshal_with(projekt)
     @electivApp.expect(projekt)
+    @secured
     def put(self):
         '''
         Einfugen eines Projekts im zustand pending. 

@@ -85,6 +85,9 @@ export default class ElectivAPI {
 	//Add Modul
 	#addModulURL = () => `${this.#ElectivServerBaseURL}/module`;
 
+	//Update Modul
+	#updateModulURL = () => `${this.#ElectivServerBaseURL}/module`
+
 	//Delete Modul
 	#deleteModulURL = (id) => `${this.#ElectivServerBaseURL}/module?id=${id}`;
 
@@ -393,6 +396,23 @@ export default class ElectivAPI {
 	addModul(modulBO) {
 		return this.#fetchAdvanced(this.#addModulURL(), {
 			method: 'POST',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(modulBO)
+		}).then((responseJSON) => {
+			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
+			let responseModulBO = ModulBO.fromJSON(responseJSON);
+			return new Promise(function (resolve) {
+				resolve(responseModulBO);
+			})
+		})
+	}
+
+	updateModul(modulBO){
+		return this.#fetchAdvanced(this.#updateModulURL(), {
+			method: 'PUT',
 			headers: {
 				'Accept': 'application/json, text/plain',
 				'Content-type': 'application/json',

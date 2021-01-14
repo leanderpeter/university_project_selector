@@ -120,10 +120,21 @@ class ModulMapper(Mapper):
         cursor.close()
 
         return modul
+        
+    def update(self, modul):
 
-    def update(self):
-        """Update an already given object in the DB"""
-        pass
+        cursor = self._connection.cursor()
+
+        command = "UPDATE module SET name=%s, edv_nr=%s WHERE id=%s"
+        data = (modul.get_name(), modul.get_edv_nr(), modul.get_id())
+
+        result = modul
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+        
+        return result
 
     def delete_by_id(self, projekt_id):
         cursor = self._connection.cursor()
