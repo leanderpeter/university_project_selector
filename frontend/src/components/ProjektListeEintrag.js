@@ -154,13 +154,20 @@ class ProjektListeEintrag extends Component {
               </Grid>
               <Grid item xs />
 
+              {
+                this.state.teilnahmeButtonDisabled ?
+                  <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
+                      Teilnahme abwählen
+                  </Button>
+                :
 
-              <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
-                  Teilnahme abwählen
-               </Button>
-               <Button className={classes.teilnahmeButton} variant='contained' color='primary' size="small" startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
-                  Teilnahme
-               </Button>
+                   <Button className={classes.teilnahmeButton} variant='contained' color='primary' size="small" startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
+                      Teilnahme
+                   </Button>
+              }
+
+
+
 
               <Grid item>
               	<Typography variant='body2' color={'textSecondary'}></Typography>
@@ -207,7 +214,7 @@ const styles = theme => ({
   },
   teilnahmeButton: {
     position: 'absolute',
-    right: theme.spacing(32),
+    right: theme.spacing(6),
     bottom: theme.spacing(3)
   },
   teilnahmeAbwaehlenButton: {
@@ -216,6 +223,10 @@ const styles = theme => ({
     bottom: theme.spacing(3),
 
   }
+
+
+
+
 });
 
 /** PropTypes */
