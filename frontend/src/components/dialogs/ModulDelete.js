@@ -22,6 +22,11 @@ class ModulDelete extends Component {
     }
 
     deleteModul= () => {
+      ElectivAPI.getAPI().deleteModul(this.state.modul.id)
+        .then(()=>{
+			    this.props.getModule();
+          this.props.onClose(null);
+        });
     }
     
     render() {

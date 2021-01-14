@@ -104,7 +104,7 @@ class ModulListeEintrag extends Component {
             </ListItem>
             <Divider/>
             <ModulForm show={showModulForm} modul={modul} onClose={this.modulFormClosed} getModule= {this.getModule}/>
-            <ModulDelete show={showModulDelete} modul={modul} onClose={this.modulDeleteClosed} />       
+            <ModulDelete show={showModulDelete} modul={modul} onClose={this.modulDeleteClosed} getModule= {this.getModule} />       
           </div>                        
         );
     }

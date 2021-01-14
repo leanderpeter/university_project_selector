@@ -442,8 +442,10 @@ class ModulOperationen(Resource):
         module = adm.get_alle_module()
         return module
 
-    def delete(self, id):
-        pass
+    def delete(self):
+        id = request.args.get("id")
+        adm = ProjektAdministration()
+        adm.delete_modul(id)
 
     @secured
     def put(self):

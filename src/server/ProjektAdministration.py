@@ -203,6 +203,10 @@ class ProjektAdministration(object):
         with ModulMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def delete_modul(self, id):
+        with ModulMapper() as mapper:
+            return mapper.delete(id)
+
     def create_projekte_hat_module(self, projekt_id, module):
         for modul in module:
             with ModulMapper() as mapper:
@@ -221,11 +225,7 @@ class ProjektAdministration(object):
     def get_bewertung_by_id(self, id):
         with BewertungMapper() as mapper:
             return mapper.find_by_id(id)
-
-    def delete_bewertung(self, ):
-        pass
-
-
+    
     def get_teilnahmen_von_student(self, id):
         """ Alle Teilnamen des Users auslesen"""
         with TeilnahmeMapper() as mapper:

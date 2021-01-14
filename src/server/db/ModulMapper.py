@@ -135,7 +135,16 @@ class ModulMapper(Mapper):
 
         
 
-    def delete(self):
+    def delete(self, id):
         """Delete an object from the DB"""
-        pass
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM teilnahmen WHERE anrechnung={}".format(id)
+        command2 = "DELETE FROM projekte_hat_module WHERE modul_id={}".format(id)
+        command3 = "DELETE FROM module WHERE id={}".format(id)
+        cursor.execute(command)
+        cursor.execute(command2)
+        cursor.execute(command3)
+        self._connection.commit()
+        cursor.close()
 

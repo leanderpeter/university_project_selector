@@ -85,6 +85,9 @@ export default class ElectivAPI {
 	//Add Modul
 	#addModulURL = () => `${this.#ElectivServerBaseURL}/module`;
 
+	//Delete Modul
+	#deleteModulURL = (id) => `${this.#ElectivServerBaseURL}/module?id=${id}`;
+
 	//Module nach Id bekommen
 	#getModule_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/modul/${id}`;
 
@@ -402,6 +405,10 @@ export default class ElectivAPI {
 				resolve(responseModulBO);
 			})
 		})
+	}
+
+	deleteModul(id){
+		return this.#fetchAdvanced(this.#deleteModulURL(id),{method: 'DELETE'})
 	}
 
 	getModule_by_projekt_id(id){

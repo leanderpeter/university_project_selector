@@ -118,6 +118,7 @@ class ProjektForm extends Component {
 			addingError: null,
 			updatingError: null,
 
+			modulwahlBOs: [],
 			modulwahl: [],
 			moduleEdited: false,
 
@@ -380,12 +381,14 @@ class ProjektForm extends Component {
 				modulIDs.push(modul.id)
 			})
 			this.setState({
+				modulwahlBOs: modulBOs,
 				modulwahl: modulIDs,
 				error: null,
 				loadingInProgress: false,
 			})})
 			.catch(e =>
 				this.setState({
+					modulwahlBOs: [],
 					modulwahl: null,
 					error: e,
 					loadingInProgress: false,
@@ -420,10 +423,25 @@ class ProjektForm extends Component {
 		this.setState({
 			modulwahl: event.target.value,
 			moduleEdited: true
-		})
+		});
 		setTimeout(() => {
-			console.log('Ausgewählte ModulIDs:',this.state.modulwahl)
+			this.modulwahlChange();
 		  }, 0);
+	}
+
+	modulwahlChange = () => {
+		console.log('Ausgewählte ModulIDs:',this.state.modulwahl)
+		var modulBOs = [];
+		this.state.modulwahl.forEach(id=>{
+			this.state.module.forEach(modul=>{
+				if (id === modul.getID()) {
+					modulBOs.push(modul)
+				}
+			})
+		});
+		this.setState({
+			modulwahlBOs: modulBOs
+		});
 	}
 
 	handleClose = () => {
@@ -512,6 +530,7 @@ class ProjektForm extends Component {
 			artEdited,
 
 			module,
+			modulwahlBOs,
 			modulwahl,
 			moduleEdited,
 
@@ -616,17 +635,17 @@ class ProjektForm extends Component {
 					value = {modulwahl} 
 					multiple label="Anrechenbare Module" 
 					onChange={this.handleModulChange}
-					renderValue={(selected) => (
+					renderValue={() => (
 						<div className={classes.chips}>
-						  {selected.map((value) => (
-							<Chip key={value} label={module[value-1].name} className={classes.chip} />
+						  {modulwahlBOs.map((value) => (
+							<Chip key={value} label={value.name} className={classes.chip} />
 						  ))}
 						</div>
 					  )}>
 					{
 					module.map(modul =>
 						<MenuItem key={modul.getID()} value={modul.getID()}>
-							<Checkbox checked={modulwahl.indexOf(modul.getID()) > -1} />
+							{<Checkbox checked={modulwahl.indexOf(modul.getID()) > -1} />}
 							<ListItemText>{modul.getname()} ({modul.getEdv_nr()})</ListItemText>
 						</MenuItem>
 					)
