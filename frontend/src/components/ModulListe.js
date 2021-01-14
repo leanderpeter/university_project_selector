@@ -62,6 +62,7 @@ clearFilterFieldButtonClicked = () => {
 }
 
 modulFormClosed = modul => {
+    this.getModule();
     if (modul) {
       const newModulList = [...this.state.module, modul];
       this.setState({

@@ -5,6 +5,7 @@ import argparse
 from .bo.Person import Person
 from .bo.Student import Student
 from .bo.Projekt import Projekt
+from .bo.Modul import Modul
 from .bo.Teilnahme import Teilnahme
 from .bo.Zustand import Zustand
 from .bo.Projektart import Projektart
@@ -185,6 +186,14 @@ class ProjektAdministration(object):
     def get_alle_module(self):
         with ModulMapper() as mapper:
             return mapper.find_all()
+
+    def create_modul(self, id, name, edv_nr):
+        modul = Modul()
+        modul.set_id(id)
+        modul.set_name(name)
+        modul.set_edv_nr(edv_nr)    
+        with ModulMapper() as mapper:
+            return mapper.insert(modul)
 
     def get_module_by_projekt_id(self, projekt_id):
         with ModulMapper() as mapper:

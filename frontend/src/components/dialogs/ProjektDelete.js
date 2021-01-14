@@ -23,7 +23,10 @@ class ProjektDelete extends Component {
 
     deleteProjekt= () => {
         ElectivAPI.getAPI().deleteProjekt(this.state.projekt.id)
-        .then(()=>this.props.onClose(null));
+        .then(()=>{
+			    this.props.getProjekte();
+          this.props.onClose(null);
+        });
     }
     
     render() {

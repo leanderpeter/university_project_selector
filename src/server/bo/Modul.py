@@ -23,3 +23,12 @@ class Modul(NamedBusinessObject):
 
     def __str__(self, ):
         pass
+
+    @staticmethod
+    def from_dict(dictionary=dict()):
+        '''dict() -> modul'''
+        obj = Modul()
+        obj.set_id(dictionary["id"]) # from BO
+        obj.set_name(dictionary["name"]) # from NBO
+        obj.set_edv_nr(dictionary["edv_nr"]) 
+        return obj

@@ -93,9 +93,33 @@ class ModulMapper(Mapper):
         """Reads a tuple with a given ID"""
         pass
 
-    def insert(self):
-        """Add the given object to the database"""
-        pass
+    def insert(self, modul):
+        '''
+        Einfugen eines Modul BO's in die DB
+        '''
+
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT MAX(id) AS maxid FROM module")
+        tuples = cursor.fetchall()
+
+
+        for (maxid) in tuples:
+            if maxid[0] is None:
+                modul.set_id(1)
+            else:
+                modul.set_id(maxid[0]+1)
+
+        command = "INSERT INTO module (id, name, edv_nr) VALUES (%s,%s,%s)"
+        data = (
+            modul.get_id(),
+            modul.get_name(),
+            modul.get_edv_nr(),
+            )
+        cursor.execute(command, data)
+        self._connection.commit()
+        cursor.close()
+
+        return modul
 
     def update(self):
         """Update an already given object in the DB"""

@@ -11,6 +11,7 @@ import json
 from server.ProjektAdministration import ProjektAdministration
 from server.bo.Teilnahme import Teilnahme
 from server.bo.Projekt import Projekt
+from server.bo.Modul import Modul
 
 #SecurityDecorator
 from SecurityDecorator import secured
@@ -444,6 +445,27 @@ class ModulOperationen(Resource):
     def delete(self, id):
         pass
 
+    @secured
+    def put(self):
+        pass
+
+    @electivApp.marshal_with(modul, code=200)
+    @electivApp.expect(modul)
+    @secured
+    def post (self):
+        adm = ProjektAdministration()
+        modul = Modul.from_dict(api.payload)
+
+        if modul is not None:
+            m = adm.create_modul(modul.get_id(), modul.get_name(), modul.get_edv_nr())
+            return m, 200
+        else: 
+            return '', 500
+
+@electivApp.route('/projekte_hat_module')
+@electivApp.response(500, 'Something went wrong')
+class ProjektehatModuleOperationen(Resource):
+    @electivApp.marshal_list_with(modul)
     @secured
     def put(self):
         projekt_id = request.args.get("projekt_id")

@@ -82,14 +82,17 @@ export default class ElectivAPI {
 	//Alle Module bekommen
 	#getModuleURL = () => `${this.#ElectivServerBaseURL}/module`;
 
+	//Add Modul
+	#addModulURL = () => `${this.#ElectivServerBaseURL}/module`;
+
 	//Module nach Id bekommen
 	#getModule_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/modul/${id}`;
 
 	//für ein Projekt wählbare Module in DB 'projekte_hat_module' einfügen 
-	#postProjekte_hat_moduleURL = (projekt_id, module) => `${this.#ElectivServerBaseURL}/module?projekt_id=${projekt_id}&module=${module}`;
+	#postProjekte_hat_moduleURL = (projekt_id, module) => `${this.#ElectivServerBaseURL}/projekte_hat_module?projekt_id=${projekt_id}&module=${module}`;
 
 	//für ein Projekt wählbare Module in DB 'projekte_hat_module' einfügen 
-	#updateProjekte_hat_moduleURL = (projekt_id, module) => `${this.#ElectivServerBaseURL}/module?projekt_id=${projekt_id}&module=${module}`;
+	#updateProjekte_hat_moduleURL = (projekt_id, module) => `${this.#ElectivServerBaseURL}/projekte_hat_module?projekt_id=${projekt_id}&module=${module}`;
 
 	#updateTeilnahmeURL = (id) => `${this.#ElectivServerBaseURL}/teilnahme2/${id}`;
 
@@ -380,6 +383,23 @@ export default class ElectivAPI {
 			console.info(modulBOs)
 			return new Promise(function (resolve){
 				resolve(modulBOs)
+			})
+		})
+	}
+
+	addModul(modulBO) {
+		return this.#fetchAdvanced(this.#addModulURL(), {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(modulBO)
+		}).then((responseJSON) => {
+			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
+			let responseModulBO = ModulBO.fromJSON(responseJSON);
+			return new Promise(function (resolve) {
+				resolve(responseModulBO);
 			})
 		})
 	}

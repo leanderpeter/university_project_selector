@@ -82,7 +82,6 @@ class ProjektDozentListeEintrag extends Component {
       this.setState({
         showProjektDeleteDialog: false
       });
-      this.getProjekte();
   }
 
   getProjektart = () => {
@@ -167,7 +166,7 @@ class ProjektDozentListeEintrag extends Component {
           </AccordionDetails>
         </Accordion>
         <ProjektForm show={showProjektForm} projekt={projekt} onClose={this.projektFormClosed} getProjekte= {this.getProjekte}/>
-        <ProjektDelete show={showProjektDeleteDialog} projekt={projekt} onClose={this.projektDeleteClosed} />
+        <ProjektDelete show={showProjektDeleteDialog} projekt={projekt} onClose={this.projektDeleteClosed} getProjekte= {this.getProjekte}/>
       </div>
     );
   }

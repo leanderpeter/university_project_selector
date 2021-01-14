@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { withStyles, Button, IconButton, Dialog, DialogContent, DialogContentText,
      DialogTitle, DialogActions, InputAdornment, Typography, TextField } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import ContextErrorMessage from './ContextErrorMessage';
+import LoadingProgress from './LoadingProgress';
 
+import { ElectivAPI, ModulBO } from '../../api';
 
 
 class ModulForm extends Component {
@@ -19,13 +22,37 @@ class ModulForm extends Component {
             edv_nrValidationFailed: false,
             edv_nrEdited: false,
 
-            error: null,
-            loadingInProgress: false,
+            addingError: null,
+            addingInProgress: false,
+
+            updatingError: null,
+            updatingInProgress: false
         };
+        this.baseState = this.state;
     }
 
     addModul = () => {
+        let newModul = new ModulBO()
+        newModul.setID(0)
+        newModul.setname(this.state.name)
+        newModul.setEdv_nr(this.state.edv_nr)
 
+        console.log(newModul, "neues M")
+        ElectivAPI.getAPI().addModul(newModul).then(modul => {
+            this.props.getModule()
+            this.setState(this.baseState);
+            this.props.onClose(modul); //Aufrufen parent in backend
+		}).catch(e => 
+			this.setState({
+				addingInProgress: false,
+				addingError: e
+			})
+			);
+		// Ladeanimation einblenden
+		this.setState({
+			addingProgress: true,
+			addingError: null
+		});
     }
 
     updateModul = () => {
@@ -75,19 +102,45 @@ class ModulForm extends Component {
     
     render() {
 		const { classes, show } = this.props;
-        const { modul, name, nameValidationFailed, nameEdited, edv_nr, edv_nrValidationFailed, edv_nrEdited, error, loadingInProgress  } = this.state;
+        const { 
+            modul, 
+            
+            name, 
+            nameValidationFailed, 
+            nameEdited, 
+            
+            edv_nr, 
+            edv_nrValidationFailed, 
+            edv_nrEdited, 
+
+            addingInProgress,
+            addingError, 
+            updatingInProgress,
+            updatingError,  } = this.state;
         
+        let title = '';
+		let header = '';
+
+		if (modul) {
+			// Projekt objekt true, somit ein edit
+			title = `Modul "${modul.name}" bearbeiten`;
+			header = 'Neue Moduldaten einfügen';
+		} else {
+			title = 'Erstelle ein neues Projekt';
+			header = 'Moduldaten einfügen';
+		}
+
         return (
             show ?
                 <Dialog open={show} onClose={this.handleClose} maxWidth='xs' fullWidth>
-                    <DialogTitle className={classes.dialogtitle}>Modul hinzufügen
+                    <DialogTitle className={classes.dialogtitle}>{title}
                         <IconButton className={classes.closeButton} onClick={this.handleClose}>
                         <CloseIcon />
                         </IconButton>
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                        header
+                        {header}
                         </DialogContentText>
 
                         <form className={classes.root} noValidate autoComplete='off'>
@@ -98,6 +151,14 @@ class ModulForm extends Component {
                         <TextField className={classes.textfield} type='text' required fullWidth margin='small' id='edv_nr' label='EDV-Nummer' variant="outlined" value={edv_nr}
                         onChange={this.numberValueChange} error={edv_nrValidationFailed} />
                         </form>
+                        <LoadingProgress show={addingInProgress || updatingInProgress} />
+                        {
+                        // Show error message in dependency of modul prop
+                        modul ?
+                            <ContextErrorMessage error={updatingError} contextErrorMsg={`The Modul ${modul.getID()} could not be updated.`} onReload={this.updateModul} />
+                            :
+                            <ContextErrorMessage error={addingError} contextErrorMsg={`The Modul could not be added.`} onReload={this.addModul} />
+                        }
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClose} color='secondary'>

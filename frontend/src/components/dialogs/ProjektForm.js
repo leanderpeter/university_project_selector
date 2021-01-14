@@ -522,10 +522,10 @@ class ProjektForm extends Component {
 		if (projekt) {
 			// Projekt objekt true, somit ein edit
 			title = `Projekt "${projekt.name}" bearbeiten`;
-			header = 'Projektdaten einfugen';
+			header = 'Projektdaten einfügen';
 		} else {
 			title = 'Erstelle ein neues Projekt';
-			header = 'Projektdaten einfugen';
+			header = 'Projektdaten einfügen';
 		}
 
 		return (
