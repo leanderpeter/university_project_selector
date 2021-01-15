@@ -42,28 +42,66 @@ class ProjektDozentListe extends Component {
 
 	//hole alle Projekte vom Backend
 	getProjekte = () => {
-		ElectivAPI.getAPI().getPendingProjekte()
-      .then(projekteBOs => 
-				this.setState({								//neuer status wenn fetch komplett
-					projekte: projekteBOs,					
-					filteredProjekte: [...projekteBOs],		//speicher eine kopie
-					loadingInProgress: false,				// deaktiviere ladeindikator
-          error: null,
-				})).catch(e =>
-					this.setState({
-						projekte: [],
-						loadingInProgress: false,
-						error: e
-          }));
-		// setze laden auf wahr
-		this.setState({
-			loadingInProgress: true,
-			error: null
-    });
+    if (this.props.currentPerson.getrolle()==='Admin'){
+      ElectivAPI.getAPI().getProjekteByZustand('Neu')
+        .then(projekteBOs => {
+          this.setState({								//neuer status wenn fetch komplett
+            projekte: projekteBOs,					
+            filteredProjekte: [...projekteBOs],		//speicher eine kopie
+            loadingInProgress: false,				// deaktiviere ladeindikator
+            error: null,
+          })})
+          ElectivAPI.getAPI().getProjekteByZustand('Abgelehnt').then( projekteBOs => {
+          this.setState({								//neuer status wenn fetch komplett
+            projekte: [...this.state.projekte, projekteBOs],					
+            filteredProjekte: [...this.state.projekte, ...projekteBOs],		//speicher eine kopie
+            loadingInProgress: false,				// deaktiviere ladeindikator
+            error: null,
+          })})
+          .catch(e =>
+            this.setState({
+              projekte: [],
+              loadingInProgress: false,
+              error: e
+            }));
+      // setze laden auf wahr
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }else{
+      ElectivAPI.getAPI().getProjekteByZustandByDozent("Neu",this.props.currentPerson.getID())
+        .then(projekteBOs => {
+          this.setState({								//neuer status wenn fetch komplett
+            projekte: projekteBOs,					
+            filteredProjekte: [...projekteBOs],		//speicher eine kopie
+            loadingInProgress: false,				// deaktiviere ladeindikator
+            error: null,
+          })})
+          ElectivAPI.getAPI().getProjekteByZustandByDozent("Abgelehnt",this.props.currentPerson.getID())
+          .then( projekteBOs => {
+          this.setState({								//neuer status wenn fetch komplett
+            projekte: [...this.state.projekte, projekteBOs],					
+            filteredProjekte: [...this.state.projekte, ...projekteBOs],		//speicher eine kopie
+            loadingInProgress: false,				// deaktiviere ladeindikator
+            error: null,
+          })})
+          .catch(e =>
+            this.setState({
+              projekte: [],
+              loadingInProgress: false,
+              error: e
+            }));
+      // setze laden auf wahr
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }
 	}
 	// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 	componentDidMount() {
-		this.getProjekte();
+    this.getProjekte();
 	}
 
   onExpandedStateChange = projekt => {
