@@ -30,26 +30,15 @@ class ProjektForm extends Component {
 	constructor(props) {
 		super(props);
 
-		let nm = '', mt = '', bs = '', bt = '', ep = '',wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '', hj = '', pa = '' ;
-		if (props.projekt) {
-			nm = props.projekt.getname();
-			mt = props.projekt.getmax_teilnehmer();
-			bs = props.projekt.getbeschreibung();
-			bt = props.projekt.getbetreuer();
-			ep = props.projekt.getexterner_partner();
-			wt = props.projekt.getwoechentlich();
-			av = props.projekt.getanzahl_block_vor();
-			ai = props.projekt.getanzahl_block_in();
-			pb = props.projekt.getpraeferierte_block();
-			br = props.projekt.getbes_raum();
-			rm = props.projekt.getraum();
-			sp = props.projekt.getsprache();
-			dz = props.projekt.getdozent();
-			at = props.projekt.getAnzahlTeilnehmer();
-			tl = props.projekt.getTeilnehmerListe();
-			hj = props.projekt.getHalbjahr();
-			pa = props.projekt.getArt();
+		let nm = '', mt = null, bs = '', bt = '', ep = '',wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '';
+		let boolvor = false, boolin = false, boolpraef = false;
+		if (props.projekt){
+			var  hj = 0, pa = 0;
 		}
+		else{
+			var hj = null, pa = null;
+		}
+		
 
 		//init state
 		this.state = {
@@ -77,17 +66,17 @@ class ProjektForm extends Component {
 			woechentlichValidationFailed: false,
 			woechentlichEdited: false,
 
-			boolBlock_vor: false,
+			boolBlock_vor: boolvor,
 			anzahl_block_vor: av,
 			anzahl_block_vorValidationFailed: false,
 			anzahl_block_vorEdited: false,
 
-			boolBlock_in: false,
+			boolBlock_in: boolin,
 			anzahl_block_in: ai,
 			anzahl_block_inValidationFailed: false,
 			anzahl_block_inEdited: false,
 
-			boolBlockpraef: false,
+			boolBlockpraef: boolpraef,
 			praeferierte_block: pb,
 			praeferierte_blockValidationFailed: false,
 			praeferierte_blockEdited: false,
@@ -109,8 +98,6 @@ class ProjektForm extends Component {
 			dozentEdited: false,
 
 			aktueller_zustand: "Neu",
-			dozentValidationFailed: false,
-			dozentEdited: false,
 
 			halbjahr: hj,
 			halbjahrEdited: false,
@@ -131,6 +118,7 @@ class ProjektForm extends Component {
 			addingError: null,
 			updatingError: null,
 
+			modulwahlBOs: [],
 			modulwahl: [],
 			moduleEdited: false,
 
@@ -178,7 +166,6 @@ class ProjektForm extends Component {
 				updatingError: e
 			})
 			);
-
 		// Ladeanimation einblenden
 		this.setState({
 			updatingInProgress: true,
@@ -187,20 +174,109 @@ class ProjektForm extends Component {
 	}
 
 	updateProjekt = () => {
+		let projekt = this.props.projekt;
+		projekt.setname(this.state.name);
+		projekt.setmax_teilnehmer(this.state.max_teilnehmer);
+		projekt.setbeschreibung(this.state.beschreibung);
+		projekt.setbetreuer(this.state.betreuer );
+		projekt.setexterner_partner(this.state.externer_partner);
+		projekt.setwoechentlich(this.state.woechentlich);
+		projekt.setanzahl_block_vor(this.state.anzahl_block_vor);
+		projekt.setanzahl_block_in(this.state.anzahl_block_in);
+		projekt.setpraeferierte_block(this.state.praeferierte_block);
+		projekt.setbes_raum(this.state.bes_raum);
+		projekt.setraum(this.state.raum);
+		projekt.setsprache(this.state.sprache);
+		projekt.setAktuellerZustand(this.state.aktueller_zustand);
+		projekt.setHalbjahr(this.state.halbjahr);
+		projekt.setArt(this.state.art);
+		projekt.setAnzahlTeilnehmer(this.state.anzahlTeilnehmer);
+		projekt.setTeilnehmerListe(this.state.teilnehmerListe);
+		ElectivAPI.getAPI().updateProjekt(projekt).then(projekt => {
+			this.props.getProjekte();
+			ElectivAPI.getAPI().updateProjekte_hat_module(projekt.id, JSON.stringify(this.state.modulwahl))}).then(projekt => {
+			// Backend erfolgreich
+			// reinitialisierung fuer ein neues leere Projekt
+			this.setState(this.baseState);
+			this.props.onClose(projekt); //Aufrufen parent in backend
+		}).catch(e => 
+			this.setState({
+				updatingInProgress: false,
+				updatingError: e
+			})
+			);
+		// Ladeanimation einblenden
+		this.setState({
+			updatingInProgress: true,
+			updatingError: null
+		});
+	}
 
+	getUpdateInfos = () => {
+		let nm = this.props.projekt.getname();
+		let mt = this.props.projekt.getmax_teilnehmer();
+		let bs = this.props.projekt.getbeschreibung();
+		let bt = this.props.projekt.getbetreuer();
+		let ep = this.props.projekt.getexterner_partner();
+		let wt = this.props.projekt.getwoechentlich();
+		let av = this.props.projekt.getanzahl_block_vor();
+		let ai = this.props.projekt.getanzahl_block_in();
+		let pb = this.props.projekt.getpraeferierte_block();
+		let br = this.props.projekt.getbes_raum();
+		let rm = this.props.projekt.getraum();
+		let sp = this.props.projekt.getsprache();
+		let dz = this.props.projekt.getdozent();
+		let at = this.props.projekt.getAnzahlTeilnehmer();
+		let tl = this.props.projekt.getTeilnehmerListe();
+		let hj = this.props.projekt.getHalbjahr();
+		let pa = this.props.projekt.getArt();
+		let boolvor = false;
+		let boolin = false;
+		let boolpraef = false;
+		if(av !== null && av > 0){
+			boolvor = true 
+		}
+		if(ai !== null && ai > 0){
+			boolin = true 
+		}
+		if(pb !== null && pb !== ''){
+			boolpraef = true 
+		}
+		this.setState({
+			name: nm,
+			max_teilnehmer: mt,
+			beschreibung: bs,
+			betreuer: bt,
+			externer_partner: ep,
+			woechentlich: wt,
+			boolBlock_vor: boolvor,
+			anzahl_block_vor: av,
+			boolBlock_in: boolin,
+			anzahl_block_in: ai,
+			boolBlockpraef: boolpraef,
+			praeferierte_block: pb,
+			bes_raum: br,
+			raum: rm,
+			sprache: sp,
+			dozent: dz,
+			aktueller_zustand: "Neu",
+			halbjahr: hj,
+			art: pa,
+			anzahlTeilnehmer: at,
+			teilnehmerListe: tl,
+		})
 	}
 
 	// ---------------------------------------------------------------
-	//update Projekt fehlt noch
 	//textFieldValueChange fehlt noch
 	// ---------------------------------------------------------------
 
-	// Validierung der textfeldaenderungen 
+	// Validierung der Textfeldaenderungen 
 	textFieldValueChange = (event) => {
 		const value = event.target.value;
 
 		let error = false;
-		if (value.trim().lenght === 0) {
+		if (value.trim().length === 0) {
 			error = true;
 		}
 		this.setState({
@@ -215,7 +291,7 @@ class ProjektForm extends Component {
 		const re = /^[0-9]{1,3}$/;
 
 		let error = false;
-		if (value.trim().lenght === 0) {
+		if (value.trim().length === 0) {
 			error = true;
 		}
 		if (re.test(event.target.value) === false) {
@@ -297,6 +373,32 @@ class ProjektForm extends Component {
       });
   }
 
+	getModule_by_projekt_id = () => {
+		ElectivAPI.getAPI().getModule_by_projekt_id(this.props.projekt.id)
+		.then(modulBOs => {
+			let modulIDs = [];
+			modulBOs.forEach(modul=>{
+				modulIDs.push(modul.id)
+			})
+			this.setState({
+				modulwahlBOs: modulBOs,
+				modulwahl: modulIDs,
+				error: null,
+				loadingInProgress: false,
+			})})
+			.catch(e =>
+				this.setState({
+					modulwahlBOs: [],
+					modulwahl: null,
+					error: e,
+					loadingInProgress: false,
+				}));
+		this.setState({
+			error: null,
+			loadingInProgress: true
+		});
+	}
+
 	handleSemesterChange = (semester) => {
 		this.setState({
 		  halbjahr: semester.target.value,
@@ -321,10 +423,25 @@ class ProjektForm extends Component {
 		this.setState({
 			modulwahl: event.target.value,
 			moduleEdited: true
-		})
+		});
 		setTimeout(() => {
-			console.log('Ausgewählte ModulIDs:',this.state.modulwahl)
+			this.modulwahlChange();
 		  }, 0);
+	}
+
+	modulwahlChange = () => {
+		console.log('Ausgewählte ModulIDs:',this.state.modulwahl)
+		var modulBOs = [];
+		this.state.modulwahl.forEach(id=>{
+			this.state.module.forEach(modul=>{
+				if (id === modul.getID()) {
+					modulBOs.push(modul)
+				}
+			})
+		});
+		this.setState({
+			modulwahlBOs: modulBOs
+		});
 	}
 
 	handleClose = () => {
@@ -337,6 +454,10 @@ class ProjektForm extends Component {
 		this.getSemester();
 		this.getProjektart();
 		this.getModule();
+		if (this.props.projekt) {
+			this.getUpdateInfos();
+			this.getModule_by_projekt_id();
+		}
 	}
 
 	// Rendering
@@ -409,6 +530,7 @@ class ProjektForm extends Component {
 			artEdited,
 
 			module,
+			modulwahlBOs,
 			modulwahl,
 			moduleEdited,
 
@@ -418,11 +540,11 @@ class ProjektForm extends Component {
 
 		if (projekt) {
 			// Projekt objekt true, somit ein edit
-			title = 'Update Projekt';
-			header = 'Projekt ID: hier muss dann die ID hin';
+			title = `Projekt "${projekt.name}" bearbeiten`;
+			header = 'Projektdaten einfügen';
 		} else {
 			title = 'Erstelle ein neues Projekt';
-			header = 'Projektdaten einfugen';
+			header = 'Projektdaten einfügen';
 		}
 
 		return (
@@ -446,7 +568,7 @@ class ProjektForm extends Component {
 				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
 				
 				<FormControl component="fieldset">
-					<RadioGroup  row aria-label="position" defaultValue="deutsch" onChange={this.radioValueChange}>
+					<RadioGroup  row aria-label="position" value= {sprache} defaultValue="deutsch" onChange={this.radioValueChange}>
 						<FormControlLabel
 						value="deutsch" 
 						control={<Radio color="primary" />}
@@ -466,7 +588,7 @@ class ProjektForm extends Component {
             	semester ?
 				<FormControl required variant="outlined" className={classes.formControl}>
 				<InputLabel>Semester</InputLabel> 
-					<Select  value = {semester.id} label="Semester" onChange={this.handleSemesterChange}>
+					<Select  value = {halbjahr} label="Semester" onChange={this.handleSemesterChange}>
 					{
 					semester.map(semester =>
 					<MenuItem value={semester.getID()}><em>{semester.getname()}</em></MenuItem>
@@ -487,7 +609,7 @@ class ProjektForm extends Component {
             	projektarten ?
 				<FormControl required variant="outlined" className={classes.formControlpa}>
 				<InputLabel>Projektart</InputLabel> 
-					<Select  value = {projektarten.id} label="Projektart" onChange={this.handleArtChange}>
+					<Select  value = {art} label="Projektart" onChange={this.handleArtChange}>
 					{
 					projektarten.map(projektart =>
 					<MenuItem value={projektart.getID()}><em>{projektart.getname()}</em></MenuItem>
@@ -498,7 +620,7 @@ class ProjektForm extends Component {
 				:
 				<FormControl required variant="outlined" className={classes.formControl}>
 				<InputLabel>Projektart</InputLabel>
-					<Select value="" label="Projektart">
+					<Select value={art} label="Projektart">
 					<MenuItem value=""><em>Projektarten noch nicht geladen</em></MenuItem>
 					</Select>
 				</FormControl>
@@ -513,17 +635,17 @@ class ProjektForm extends Component {
 					value = {modulwahl} 
 					multiple label="Anrechenbare Module" 
 					onChange={this.handleModulChange}
-					renderValue={(selected) => (
+					renderValue={() => (
 						<div className={classes.chips}>
-						  {selected.map((value) => (
-							<Chip key={value} label={module[value-1].name} className={classes.chip} />
+						  {modulwahlBOs.map((value) => (
+							<Chip key={value} label={value.name} className={classes.chip} />
 						  ))}
 						</div>
 					  )}>
 					{
 					module.map(modul =>
 						<MenuItem key={modul.getID()} value={modul.getID()}>
-							<Checkbox checked={modulwahl.indexOf(modul.getID()) > -1} />
+							{<Checkbox checked={modulwahl.indexOf(modul.getID()) > -1} />}
 							<ListItemText>{modul.getname()} ({modul.getEdv_nr()})</ListItemText>
 						</MenuItem>
 					)
@@ -570,7 +692,7 @@ class ProjektForm extends Component {
 					labelPlacement="end"
 				/>
 				</FormGroup>
-				{ bes_raum === true ?
+				{ bes_raum === true || bes_raum === 1 ?
 					<TextField type='text' required fullWidth margin='small' id='raum' label='Raum' variant="outlined" value={raum}
 					onChange={this.textFieldValueChange} error={raumValidationFailed}
 					helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
@@ -658,17 +780,18 @@ class ProjektForm extends Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color='secondary'>
-              Cancel
+              Abbrechen
             </Button>
             {
               // If a Projekt is given, show an update button, else an add button
               projekt ?
-                <Button disabled={nameValidationFailed || max_teilnehmerValidationFailed} variant='contained' onClick={this.updateProjekt} color='primary'>
-                  Update
+                <Button disabled={nameValidationFailed || max_teilnehmerValidationFailed || beschreibungValidationFailed} variant='contained' onClick={this.updateProjekt} color='primary'>
+                  Speichern
               </Button>
-				: <Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited || beschreibungValidationFailed || !beschreibungEdited ||!halbjahrEdited || !artEdited || !moduleEdited}  
+			: 
+			<Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited || beschreibungValidationFailed || !beschreibungEdited ||!halbjahrEdited || !artEdited || !moduleEdited}  
 				variant='contained' onClick={this.addProjekt} color='primary'>
-                  Add
+                  Hinzufügen
              </Button>
             }
           </DialogActions>

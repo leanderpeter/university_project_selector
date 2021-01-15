@@ -11,6 +11,7 @@ import json
 from server.ProjektAdministration import ProjektAdministration
 from server.bo.Teilnahme import Teilnahme
 from server.bo.Projekt import Projekt
+from server.bo.Modul import Modul
 
 #SecurityDecorator
 from SecurityDecorator import secured
@@ -171,8 +172,9 @@ class ProjektOperationen(Resource):
         projekt = adm.get_projekt_by_id(id)
         return projekt
 
-    def delete(self, projekt_id):
-        pass
+    def delete(self, id):
+        adm = ProjektAdministration()
+        adm.delete_projekt(id)
 
     def put(self, projekt_id):
         pass
@@ -440,12 +442,52 @@ class ModulOperationen(Resource):
         module = adm.get_alle_module()
         return module
 
-    def delete(self, id):
-        pass
+    def delete(self):
+        id = request.args.get("id")
+        adm = ProjektAdministration()
+        adm.delete_modul(id)
 
-    def put(self, id):
-        pass
-    
+    @electivApp.marshal_with(modul)
+    @electivApp.expect(modul)
+    @secured
+    def put(self):
+        '''
+        Updaten eines Moduls
+        '''
+        adm = ProjektAdministration()
+        modul = Modul.from_dict(api.payload)
+
+        if modul is not None:
+            response = adm.save_modul(modul)
+            return response, 200
+        else:
+            return '', 500
+
+    @electivApp.marshal_with(modul, code=200)
+    @electivApp.expect(modul)
+    @secured
+    def post (self):
+        adm = ProjektAdministration()
+        modul = Modul.from_dict(api.payload)
+
+        if modul is not None:
+            m = adm.create_modul(modul)
+            return m, 200
+        else: 
+            return '', 500
+
+@electivApp.route('/projekte_hat_module')
+@electivApp.response(500, 'Something went wrong')
+class ProjektehatModuleOperationen(Resource):
+    @electivApp.marshal_list_with(modul)
+    @secured
+    def put(self):
+        projekt_id = request.args.get("projekt_id")
+        module = json.loads(request.args.get("module"))
+        adm = ProjektAdministration()
+        adm.update_projekte_hat_module(projekt_id, module)
+
+    @secured
     def post (self):
         projekt_id = request.args.get("projekt_id")
         module = json.loads(request.args.get("module"))
@@ -487,6 +529,7 @@ class SemesterByIDOperationen(Resource):
 class ProjektGenehmigungOperation(Resource):
 
     @electivApp.marshal_list_with(projekt)
+    @secured
     def get(self):
         adm = ProjektAdministration()
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
@@ -512,6 +555,22 @@ class ProjektGenehmigungOperation(Resource):
         if proposal is not None:
             p = adm.create_wartelisteProjekt(proposal.get_id(), proposal.get_name(),proposal.get_max_teilnehmer(),proposal.get_projektbeschreibung(),proposal.get_betreuer(),proposal.get_externer_partner(),proposal.get_woechentlich(),proposal.get_anzahl_block_vor(),proposal.get_anzahl_block_in(),proposal.get_praeferierte_block(),proposal.get_bes_raum(),proposal.get_raum(),proposal.get_sprache(),proposal.get_dozent(), proposal.get_art(), proposal.get_halbjahr(), proposal.get_anzahlTeilnehmer(),proposal.get_teilnehmerListe())
             return p, 200
+        else:
+            return '', 500
+
+    @electivApp.marshal_with(projekt)
+    @electivApp.expect(projekt)
+    @secured
+    def put(self):
+        '''
+        Einfugen eines Projekts im zustand pending. 
+        '''
+        adm = ProjektAdministration()
+        projekt = Projekt.from_dict(api.payload)
+
+        if projekt is not None:
+            response = adm.save_projekt(projekt)
+            return response, 200
         else:
             return '', 500
 

@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Button, IconButton, Dialog, DialogTitle, InputAdornment, Typography, TextField } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import ClearIcon from '@material-ui/icons/Clear'
+import ClearIcon from '@material-ui/icons/Clear';
 import { ElectivAPI, ProjektBO } from '../../api';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
-import AddStudentEintrag from './AddStudentEintrag'
+import AddStudentEintrag from './AddStudentEintrag';
 
 
 class AddStudent extends Component {

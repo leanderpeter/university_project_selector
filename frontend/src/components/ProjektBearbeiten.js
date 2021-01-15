@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
 import { withStyles, Button, Grid, Typography,Fab,Select,TableFooter,FormControl,MenuItem,Paper,Table,TableRow,TableBody,TableHead,TableCell,TableContainer, InputLabel} from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -191,9 +192,11 @@ class ProjektBearbeiten extends Component {
                     <>
                         <Grid item xs/>
                         <Grid item className={classes.grid} >
+                            <Tooltip title='Teilnehmer hinzufügen' placement="left">
                               <Fab size="small" align="right" className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
                                 <AddIcon />
                               </Fab> 
+                              </Tooltip>
                         </Grid>
                         
                         <TableContainer component={Paper}>

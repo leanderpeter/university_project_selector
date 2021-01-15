@@ -40,16 +40,17 @@ class Header extends Component {
         </Typography>
         {
           user ?
-            <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
+            <Tabs indicatorColor='primary' textColor='primary' variant="scrollable"
+            scrollButtons="auto" centered value={this.state.tabindex} onChange={this.handleTabChange}  >
               <Tab label='Projekte' component={RouterLink} to={`/projekte`} />
               <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'}/>
               <Tab label='Projektbearbeiten' component={RouterLink} to={`/projektbearbeiten`} />
               <Tab label="Notenliste" component={RouterLink} to={'/notenliste'}/>
               <Tab label='Projekte Dozent' component={RouterLink} to={`/projekteDozent`} />
               <Tab label='Projektverwaltung' component={RouterLink} to={`/projektverwaltung`} />
-              {/*
-              s<Tab label='About' component={RouterLink} to={`/about`} />
-              */}
+              <Tab label='Administration' component={RouterLink} to={`/administration/semester`} />
+              <Tab label='About' component={RouterLink} to={`/about`} />
+             
             </Tabs>
             : null
         }

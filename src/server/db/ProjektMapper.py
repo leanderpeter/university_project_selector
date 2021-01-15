@@ -124,7 +124,7 @@ class ProjektMapper(Mapper):
 
         self._connection.commit()
         cursor.close()
-
+        
         return result
 
 
@@ -202,11 +202,46 @@ class ProjektMapper(Mapper):
     def insert(self):
         pass
 
-    def update(self):
-        pass
+    def update(self, projekt):
+        cursor = self._connection.cursor()
 
-    def delete(self):
-        pass
+        command = "UPDATE projekte SET name=%s, max_teilnehmer=%s, beschreibung=%s, betreuer=%s, externer_partner=%s, woechentlich=%s, anzahl_block_vor=%s, anzahl_block_in=%s, praeferierte_block=%s, bes_raum=%s, raum=%s, sprache=%s, dozent=%s, aktueller_zustand=%s, halbjahr=%s, art=%s WHERE id=%s"
+        data = (
+            projekt.get_name(),
+            projekt.get_max_teilnehmer(),
+            projekt.get_projektbeschreibung(),
+            projekt.get_betreuer(),
+            projekt.get_externer_partner(),
+            projekt.get_woechentlich(),
+            projekt.get_anzahl_block_vor(),
+            projekt.get_anzahl_block_in(),
+            projekt.get_praeferierte_block(),
+            projekt.get_bes_raum(),
+            projekt.get_raum(),
+            projekt.get_sprache(),
+            projekt.get_dozent(),
+            str(projekt.get_aktueller_zustand()),
+            projekt.get_halbjahr(),
+            projekt.get_art(),
+            projekt.get_id()
+        )
+        result = projekt
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def delete(self, id):
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM projekte_hat_module WHERE projekt_id={}".format(id)
+        command2 = "DELETE FROM projekte WHERE id={}".format(id)
+        cursor.execute(command)
+        cursor.execute(command2)
+        self._connection.commit()
+        cursor.close()
 
     def count_teilnehmer_by_projekt(self, projektID):
         cursor = self._connection.cursor()

@@ -142,32 +142,36 @@ class ProjektListeEintrag extends Component {
     
     return (
       <div>
-        <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
+        <Accordion className={classes.root} defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             id={`projekt${projekt.getID()}Infopanel-header`}
           >
-            <Grid container spacing={1} justify='flex-start' alignItems='center'>
+            <Grid container spacing={2} justify='flex-start' alignItems='center'>
               <Grid item>
-                <Typography variant='body1' className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()} </Typography> <Typography variant='body1' color={'success.main'}>{projekt.getAnzahlTeilnehmer()} / {projekt.getmax_teilnehmer()} Plätze besetzt
-                </Typography>
+                <Typography variant='body1' className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()} </Typography> 
               </Grid>
-              <Grid item xs />
+               <Grid item xs />
+              <Grid item>              
+                <Typography variant='body1' color={'success.main'}>{projekt.getAnzahlTeilnehmer()} / {projekt.getmax_teilnehmer()} Plätze besetzt
+                </Typography>
+              </Grid>    
+              <Grid item>      
+              {
+                this.state.teilnahmeButtonDisabled ?
+                  <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' size="small" color='secondary' onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
+                      abwählen
+                  </Button>
+                :
 
-
-              <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
-                  Teilnahme abwählen
-               </Button>
-               <Button className={classes.teilnahmeButton} variant='contained' color='primary' size="small" startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
-                  Teilnahme
-               </Button>
-
-              <Grid item>
-              	<Typography variant='body2' color={'textSecondary'}></Typography>
-            	</Grid>
+                   <Button className={classes.teilnahmeButton} variant='contained' color='primary' size="small" startIcon={<AddIcon />} onClick={this.teilnahmeButtonClicked} disabled={this.state.teilnahmeButtonDisabled}>
+                      wählen
+                   </Button>
+              }
+              </Grid>
             </Grid>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails className={classes.details}>
             <Typography variant='body1' color={'textSecondary'}>
                 <b>Beschreibung: </b> {projekt.getbeschreibung()} <br />
                 <b>Raum: </b>{projekt.getraum()}<br />
@@ -204,18 +208,21 @@ class ProjektListeEintrag extends Component {
 const styles = theme => ({
   root: {
     width: '100%',
+    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(1),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
   },
   teilnahmeButton: {
-    position: 'absolute',
-    right: theme.spacing(32),
-    bottom: theme.spacing(3)
+    width: 100,
   },
   teilnahmeAbwaehlenButton: {
-    position: 'absolute',
-    right: theme.spacing(6),
-    bottom: theme.spacing(3),
-
+    width: 100,
   }
+
+
+
+
 });
 
 /** PropTypes */

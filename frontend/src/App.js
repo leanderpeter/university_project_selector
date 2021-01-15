@@ -18,6 +18,11 @@ import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import ElectivAPI from './api/ElectivAPI';
 import firebaseConfig from './firebaseconfig';
 import ProjektverwaltungListe from './components/ProjektverwaltungListe';
+import Administration from './components/Administration';
+import ModulListe from './components/ModulListe';
+import SemesterListe from './components/SemesterListe';
+import ProjektartListe from './components/ProjektartListe';
+import UserListe from './components/UserListe';
 
 
 /*
@@ -205,6 +210,28 @@ class App extends React.Component {
                   <Route path='/notenliste' component={Notenliste}>
                     <Notenliste currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
+
+                  <Route path='/administration' component={Administration}>
+                    <Administration currentPerson= {currentPerson}/>
+                  </Route>
+
+                  <Route path='/administration/semester' component={SemesterListe}>
+                    <SemesterListe currentPerson= {currentPerson}/>
+                  </Route>
+
+                  <Route path='/administration/module' component={ModulListe}>
+                    <ModulListe currentPerson= {currentPerson}/>
+                  </Route>
+
+                  <Route path='/administration/projektarten' component={ProjektartListe}>
+                    <ProjektartListe currentPerson= {currentPerson}/>
+                  </Route>
+
+                  <Route path='/administration/user' component={UserListe}>
+                    <UserListe currentPerson= {currentPerson}/>
+                  </Route>
+
+
                 </>
                 :
                 // if not signed in show sign in page

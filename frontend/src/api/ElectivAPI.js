@@ -25,8 +25,10 @@ export default class ElectivAPI {
 	#setZustandAtProjekt = (projektId, zustandId) => `${this.#ElectivServerBaseURL}/projekte/zustand?projektId=${projektId}&zustandId=${zustandId}`;
 	#addProjekteURL = () => `${this.#ElectivServerBaseURL}/projekte`;
 	#getProjekteByIDURL = (id) => `${this.#ElectivServerBaseURL}/projekte/${id}`;
-	//update 
-	//delete
+
+	//Projekt löschen
+	#deleteProjektURL = (id) => `${this.#ElectivServerBaseURL}/projekt/${id}`;
+
 	#searchProjektURL = (projektname) => `${this.#ElectivServerBaseURL}/projekte_by_name/${projektname}`;
 
 	// ------------------------Projekte bearbeiten/hinzufugen---------------------------
@@ -35,6 +37,9 @@ export default class ElectivAPI {
 	// ---------------------------------------------------------------------------------
 
 	#addProjektPendingURL = () => `${this.#ElectivServerBaseURL}/projektePending`;
+	
+	#updateProjektPendingURL = () => `${this.#ElectivServerBaseURL}/projektePending`;
+
 	#getProjektePendingURL = () => `${this.#ElectivServerBaseURL}/projektePending`;
 
 	//Projekt nach ID bekommen
@@ -77,11 +82,23 @@ export default class ElectivAPI {
 	//Alle Module bekommen
 	#getModuleURL = () => `${this.#ElectivServerBaseURL}/module`;
 
+	//Add Modul
+	#addModulURL = () => `${this.#ElectivServerBaseURL}/module`;
+
+	//Update Modul
+	#updateModulURL = () => `${this.#ElectivServerBaseURL}/module`
+
+	//Delete Modul
+	#deleteModulURL = (id) => `${this.#ElectivServerBaseURL}/module?id=${id}`;
+
 	//Module nach Id bekommen
 	#getModule_by_projekt_idURL = (id) => `${this.#ElectivServerBaseURL}/modul/${id}`;
 
 	//für ein Projekt wählbare Module in DB 'projekte_hat_module' einfügen 
-	#postProjekte_hat_moduleURL = (projekt_id, module) => `${this.#ElectivServerBaseURL}/module?projekt_id=${projekt_id}&module=${module}`;
+	#postProjekte_hat_moduleURL = (projekt_id, module) => `${this.#ElectivServerBaseURL}/projekte_hat_module?projekt_id=${projekt_id}&module=${module}`;
+
+	//für ein Projekt wählbare Module in DB 'projekte_hat_module' einfügen 
+	#updateProjekte_hat_moduleURL = (projekt_id, module) => `${this.#ElectivServerBaseURL}/projekte_hat_module?projekt_id=${projekt_id}&module=${module}`;
 
 	#updateTeilnahmeURL = (id) => `${this.#ElectivServerBaseURL}/teilnahme2/${id}`;
 
@@ -241,12 +258,25 @@ export default class ElectivAPI {
 		})
 	}
 
-	updateProjekt(){
-		//USW
+	updateProjekt(projektBO){
+		return this.#fetchAdvanced(this.#updateProjektPendingURL(), {
+			method: 'PUT',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(projektBO)
+		}).then((responseJSON) => {
+			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
+			let responseProjektBO = ProjektBO.fromJSON(responseJSON);
+			return new Promise(function (resolve) {
+				resolve(responseProjektBO);
+			})
+		})
 	}
 
-	deleteProjekt(){
-		//USW
+	deleteProjekt(id){
+		return this.#fetchAdvanced(this.#deleteProjektURL(id),{method: 'DELETE'})
 	}
 
 	//gibt die Person mit der bestimmten ID als BO zurück
@@ -383,7 +413,44 @@ export default class ElectivAPI {
 		})
 	}
 
-	//gibt die Module mit der bestimmten ProjektID als BO zurück
+	addModul(modulBO) {
+		return this.#fetchAdvanced(this.#addModulURL(), {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(modulBO)
+		}).then((responseJSON) => {
+			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
+			let responseModulBO = ModulBO.fromJSON(responseJSON);
+			return new Promise(function (resolve) {
+				resolve(responseModulBO);
+			})
+		})
+	}
+
+	updateModul(modulBO){
+		return this.#fetchAdvanced(this.#updateModulURL(), {
+			method: 'PUT',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(modulBO)
+		}).then((responseJSON) => {
+			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
+			let responseModulBO = ModulBO.fromJSON(responseJSON);
+			return new Promise(function (resolve) {
+				resolve(responseModulBO);
+			})
+		})
+	}
+
+	deleteModul(id){
+		return this.#fetchAdvanced(this.#deleteModulURL(id),{method: 'DELETE'})
+	}
+
 	getModule_by_projekt_id(id){
 		return this.#fetchAdvanced(this.#getModule_by_projekt_idURL(id)).then((responseJSON) => {
 			let modulBO = ModulBO.fromJSON(responseJSON);
@@ -399,7 +466,10 @@ export default class ElectivAPI {
 	   return this.#fetchAdvanced(this.#postProjekte_hat_moduleURL(projekt_id, module),{method: 'POST'})
    }
 
-   //gibt die Studenten mit der bestimmten ProjektID als BO zurück
+   updateProjekte_hat_module(projekt_id, module){
+	   return this.#fetchAdvanced(this.#updateProjekte_hat_moduleURL(projekt_id, module),{method: 'PUT'})
+	}
+
 	getStudentenByProjektId(id){
 		return this.#fetchAdvanced(this.#getStudentenByProjektIdURL(id)).then((responseJSON) => {
 			let studentBOs = StudentBO.fromJSON(responseJSON);
