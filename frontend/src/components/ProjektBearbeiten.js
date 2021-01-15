@@ -47,7 +47,6 @@ class ProjektBearbeiten extends Component {
         this.state = {
             teilnahmen:[],
             projekte:[],
-            adminProjekte:[],
             "currentProjekt": null,
             error: null,
             loadingInProgress: false,
@@ -56,40 +55,43 @@ class ProjektBearbeiten extends Component {
         };
         this.getTeilnahmenByProjektId=this.getTeilnahmenByProjektId.bind(this)
     }
-    //Funtion für den Dozenten 
-    //API Anbindung holt alle Projekte im richtigen Zustand, vom jeweiligen Dozenten vom Backend
+    
     getProjekte = () => {
-      ElectivAPI.getAPI().getProjekteByZustandByDozent("in Bewertung",this.props.currentPerson.getID())
-        .then(projekteBOs =>
-          this.setState({								//neuer status wenn fetch komplett
-            projekte: projekteBOs, 
-            loadingInProgress: false,				// deaktiviere ladeindikator
-            error: null,
-          })).catch(e =>
-            this.setState({
-              projekte: [],
-              loadingInProgress: false,
-              error: e
-            }));
-      // setze laden auf wahr
-      this.setState({
-        loadingInProgress: true,
-        error: null
-      });
-    }
+      //Funtion für den Dozenten 
+      //API Anbindung holt alle Projekte im richtigen Zustand, vom jeweiligen Dozenten vom Backend
+      console.log("Hallo",this.props.currentPerson)
+      if (this.props.currentPerson.getrolle()==="Dozent"){
+        ElectivAPI.getAPI().getProjekteByZustandByDozent("in Bewertung",this.props.currentPerson.getID())
+          .then(projekteBOs =>
+            this.setState({								//neuer status wenn fetch komplett
+              projekte: projekteBOs, 
+              loadingInProgress: false,				// deaktiviere ladeindikator
+              error: null,
+            })).catch(e =>
+              this.setState({
+                projekte: [],
+                loadingInProgress: false,
+                error: e
+              }));
+        // setze laden auf wahr
+        this.setState({
+          loadingInProgress: true,
+          error: null
+        });
+      }
+
     //Funtion für den Admin  
     //API Anbindung holt alle Projekte im richtigen Zustand vom Backend
-    //hole alle Projekte vom Backend
-	getProjekteAdmin = () => {
-		ElectivAPI.getAPI().getProjekteByZustand("in Bewertung")
+    if (this.props.currentPerson.getrolle()==="Admin"){
+			ElectivAPI.getAPI().getProjekteByZustand("in Bewertung")
       .then(projekteBOs => 
 				this.setState({								//neuer status wenn fetch komplett
-					adminProjekte: projekteBOs,	
+					projekte: projekteBOs,	
 					loadingInProgress: false,				// deaktiviere ladeindikator
           error: null,
 				})).catch(e =>
 					this.setState({
-						adminProjekte: [],
+						projekte: [],
 						loadingInProgress: false,
 						error: e
           }));
@@ -98,7 +100,8 @@ class ProjektBearbeiten extends Component {
 		this.setState({
 			loadingInProgress: true,
 			error: null
-		});
+    });
+    }
 	}
 
     // API Anbindung holt alle Teilnahmen der jeweiligen Projekt ID vom Backend
@@ -150,7 +153,6 @@ class ProjektBearbeiten extends Component {
 
     componentDidMount() {
       this.getProjekte();
-      this.getProjekteAdmin();
     }
 
     //bei Änderung der Select Komponente wird das Projekt als das aktuelle Projekt ausgewählt  
@@ -163,7 +165,7 @@ class ProjektBearbeiten extends Component {
 
     render(){
         const { classes } = this.props;
-        const { projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
+        const {currentRolle, projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
         
         return(
           <div className={classes.root}>
@@ -171,9 +173,10 @@ class ProjektBearbeiten extends Component {
             {/*erster sichtbarer Teil wenn noch kein Projekt ausgewählt wurde*/}
             <Grid className={classes.grid} container spacing={2} display="flex" margin="auto">
               <Grid item xs={12} sm={6} >
-                  <Typography >Projektname:
+                  
                     <FormControl className={classes.formControl}>
-                        <Select  className={classes.formControl} style={{ minWidth:"5rem", paddingLeft:"7px",}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
+                      <InputLabel>Projektname</InputLabel>
+                        <Select  className={classes.formControl} style={{ minWidth:"8rem"}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
                           {
                           projekte.map(projekt =>
                           <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
@@ -181,7 +184,6 @@ class ProjektBearbeiten extends Component {
                           }
                         </Select>                                                              
                     </FormControl>
-                  </Typography>
               </Grid>
             
             {/*wenn ein Projekt ausgewählt wurde*/}
@@ -244,7 +246,6 @@ const styles = theme => ({
         margin: theme.spacing(1),
       },
       addButton: {
-        margin: theme.spacing(1),
       },
       grid:{
       }
