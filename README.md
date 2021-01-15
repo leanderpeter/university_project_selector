@@ -1,2 +1,4 @@
 # WahlfachApp
-University project to create/choose projects based on React, JavaScript, Flask, MySQL und Python
+
+RESTful client-server-model to create/choose/edit University projects based on React, JavaScript, Flask, MySQL und Python
+
