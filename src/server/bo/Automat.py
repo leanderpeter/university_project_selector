@@ -15,3 +15,5 @@ class Automat:
 
     def is_in_state(self, zustand):
     	return zustand == self._aktueller_zustand
+    def __str__(self):
+    	return self._aktueller_zustand

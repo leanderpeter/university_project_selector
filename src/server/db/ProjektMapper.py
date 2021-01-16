@@ -19,6 +19,7 @@ class ProjektMapper(Mapper):
 
         for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
              anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art) in tuples:
+
             projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
                                           raum, sprache, dozent, aktueller_zustand, halbjahr, art)

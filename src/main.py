@@ -132,9 +132,15 @@ class Projektverwaltungoperation(Resource):
     # @secured
 
     def get(self, id):
+        result = []
         adm = ProjektAdministration()
-        projekte = adm.get_projekte_by_zustand('"{}"'.format(id))
-        return projekte
+        projekte = adm.get_projekte()
+        for p in projekte:
+            if id == p.get_aktueller_zustand():
+                result.append(p)
+
+        print(type(projekte), "Type des Objekts")
+        return result
 
 @electivApp.route('/projekte/zustand/<string:zustand_id>/dozent/<int:dozent_id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')

@@ -120,7 +120,9 @@ class ProjektAdministration(object):
         with ProjektMapper() as mapper:
             return mapper.find_granted()
 
-
+    def get_projekte(self):
+        with ProjektMapper() as mapper:
+            return mapper.find_all()
     
         
     def get_projekte_by_zustand(self, zustand_id):

@@ -19,6 +19,9 @@ class Zustand:
     	else:
     		return False
 
+    def __str__(self):
+    	return self.name
+
     '''
     def __str__(self):
         return '{}'.format(self.name)
