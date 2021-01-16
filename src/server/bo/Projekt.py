@@ -7,6 +7,11 @@ from server.bo.Zustand import Zustand
 
 
 class Projekt(NamedBusinessObject, Automat):
+    Z_NEU = Zustand("Neu")
+    Z_GENEHMIGT = Zustand("Genehmigt")
+    Z_IN_BEWERTUNG = Zustand("In Bewertung")
+    Z_ABGESCHLOSSEN = Zustand("Abgeschlossen")
+
     def __init__(self):
         super().__init__()
         self._max_teilnehmer = None
