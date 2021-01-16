@@ -64,6 +64,7 @@ clearFilterFieldButtonClicked = () => {
 }
 
 projektartFormClosed = projektart => {
+    this.getProjektart();
     if (projektart) {
       const newProjektartList = [...this.state.projektarten, projektart];
       this.setState({
@@ -79,7 +80,7 @@ projektartFormClosed = projektart => {
   }
 
   // API Anbindung um alle Projektarten vom Backend zu bekommen 
-  getProjektarten = () => {
+  getProjektart = () => {
     ElectivAPI.getAPI().getProjektart()
     .then(projektartBOs =>
         this.setState({
@@ -104,7 +105,7 @@ projektartFormClosed = projektart => {
 
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
   componentDidMount() {
-      this.getProjektarten();
+      this.getProjektart();
   }
 
 
@@ -146,7 +147,7 @@ projektartFormClosed = projektart => {
             <List className={classes.root} dense>
                 {
                 filteredProjektarten.map(projektart => 
-                    <ProjektartListeEintrag key={projektart.getID()} projektart = {projektart} show={this.props.show} getProjektarten={this.getProjektarten}/>)
+                    <ProjektartListeEintrag key={projektart.getID()} projektart = {projektart} show={this.props.show} getProjektart={this.getProjektart}/>)
                 }
                 <ListItem>
                 <LoadingProgress show={loadingInProgress} />
@@ -156,7 +157,7 @@ projektartFormClosed = projektart => {
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`}  />
         </Paper>
-        <ProjektartenForm show={showProjektartenForm} onClose={this.projektartFormClosed} getProjektarten = {this.getProjektarten}/>
+        <ProjektartenForm show={showProjektartenForm} onClose={this.projektartFormClosed} getProjektart = {this.getProjektart}/>
       </div>
     );
   }

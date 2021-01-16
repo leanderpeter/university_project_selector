@@ -212,7 +212,7 @@ class ProjektartenForm extends Component {
                             Speichern
                         </Button>
                         : 
-                        <Button disabled={nameValidationFailed || !nameEdited || ectsValidationFailed || !ectsEdited }  
+                        <Button disabled={nameValidationFailed || !nameEdited || ectsValidationFailed || !ectsEdited || swsValidationFailed || !swsEdited}  
                             variant='contained' onClick={this.addProjektart} color='primary'>
                             Hinzufügen
                         </Button>
