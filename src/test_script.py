@@ -6,5 +6,8 @@ from server.bo.Zustand import Zustand
 
 
 adm = ProjektAdministration()
-obj = adm.get_projektart_by_id(3)
-print(obj)
+projekt = adm.create_wartelisteProjekt(1000, "name", 23, "projektbeschreibung", "betreuer", "externer_partner", True, 3, 3, "praeferierte_block", 50, "raum", "sprache", 3, "2", '2', "anzahlTeilnehmer", "teilnehmerListe")
+projekt.set_aktueller_zustand(Projekt.Z_NEU)
+
+if projekt.is_in_state(Projekt.Z_NEU):
+	print("YEY")
