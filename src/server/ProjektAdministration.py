@@ -313,6 +313,10 @@ class ProjektAdministration(object):
         with ProjektartMapper() as mapper:
             return mapper.find_all()
 
+    def delete_projektart(self, id):
+        with ProjektartMapper() as mapper:
+            return mapper.delete(id)
+
     def get_projektart_by_id(self, id):
         with ProjektartMapper() as mapper:
             return mapper.find_projektart_by_id(id)

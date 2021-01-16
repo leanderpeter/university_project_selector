@@ -591,6 +591,11 @@ class Projektart(Resource):
         projektart = adm.get_alle_projektarten()
         return projektart
 
+    def delete(self):
+        id = request.args.get("id")
+        adm = ProjektAdministration()
+        adm.delete_projektart(id)
+
 @electivApp.route('/projektart/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektartByID(Resource):
