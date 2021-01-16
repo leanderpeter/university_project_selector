@@ -6,10 +6,10 @@ import CloseIcon from '@material-ui/icons/Close';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
 
-import { ElectivAPI, ModulBO } from '../../api';
+import { ElectivAPI, ProjektartBO } from '../../api';
 
 
-class ModulForm extends Component {
+class ProjektartForm extends Component {
 
 	constructor(props) {
         super(props);
@@ -18,9 +18,13 @@ class ModulForm extends Component {
             nameValidationFailed: false,
             nameEdited: false,
 
-            edv_nr: null,
-            edv_nrValidationFailed: false,
-            edv_nrEdited: false,
+            ects: null,
+            ectsValidationFailed: false,
+            ectsEdited: false,
+
+            sws: null,
+            swsValidationFailed: false,
+            swsEdited: false,
 
             addingError: null,
             addingInProgress: false,
@@ -31,15 +35,16 @@ class ModulForm extends Component {
         this.baseState = this.state;
     }
 
-    addModul = () => {
-        let newModul = new ModulBO()
-        newModul.setID(0)
-        newModul.setname(this.state.name)
-        newModul.setEdv_nr(this.state.edv_nr)
-        ElectivAPI.getAPI().addModul(newModul).then(modul => {
-            this.props.getModule()
+    addProjektart = () => {
+        let newProjektart = new ProjektBO()
+        newProjektart.setID(0)
+        newProjektart.setname(this.state.name)
+        newProjektart.set_ects(this.state.ects)
+        newProjektart.set_sws(this.state.sws)
+        ElectivAPI.getAPI().addProjektart(newProjektart).then(projektart => {
+            this.props.getProjektart()
             this.setState(this.baseState);
-            this.props.onClose(modul); //Aufrufen parent in backend
+            this.props.onClose(projektart); //Aufrufen parent in backend
 		}).catch(e => 
 			this.setState({
 				addingInProgress: false,
@@ -53,14 +58,15 @@ class ModulForm extends Component {
 		});
     }
 
-    updateModul = () => {
-        let modul = this.props.modul;
-        modul.setname(this.state.name)
-        modul.setEdv_nr(this.state.edv_nr)
-        ElectivAPI.getAPI().updateModul(modul).then(modul => {
-            this.props.getModule()
+    updateProjektart = () => {
+        let projektart = this.props.projektart;
+        projektart.setname(this.state.name)
+        projektart.set_ects(this.state.ects)
+        projektart.set_sws(this.state.sws)
+        ElectivAPI.getAPI().updateProjektart(projektart).then(projektart => {
+            this.props.getProjektart()
             this.setState(this.baseState);
-            this.props.onClose(modul); //Aufrufen parent in backend
+            this.props.onClose(projektart); //Aufrufen parent in backend
 		}).catch(e => 
 			this.setState({
 				updatingInProgress: false,
@@ -109,12 +115,14 @@ class ModulForm extends Component {
     }
     
     getInfos = () => {
-        if (this.props.modul) {
-            let name = this.props.modul.getname();
-		    let edv_nr = this.props.modul.getEdv_nr();
+        if (this.props.projektart) {
+            let name = this.props.projektart.getname();
+		    let ects = this.props.projektart.get_ects();
+            let sws = this.props.projektart.get_sws();
             this.setState({
                 name: name,
-                edv_nr: edv_nr,
+                ects: ects,
+                sws: sws,
             })
 		}
     }
@@ -128,15 +136,19 @@ class ModulForm extends Component {
 
     
     render() {
-		const { classes, show, modul } = this.props;
+		const { classes, show, projektart } = this.props;
         const {             
             name, 
             nameValidationFailed, 
             nameEdited, 
             
-            edv_nr, 
-            edv_nrValidationFailed, 
-            edv_nrEdited, 
+            ects, 
+            ectsValidationFailed, 
+            ectsEdited, 
+
+            sws, 
+            swsValidationFailed, 
+            swsEdited, 
 
             addingInProgress,
             addingError, 
@@ -146,13 +158,13 @@ class ModulForm extends Component {
         let title = '';
 		let header = '';
 
-		if (modul) {
+		if (projektart) {
 			// Projekt objekt true, somit ein edit
-			title = `Modul "${modul.name}" bearbeiten`;
-			header = 'Neue Moduldaten einfügen';
+			title = `Projektart "${projektart.name}" bearbeiten`;
+			header = 'Neue Projektart Daten einfügen';
 		} else {
-			title = 'Erstelle ein neues Projekt';
-			header = 'Moduldaten einfügen';
+			title = 'Erstelle eine neue Projektart';
+			header = 'Projektart Daten einfügen';
 		}
 
         return (
@@ -170,19 +182,19 @@ class ModulForm extends Component {
 
                         <form className={classes.root} noValidate autoComplete='off'>
 
-                        <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='small' id='name' label='Modulname' variant="outlined" value={name}
+                        <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='small' id='name' label='Projektartname' variant="outlined" value={name}
                         onChange={this.textFieldValueChange} error={nameValidationFailed}  />
 
-                        <TextField className={classes.textfield} type='text' required fullWidth margin='small' id='edv_nr' label='EDV-Nummer' variant="outlined" value={edv_nr}
-                        onChange={this.numberValueChange} error={edv_nrValidationFailed} />
+                        <TextField className={classes.textfield} type='text' required fullWidth margin='small' id='ects' label='ECTS' variant="outlined" value={ects}
+                        onChange={this.numberValueChange} error={ectsValidationFailed} />
                         </form>
                         <LoadingProgress show={addingInProgress || updatingInProgress} />
                         {
-                        // Show error message in dependency of modul prop
-                        modul ?
-                            <ContextErrorMessage error={updatingError} contextErrorMsg={`The Modul ${modul.getID()} could not be updated.`} onReload={this.updateModul} />
+                        // Show error message in dependency of Projektart prop
+                        projektart ?
+                            <ContextErrorMessage error={updatingError} contextErrorMsg={`The Projektart ${projektart.getID()} could not be updated.`} onReload={this.updateProjektart} />
                             :
-                            <ContextErrorMessage error={addingError} contextErrorMsg={`The Modul could not be added.`} onReload={this.addModul} />
+                            <ContextErrorMessage error={addingError} contextErrorMsg={`The Projektart could not be added.`} onReload={this.addProjektart} />
                         }
                     </DialogContent>
                     <DialogActions>
@@ -191,13 +203,13 @@ class ModulForm extends Component {
                         </Button>
                         {
                         // If a Projekt is given, show an update button, else an add button
-                        modul ?
-                        <Button disabled={nameValidationFailed || edv_nrValidationFailed } variant='contained' onClick={this.updateModul} color='primary'>
+                        projektart ?
+                        <Button disabled={nameValidationFailed || ectsValidationFailed  || swsValidationFailed} variant='contained' onClick={this.updateProjektart} color='primary'>
                             Speichern
                         </Button>
                         : 
-                        <Button disabled={nameValidationFailed || !nameEdited || edv_nrValidationFailed || !edv_nrEdited }  
-                            variant='contained' onClick={this.addModul} color='primary'>
+                        <Button disabled={nameValidationFailed || !nameEdited || ectsValidationFailed || !ectsEdited }  
+                            variant='contained' onClick={this.addProjektart} color='primary'>
                             Hinzufügen
                         </Button>
                         }
@@ -226,7 +238,7 @@ const styles = theme => ({
   });
   
   /** PropTypes */
-  ModulForm.propTypes = {
+  ProjektartForm.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** If true, the form is rendered */
@@ -240,4 +252,4 @@ const styles = theme => ({
     onClose: PropTypes.func.isRequired,
   }
   
-  export default withStyles(styles)(ModulForm);
+  export default withStyles(styles)(ProjektartForm);
