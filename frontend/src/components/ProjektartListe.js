@@ -12,13 +12,15 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
-import ModulListeEintrag from './ModulListeEintrag';
+// import ModulListeEintrag from './ModulListeEintrag';
 import ModulForm from './dialogs/ModulForm';
 
+import ProjektartListeEintrag from './ProjektartListeEintrag';
 
 
 
-class ModulListe extends Component {
+
+class ProjektartListe extends Component {
 
   constructor(props) {
     super(props);
