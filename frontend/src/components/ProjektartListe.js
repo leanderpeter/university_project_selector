@@ -13,7 +13,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
 // import ModulListeEintrag from './ModulListeEintrag';
-import ProjektartForm from './dialogs/ProjektartForm';
+import ProjektartenForm from './dialogs/ProjektartenForm';
 
 import ProjektartListeEintrag from './ProjektartListeEintrag';
 
@@ -69,11 +69,11 @@ projektartFormClosed = projektart => {
       this.setState({
         projektarten: newProjektartList,
         filteredProjektarten: [...newProjektartList],
-        showProjektartForm: false
+        showProjektartenForm: false
       });
     } else {
       this.setState({
-        showProjektartForm: false
+        showProjektartenForm: false
       });
     }
   }
@@ -112,7 +112,7 @@ projektartFormClosed = projektart => {
   /** Renders the component */
   render() {
     const { classes } = this.props;
-    const {  loadingInProgress, error, projektartFilter, filteredProjektarten, showDeleteForm, showProjektartForm} = this.state;
+    const {  loadingInProgress, error, projektartFilter, filteredProjektarten, showDeleteForm, showProjektartenForm} = this.state;
 
     return (
       <div className={classes.root}>
@@ -156,7 +156,7 @@ projektartFormClosed = projektart => {
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`}  />
         </Paper>
-        <ProjektartForm show={showProjektartForm} onClose={this.projektartFormClosed} getProjektarten = {this.getProjektarten}/>
+        <ProjektartenForm show={showProjektartenForm} onClose={this.projektartFormClosed} getProjektarten = {this.getProjektarten}/>
       </div>
     );
   }

@@ -187,6 +187,10 @@ class ProjektartenForm extends Component {
 
                         <TextField className={classes.textfield} type='text' required fullWidth margin='small' id='ects' label='ECTS' variant="outlined" value={ects}
                         onChange={this.numberValueChange} error={ectsValidationFailed} />
+
+                        <TextField className={classes.textfield} type='text' required fullWidth margin='small' id='sws' label='SWS' variant="outlined" value={sws}
+                        onChange={this.numberValueChange} error={swsValidationFailed} />
+
                         </form>
                         <LoadingProgress show={addingInProgress || updatingInProgress} />
                         {

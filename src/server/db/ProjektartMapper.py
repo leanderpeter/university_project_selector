@@ -57,8 +57,34 @@ class ProjektartMapper(Mapper):
 
 		return result
 
-	def insert(self):
-		pass
+	def insert(self, projektart):
+		'''
+		Einfugen eines Projektart BO's in die DB
+		'''
+
+		cursor = self._connection.cursor()
+		cursor.execute("SELECT MAX(id) AS maxid FROM projektarten")
+		tuples = cursor.fetchall()
+
+
+		for (maxid) in tuples:
+			if maxid[0] is None:
+				projektart.set_id(1)
+			else:
+				projektart.set_id(maxid[0]+1)
+
+		command = "INSERT INTO projektarten (id, name, ects, sws) VALUES (%s,%s,%s,%s)"
+		data = (
+			projektart.get_id(),
+			projektart.get_name(),
+			projektart.get_ects(),
+			projektart.get_sws()
+			)
+		cursor.execute(command, data)
+		self._connection.commit()
+		cursor.close()
+
+		return projektart
 
 	def delete(self, id):
 		cursor = self._connection.cursor()
@@ -75,5 +101,18 @@ class ProjektartMapper(Mapper):
 
 	def find_by_key(self):
 		pass
-	def update(self):
-		pass
+
+	def update(self, projektart):
+
+		cursor = self._connection.cursor()
+
+		command = "UPDATE projektarten SET name=%s, ects=%s, sws=%s WHERE id=%s"
+		data = (projektart.get_name(), projektart.get_ects(), projektart.get_sws(), projektart.get_id())
+
+		result = projektart
+		cursor.execute(command, data)
+
+		self._connection.commit()
+		cursor.close()
+		
+		return result

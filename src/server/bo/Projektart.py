@@ -16,7 +16,7 @@ class Projektart(NamedBusinessObject):
         self._sws = sws
 
     def get_ects(self):
-        return _ects
+        return self._ects
 
     def set_ects(self, ects):
         self._ects = ects
@@ -28,6 +28,7 @@ class Projektart(NamedBusinessObject):
             self._sws,
             self._ects
             )
+        
     @staticmethod
     def from_dict(dictionary=dict()):
         obj = Projektart()
@@ -35,7 +36,6 @@ class Projektart(NamedBusinessObject):
         obj.set_name(dictionary['name'])
         obj.set_sws(dictionary['sws'])
         obj.set_ects(dictionary['ects'])
-
         return obj
 
     def to_dict(self):

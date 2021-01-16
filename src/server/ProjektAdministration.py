@@ -317,6 +317,14 @@ class ProjektAdministration(object):
         with ProjektartMapper() as mapper:
             return mapper.delete(id)
 
+    def save_projektart(self, projektart):
+        with ProjektartMapper() as mapper: 
+            return mapper.update(projektart)
+
+    def create_projektart(self, projektart): 
+        with ProjektartMapper() as mapper:
+            return mapper.insert(projektart)
+
     def get_projektart_by_id(self, id):
         with ProjektartMapper() as mapper:
             return mapper.find_projektart_by_id(id)

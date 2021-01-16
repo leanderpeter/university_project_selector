@@ -12,6 +12,7 @@ from server.ProjektAdministration import ProjektAdministration
 from server.bo.Teilnahme import Teilnahme
 from server.bo.Projekt import Projekt
 from server.bo.Modul import Modul
+from server.bo.Projektart import Projektart
 
 #SecurityDecorator
 from SecurityDecorator import secured
@@ -582,7 +583,7 @@ class ProjektGenehmigungOperation(Resource):
 
 @electivApp.route('/projektart')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class Projektart(Resource):
+class ProjektartOperationen(Resource):
     @electivApp.marshal_list_with(projektart)
     @secured
 
@@ -595,6 +596,36 @@ class Projektart(Resource):
         id = request.args.get("id")
         adm = ProjektAdministration()
         adm.delete_projektart(id)
+
+    @electivApp.marshal_with(projektart)
+    @electivApp.expect(projektart)
+    @secured
+    def put(self):
+        '''
+        Updaten einer Projektart
+        '''
+        adm = ProjektAdministration()
+        projektart = Projektart.from_dict(api.payload)
+
+        if projektart is not None:
+            response = adm.save_projektart(projektart)
+            return response, 200
+        else:
+            return '', 500
+
+    @electivApp.marshal_with(projektart, code=200)
+    @electivApp.expect(projektart)
+    @secured
+    def post (self):
+        adm = ProjektAdministration()
+        projektart = Projektart.from_dict(api.payload)
+
+        if projektart is not None:
+            p = adm.create_projektart(projektart)
+            return p, 200
+        else: 
+            return '', 500
+
 
 @electivApp.route('/projektart/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
