@@ -10,6 +10,7 @@ import LoadingProgress from './dialogs/LoadingProgress';
 //Icons importieren
 import SaveIcon from '@material-ui/icons/Save';
 import AddIcon from '@material-ui/icons/Add';
+import ArchiveIcon from '@material-ui/icons/Archive';
 
 //import AddStudent Dialog
 import AddStudent from './dialogs/AddStudent';
@@ -48,6 +49,7 @@ class ProjektBearbeiten extends Component {
         this.state = {
             teilnahmen:[],
             projekte:[],
+            abgeschlosseneProjekte: [],
             "currentProjekt": null,
             error: null,
             loadingInProgress: false,
@@ -57,10 +59,10 @@ class ProjektBearbeiten extends Component {
         this.getTeilnahmenByProjektId=this.getTeilnahmenByProjektId.bind(this)
     }
     
+    //API Anbindung um alle aktuellen Projekte vom Backend zu bekommen
     getProjekte = () => {
       //Funtion für den Dozenten 
-      //API Anbindung holt alle Projekte im richtigen Zustand, vom jeweiligen Dozenten vom Backend
-      console.log("Hallo",this.props.currentPerson)
+      //API Anbindung holt alle Projekte im richtigen Zustand, vom jeweiligen Dozenten vom Backendconsole.log("Hallo",this.props.currentPerson)
       if (this.props.currentPerson.getrolle()==="Dozent"){
         ElectivAPI.getAPI().getProjekteByZustandByDozent("in Bewertung",this.props.currentPerson.getID())
           .then(projekteBOs =>
@@ -80,6 +82,7 @@ class ProjektBearbeiten extends Component {
           error: null
         });
       }
+      
 
     //Funtion für den Admin  
     //API Anbindung holt alle Projekte im richtigen Zustand vom Backend
@@ -103,29 +106,77 @@ class ProjektBearbeiten extends Component {
 			error: null
     });
     }
-	}
+  }
+  
 
-    // API Anbindung holt alle Teilnahmen der jeweiligen Projekt ID vom Backend
-    getTeilnahmenByProjektId=(id)=>{
-      ElectivAPI.getAPI().getTeilnahmenByProjektId(id)
-      .then(teilnahmeBOs =>
-        this.setState({
-            teilnahmen: teilnahmeBOs,
+  getAbgeschlosseneProjekte = () => {
+    //Funtion für den Dozenten 
+    //API Anbindung holt alle Projekte im richtigen Zustand, vom jeweiligen Dozenten vom Backend
+    if (this.props.currentPerson.getrolle()==="Dozent"){
+      ElectivAPI.getAPI().getProjekteByZustandByDozent("Bewertung abgeschlossen",this.props.currentPerson.getID())
+        .then(projekteBOs =>
+          this.setState({								//neuer status wenn fetch komplett
+            abgeschlosseneProjekte: projekteBOs, 
+            loadingInProgress: false,				// deaktiviere ladeindikator
             error: null,
-            loadingInProgress: false,
-        })
-      ).catch(e =>
+          })).catch(e =>
             this.setState({
-                teilnahme: [],
-                error: e,
-                loadingInProgress: false,
+              abgeschlosseneProjekte: [],
+              loadingInProgress: false,
+              error: e
             }));
+      // setze laden auf wahr
       this.setState({
-          error: null,
-          loadingInProgress: true,
-          loadingProjekteError: null
+        loadingInProgress: true,
+        error: null
       });
     }
+
+  //Funtion für den Admin  
+  //API Anbindung holt alle Projekte im richtigen Zustand vom Backend
+  if (this.props.currentPerson.getrolle()==="Admin"){
+    ElectivAPI.getAPI().getProjekteByZustand("Bewertung abgeschlossen")
+    .then(projekteBOs => 
+      this.setState({								//neuer status wenn fetch komplett
+        abgeschlosseneProjekte: projekteBOs,	
+        loadingInProgress: false,				// deaktiviere ladeindikator
+        error: null,
+      })).catch(e =>
+        this.setState({
+          abgeschlosseneProjekte: [],
+          loadingInProgress: false,
+          error: e
+        }));
+  // setze laden auf wahr
+  // console.log(this.projekte.toString());
+  this.setState({
+    loadingInProgress: true,
+    error: null
+  });
+  }
+}
+
+  // API Anbindung holt alle Teilnahmen der jeweiligen Projekt ID vom Backend
+  getTeilnahmenByProjektId=(id)=>{
+    ElectivAPI.getAPI().getTeilnahmenByProjektId(id)
+    .then(teilnahmeBOs =>
+      this.setState({
+          teilnahmen: teilnahmeBOs,
+          error: null,
+          loadingInProgress: false,
+      })
+    ).catch(e =>
+          this.setState({
+              teilnahme: [],
+              error: e,
+              loadingInProgress: false,
+          }));
+    this.setState({
+        error: null,
+        loadingInProgress: true,
+        loadingProjekteError: null
+    });
+  }
     
     //bei Klick Button Bewertung abgeben, wird der Zustand des Projektes in den nächsten Zustand versetzt
     bewertungAbgeschlossenButtonClicked = event => {
@@ -133,6 +184,9 @@ class ProjektBearbeiten extends Component {
       ElectivAPI.getAPI().setZustandAtProjekt(this.state.currentProjekt, "Bewertung abgeschlossen").then(()=>{
         this.getProjekte()
         this.getTeilnahmenByProjektId()
+        this.setState({
+          currentProjekt: null,
+        })
       }); 
     }
 
@@ -154,6 +208,7 @@ class ProjektBearbeiten extends Component {
 
     componentDidMount() {
       this.getProjekte();
+      this.getAbgeschlosseneProjekte();
     }
 
     //bei Änderung der Select Komponente wird das Projekt als das aktuelle Projekt ausgewählt  
@@ -166,20 +221,33 @@ class ProjektBearbeiten extends Component {
 
     render(){
         const { classes } = this.props;
-        const {currentRolle, projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
+        const {currentRolle, projekte, abgeschlosseneProjekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
         
         return(
           <div className={classes.root}>
-            
+                       
             {/*erster sichtbarer Teil wenn noch kein Projekt ausgewählt wurde*/}
             <Grid className={classes.grid} container spacing={2} display="flex" margin="auto">
-              <Grid item xs={12} sm={6} >
+              <Grid item xs={12} sm={4} >
                   
                     <FormControl className={classes.formControl}>
-                      <InputLabel>Projektname</InputLabel>
-                        <Select  className={classes.formControl} style={{ minWidth:"8rem"}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
+                      <InputLabel>aktuelle Projekte</InputLabel>
+                        <Select  className={classes.formControl} style={{ minWidth:"9rem"}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
                           {
                           projekte.map(projekt =>
+                          <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
+                          )
+                          }
+                        </Select>                                                              
+                    </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={4} >
+              
+                    <FormControl className={classes.formControl}>
+                      <InputLabel>abgeschlossene Projekte</InputLabel>
+                        <Select  className={classes.formControl} style={{ minWidth:"13rem"}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
+                          {
+                          abgeschlosseneProjekte.map(projekt =>
                           <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
                           )
                           }
@@ -190,6 +258,8 @@ class ProjektBearbeiten extends Component {
             {/*wenn ein Projekt ausgewählt wurde*/}
                   {currentProjekt?
                     <>
+                      {currentProjekt.zustand === "in Bewertung"?
+                        <>
                         <Grid item xs/>
                         <Grid item className={classes.grid} >
                             <Tooltip title='Teilnehmer hinzufügen' placement="left">
@@ -198,6 +268,19 @@ class ProjektBearbeiten extends Component {
                               </Fab> 
                               </Tooltip>
                         </Grid>
+                        </>
+                          :
+                        <>
+                          <Grid item xs/>
+                          <Grid item className={classes.grid} >
+                              <Tooltip title='Teilnehmer hinzufügen' placement="left">
+                                <Fab size="small" align="right" className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked} disabled>
+                                  <AddIcon />
+                                </Fab> 
+                                </Tooltip>
+                          </Grid>
+                        </>
+                      }
                         
                         <TableContainer component={Paper}>
                           <Table className={classes.table} aria-label="customized table">
@@ -212,7 +295,7 @@ class ProjektBearbeiten extends Component {
                               <TableBody>
                                 {
                                   teilnahmen.map(teilnahme =>
-                                    <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme} reloadteilnahmen={this.getTeilnahmenByProjektId} />
+                                    <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme} reloadteilnahmen={this.getTeilnahmenByProjektId} currentProjekt = {currentProjekt}  />
                                   )
                                 }
                               </TableBody> 
@@ -221,11 +304,26 @@ class ProjektBearbeiten extends Component {
                               <ContextErrorMessage error={error} contextErrorMsg = {'Projekte Bearbeiten konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
                               <AddStudent show={showAddStudent} currentProjekt={currentProjekt} teilnahmen={teilnahmen} onClose={this.addStudentClosed}/>
                         </TableContainer>
-                      
-                      <Grid item xs/>
-                      <Grid item>
-                        <Button variant="contained" color="primary" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
-                      </Grid>
+
+                      {/*Bewertung abschließen Button wird nur angezeigt wenn das Projekt sich noch in dem Bewertungszustand befindet*/}
+                      {currentProjekt ?
+                        <>
+                          {currentProjekt.zustand === "in Bewertung"?
+                            <>
+                              <Grid item xs/>
+                              <Grid item>
+                                <Button variant="contained" color="primary" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
+                              </Grid>
+                            </>
+                            :
+                          <>
+                              
+                          </>
+                          }
+                          
+                          </>
+                          :null
+                      }
                       
                     </>
                   :
