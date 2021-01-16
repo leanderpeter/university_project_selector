@@ -33,7 +33,6 @@ class ProjektListeEintrag extends Component {
                 teilnahmeChanged : false,
                 projektarten: [],
                 pArten: null
-
             };
 	}
 
@@ -135,10 +134,6 @@ class ProjektListeEintrag extends Component {
             this.state.teilnahmeButtonDisabled = true;
             this.state.teilnahmeAbwaehlenButtonDisabled = false;
 		}
-
-
-    
-
     
     return (
       <div>

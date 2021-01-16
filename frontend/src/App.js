@@ -177,7 +177,8 @@ class App extends React.Component {
         <CssBaseline />
         <Router basename={process.env.PUBLIC_URL}>
           <Container maxWidth='md'>
-            <Header user={currentUser}/> 
+            <Header user={currentUser} currentStudent={currentStudent} currentPerson= {currentPerson}/> 
+          
             {
               // is the user signed in?
               currentUser ?

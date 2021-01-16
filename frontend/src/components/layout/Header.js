@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Paper, Typography, Tabs, Tab } from '@material-ui/core';
+import { withStyles, Paper, Typography, Tabs, Tab } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import ProfileDropDown from '../dialogs/ProfileDropDown';
+import { withRouter } from 'react-router-dom';
 
 /**
 
@@ -28,7 +29,7 @@ class Header extends Component {
 	};
 	// Render component
 	render() {
-    const { user } = this.props;
+    const { classes, user, currentStudent, currentPerson } = this.props;
 		return (
       <Paper variant='outlined' >
         <ProfileDropDown user={user} />
@@ -40,18 +41,48 @@ class Header extends Component {
         </Typography>
         {
           user ?
-            <Tabs indicatorColor='primary' textColor='primary' variant="scrollable"
-            scrollButtons="auto" centered value={this.state.tabindex} onChange={this.handleTabChange}  >
-              <Tab label='Projekte' component={RouterLink} to={`/projekte`} />
-              <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'}/>
-              <Tab label='Projektbearbeiten' component={RouterLink} to={`/projektbearbeiten`} />
-              <Tab label="Notenliste" component={RouterLink} to={'/notenliste'}/>
-              <Tab label='Projekte Dozent' component={RouterLink} to={`/projekteDozent`} />
-              <Tab label='Projektverwaltung' component={RouterLink} to={`/projektverwaltung`} />
-              <Tab label='Administration' component={RouterLink} to={`/administration/semester`} />
-              <Tab label='About' component={RouterLink} to={`/about`} />
-             
-            </Tabs>
+            
+              <>
+              {currentStudent ?
+                <>
+                <Tabs indicatorColor='primary' textColor='primary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}>
+                <Tab label='Projektwahl' component={RouterLink} to={`/projekte`} />
+                <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'}/>
+                <Tab label='About' component={RouterLink} to={`/about`} />
+                </Tabs>
+                </>
+                :null
+              }
+              {currentPerson?
+                <>
+                  {currentPerson.rolle === "Dozent"?
+                  <>
+                  <Tabs indicatorColor='primary' textColor='primary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
+                  <Tab label='Wahl' component={RouterLink} to={`/projekte`} />
+                  <Tab label='Projektpflege' component={RouterLink} to={`/projektbearbeiten`} />
+                  <Tab label='Projektverwaltung' component={RouterLink} to={`/projekteDozent`} />
+                  <Tab label='About' component={RouterLink} to={`/about`} />
+                  </Tabs>
+                  </>
+                  :null
+                  }
+                  {currentPerson.rolle === "Admin"?
+                  <>
+                  <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
+                  <Tab className={classes.tab} label='Wahl' component={RouterLink} to={`/projekte`} />
+                  <Tab className={classes.tab} label='Pflege' component={RouterLink} to={`/projektbearbeiten`} />
+                  <Tab className={classes.tab} label='Verwaltung' component={RouterLink} to={`/projekteDozent`} />
+                  <Tab className={classes.tab} label='Prüfung' component={RouterLink} to={`/projektverwaltung`} />
+                  <Tab className={classes.tab} label="Notenliste" component={RouterLink} to={'/notenliste'}/>
+                  <Tab className={classes.tab} label='Administration' component={RouterLink} to={`/administration/semester`} />
+                  </Tabs>
+                  </>
+                  :null
+                  }
+                </>
+              :null
+              }
+            </>
             : null
         }
       </Paper>
@@ -59,10 +90,21 @@ class Header extends Component {
   }
 }
 
+const styles = theme => ({
+  root: {
+    width: '100%',
+  },
+  tab: {
+    minWidth: 150, // a number of your choice
+    width: 150, // a number of your choice
+  }
+});
+
+
 // Prop Type
 Header.propTypes = {
 	// logged in Firebase user/person
 	user: PropTypes.object,
 }
 
-export default Header;
+export default withRouter(withStyles(styles)(Header));
