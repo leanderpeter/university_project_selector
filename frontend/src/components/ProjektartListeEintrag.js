@@ -11,38 +11,38 @@ import EditIcon from '@material-ui/icons/Edit';
 import Divider from '@material-ui/core/Divider';
 import {ElectivAPI} from '../api';
 
-import ModulForm from './dialogs/ModulForm';
-import ModulDelete from './dialogs/ModulDelete';
+import ProjektartForm from './dialogs/ProjektartForm';
+import ProjektartDelete from './dialogs/ProjektartDelete';
 
 
 
 
-class ModulListeEintrag extends Component {
+class ProjektartListeEintrag extends Component {
 
     constructor(props){
         super(props);
 
         this.state = {
-            showModulForm: false,
-            showModulDelete: false,
+            showProjektartForm: false,
+            showProjektartDelete: false,
             error: null,
             loadingInProgress: false
         };
     }
 
-    getModule = () => {
-      this.props.getModule();
+    getProjektarten = () => {
+      this.props.getProjektarten();
     }
 
-    modulFormClosed = (modul) => {
-      if (modul){
+    projektartFormClosed = (projektart) => {
+      if (projektart){
         this.setState({
-          modul: modul,
-          showModulForm: false
+          projektart: projektart,
+          showProjektartForm: false
         });
       }else {
         this.setState({
-          showModulForm: false
+          showProjektartForm: false
         });
       }
     }
@@ -50,38 +50,38 @@ class ModulListeEintrag extends Component {
     bearbeitenButtonClicked = event => {
       event.stopPropagation();
       this.setState({
-        showModulForm: true
+        showProjektartForm: true
       });
     }
     
-    modulDeleteButtonClicked =  event => {
+    projektartDeleteButtonClicked =  event => {
       event.stopPropagation();
       this.setState({
-        showModulDelete: true
+        showProjektartDelete: true
       });
     }
   
-    modulDeleteClosed = () => {
+    projektartDeleteClosed = () => {
         this.setState({
-          showModulDelete: false
+          showProjektartDelete: false
         });
-        this.getModule();
+        this.getProjektart();
     }
 
 
     render(){
-        const {classes, modul} = this.props;
-        const { showModulForm, showModulDelete,  error, loadingInProgress } = this.state;
+        const {classes, projektart} = this.props;
+        const { showProjektartForm, showProjektartDelete,  error, loadingInProgress } = this.state;
 
         return(
           <div>
             <ListItem className={classes.root}>
                   <Grid container  alignItems="center" spacing={2}>
                     <Grid item>
-                        <Typography >{modul.edv_nr}</Typography>
+                        <Typography >{projektart.name}</Typography>
                     </Grid>
                     <Grid item>
-                        <Typography >{modul.name}</Typography>
+                        <Typography >{projektart.name}</Typography>
                     </Grid>
                     <Grid item xs/>
                     <Grid item>
@@ -93,7 +93,7 @@ class ModulListeEintrag extends Component {
                     </Grid>
                     <Grid item>
                     <Tooltip title='Löschen' placement="bottom">
-                        <IconButton className={classes.projektDeleteButton}  variant="contained"  onClick={this.modulDeleteButtonClicked}><DeleteIcon /></IconButton>
+                        <IconButton className={classes.projektDeleteButton}  variant="contained"  onClick={this.projektartDeleteButtonClicked}><DeleteIcon /></IconButton>
                     </Tooltip>
                     </Grid>
                     </Grid>
@@ -103,8 +103,8 @@ class ModulListeEintrag extends Component {
               <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getProjekt} />
             </ListItem>
             <Divider/>
-            <ModulForm show={showModulForm} modul={modul} onClose={this.modulFormClosed} getModule= {this.getModule}/>
-            <ModulDelete show={showModulDelete} modul={modul} onClose={this.modulDeleteClosed} />       
+            <ProjektartForm show={showProjektartForm} projektart={projektart} onClose={this.projektartFormClosed} getProjektart= {this.getProjektart}/>
+            <ProjektartDelete show={showProjektartDelete} projektart={projektart} onClose={this.projektartDeleteClosed} />       
           </div>                        
         );
     }
@@ -117,7 +117,7 @@ const styles = theme => ({
     });
 
 /** PropTypes */
-ModulListeEintrag.propTypes = {
+ProjektartListeEintrag.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     show: PropTypes.bool.isRequired
@@ -125,6 +125,6 @@ ModulListeEintrag.propTypes = {
   
 
 
-export default withStyles(styles)(ModulListeEintrag);
+export default withStyles(styles)(ProjektartListeEintrag);
 
 

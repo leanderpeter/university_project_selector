@@ -13,7 +13,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
 // import ModulListeEintrag from './ModulListeEintrag';
-import ModulForm from './dialogs/ModulForm';
+import ProjektartForm from './dialogs/ProjektartForm';
 
 import ProjektartListeEintrag from './ProjektartListeEintrag';
 
@@ -27,10 +27,10 @@ class ProjektartListe extends Component {
 
     //gebe einen leeren status
     this.state = {
-        module: [],
-        filteredModule: [],
-        modulFilter: '',
-        showModulForm: false,
+        projektarten: [],
+        filteredProjektarten: [],
+        projektartFilter: '',
+        showProjektartenForm: false,
         showDeleteForm: false,
         error: null,
         loadingInProgress: false,
@@ -40,57 +40,57 @@ class ProjektartListe extends Component {
   addButtonClicked = event => {
     event.stopPropagation();
     this.setState({
-      showModulForm: true
+      showProjektartenForm: true
     });
   }
 
   filterFieldValueChange= event => {
     const value = event.target.value.toLowerCase();
     this.setState({
-        filteredModule: this.state.module.filter(modul => {
-            let nameContainsValue = modul.getname().toLowerCase().includes(value);
-            let edv_nrContainsValue = modul.getEdv_nr().toString().includes(value);
+        filteredProjektarten: this.state.projektarten.filter(projektart => {
+            let nameContainsValue = projektart.getname().toLowerCase().includes(value);
+            let edv_nrContainsValue = projektart.getEdv_nr().toString().includes(value);
             return nameContainsValue || edv_nrContainsValue;
         }),
-        modulFilter: value
+        projektartFilter: value
     });
 }
 
 clearFilterFieldButtonClicked = () => {
     this.setState({
-        filteredModule: [...this.state.module],
-        modulFilter: ''
+        filteredProjektarten: [...this.state.projektarten],
+        projektartFilter: ''
     });
 }
 
-modulFormClosed = modul => {
-    if (modul) {
-      const newModulList = [...this.state.module, modul];
+projektartFormClosed = projektart => {
+    if (projektart) {
+      const newProjektartList = [...this.state.projektarten, projektart];
       this.setState({
-        module: newModulList,
-        filteredModule: [...newModulList],
-        showModulForm: false
+        projektarten: newProjektartList,
+        filteredProjektarten: [...newProjektartList],
+        showProjektartForm: false
       });
     } else {
       this.setState({
-        showModulForm: false
+        showProjektartForm: false
       });
     }
   }
 
-  // API Anbindung um alle Module vom Backend zu bekommen 
-  getModule = () => {
-    ElectivAPI.getAPI().getModule()
-    .then(modulBOs =>
+  // API Anbindung um alle Projektarten vom Backend zu bekommen 
+  getProjektarten = () => {
+    ElectivAPI.getAPI().getProjektart()
+    .then(projektartBOs =>
         this.setState({
-            module: modulBOs,
-            filteredModule: [...modulBOs],
+            projektarten: projektartBOs,
+            filteredProjektarten: [...projektartBOs],
             error: null,
             loadingInProgress: false,
         })).catch(e =>
             this.setState({
-                module: [],
-                filteredModule: [],
+                projektarten: [],
+                filteredProjektarten: [],
                 error: e,
                 loadingInProgress: false,
             }));
@@ -104,7 +104,7 @@ modulFormClosed = modul => {
 
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
   componentDidMount() {
-      this.getModule();
+      this.getProjektarten();
   }
 
 
@@ -112,7 +112,7 @@ modulFormClosed = modul => {
   /** Renders the component */
   render() {
     const { classes } = this.props;
-    const {  loadingInProgress, error, modulFilter, filteredModule, showDeleteForm, showModulForm} = this.state;
+    const {  loadingInProgress, error, projektartFilter, filteredProjektarten, showDeleteForm, showProjektartForm} = this.state;
 
     return (
       <div className={classes.root}>
@@ -121,8 +121,8 @@ modulFormClosed = modul => {
             <TextField
                 className={classes.filter}
                 type='text'
-                label='Module suchen'
-                value={modulFilter}
+                label='Projektart suchen'
+                value={projektartFilter}
                 onChange={this.filterFieldValueChange}
                 InputProps={{
                     endAdornment: <InputAdornment position='end'>
@@ -135,7 +135,7 @@ modulFormClosed = modul => {
             </Grid>
             <Grid item xs/>
             <Grid item>
-                <Tooltip title='Modul anlegen' placement="left">
+                <Tooltip title='Projektart anlegen' placement="left">
                     <Fab size="medium"  className={classes.addButton} color="primary" aria-label="add" onClick={this.addButtonClicked}>
                         <AddIcon />
                     </Fab>
@@ -145,18 +145,18 @@ modulFormClosed = modul => {
         <Paper>
             <List className={classes.root} dense>
                 {
-                filteredModule.map(modul => 
-                    <ModulListeEintrag key={modul.getID()} modul = {modul} show={this.props.show} getModule={this.getModule}/>)
+                filteredProjektarten.map(projektart => 
+                    <ProjektartListeEintrag key={projektart.getID()} projektart = {projektart} show={this.props.show} getProjektarten={this.getProjektarten}/>)
                 }
                 <ListItem>
                 <LoadingProgress show={loadingInProgress} />
-                <ContextErrorMessage error={error} contextErrorMsg={`Modulliste konnte nicht geladen werden.`} onReload={null} />
+                <ContextErrorMessage error={error} contextErrorMsg={`Projektartliste konnte nicht geladen werden.`} onReload={null} />
                 </ListItem>
             </List>
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`}  />
         </Paper>
-        <ModulForm show={showModulForm} onClose={this.modulFormClosed} getModule= {this.getModule}/>
+        <ProjektartForm show={showProjektartForm} onClose={this.projektartFormClosed} getProjektarten = {this.getProjektarten}/>
       </div>
     );
   }
@@ -178,12 +178,12 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-ModulListe.propTypes = {
+ProjektartListe.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   /** @ignore */
   location: PropTypes.object.isRequired,
 }
 
-export default withRouter(withStyles(styles)(ModulListe));
+export default withRouter(withStyles(styles)(ProjektartListe));
 
