@@ -4,6 +4,8 @@ import { withStyles, Button, TextField, InputAdornment, IconButton, Grid, Typogr
 import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear'
 import { withRouter } from 'react-router-dom';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import { ElectivAPI } from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -36,7 +38,8 @@ class ProjektDozentListe extends Component {
 			error: null,
 			loadingInProgress: false,
 			expandedProjektID: expandedID,
-			showProjekteForm: false
+			showProjekteForm: false,
+			filterValue : 'Neu'
 		};
 	}
 
@@ -46,14 +49,21 @@ class ProjektDozentListe extends Component {
       ElectivAPI.getAPI().getProjekteByZustand('Neu')
         .then(projekteBOs => {
           this.setState({								//neuer status wenn fetch komplett
-            projekte: projekteBOs,					
+            projekte: projekteBOs,
             filteredProjekte: [...projekteBOs],		//speicher eine kopie
             loadingInProgress: false,				// deaktiviere ladeindikator
             error: null,
           })})
           ElectivAPI.getAPI().getProjekteByZustand('Abgelehnt').then( projekteBOs => {
           this.setState({								//neuer status wenn fetch komplett
-            projekte: [...this.state.projekte, projekteBOs],					
+            projekte: [...this.state.projekte, ...projekteBOs],
+            filteredProjekte: [...this.state.projekte, ...projekteBOs],		//speicher eine kopie
+            loadingInProgress: false,				// deaktiviere ladeindikator
+            error: null,
+          })})
+          ElectivAPI.getAPI().getProjekteByZustand('Genehmigt').then( projekteBOs => {
+          this.setState({								//neuer status wenn fetch komplett
+            projekte: [...this.state.projekte, ...projekteBOs],
             filteredProjekte: [...this.state.projekte, ...projekteBOs],		//speicher eine kopie
             loadingInProgress: false,				// deaktiviere ladeindikator
             error: null,
@@ -73,18 +83,24 @@ class ProjektDozentListe extends Component {
       ElectivAPI.getAPI().getProjekteByZustandByDozent("Neu",this.props.currentPerson.getID())
         .then(projekteBOs => {
           this.setState({								//neuer status wenn fetch komplett
-            projekte: projekteBOs,					
+            projekte: projekteBOs,
             filteredProjekte: [...projekteBOs],		//speicher eine kopie
             loadingInProgress: false,				// deaktiviere ladeindikator
-            error: null,
+            error: null
           })})
           ElectivAPI.getAPI().getProjekteByZustandByDozent("Abgelehnt",this.props.currentPerson.getID())
           .then( projekteBOs => {
           this.setState({								//neuer status wenn fetch komplett
-            projekte: [...this.state.projekte, projekteBOs],					
-            filteredProjekte: [...this.state.projekte, ...projekteBOs],		//speicher eine kopie
+            projekte: [...this.state.projekte, ...projekteBOs],
             loadingInProgress: false,				// deaktiviere ladeindikator
-            error: null,
+            error: null
+          })})
+          ElectivAPI.getAPI().getProjekteByZustandByDozent("Genehmigt",this.props.currentPerson.getID())
+          .then( projekteBOs => {
+          this.setState({								//neuer status wenn fetch komplett
+            projekte: [...this.state.projekte, ...projekteBOs],
+            loadingInProgress: false,				// deaktiviere ladeindikator
+            error: null
           })})
           .catch(e =>
             this.setState({
@@ -107,7 +123,6 @@ class ProjektDozentListe extends Component {
   onExpandedStateChange = projekt => {
     //  Zum anfang Projekt Eintrag = null
     let newID = null;
-
     // Falls ein Objekt geclicket wird, collapse
     if (projekt.getID() !== this.state.expandedProjektID) {
       // Oeffnen mit neuer Projekt ID
@@ -132,13 +147,32 @@ class ProjektDozentListe extends Component {
       this.setState({
         projekte: newProjektList,
         filteredProjekte: [...newProjektList],
-        showProjekteForm: false
+        showProjekteForm: false,
+        filterValue : 'Neu'
       });
     } else {
       this.setState({
-        showProjekteForm: false
+        showProjekteForm: false,
+        filterValue : 'Neu'
       });
     }
+  }
+
+  filterFieldValueChange = event =>{
+
+
+    var filteredProjekte = []
+    for (var i = 0; i < this.state.projekte.length; i++) {
+      if(this.state.projekte[i].aktueller_zustand === event.target.value){
+        filteredProjekte.push(this.state.projekte[i]);
+      }
+    }
+
+    this.setState({
+        filteredProjekte : filteredProjekte,
+        filterValue : event.target.value
+    })
+
   }
 
 
@@ -148,32 +182,24 @@ class ProjektDozentListe extends Component {
 	/** Renders the component */
 	render() {
     const { classes , currentPerson } = this.props;
-    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm } = this.state;
+    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm, filterValue } = this.state;
 
     return (
       <div className={classes.root}>
         <Grid className={classes.projektFilter} container spacing={1} justify='flex-start' alignItems='center'>
           <Grid item>
             <Typography>
-              Deine noch nicht genehmigten Projekte:
+              Ihre Projekte mit dem Status:
               </Typography>
           </Grid>
           <Grid item xs={4}>
-            <TextField
-              autoFocus
-              fullWidth
-              id='projektFilter'
-              type='text'
-              value={projektFilter}
-              onChange={this.filterFieldValueChange}
-              InputProps={{
-                endAdornment: <InputAdornment position='end'>
-                  <IconButton onClick={this.clearFilterFieldButtonClicked}>
-                    <ClearIcon />
-                  </IconButton>
-                </InputAdornment>,
-              }}
-            />
+            <Select id='projektFilter' value={filterValue} onChange={this.filterFieldValueChange}>
+                <MenuItem value={'Neu'} >Neu</MenuItem>
+                <MenuItem value={'Genehmigt'}>Genehmigt</MenuItem>
+                <MenuItem value={'Abgelehnt'}>Abgelehnt</MenuItem>
+            </Select>
+
+
           </Grid>
           <Grid item xs />
           <Grid item>
