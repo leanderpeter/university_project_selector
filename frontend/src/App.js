@@ -149,7 +149,7 @@ class App extends React.Component {
       var i=0;  //Suchposition im Cookie
       var suche = name + "=";
       while (i<document.cookie.length) {
-         if (document.cookie.substring(i, i + suche.length) == suche) {
+         if (document.cookie.substring(i, i + suche.length) === suche) {
             var ende = document.cookie.indexOf(";", i + suche.length);
             ende = (ende > -1) ? ende : document.cookie.length;
             var cook = document.cookie.substring(i + suche.length, ende);

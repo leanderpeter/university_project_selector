@@ -1,5 +1,5 @@
 import React from 'react'
-import {makeStyles, Paper, Typography, Link, Grid, Card, CardMedia, CardContent, Collapse, CardHeader, Button, } from '@material-ui/core';
+import {makeStyles, Paper, Typography, Grid, Card, CardContent, Button, } from '@material-ui/core';
 import pascal from '../images/pascal.jpg';
 
 const useStyles = makeStyles(theme => ({
@@ -32,7 +32,7 @@ function About() {
       </Typography>
     <Card className={classes.root}>
       
-      <img style={{margin:"auto",display: "flex",marginTop:"0%",width:"80%" }}src="https://www.hdm-stuttgart.de/news/news20200414121003/thumbstart" />
+      <img alt="Bild HDM" style={{margin:"auto",display: "flex",marginTop:"0%",width:"80%" }}src="https://www.hdm-stuttgart.de/news/news20200414121003/thumbstart" />
     
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
@@ -50,7 +50,7 @@ function About() {
         <Grid item xs={4}><Paper className={classes.paper1}>
           <Card className={classes.root1}>
      
-        <img style={{margin:"auto",display: "flex",marginTop:"0%",width:"68%" }}src="https://www.imago-images.de/bild/sp/0047040892/s.jpg"
+        <img alt="Bild Raphael Müller" style={{margin:"auto",display: "flex",marginTop:"0%",width:"68%" }}src="https://www.imago-images.de/bild/sp/0047040892/s.jpg"
           title="Raphael Müller"
         />
         <CardContent>
@@ -71,7 +71,7 @@ function About() {
           
           <Card className={classes.root1}>
      
-        <img style={{margin:"auto",display: "flex",marginTop:"0%",width:"50%" }}src="https://profile-images.xing.com/images/15a25d6e24511f62164df882d9ecb497-1/jannik-merz.1024x1024.jpg"
+        <img alt="Bild Jannik Merz" style={{margin:"auto",display: "flex",marginTop:"0%",width:"50%" }}src="https://profile-images.xing.com/images/15a25d6e24511f62164df882d9ecb497-1/jannik-merz.1024x1024.jpg"
           title="Jannik Merz"
         />
         <CardContent>
@@ -92,7 +92,7 @@ function About() {
         <Grid item xs={4}><Paper className={classes.paper}>
           <Card className={classes.root1}>
      
-        <img style={{margin:"auto",display: "flex",marginTop:"0%",width:"50%" }}src="https://pbs.twimg.com/profile_images/1321033014906966022/FfIl7cGE.jpg"
+        <img alt="Bild Leander Peter" style={{margin:"auto",display: "flex",marginTop:"0%",width:"50%" }}src="https://pbs.twimg.com/profile_images/1321033014906966022/FfIl7cGE.jpg"
           title="Leander Peter"
         />
         <CardContent>
@@ -118,7 +118,7 @@ function About() {
         <Grid item xs={4}><Paper className={classes.paper1}>
           <Card className={classes.root1}>
      
-        <img style={{margin:"auto",display: "flex",marginTop:"0%",width:"50%" }}src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIeqgZiptkRGerhe8HeYd6LDMWfSsaohvs5g&usqp=CAU"
+        <img alt="Bild Daria Bilyk" style={{margin:"auto",display: "flex",marginTop:"0%",width:"50%" }}src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIeqgZiptkRGerhe8HeYd6LDMWfSsaohvs5g&usqp=CAU"
           title="Daria Bilyk"
         />
         <CardContent>
@@ -139,7 +139,7 @@ function About() {
           
           <Card className={classes.root1}>
      
-        <img style={{margin:"auto",display: "flex",marginTop:"0%",width:"50%" }}src="https://cdn.pixabay.com/photo/2016/10/02/03/15/smiley-1708870_960_720.png"
+        <img alt="Bild Alexander Hofstetter" style={{margin:"auto",display: "flex",marginTop:"0%",width:"50%" }}src="https://cdn.pixabay.com/photo/2016/10/02/03/15/smiley-1708870_960_720.png"
           title="Alexander Hofstetter"
         />
         <CardContent>
@@ -160,7 +160,7 @@ function About() {
         <Grid item xs={4}><Paper className={classes.paper}>
           <Card className={classes.root1}>
      
-        <img style={{margin:"auto",display: "flex",marginTop:"0%",width:"50%" }}src={pascal}
+        <img alt="Bild Pascal Gienger" style={{margin:"auto",display: "flex",marginTop:"0%",width:"50%" }}src={pascal}
           title="Pascal Gienger"
         />
         <CardContent>

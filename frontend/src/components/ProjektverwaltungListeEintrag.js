@@ -116,7 +116,7 @@ class ProjektverwaltungListeEintrag extends Component {
                 <b>Maximale Teilnehmer: </b>{projekt.getmax_teilnehmer()}<br />
                 <b>Betreuer: </b>{projekt.getbetreuer()}<br />
                 <b>Externer Partner: </b>{projekt.getexterner_partner()}<br />
-                <b>Wöchentlich: </b>{projekt.getwoechentlich() == "1" ? "Ja" : "Nein"}<br />
+                <b>Wöchentlich: </b>{projekt.getwoechentlich() === "1" ? "Ja" : "Nein"}<br />
                 <b>Anzahl Block vor: </b>{projekt.getanzahl_block_vor()}<br />
                 <b>Anzahl Block in: </b>{projekt.getanzahl_block_in()}<br />
                 <b>Sprache: </b>{projekt.getsprache()}<br />
