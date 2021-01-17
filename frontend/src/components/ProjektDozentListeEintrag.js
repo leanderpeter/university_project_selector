@@ -193,12 +193,7 @@ ProjektDozentListeEintrag.propTypes = {
    * Signature: onExpandedStateChange(projektBo projekt)
    */
   onExpandedStateChange: PropTypes.func.isRequired,
-  /** 
-   *  Event Handler function which is called after a sucessfull delete of this customer.
-   * 
-   * Signature: onProjektDelete(projektBO projekt)
-   */
-  onProjektDeleted: PropTypes.func.isRequired
+
 }
 
 export default withStyles(styles)(ProjektDozentListeEintrag);
