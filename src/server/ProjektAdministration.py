@@ -258,6 +258,10 @@ class ProjektAdministration(object):
        with TeilnahmeMapper() as mapper:
             return mapper.delete(lehrangebotId, teilnehmerId)
 
+    def delete_UserById(self, userId):
+       with StudentMapper() as mapper:
+            return mapper.deleteByID(userId)
+
     def create_teilnahme(self, lehrangebotId, teilnehmerId):
         '''creat teilnahme'''
 

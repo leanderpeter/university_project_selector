@@ -313,8 +313,9 @@ class StudentIDOperationen(Resource):
         student = adm.get_student_by_id(id)
         return student
 
-    def delete(self, student_id):
-        pass
+    def delete(self, id):
+        adm = ProjektAdministration()
+        adm.delete_UserById(id)
 
     def put(self, student_id):
         pass

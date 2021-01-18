@@ -12,83 +12,42 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
-import ModulListeEintrag from './ModulListeEintrag';
-import ModulForm from './dialogs/ModulForm';
+import UserListeEintrag from './UserListeEintrag';
 
 
 
 
-class ModulListe extends Component {
+
+class UserListe extends Component {
 
   constructor(props) {
     super(props);
 
     //gebe einen leeren status
     this.state = {
-        module: [],
-        filteredModule: [],
+        user: [],
+        filteredUser: [],
         modulFilter: '',
-        showModulForm: false,
         showDeleteForm: false,
         error: null,
         loadingInProgress: false,
     };
   }
 
-  addButtonClicked = event => {
-    event.stopPropagation();
-    this.setState({
-      showModulForm: true
-    });
-  }
-
-  filterFieldValueChange= event => {
-    const value = event.target.value.toLowerCase();
-    this.setState({
-        filteredModule: this.state.module.filter(modul => {
-            let nameContainsValue = modul.getname().toLowerCase().includes(value);
-            let edv_nrContainsValue = modul.getEdv_nr().toString().includes(value);
-            return nameContainsValue || edv_nrContainsValue;
-        }),
-        modulFilter: value
-    });
-}
-
-clearFilterFieldButtonClicked = () => {
-    this.setState({
-        filteredModule: [...this.state.module],
-        modulFilter: ''
-    });
-}
-
-modulFormClosed = modul => {
-    if (modul) {
-      const newModulList = [...this.state.module, modul];
-      this.setState({
-        module: newModulList,
-        filteredModule: [...newModulList],
-        showModulForm: false
-      });
-    } else {
-      this.setState({
-        showModulForm: false
-      });
-    }
-  }
 
   // API Anbindung um alle Module vom Backend zu bekommen 
-  getModule = () => {
-    ElectivAPI.getAPI().getModule()
-    .then(modulBOs =>
+  getUser = () => {
+    ElectivAPI.getAPI().getStudenten()
+    .then(userBOs =>
         this.setState({
-            module: modulBOs,
-            filteredModule: [...modulBOs],
+            user: userBOs,
+            filteredUser: [...userBOs],
             error: null,
             loadingInProgress: false,
         })).catch(e =>
             this.setState({
-                module: [],
-                filteredModule: [],
+                user: [],
+                filteredUser: [],
                 error: e,
                 loadingInProgress: false,
             }));
@@ -102,7 +61,7 @@ modulFormClosed = modul => {
 
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
   componentDidMount() {
-      this.getModule();
+      this.getUser();
   }
 
 
@@ -110,27 +69,12 @@ modulFormClosed = modul => {
   /** Renders the component */
   render() {
     const { classes } = this.props;
-    const {  loadingInProgress, error, modulFilter, filteredModule, showDeleteForm, showModulForm} = this.state;
+    const {  loadingInProgress, error, filteredUser, showDeleteForm} = this.state;
 
     return (
       <div className={classes.root}>
         <Grid container spacing={2} alignItems="center">
-            <Grid item >
-            <TextField
-                className={classes.filter}
-                type='text'
-                label='Module suchen'
-                value={modulFilter}
-                onChange={this.filterFieldValueChange}
-                InputProps={{
-                    endAdornment: <InputAdornment position='end'>
-                    <IconButton onClick={this.clearFilterFieldButtonClicked}>
-                        <ClearIcon fontSize="small"/>
-                    </IconButton>
-                    </InputAdornment>,
-                }}
-            />
-            </Grid>
+
             <Grid item xs/>
             <Grid item>
                 <Tooltip title='Modul anlegen' placement="left">
@@ -143,8 +87,8 @@ modulFormClosed = modul => {
         <Paper>
             <List className={classes.root} dense>
                 {
-                filteredModule.map(modul => 
-                    <ModulListeEintrag key={modul.getID()} modul = {modul} show={this.props.show} getModule={this.getModule}/>)
+                filteredUser.map(user =>
+                    <UserListeEintrag key={user.getID()} user = {user} show={this.props.show} getUser={this.getUser}/>)
                 }
                 <ListItem>
                 <LoadingProgress show={loadingInProgress} />
@@ -154,7 +98,7 @@ modulFormClosed = modul => {
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`}  />
         </Paper>
-        <ModulForm show={showModulForm} onClose={this.modulFormClosed} getModule= {this.getModule}/>
+
       </div>
     );
   }
@@ -176,12 +120,12 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-ModulListe.propTypes = {
+UserListe.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   /** @ignore */
   location: PropTypes.object.isRequired,
 }
 
-export default withRouter(withStyles(styles)(ModulListe));
+export default withRouter(withStyles(styles)(UserListe));
 

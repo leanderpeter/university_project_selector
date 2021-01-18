@@ -170,6 +170,18 @@ class StudentMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+    def deleteByID(self, userID):
+        '''
+        delete an object from the database
+        '''
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM studenten WHERE id={}".format(userID)
+        print(command)
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
 
 '''Only for testing purpose'''
 
