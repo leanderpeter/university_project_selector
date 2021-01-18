@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
-import { Button, ButtonGroup } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Tooltip from '@material-ui/core/Tooltip';
-import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import { ElectivAPI } from '../api';
@@ -17,8 +16,6 @@ import AccountList from './AccountList';
 
 //Muss noch geschrieben werden!
 
-var InfoList = null;
-var ProjektDeleteDialog = null;
 
 
 class ProjektDozentListeEintrag extends Component {

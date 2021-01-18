@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, makeStyles,} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
-import List from '@material-ui/core/List';
+
 import ListItem from '@material-ui/core/ListItem';
-import {ListItemSecondaryAction, Typography, IconButton, Grid, Tooltip, Button} from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Typography, IconButton, Grid, Tooltip } from '@material-ui/core';
+
 import EditIcon from '@material-ui/icons/Edit';
 import Divider from '@material-ui/core/Divider';
-import {ElectivAPI} from '../api';
+
 
 import UserForm from './dialogs/UserForm';
 

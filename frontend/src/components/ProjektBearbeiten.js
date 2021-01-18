@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles, Button, Grid, Typography,Fab,Select,TableFooter,FormControl,MenuItem,Paper,Table,TableRow,TableBody,TableHead,TableCell,TableContainer, InputLabel} from '@material-ui/core';
+import { withStyles, Button, Grid,Fab,Select,FormControl,MenuItem,Paper,Table,TableRow,TableBody,TableHead,TableCell,TableContainer, InputLabel} from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
 //Icons importieren
-import SaveIcon from '@material-ui/icons/Save';
+
 import AddIcon from '@material-ui/icons/Add';
 
 //import AddStudent Dialog
@@ -166,7 +166,7 @@ class ProjektBearbeiten extends Component {
 
     render(){
         const { classes } = this.props;
-        const {currentRolle, projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
+        const { projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
         
         return(
           <div className={classes.root}>

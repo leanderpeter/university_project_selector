@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, TextField, InputAdornment, IconButton, Button, Grid, Typography, Paper } from '@material-ui/core';
-import ClearIcon from '@material-ui/icons/Clear'
+import { withStyles, Button, Grid, Typography, Paper } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { ElectivAPI } from '../api';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -43,10 +42,12 @@ class Notenliste extends Component {
 	constructor(props) {
 		super(props);
 
-		let expandedID = null;
+		// let expandedID = null;
+
+    // Muss die expandedID schon vorher mit null deklariert werden?
 
 		if (this.props.location.expandModul){
-			expandedID = this.props.location.expandModul.getID();
+			let expandedID = this.props.location.expandModul.getID();
 		}
 
 		//gebe einen leeren status

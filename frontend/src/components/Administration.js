@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles, Tabs, Tab, Paper } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
-import { ElectivAPI } from '../api';
+
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 

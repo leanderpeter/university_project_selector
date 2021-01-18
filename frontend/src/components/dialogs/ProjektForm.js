@@ -479,42 +479,30 @@ class ProjektForm extends Component {
 
 			betreuer,
 			betreuerValidationFailed,
-			betreuerEdited,
 
 			externer_partner,
 			externer_partnerValidationFailed,
-			externer_partnerEdited,
 
 			woechentlich,
-			woechentlichValidationFailed,
-			woechentlichEdited,
 
 			boolBlock_vor,
 			anzahl_block_vor,
 			anzahl_block_vorValidationFailed,
-			anzahl_block_vorEdited,
 
 			boolBlock_in,
 			anzahl_block_in,
 			anzahl_block_inValidationFailed,
-			anzahl_block_inEdited,
 
 			boolBlockpraef,
 			praeferierte_block,
 			praeferierte_blockValidationFailed,
-			praeferierte_blockEdited,
 
 			bes_raum,
-			bes_raumValidationFailed,
-			bes_raumEdited,
 
 			raum,
 			raumValidationFailed,
-			raumEdited,
 
 			sprache,
-			spracheValidationFailed,
-			spracheEdited,
 
 			addingInProgress,
 			updatingInProgress,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from '@material-ui/core';
+import { withStyles, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { ElectivAPI } from '../../api';
 
 
@@ -31,7 +31,7 @@ class ProjektartDelete extends Component {
     
     render() {
 
-        const {classes, show} = this.props;
+        const { show } = this.props;
         const { projektart } = this.state;
         return (
             <div>

@@ -1,24 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import SaveIcon from '@material-ui/icons/Save';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
+import { withStyles } from '@material-ui/core/styles';
+
+
+
+
 import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
+
+
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
-import TableFooter from '@material-ui/core/TableFooter';
-import ProjektartBO from '../api/ProjektartBO';
+
+
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -212,7 +212,7 @@ class MeineProjekteEintrag extends Component {
 
 
     render(){
-        const {classes, expandedState, teilnahme} = this.props;
+        const {classes, teilnahme} = this.props;
         const {  projektZustand, projektID, projektName, ECTS, semester, module, dozentName, note, loadingInProgress, error } = this.state;
 
         return(
