@@ -77,11 +77,6 @@ class UserListe extends Component {
 
             <Grid item xs/>
             <Grid item>
-                <Tooltip title='Modul anlegen' placement="left">
-                    <Fab size="medium"  className={classes.addButton} color="primary" aria-label="add" onClick={this.addButtonClicked}>
-                        <AddIcon />
-                    </Fab>
-                </Tooltip>
             </Grid>
         </Grid>
         <Paper>

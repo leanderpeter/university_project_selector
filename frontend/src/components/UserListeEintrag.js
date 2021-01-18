@@ -11,7 +11,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import Divider from '@material-ui/core/Divider';
 import {ElectivAPI} from '../api';
 
-import UserDelete from './dialogs/UserDelete';
+import UserForm from './dialogs/UserForm';
 
 
 
@@ -22,7 +22,7 @@ class UserListeEintrag extends Component {
         super(props);
 
         this.state = {
-            showUserDelete: false,
+            showUserForm: false,
             error: null,
             loadingInProgress: false
         };
@@ -33,24 +33,31 @@ class UserListeEintrag extends Component {
     }
 
 
-    userDeleteButtonClicked =  event => {
+    bearbeitenButtonClicked = event => {
       event.stopPropagation();
       this.setState({
-        showUserDelete: true
+        showUserForm: true
       });
     }
   
-    userDeleteClosed = () => {
+    userFormClosed = (user) => {
+      if (user){
         this.setState({
-          showUserDelete: false
+          user: user,
+          showUserForm: false
         });
-        this.getUser();
+      }else {
+        this.setState({
+          showUserForm: false
+        });
+      }
     }
+
 
 
     render(){
         const {classes, user} = this.props;
-        const {showUserDelete,  error, loadingInProgress } = this.state;
+        const {showUserForm,  error, loadingInProgress } = this.state;
 
         return(
           <div>
@@ -65,11 +72,11 @@ class UserListeEintrag extends Component {
                     <Grid item xs/>
                     <Grid item>
                     </Grid>
-                    <Grid item>
-                    <Tooltip title='Löschen' placement="bottom">
-                        <IconButton className={classes.userDeleteButton}  variant="contained"  onClick={this.userDeleteButtonClicked}><DeleteIcon /></IconButton>
+                     <Tooltip title='Bearbeiten' placement="bottom">
+                    <IconButton  className={classes.bearbeitenButton} variant='contained' onClick={this.bearbeitenButtonClicked}>
+                        <EditIcon />
+                    </IconButton>
                     </Tooltip>
-                    </Grid>
                     </Grid>
             </ListItem>
             <ListItem>
@@ -77,7 +84,7 @@ class UserListeEintrag extends Component {
               <ContextErrorMessage error={error} contextErrorMsg = {'Der User konnte nicht geladen werden'} onReload={this.getUser} />
             </ListItem>
             <Divider/>
-            <UserDelete show={showUserDelete} user={user} onClose={this.userDeleteClosed} />
+            <UserForm show={showUserForm} user={user} onClose={this.userFormClosed} getModule= {this.getUser}/>
           </div>                        
         );
     }

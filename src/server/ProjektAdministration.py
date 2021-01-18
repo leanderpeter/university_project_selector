@@ -304,6 +304,10 @@ class ProjektAdministration(object):
         with TeilnahmeMapper() as mapper:
             mapper.update(teilnahme)
 
+    def update_student(self, student):
+        with StudentMapper() as mapper:
+            mapper.updateByUserId(student)
+
     def set_state(self, projekt, zus):
         projekt = Projekt()
         projekt.set_aktueller_zustand(zus)

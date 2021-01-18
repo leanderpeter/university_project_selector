@@ -91,6 +91,9 @@ export default class ElectivAPI {
 	//Delete Modul
 	#deleteModulURL = (id) => `${this.#ElectivServerBaseURL}/module?id=${id}`;
 
+    //Delete Modul
+	#updateUserURL = (id,name,matrNr) => `${this.#ElectivServerBaseURL}/studenten?id=${id}&name=${name}&matrNr=${matrNr}`;
+
 	//Delete User
 	#deleteUserURL = (id) => `${this.#ElectivServerBaseURL}/student/${id}`;
 
@@ -447,6 +450,16 @@ export default class ElectivAPI {
 			return new Promise(function (resolve) {
 				resolve(responseModulBO);
 			})
+		})
+	}
+
+	updateUser(id,name,matrNr){
+		return this.#fetchAdvanced(this.#updateUserURL(id,name,matrNr), {
+			method: 'PUT',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			}
 		})
 	}
 

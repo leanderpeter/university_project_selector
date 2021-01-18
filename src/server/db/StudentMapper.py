@@ -158,6 +158,18 @@ class StudentMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+    def updateByUserId(self, student):
+
+        cursor = self._connection.cursor()
+
+        command = "UPDATE studenten " + "SET name=%s, email=%s, rolle=%s, kuerzel=%s, mat_nr=%s WHERE id=%s"
+        data = (student.get_name(), student.get_email(), str(student.get_rolle()), student.get_kuerzel(), student.get_mat_nr(), student.get_id())
+
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
     def delete(self, student):
         '''
         delete an object from the database

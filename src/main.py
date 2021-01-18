@@ -301,6 +301,16 @@ class StudentenOperationen(Resource):
         studenten = adm.get_alle_studenten()
         return studenten
 
+    def put(self):
+        userId = request.args.get("id")
+        name = request.args.get("name")
+        matrNr = request.args.get("matrNr")
+        adm = ProjektAdministration()
+        student = adm.get_student_by_id(userId)
+        student.set_name(name)
+        student.set_mat_nr(matrNr)
+        adm.update_student(student)
+
 
 @electivApp.route('/student/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
