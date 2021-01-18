@@ -2,9 +2,11 @@ import NamedBusinessObject from "./NamedBusinessObject";
 
 export default class SemesterBO extends NamedBusinessObject{
 
+	/*
 	constructor(){
         super();
     }
+    */
     
     static fromJSON(semester) {
 		let results = null;

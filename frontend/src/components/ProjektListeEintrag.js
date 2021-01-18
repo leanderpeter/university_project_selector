@@ -1,21 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
-import { Button, ButtonGroup } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import { ElectivAPI } from '../api';
-/*
-import CustomerForm from './dialogs/CustomerForm';
-import CustomerDeleteDialog from './dialogs/CustomerDeleteDialog';
-import AccountList from './AccountList';
-*/
-
-//Muss noch geschrieben werden!
-
-var InfoList = null;
-var ProjektForm = null;
-var ProjektDeleteDialog = null;
 
 
 class ProjektListeEintrag extends Component {
@@ -31,7 +20,6 @@ class ProjektListeEintrag extends Component {
                 teilnahmeButtonDisabled:false,
                 teilnahmeAbwaehlenButtonDisabled:true,
                 teilnahmeChanged : false,
-                projektarten: [],
                 pArten: null
             };
 	}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, IconButton, InputAdornment, Typography, TextField,  Paper , Grid} from '@material-ui/core';
+import { withStyles, IconButton, InputAdornment, TextField,  Paper , Grid} from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -113,7 +113,7 @@ projektartFormClosed = projektart => {
   /** Renders the component */
   render() {
     const { classes } = this.props;
-    const {  loadingInProgress, error, projektartFilter, filteredProjektarten, showDeleteForm, showProjektartenForm} = this.state;
+    const {  loadingInProgress, error, projektartFilter, filteredProjektarten, showProjektartenForm} = this.state;
 
     return (
       <div className={classes.root}>

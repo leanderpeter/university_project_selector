@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
+import { withStyles, Button, Grid, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import ClearIcon from '@material-ui/icons/Clear'
+
 import { withRouter } from 'react-router-dom';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -182,7 +182,7 @@ class ProjektDozentListe extends Component {
 	/** Renders the component */
 	render() {
     const { classes , currentPerson } = this.props;
-    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, showProjekteForm, filterValue } = this.state;
+    const { filteredProjekte, expandedProjektID, loadingInProgress, error, showProjekteForm, filterValue } = this.state;
 
     return (
       <div className={classes.root}>

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles, makeStyles, createGenerateClassName } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
-import StudentBO from '../api/StudentBO';
+
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -136,7 +136,7 @@ class NotenlisteEintrag extends Component {
     }
 
     render(){
-        const {classes, expandedState, teilnahme} = this.props;
+        const { classes } = this.props;
         const { studentName, mat_nr, note, dozentName, loadingInProgress, error } = this.state;
         
         return(

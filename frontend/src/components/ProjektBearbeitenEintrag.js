@@ -1,30 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import SaveIcon from '@material-ui/icons/Save';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
+import { withStyles } from '@material-ui/core/styles';
+
+
+
+
 import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
+
+
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import InputLabel from '@material-ui/core/InputLabel';
+
+
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
-import TableFooter from '@material-ui/core/TableFooter';
-import StudentBO from '../api/StudentBO'
+
+
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import {  Grid, Typography  } from '@material-ui/core';
+
 
 //Projekt Bearbeiten Datei importieren
-import ProjektBearbeiten from './ProjektBearbeiten';
+
 
 //Css Style Klassen für die Tabellen Zellen
 const StyledTableCell = withStyles((theme) => ({
@@ -160,7 +160,7 @@ class ProjektBearbeitenEintrag extends Component {
 
     render(){
         const {classes} = this.props;
-        const {bewertungen,studentID,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
+        const {bewertungen,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
 
         return(
               //Tabelleneinträge für die Tabelle in der ProjektBearbeiten.js File

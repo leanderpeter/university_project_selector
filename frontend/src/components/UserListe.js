@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, IconButton, InputAdornment, Typography, TextField,  Paper , Grid} from '@material-ui/core';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles,  Paper , Grid} from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { ElectivAPI } from '../api';
-import ClearIcon from '@material-ui/icons/Clear';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import List from '@material-ui/core/List';
@@ -69,7 +65,7 @@ class UserListe extends Component {
   /** Renders the component */
   render() {
     const { classes } = this.props;
-    const {  loadingInProgress, error, filteredUser, showDeleteForm} = this.state;
+    const {  loadingInProgress, error, filteredUser } = this.state;
 
     return (
       <div className={classes.root}>

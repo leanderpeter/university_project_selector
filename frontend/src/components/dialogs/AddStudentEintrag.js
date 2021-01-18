@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
-import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {ListItemSecondaryAction, Typography, IconButton} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
@@ -33,7 +32,7 @@ class AddStudentEintrag extends Component {
   }
 
     render(){
-        const {classes, expandedState, student} = this.props;
+        const {classes, student} = this.props;
         const {  error, loadingInProgress } = this.state;
 
         return(
