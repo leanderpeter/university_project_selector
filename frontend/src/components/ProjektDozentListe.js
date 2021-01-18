@@ -57,14 +57,12 @@ class ProjektDozentListe extends Component {
           ElectivAPI.getAPI().getProjekteByZustand('Abgelehnt').then( projekteBOs => {
           this.setState({								//neuer status wenn fetch komplett
             projekte: [...this.state.projekte, ...projekteBOs],
-            filteredProjekte: [...this.state.projekte, ...projekteBOs],		//speicher eine kopie
             loadingInProgress: false,				// deaktiviere ladeindikator
             error: null,
           })})
           ElectivAPI.getAPI().getProjekteByZustand('Genehmigt').then( projekteBOs => {
           this.setState({								//neuer status wenn fetch komplett
             projekte: [...this.state.projekte, ...projekteBOs],
-            filteredProjekte: [...this.state.projekte, ...projekteBOs],		//speicher eine kopie
             loadingInProgress: false,				// deaktiviere ladeindikator
             error: null,
           })})
