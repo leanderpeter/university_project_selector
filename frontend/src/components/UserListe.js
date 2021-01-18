@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles,  Paper , Grid} from '@material-ui/core';
+import { withStyles, Paper, Grid } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { ElectivAPI } from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
@@ -21,12 +21,12 @@ class UserListe extends Component {
 
     //gebe einen leeren status
     this.state = {
-        user: [],
-        filteredUser: [],
-        modulFilter: '',
-        showDeleteForm: false,
-        error: null,
-        loadingInProgress: false,
+      user: [],
+      filteredUser: [],
+      modulFilter: '',
+      showDeleteForm: false,
+      error: null,
+      loadingInProgress: false,
     };
   }
 
@@ -34,30 +34,30 @@ class UserListe extends Component {
   // API Anbindung um alle Module vom Backend zu bekommen 
   getUser = () => {
     ElectivAPI.getAPI().getStudenten()
-    .then(userBOs =>
+      .then(userBOs =>
         this.setState({
-            user: userBOs,
-            filteredUser: [...userBOs],
-            error: null,
-            loadingInProgress: false,
+          user: userBOs,
+          filteredUser: [...userBOs],
+          error: null,
+          loadingInProgress: false,
         })).catch(e =>
-            this.setState({
-                user: [],
-                filteredUser: [],
-                error: e,
-                loadingInProgress: false,
-            }));
+          this.setState({
+            user: [],
+            filteredUser: [],
+            error: e,
+            loadingInProgress: false,
+          }));
     this.setState({
-        error: null,
-        loadingInProgress: true,
+      error: null,
+      loadingInProgress: true,
     });
-}
+  }
 
 
 
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
   componentDidMount() {
-      this.getUser();
+    this.getUser();
   }
 
 
@@ -65,29 +65,29 @@ class UserListe extends Component {
   /** Renders the component */
   render() {
     const { classes } = this.props;
-    const {  loadingInProgress, error, filteredUser } = this.state;
+    const { loadingInProgress, error, filteredUser } = this.state;
 
     return (
       <div className={classes.root}>
         <Grid container spacing={2} alignItems="center">
 
-            <Grid item xs/>
-            <Grid item>
-            </Grid>
+          <Grid item xs />
+          <Grid item>
+          </Grid>
         </Grid>
         <Paper>
-            <List className={classes.root} dense>
-                {
-                filteredUser.map(user =>
-                    <UserListeEintrag key={user.getID()} user = {user} show={this.props.show} getUser={this.getUser}/>)
-                }
-                <ListItem>
-                <LoadingProgress show={loadingInProgress} />
-                <ContextErrorMessage error={error} contextErrorMsg={`Modulliste konnte nicht geladen werden.`} onReload={null} />
-                </ListItem>
-            </List>
-        <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`}  />
+          <List className={classes.root} dense>
+            {
+              filteredUser.map(user =>
+                <UserListeEintrag key={user.getID()} user={user} show={this.props.show} getUser={this.getUser} />)
+            }
+            <ListItem>
+              <LoadingProgress show={loadingInProgress} />
+              <ContextErrorMessage error={error} contextErrorMsg={`Modulliste konnte nicht geladen werden.`} onReload={null} />
+            </ListItem>
+          </List>
+          <LoadingProgress show={loadingInProgress} />
+          <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`} />
         </Paper>
 
       </div>
@@ -98,15 +98,15 @@ class UserListe extends Component {
 /** Component specific styles */
 const styles = theme => ({
   root: {
-      width: '100%',
-      marginTop: theme.spacing(2),
-      paddingTop: '4px'
+    width: '100%',
+    marginTop: theme.spacing(2),
+    paddingTop: '4px'
   },
   addButton: {
-      marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2)
   },
   filter: {
-      marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2)
   }
 });
 
