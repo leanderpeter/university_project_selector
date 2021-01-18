@@ -30,7 +30,7 @@ class ProjektartListeEintrag extends Component {
         };
     }
 
-    getProjektarten = () => {
+    getProjektart = () => {
       this.props.getProjektart();
     }
 
@@ -65,7 +65,7 @@ class ProjektartListeEintrag extends Component {
         this.setState({
           showProjektartDelete: false
         });
-        this.getProjektarten();
+        this.getProjektart();
     }
 
 
@@ -103,11 +103,11 @@ class ProjektartListeEintrag extends Component {
             </ListItem>
             <ListItem>
               <LoadingProgress show={loadingInProgress}/>
-              <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getProjekt} />
+              <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getProjektart} />
             </ListItem>
             <Divider/>
             <ProjektartenForm show={showProjektartForm} projektart={projektart} onClose={this.projektartFormClosed} getProjektart= {this.getProjektart}/>
-            <ProjektartDelete show={showProjektartDelete} projektart={projektart} onClose={this.projektartDeleteClosed} />       
+            <ProjektartDelete show={showProjektartDelete} projektart={projektart} onClose={this.projektartDeleteClosed} getProjektart= {this.getProjektart}/>       
           </div>                        
         );
     }

@@ -21,10 +21,10 @@ class ProjektartDelete extends Component {
 		this.props.onClose(null);
     }
 
-    deleteProjektart= () => {
+    deleteProjektart = () => {
       ElectivAPI.getAPI().deleteProjektart(this.state.projektart.id)
         .then(()=>{
-			    this.props.getProjektarten();
+          this.props.getProjektart();
           this.props.onClose(null);
         });
     }

@@ -155,7 +155,7 @@ projektartFormClosed = projektart => {
                 </ListItem>
             </List>
         <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`}  />
+        <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`} onReload={this.getProjektart} />
         </Paper>
         <ProjektartenForm show={showProjektartenForm} onClose={this.projektartFormClosed} getProjektart = {this.getProjektart}/>
       </div>
