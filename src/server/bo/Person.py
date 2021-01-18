@@ -6,48 +6,53 @@ from server.bo.Rolle import Rolle
 
 
 class Person(NamedBusinessObject):
-    ROLLE_STUDENT = Rolle("Student")
-    ROLLE_DOZENT = Rolle("Dozent")
-    ROLLE_ADMIN = Rolle("Admin")
-    '''
-    Here all the information for the instance of a user are given. The user has atm the values: name, email role, and user-id (given from google firebase)
-    '''
+    """Realisierung einer Person
+
+    Eine Person besitzt eine Email-Adresse, mit der sie sich einloggt, 
+    eine eindeutige Google User ID sowie eine Rolle, welche einer Person zugewiesen wird.
+    Diese Rollen vergeben den angemeldeten Personen später bestimmte Berechtigungen.
+    """
+    ROLLE_STUDENT = Rolle("Student") #Klassenvariable für die Rolle Student, instanziiert das Python Objekt Rolle() 
+    ROLLE_DOZENT = Rolle("Dozent") #Klassenvariable für die Rolle Dozent, instanziiert das Python Objekt Rolle() 
+    ROLLE_ADMIN = Rolle("Admin") #Klassenvariable für die Rolle Admin, instanziiert das Python Objekt Rolle() 
 
     def __init__(self):
         super().__init__()
-        self._email = None
-        self._google_user_id = None
-        self._rolle = None
+        self._email = None #Die Email-Adresse der Person 
+        self._google_user_id = None #Die eindeutige Google User ID der Person
+        self._rolle = None #Die Rolle, welche einer Person zugewiesen wird
 
     def get_email(self):
-        '''return the email'''
+        """ Auslesen der Email-Adresse"""
         return self._email
 
     def set_email(self, value):
-        '''set email'''
+        """ Setzen der Email """
         self._email = value
 
     def get_google_user_id(self):
-        '''tf i does what the function says?! '''
+        """ Auslesen der Google User ID"""
         return self._google_user_id
 
     def set_google_user_id(self, value):
-        '''set google user id from firebase'''
+        """ Setzen der Google User ID"""
         self._google_user_id = value
 
     def get_rolle(self):
+        """ Auslesen der Rolle"""
         return self._rolle
 
     def set_rolle(self, rolle):
+        """ Setzen der Rolle"""
         self._rolle = rolle
 
     def __str__(self):
-        '''Simple textual user instance'''
+        """ Umwandlung der Attributwerte des Objekts in einen String"""
         return "Person: {}, {}, {}, {}, {}".format(self.get_id(), self._name, self._email, self._google_user_id, self._rolle)
 
     @staticmethod
     def from_dict(dictionary=dict()):
-        '''from python dict to Person()'''
+        """ Umwandeln eines Python dict() in ein Python Objekt Person() """
         obj = Person()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_name(dictionary["name"])

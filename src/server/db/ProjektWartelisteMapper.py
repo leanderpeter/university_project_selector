@@ -60,8 +60,7 @@ class ProjektWartelisteMapper(Mapper):
         projekt.set_teilnehmerListe(self.get_teilnehmerId_by_projekt(id))
         return projekt
 
-
-    def find_by_key(self):
+    def find_by_id(self):
         pass
 
     def insert(self, projekt):

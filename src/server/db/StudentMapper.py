@@ -42,14 +42,7 @@ class StudentMapper(Mapper):
         return result
 
 
-    
-
-       
-
     def find_by_name(self):
-        pass
-
-    def find_by_key(self):
         pass
 
     def find_by_email(self):

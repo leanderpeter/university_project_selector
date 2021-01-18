@@ -113,9 +113,6 @@ class ProjektartMapper(Mapper):
 		cursor.close()
 
 
-	def find_by_key(self):
-		pass
-
 	def update(self, projektart):
 
 		cursor = self._connection.cursor()

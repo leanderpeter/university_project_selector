@@ -54,10 +54,6 @@ class SemesterMapper(Mapper):
         cursor.close()
         return result
 
-    def find_by_key(self):
-        """Reads a tuple with a given ID"""
-        pass
-
 
     def insert(self, semester):
         '''
