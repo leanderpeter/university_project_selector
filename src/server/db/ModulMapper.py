@@ -134,17 +134,7 @@ class ModulMapper(Mapper):
         self._connection.commit()
         cursor.close()
         
-        return result
-
-    def delete_by_id(self, projekt_id):
-        cursor = self._connection.cursor()
-
-        command = "DELETE FROM projekte_hat_module WHERE projekt_id ='{}'".format(projekt_id)
-        cursor.execute(command)
-        self._connection.commit()
-        cursor.close()
-
-        
+        return result        
 
     def delete(self, id):
         """Delete an object from the DB"""
@@ -158,4 +148,14 @@ class ModulMapper(Mapper):
         cursor.execute(command3)
         self._connection.commit()
         cursor.close()
+
+
+    def delete_by_id(self, projekt_id):
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM projekte_hat_module WHERE projekt_id ='{}'".format(projekt_id)
+        cursor.execute(command)
+        self._connection.commit()
+        cursor.close()
+
 

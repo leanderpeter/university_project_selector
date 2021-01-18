@@ -10,3 +10,11 @@ class Semester(NamedBusinessObject):
 
     def __str__(self, ):
         pass
+
+    @staticmethod
+    def from_dict(dictionary=dict()):
+        '''dict() -> modul'''
+        obj = Semester()
+        obj.set_id(dictionary["id"]) # from BO
+        obj.set_name(dictionary["name"]) # from NBO
+        return obj

@@ -11,38 +11,38 @@ import EditIcon from '@material-ui/icons/Edit';
 import Divider from '@material-ui/core/Divider';
 import {ElectivAPI} from '../api';
 
-import ModulForm from './dialogs/ModulForm';
-import ModulDelete from './dialogs/ModulDelete';
+import SemesterForm from './dialogs/SemesterForm';
+import SemesterDelete from './dialogs/SemesterDelete';
 
 
 
 
-class ModulListeEintrag extends Component {
+class SemesterListeEintrag extends Component {
 
     constructor(props){
         super(props);
 
         this.state = {
-            showModulForm: false,
-            showModulDelete: false,
+            showSemesterForm: false,
+            showSemesterDelete: false,
             error: null,
             loadingInProgress: false
         };
     }
 
-    getModule = () => {
-      this.props.getModule();
+    getSemester = () => {
+      this.props.getSemester();
     }
 
-    modulFormClosed = (modul) => {
-      if (modul){
+    semesterFormClosed = (semester) => {
+      if (semester){
         this.setState({
-          modul: modul,
-          showModulForm: false
+          semester: semester,
+          showSemesterForm: false
         });
       }else {
         this.setState({
-          showModulForm: false
+          showSemesterForm: false
         });
       }
     }
@@ -50,38 +50,35 @@ class ModulListeEintrag extends Component {
     bearbeitenButtonClicked = event => {
       event.stopPropagation();
       this.setState({
-        showModulForm: true
+        showSemesterForm: true
       });
     }
     
-    modulDeleteButtonClicked =  event => {
+    semesterDeleteButtonClicked =  event => {
       event.stopPropagation();
       this.setState({
-        showModulDelete: true
+        showSemesterDelete: true
       });
     }
   
-    modulDeleteClosed = () => {
+    semesterDeleteClosed = () => {
         this.setState({
-          showModulDelete: false
+          showSemesterDelete: false
         });
-        this.getModule();
+        this.getSemester();
     }
 
 
     render(){
-        const {classes, modul} = this.props;
-        const { showModulForm, showModulDelete,  error, loadingInProgress } = this.state;
+        const {classes, semester} = this.props;
+        const { showSemesterForm, showSemesterDelete,  error, loadingInProgress } = this.state;
 
         return(
           <div>
             <ListItem className={classes.root}>
                   <Grid container  alignItems="center" spacing={2}>
                     <Grid item>
-                        <Typography >{modul.edv_nr}</Typography>
-                    </Grid>
-                    <Grid item>
-                        <Typography >{modul.name}</Typography>
+                        <Typography >{semester.name}</Typography>
                     </Grid>
                     <Grid item xs/>
                     <Grid item>
@@ -93,18 +90,18 @@ class ModulListeEintrag extends Component {
                     </Grid>
                     <Grid item>
                     <Tooltip title='Löschen' placement="bottom">
-                        <IconButton className={classes.projektDeleteButton}  variant="contained"  onClick={this.modulDeleteButtonClicked}><DeleteIcon /></IconButton>
+                        <IconButton variant="contained"  onClick={this.semesterDeleteButtonClicked}><DeleteIcon /></IconButton>
                     </Tooltip>
                     </Grid>
                     </Grid>
             </ListItem>
             <ListItem>
               <LoadingProgress show={loadingInProgress}/>
-              <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getProjekt} />
+              <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Semester konnte nicht geladen werden'} onReload={this.getSemester} />
             </ListItem>
             <Divider/>
-            <ModulForm show={showModulForm} modul={modul} onClose={this.modulFormClosed} getModule= {this.getModule}/>
-            <ModulDelete show={showModulDelete} modul={modul} onClose={this.modulDeleteClosed} />       
+            <SemesterForm show={showSemesterForm} semester={semester} onClose={this.semesterFormClosed} getSemester= {this.getSemester}/>
+            <SemesterDelete show={showSemesterDelete} semester={semester} onClose={this.semesterDeleteClosed} getSemester= {this.getSemester}/>       
           </div>                        
         );
     }
@@ -117,7 +114,7 @@ const styles = theme => ({
     });
 
 /** PropTypes */
-ModulListeEintrag.propTypes = {
+SemesterListeEintrag.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     show: PropTypes.bool.isRequired
@@ -125,6 +122,6 @@ ModulListeEintrag.propTypes = {
   
 
 
-export default withStyles(styles)(ModulListeEintrag);
+export default withStyles(styles)(SemesterListeEintrag);
 
 

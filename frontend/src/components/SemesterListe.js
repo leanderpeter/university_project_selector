@@ -12,23 +12,23 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
-import ModulListeEintrag from './ModulListeEintrag';
-import ModulForm from './dialogs/ModulForm';
+import SemesterListeEintrag from './SemesterListeEintrag';
+import SemesterForm from './dialogs/SemesterForm';
 
 
 
 
-class ModulListe extends Component {
+class SemesterListe extends Component {
 
   constructor(props) {
     super(props);
 
     //gebe einen leeren status
     this.state = {
-        module: [],
-        filteredModule: [],
-        modulFilter: '',
-        showModulForm: false,
+        semester: [],
+        filteredSemester: [],
+        semesterFilter: '',
+        showSemesterForm: false,
         showDeleteForm: false,
         error: null,
         loadingInProgress: false,
@@ -38,57 +38,56 @@ class ModulListe extends Component {
   addButtonClicked = event => {
     event.stopPropagation();
     this.setState({
-      showModulForm: true
+      showSemesterForm: true
     });
   }
 
   filterFieldValueChange= event => {
     const value = event.target.value.toLowerCase();
     this.setState({
-        filteredModule: this.state.module.filter(modul => {
-            let nameContainsValue = modul.getname().toLowerCase().includes(value);
-            let edv_nrContainsValue = modul.getEdv_nr().toString().includes(value);
-            return nameContainsValue || edv_nrContainsValue;
+        filteredSemester: this.state.semester.filter(semester => {
+            let nameContainsValue = semester.getname().toLowerCase().includes(value);
+            return nameContainsValue;
         }),
-        modulFilter: value
+        semesterFilter: value
     });
 }
 
 clearFilterFieldButtonClicked = () => {
     this.setState({
-        filteredModule: [...this.state.module],
-        modulFilter: ''
+        filteredSemester: [...this.state.semester],
+        semesterFilter: ''
     });
 }
 
-modulFormClosed = modul => {
-    if (modul) {
-      const newModulList = [...this.state.module, modul];
+semesterFormClosed = semester => {
+    if (semester) {
+      const newSemesterList = [...this.state.semester, semester];
       this.setState({
-        module: newModulList,
-        filteredModule: [...newModulList],
-        showModulForm: false
+        semester: newSemesterList,
+        filteredSemester: [...newSemesterList],
+        showSemesterForm: false
       });
     } else {
       this.setState({
-        showModulForm: false
+        showSemesterForm: false
       });
     }
   }
 
   // API Anbindung um alle Module vom Backend zu bekommen 
-  getModule = () => {
-    ElectivAPI.getAPI().getModule()
-    .then(modulBOs =>
+  getSemester = () => {
+    ElectivAPI.getAPI().getSemester()
+    .then(semesterBOs =>
         this.setState({
-            module: modulBOs,
-            filteredModule: [...modulBOs],
+            semester: semesterBOs,
+            filteredSemester: [...semesterBOs],
             error: null,
             loadingInProgress: false,
         })).catch(e =>
             this.setState({
-                module: [],
-                filteredModule: [],
+                semester: [],
+                filteredSemester: [],
                 error: e,
                 loadingInProgress: false,
             }));
@@ -102,7 +101,7 @@ modulFormClosed = modul => {
 
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
   componentDidMount() {
-      this.getModule();
+      this.getSemester();
   }
 
 
@@ -110,7 +109,7 @@ modulFormClosed = modul => {
   /** Renders the component */
   render() {
     const { classes } = this.props;
-    const {  loadingInProgress, error, modulFilter, filteredModule, showModulForm} = this.state;
+    const {  loadingInProgress, error, semesterFilter, filteredSemester, showDeleteForm, showSemesterForm} = this.state;
 
     return (
       <div className={classes.root}>
@@ -119,8 +118,8 @@ modulFormClosed = modul => {
             <TextField
                 className={classes.filter}
                 type='text'
-                label='Module suchen'
-                value={modulFilter}
+                label='Semester suchen'
+                value={semesterFilter}
                 onChange={this.filterFieldValueChange}
                 InputProps={{
                     endAdornment: <InputAdornment position='end'>
@@ -133,7 +132,7 @@ modulFormClosed = modul => {
             </Grid>
             <Grid item xs/>
             <Grid item>
-                <Tooltip title='Modul anlegen' placement="left">
+                <Tooltip title='Semester anlegen' placement="left">
                     <Fab size="medium"  className={classes.addButton} color="primary" aria-label="add" onClick={this.addButtonClicked}>
                         <AddIcon />
                     </Fab>
@@ -143,18 +142,14 @@ modulFormClosed = modul => {
         <Paper>
             <List className={classes.root} dense>
                 {
-                filteredModule.map(modul => 
-                    <ModulListeEintrag key={modul.getID()} modul = {modul} show={this.props.show} getModule={this.getModule}/>)
+                filteredSemester.map(semester => 
+                    <SemesterListeEintrag key={semester.getID()} semester = {semester} show={this.props.show} getSemester={this.getSemester}/>)
                 }
-                <ListItem>
-                <LoadingProgress show={loadingInProgress} />
-                <ContextErrorMessage error={error} contextErrorMsg={`Modulliste konnte nicht geladen werden.`} onReload={null} />
-                </ListItem>
             </List>
         <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`}  />
+        <ContextErrorMessage error={error} contextErrorMsg={`Semester konnte nicht geladen werden.`} onReload={this.getSemester} />
         </Paper>
-        <ModulForm show={showModulForm} onClose={this.modulFormClosed} getModule= {this.getModule}/>
+        <SemesterForm show={showSemesterForm} onClose={this.semesterFormClosed} getSemester= {this.getSemester}/>
       </div>
     );
   }
@@ -176,12 +171,12 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-ModulListe.propTypes = {
+SemesterListe.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   /** @ignore */
   location: PropTypes.object.isRequired,
 }
 
-export default withRouter(withStyles(styles)(ModulListe));
+export default withRouter(withStyles(styles)(SemesterListe));
 

@@ -6,6 +6,7 @@ from .bo.Person import Person
 from .bo.Student import Student
 from .bo.Projekt import Projekt
 from .bo.Modul import Modul
+from .bo.Semester import Semester
 from .bo.Teilnahme import Teilnahme
 from .bo.Zustand import Zustand
 from .bo.Projektart import Projektart
@@ -185,6 +186,18 @@ class ProjektAdministration(object):
         with SemesterMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def create_semester(self, semester): 
+        with SemesterMapper() as mapper:
+            return mapper.insert(semester)
+
+    def save_semester(self, semester):
+        with SemesterMapper() as mapper: 
+            return mapper.update(semester)
+            
+    def delete_semester(self, id):
+        with SemesterMapper() as mapper:
+            return mapper.delete(id)
+
     def get_alle_module(self):
         with ModulMapper() as mapper:
             return mapper.find_all()
@@ -197,6 +210,10 @@ class ProjektAdministration(object):
         with ModulMapper() as mapper: 
             return mapper.update(modul)
 
+    def delete_modul(self, id):
+        with ModulMapper() as mapper:
+            return mapper.delete(id)
+
     def get_module_by_projekt_id(self, projekt_id):
         with ModulMapper() as mapper:
             return mapper.find_by_projekt_id(projekt_id)
@@ -204,10 +221,6 @@ class ProjektAdministration(object):
     def get_modul_by_id(self, id):
         with ModulMapper() as mapper:
             return mapper.find_by_id(id)
-
-    def delete_modul(self, id):
-        with ModulMapper() as mapper:
-            return mapper.delete(id)
 
     def create_projekte_hat_module(self, projekt_id, module):
         for modul in module:

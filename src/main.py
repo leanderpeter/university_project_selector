@@ -12,6 +12,7 @@ from server.ProjektAdministration import ProjektAdministration
 from server.bo.Teilnahme import Teilnahme
 from server.bo.Projekt import Projekt
 from server.bo.Modul import Modul
+from server.bo.Semester import Semester
 from server.bo.Projektart import Projektart
 
 #SecurityDecorator
@@ -523,11 +524,39 @@ class SemesterOperationen(Resource):
         semester = adm.get_alle_semester()
         return semester
 
-    def delete(self, id):
-        pass
+    def delete(self):
+        id = request.args.get("id")
+        adm = ProjektAdministration()
+        adm.delete_semester(id)
 
-    def put(self, id):
-        pass
+    @electivApp.marshal_with(semester)
+    @electivApp.expect(semester)
+    @secured
+    def put(self):
+        '''
+        Updaten eines Semesters
+        '''
+        adm = ProjektAdministration()
+        semester = Semester.from_dict(api.payload)
+
+        if semester is not None:
+            response = adm.save_semester(semester)
+            return response, 200
+        else:
+            return '', 500
+
+    @electivApp.marshal_with(semester, code=200)
+    @electivApp.expect(semester)
+    @secured
+    def post (self):
+        adm = ProjektAdministration()
+        semester = Semester.from_dict(api.payload)
+
+        if semester is not None:
+            m = adm.create_semester(semester)
+            return m, 200
+        else: 
+            return '', 500
 
 @electivApp.route('/semester/<int:id>')
 @electivApp.response(500, 'Something went wrong')
@@ -539,7 +568,6 @@ class SemesterByIDOperationen(Resource):
         adm = ProjektAdministration()
         semester = adm.get_semester_by_id(id)
         return semester
-
 
 
 @electivApp.route('/projektePending')
