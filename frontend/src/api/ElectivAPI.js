@@ -135,6 +135,15 @@ export default class ElectivAPI {
 	
 	//erhalte alle Projektarten
     #getProjektartURL = () => `${this.#ElectivServerBaseURL}/projektart`
+
+    //POSTE eine neue Projektart
+    #addProjektartURL = () => `${this.#ElectivServerBaseURL}/projektart`;
+
+    //Update Projektart
+	#updateProjektartURL = () => `${this.#ElectivServerBaseURL}/projektart`
+
+    //Loesche eine Projektart nach ID
+    #deleteProjektartURL = (id) => `${this.#ElectivServerBaseURL}/projektart?id=${id}`;
   
 	//Alle Semester bekommen
 	#getStudentenURL = () => `${this.#ElectivServerBaseURL}/studenten`;
@@ -204,6 +213,46 @@ export default class ElectivAPI {
 			let projektartBO = ProjektartBO.fromJSON(responseJSON);
 			return new Promise(function (resolve){
 				resolve(projektartBO);
+			})
+		})
+	}
+
+	// Eine Projektart entfernen
+	deleteProjektart(id){
+		return this.#fetchAdvanced(this.#deleteProjektartURL(id),{method: 'DELETE'})
+	}
+
+	addProjektart(projektartBO) {
+		return this.#fetchAdvanced(this.#addProjektartURL(), {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(projektartBO)
+		}).then((responseJSON) => {
+			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
+			let responseProjektartBO = ProjektartBO.fromJSON(responseJSON);
+			console.log("TEST TEST")
+			return new Promise(function (resolve) {
+				resolve(responseProjektartBO);
+			})
+		})
+	}
+
+	updateProjektart(projektartBO){
+		return this.#fetchAdvanced(this.#updateProjektartURL(), {
+			method: 'PUT',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(projektartBO)
+		}).then((responseJSON) => {
+			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
+			let responseProjektartBO = ProjektartBO.fromJSON(responseJSON);
+			return new Promise(function (resolve) {
+				resolve(responseProjektartBO);
 			})
 		})
 	}
