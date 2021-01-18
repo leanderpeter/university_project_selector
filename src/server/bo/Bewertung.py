@@ -5,21 +5,20 @@ from server.bo.BusinessObject import BusinessObject
 
 
 class Bewertung(BusinessObject):
+    """Realisierung einer Bewertung
+
+    Eine Bewertung bezitzt eine Note, die ein Dozent (oder Admin) einer Teilnahme vergeben kann 
+    """
     def __init__(self):
-        self._note = None
-        self._leistung = None
+        self._note = None # Note der Teilnahme
 
     def get_note(self):
+        """Auslesen der Note"""
         return self._note
 
     def set_note(self, note):
+        """Setzen der Note"""
         self._note = note
-
-    def get_leistung(self, ):
-        pass
-
-    def set_leistung(self, teilnahme):
-        pass
 
     def __str__(self, ):
         pass

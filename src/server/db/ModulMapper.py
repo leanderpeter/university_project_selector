@@ -6,10 +6,19 @@ from server.bo.Modul import Modul
 
 
 class ModulMapper(Mapper):
+    """Mapper-Klasse, die Bewertung Objekte auf der relationealen Datenbank abbildet.
+    Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt
+    """
     def __init__(self):
         super().__init__()
 
     def find_by_id(self, id):
+        """Suchen eines Noduls mit vorgegebener ID
+
+        :param id Primärschlüsselattribut aus der DB
+        :return Modul-Objekt, das der übergebener id entspricht, 
+                None wenn DB-Tupel nicht vorhanden ist
+        """
         result = None
 
         cursor = self._connection.cursor()
@@ -57,7 +66,9 @@ class ModulMapper(Mapper):
 
 
     def find_all(self):
-        """finde alle Module in der Datenbank"""
+        """Auslesen aller Module aus der Datenbank
+        :return Eine Sammlung aller Modul-Objekten
+        """
         result = []
 
         cursor = self._connection.cursor()
@@ -79,25 +90,29 @@ class ModulMapper(Mapper):
 
         return result
     
-    def projekte_hat_module(self, projekt_id, modul):
+    def projekte_hat_module(self, projekt_id, modul_id):
+        """Einfügen von Modulen und Projekten durch Fremdschlüssel (projekt_id, modul_id)
+        Diese geben an, welche Module für welche Projekte angerechnet werden können
+        
+        :param projekt_id, modul_id
+        """
         cursor = self._connection.cursor()
         command = "INSERT INTO projekte_hat_module (projekt_id, modul_id) VALUES (%s,%s)"
-        data = (projekt_id, modul)
+        data = (projekt_id, modul_id)
 
         cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
 
-    def find_by_key(self):
-        """Reads a tuple with a given ID"""
-        pass
-
     def insert(self, modul):
-        '''
-        Einfugen eines Modul BO's in die DB
-        '''
+        """Einfügen eines Modul-Objekts
 
+        Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft
+
+        :param modul 
+        :return das bereits übergebene Modul Objekt mit aktualisierten Daten (id)
+        """
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM module")
         tuples = cursor.fetchall()
@@ -122,6 +137,11 @@ class ModulMapper(Mapper):
         return modul
         
     def update(self, modul):
+        """Überschreiben / Aktualisieren eines Modul Objekts in der DB
+
+        :param modul
+        :return aktualisiertes Modul-Objekt
+        """
 
         cursor = self._connection.cursor()
 
@@ -137,7 +157,13 @@ class ModulMapper(Mapper):
         return result        
 
     def delete(self, id):
-        """Delete an object from the DB"""
+        """Löschen der Daten eines Modul-Objekts aus der Datenbank 
+        Zuerst aus teilnahmen, dann projekte_hat_module und anschließend module Tabelle 
+        dies geschiet anhand der id
+        Das Löschen mehrerer Tabellen findet statt, da Fremdschlüßelbeziehungen bestehen
+
+        :param id
+        """
         cursor = self._connection.cursor()
 
         command = "DELETE FROM teilnahmen WHERE anrechnung={}".format(id)
@@ -151,6 +177,11 @@ class ModulMapper(Mapper):
 
 
     def delete_by_id(self, projekt_id):
+        """Löschen von Einträgen in projekte_hat_module nach projekt_id
+        Hierdurch werden Modulwahloptionen für ein Projekt durch Fremdschlüsselbeziehungen entfernt
+
+        :param projekt_id
+        """
         cursor = self._connection.cursor()
 
         command = "DELETE FROM projekte_hat_module WHERE projekt_id ='{}'".format(projekt_id)
