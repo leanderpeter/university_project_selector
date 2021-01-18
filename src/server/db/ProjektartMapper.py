@@ -89,6 +89,8 @@ class ProjektartMapper(Mapper):
 	def delete(self, id):
 		cursor = self._connection.cursor()
 
+		command1 = "SELECT id, "
+
 		command = "SET FOREIGN_KEY_CHECKS=0;"
 		command2 = "DELETE FROM projektarten WHERE id={}".format(id)
 		command3 = "SET FOREIGN_KEY_CHECKS=1;"

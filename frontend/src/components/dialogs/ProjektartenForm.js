@@ -167,6 +167,7 @@ class ProjektartenForm extends Component {
 			header = 'Projektart Daten einfügen';
 		}
 
+
         return (
             show ?
                 <Dialog open={show} onEnter={this.getInfos} onClose={this.handleClose} maxWidth='xs' fullWidth>

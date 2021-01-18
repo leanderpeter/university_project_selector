@@ -11,7 +11,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import Divider from '@material-ui/core/Divider';
 import {ElectivAPI} from '../api';
 
-import ProjektartForm from './dialogs/ProjektartForm';
+import ProjektartenForm from './dialogs/ProjektartenForm';
 import ProjektartDelete from './dialogs/ProjektartDelete';
 
 
@@ -31,7 +31,7 @@ class ProjektartListeEintrag extends Component {
     }
 
     getProjektarten = () => {
-      this.props.getProjektarten();
+      this.props.getProjektart();
     }
 
     projektartFormClosed = (projektart) => {
@@ -65,7 +65,7 @@ class ProjektartListeEintrag extends Component {
         this.setState({
           showProjektartDelete: false
         });
-        this.getProjektart();
+        this.getProjektarten();
     }
 
 
@@ -81,7 +81,10 @@ class ProjektartListeEintrag extends Component {
                         <Typography >{projektart.name}</Typography>
                     </Grid>
                     <Grid item>
-                        <Typography >{projektart.name}</Typography>
+                        <Typography >ECTS: {projektart.ects}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography >SWS: {projektart.sws}</Typography>
                     </Grid>
                     <Grid item xs/>
                     <Grid item>
@@ -103,7 +106,7 @@ class ProjektartListeEintrag extends Component {
               <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getProjekt} />
             </ListItem>
             <Divider/>
-            <ProjektartForm show={showProjektartForm} projektart={projektart} onClose={this.projektartFormClosed} getProjektart= {this.getProjektart}/>
+            <ProjektartenForm show={showProjektartForm} projektart={projektart} onClose={this.projektartFormClosed} getProjektart= {this.getProjektart}/>
             <ProjektartDelete show={showProjektartDelete} projektart={projektart} onClose={this.projektartDeleteClosed} />       
           </div>                        
         );
