@@ -5,25 +5,25 @@ import datetime
 
 
 class BusinessObject(ABC):
-    """
-    Base class for all business objects.
-    every business objetcs gets a unique ID (primary key)
-
+    """Basisklasse für alle Businessobjekte
+    
+    alle Businessobjekte besitzen eine ID (Primärschlüssel) sowie die Erstellungszeit in der das BO erstellt wurde
     """
 
     def __init__(self):
-        self._id = 0  # unique ID for the instance of the class
-        self._erstellungszeit = datetime.datetime.now()
+        self._id = 0  # Die eindeutige ID für die Instanz dieser Klasse
+        self._erstellungszeit = datetime.datetime.now() #Das Datum in der das BO erstellt wurde
 
     def get_id(self):
-        ''' return the ID of the business object'''
+        """ Auslesen der ID """
         return self._id
 
     def set_id(self, value):
-        '''set a ID for the given business object'''
+        """Setzen der ID """
         self._id = value
 
     def get_erstellungszeit(self):
+        """ Auslesen der Erstellungszeit """
         return self._erstellungszeit
 
 

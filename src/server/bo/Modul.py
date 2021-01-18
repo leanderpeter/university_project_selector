@@ -5,28 +5,27 @@ from server.bo.NamedBusinessObject import NamedBusinessObject
 
 
 class Modul(NamedBusinessObject):
+    """Realisierung eines Moduls
+
+    Ein Modul besitzt eine EDV-Nummer
+    """
     def __init__(self):
-        self._edv_nr = None
-        self._zugewiesene_teilnahme = []
+        self._edv_nr = None #EDV-Nummer
 
     def get_edv_nr(self):
+        """ Auslesen der EDV-Nummer """
         return self._edv_nr
 
     def set_edv_nr(self, edv_nr):
+        """ Setzen der EDV-Nummer """
         self._edv_nr = edv_nr
-
-    def get_zugewiesene_teilnahmen(self, ):
-        pass
-
-    def set_zugewiesene_teilnahmen(self, teilnahmen):
-        pass
 
     def __str__(self, ):
         pass
 
     @staticmethod
     def from_dict(dictionary=dict()):
-        '''dict() -> modul'''
+        """ Umwandeln eines Python dict() in ein Python Objekt Modul() """
         obj = Modul()
         obj.set_id(dictionary["id"]) # from BO
         obj.set_name(dictionary["name"]) # from NBO

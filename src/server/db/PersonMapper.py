@@ -6,17 +6,18 @@ from server.bo.Person import Person
 
 
 class PersonMapper(Mapper):
-    '''bidriectional functions for manipulating db-structures or objects'''
+    """Mapper-Klasse, die Person Objekte auf der relationealen Datenbank abbildet.
+    Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt
+    """
 
     def __init__(self):
         super().__init__()
 
     def find_all(self):
-        '''
-        reading of all user objects in the system (DB)
-        return: Person objects
-        '''
+        """Auslesen aller Personen aus der Datenbank
 
+        :return Alle Person-Objekte im System
+        """
         result = None
 
         cursor = self._connection.cursor()
@@ -51,10 +52,13 @@ class PersonMapper(Mapper):
     def find_by_name(self):
         pass
 
-    def find_by_key(self):
-        pass
-
     def find_by_id(self, id):
+        """Suchen einer Person nach der übergebenen ID. 
+
+        :param id Primärschlüsselattribut einer Person aus der Datenbank
+        :return Person-Objekt, welche mit der ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
         result = None
         cursor = self._connection.cursor()
         command = "SELECT id, name, email, google_user_id, rolle FROM personen WHERE id='{}'".format(id)
@@ -84,6 +88,12 @@ class PersonMapper(Mapper):
         return result
 
     def find_by_google_user_id(self, google_user_id):
+        """Suchen einer Person nach der übergebenen Google User ID. 
+
+        :param google_user_id Google User ID einer Person aus der Datenbank
+        :return Person-Objekt, welche mit der Google User ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
         result = None
 
         cursor = self._connection.cursor()
@@ -111,13 +121,12 @@ class PersonMapper(Mapper):
         return result
 
     def insert(self, person):
-        """Insert a user object in the DB
+        """Einfügen eines Person Objekts in die DB
 
-        Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
-        berichtigt.
+        Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft 
 
-        :param user das zu speichernde Objekt
-        :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
+        :param person das zu speichernde Person Objekt
+        :return das bereits übergebene Person Objekt mit aktualisierten Daten (id)
         """
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM personen ")
@@ -143,10 +152,11 @@ class PersonMapper(Mapper):
         return person
 
     def update(self, person):
-        '''
-        function to rewrite in the DB 
+        """Überschreiben / Aktualisieren eines Person-Objekts in der DB
 
-        '''
+        :param person -> Person-Objekt
+        :return aktualisiertes Person-Objekt
+        """
         cursor = self._connection.cursor()
 
         command = "UPDATE personen " + "SET name=%s, email=%s, rolle=%s WHERE google_user_id=%s"
@@ -158,9 +168,10 @@ class PersonMapper(Mapper):
         cursor.close()
 
     def delete(self, person):
-        '''
-        delete an object from the database
-        '''
+        """Löschen der Daten einer Person aus der Datenbank
+
+        :param person -> Person-Objekt
+        """
         cursor = self._connection.cursor()
 
         command = "DELETE FROM personen WHERE id={}".format(person.get_id())
