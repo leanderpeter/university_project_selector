@@ -135,6 +135,8 @@ class ProjektListeEintrag extends Component {
             this.state.teilnahmeAbwaehlenButtonDisabled = false;
 		}
     
+    console.log(projektarten.length)
+
     return (
       <div>
         <Accordion className={classes.root} defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>

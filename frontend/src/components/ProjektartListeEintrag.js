@@ -11,38 +11,38 @@ import EditIcon from '@material-ui/icons/Edit';
 import Divider from '@material-ui/core/Divider';
 import {ElectivAPI} from '../api';
 
-import ModulForm from './dialogs/ModulForm';
-import ModulDelete from './dialogs/ModulDelete';
+import ProjektartenForm from './dialogs/ProjektartenForm';
+import ProjektartDelete from './dialogs/ProjektartDelete';
 
 
 
 
-class ModulListeEintrag extends Component {
+class ProjektartListeEintrag extends Component {
 
     constructor(props){
         super(props);
 
         this.state = {
-            showModulForm: false,
-            showModulDelete: false,
+            showProjektartForm: false,
+            showProjektartDelete: false,
             error: null,
             loadingInProgress: false
         };
     }
 
-    getModule = () => {
-      this.props.getModule();
+    getProjektart = () => {
+      this.props.getProjektart();
     }
 
-    modulFormClosed = (modul) => {
-      if (modul){
+    projektartFormClosed = (projektart) => {
+      if (projektart){
         this.setState({
-          modul: modul,
-          showModulForm: false
+          projektart: projektart,
+          showProjektartForm: false
         });
       }else {
         this.setState({
-          showModulForm: false
+          showProjektartForm: false
         });
       }
     }
@@ -50,38 +50,41 @@ class ModulListeEintrag extends Component {
     bearbeitenButtonClicked = event => {
       event.stopPropagation();
       this.setState({
-        showModulForm: true
+        showProjektartForm: true
       });
     }
     
-    modulDeleteButtonClicked =  event => {
+    projektartDeleteButtonClicked =  event => {
       event.stopPropagation();
       this.setState({
-        showModulDelete: true
+        showProjektartDelete: true
       });
     }
   
-    modulDeleteClosed = () => {
+    projektartDeleteClosed = () => {
         this.setState({
-          showModulDelete: false
+          showProjektartDelete: false
         });
-        this.getModule();
+        this.getProjektart();
     }
 
 
     render(){
-        const {classes, modul} = this.props;
-        const { showModulForm, showModulDelete,  error, loadingInProgress } = this.state;
+        const {classes, projektart} = this.props;
+        const { showProjektartForm, showProjektartDelete,  error, loadingInProgress } = this.state;
 
         return(
           <div>
             <ListItem className={classes.root}>
                   <Grid container  alignItems="center" spacing={2}>
                     <Grid item>
-                        <Typography >{modul.edv_nr}</Typography>
+                        <Typography >{projektart.name}</Typography>
                     </Grid>
                     <Grid item>
-                        <Typography >{modul.name}</Typography>
+                        <Typography >ECTS: {projektart.ects}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography >SWS: {projektart.sws}</Typography>
                     </Grid>
                     <Grid item xs/>
                     <Grid item>
@@ -93,18 +96,18 @@ class ModulListeEintrag extends Component {
                     </Grid>
                     <Grid item>
                     <Tooltip title='Löschen' placement="bottom">
-                        <IconButton className={classes.projektDeleteButton}  variant="contained"  onClick={this.modulDeleteButtonClicked}><DeleteIcon /></IconButton>
+                        <IconButton className={classes.projektDeleteButton}  variant="contained"  onClick={this.projektartDeleteButtonClicked}><DeleteIcon /></IconButton>
                     </Tooltip>
                     </Grid>
                     </Grid>
             </ListItem>
             <ListItem>
               <LoadingProgress show={loadingInProgress}/>
-              <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getProjekt} />
+              <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getProjektart} />
             </ListItem>
             <Divider/>
-            <ModulForm show={showModulForm} modul={modul} onClose={this.modulFormClosed} getModule= {this.getModule}/>
-            <ModulDelete show={showModulDelete} modul={modul} onClose={this.modulDeleteClosed} />       
+            <ProjektartenForm show={showProjektartForm} projektart={projektart} onClose={this.projektartFormClosed} getProjektart= {this.getProjektart}/>
+            <ProjektartDelete show={showProjektartDelete} projektart={projektart} onClose={this.projektartDeleteClosed} getProjektart= {this.getProjektart}/>       
           </div>                        
         );
     }
@@ -117,7 +120,7 @@ const styles = theme => ({
     });
 
 /** PropTypes */
-ModulListeEintrag.propTypes = {
+ProjektartListeEintrag.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     show: PropTypes.bool.isRequired
@@ -125,6 +128,6 @@ ModulListeEintrag.propTypes = {
   
 
 
-export default withStyles(styles)(ModulListeEintrag);
+export default withStyles(styles)(ProjektartListeEintrag);
 
 
