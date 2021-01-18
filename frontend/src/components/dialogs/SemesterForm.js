@@ -71,7 +71,7 @@ class SemesterForm extends Component {
     // Validierung der Textfeldaenderungen 
 	textFieldValueChange = (event) => {
 		const value = event.target.value;
-        const re = /(SS[0-9]{2})|(WS[0-9]{2}\/[0-9]{2})/;
+        const re = /(^SS[0-9]{2}$)|(^WS[0-9]{2}\/[0-9]{2}$)/;
 
 		let error = false;
 		if (value.trim().length === 0) {
@@ -123,10 +123,10 @@ class SemesterForm extends Component {
 		if (semester) {
 			// Projekt objekt true, somit ein edit
 			title = `Semester "${semester.name}" bearbeiten`;
-			header = 'Neue Semesterdaten einfügen';
+			header = 'Bitte Format SS** oder WS**/** verwenden';
 		} else {
-			title = 'Erstelle ein neues Semester';
-			header = 'Semesterdaten einfügen';
+			title = 'Neues Semester erstellen';
+			header = 'Bitte Format SS** oder WS**/** verwenden';
 		}
 
         return (
@@ -154,7 +154,7 @@ class SemesterForm extends Component {
                         semester ?
                             <ContextErrorMessage error={updatingError} contextErrorMsg={`Semester ${semester.getID()} could not be updated.`} onReload={this.updateSemester} />
                             :
-                            <ContextErrorMessage error={addingError} contextErrorMsg={`The Modul could not be added.`} onReload={this.addSemester} />
+                            <ContextErrorMessage error={addingError} contextErrorMsg={`The Semester could not be added.`} onReload={this.addSemester} />
                         }
                     </DialogContent>
                     <DialogActions>

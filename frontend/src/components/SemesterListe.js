@@ -145,13 +145,9 @@ semesterFormClosed = semester => {
                 filteredSemester.map(semester => 
                     <SemesterListeEintrag key={semester.getID()} semester = {semester} show={this.props.show} getSemester={this.getSemester}/>)
                 }
-                <ListItem>
-                <LoadingProgress show={loadingInProgress} />
-                <ContextErrorMessage error={error} contextErrorMsg={`Semester konnte nicht geladen werden.`} onReload={null} />
-                </ListItem>
             </List>
         <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`}  />
+        <ContextErrorMessage error={error} contextErrorMsg={`Semester konnte nicht geladen werden.`} onReload={this.getSemester} />
         </Paper>
         <SemesterForm show={showSemesterForm} onClose={this.semesterFormClosed} getSemester= {this.getSemester}/>
       </div>
