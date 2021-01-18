@@ -30,7 +30,7 @@ class ProjektverwaltungListeEintrag extends Component {
   }
 
   annehmenButtonClicked = event => {
-  event.stopPropagation()
+    event.stopPropagation()
     //Logik fuer annehmen Button
     this.setState({ projektAnnehmenButton: true });
     this.setState({ projektAblehnenButton: true });
@@ -38,7 +38,7 @@ class ProjektverwaltungListeEintrag extends Component {
   }
 
   ablehnenButtonClicked = event => {
-  event.stopPropagation()
+    event.stopPropagation()
     //Logik fuer ablehnen Button
     this.setState({ projektAnnehmenButton: true });
     this.setState({ projektAblehnenButton: true });
@@ -64,10 +64,10 @@ class ProjektverwaltungListeEintrag extends Component {
     ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
       this.setState({
         projektarten: projektartBOs
-      })).catch(e => 
-    this.setState({
-      //projektarten: []
-    }));
+      })).catch(e =>
+        this.setState({
+          //projektarten: []
+        }));
   }
 
   componentDidMount() {
@@ -99,7 +99,7 @@ class ProjektverwaltungListeEintrag extends Component {
               </Grid>
               <Grid item xs />
               <Button className={classes.projektAnnehmenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.annehmenButtonClicked} disabled={this.state.projektAnnehmenButton}>
-                 Annehmen
+                Annehmen
               </Button>
               <Button className={classes.projektAblehnenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.ablehnenButtonClicked} disabled={this.state.projektAblehnenButton}>
                 Ablehnen
@@ -111,27 +111,27 @@ class ProjektverwaltungListeEintrag extends Component {
           </AccordionSummary>
           <AccordionDetails>
             <Typography variant='body1' color={'textSecondary'}>
-                <b>Beschreibung: </b> {projekt.getbeschreibung()} <br />
-                <b>Raum: </b>{projekt.getraum()}<br />
-                <b>Maximale Teilnehmer: </b>{projekt.getmax_teilnehmer()}<br />
-                <b>Betreuer: </b>{projekt.getbetreuer()}<br />
-                <b>Externer Partner: </b>{projekt.getexterner_partner()}<br />
-                <b>Wöchentlich: </b>{projekt.getwoechentlich() === "1" ? "Ja" : "Nein"}<br />
-                <b>Anzahl Block vor: </b>{projekt.getanzahl_block_vor()}<br />
-                <b>Anzahl Block in: </b>{projekt.getanzahl_block_in()}<br />
-                <b>Sprache: </b>{projekt.getsprache()}<br />
-                {projektarten.length > 0 && projekt ? 
+              <b>Beschreibung: </b> {projekt.getbeschreibung()} <br />
+              <b>Raum: </b>{projekt.getraum()}<br />
+              <b>Maximale Teilnehmer: </b>{projekt.getmax_teilnehmer()}<br />
+              <b>Betreuer: </b>{projekt.getbetreuer()}<br />
+              <b>Externer Partner: </b>{projekt.getexterner_partner()}<br />
+              <b>Wöchentlich: </b>{projekt.getwoechentlich() === "1" ? "Ja" : "Nein"}<br />
+              <b>Anzahl Block vor: </b>{projekt.getanzahl_block_vor()}<br />
+              <b>Anzahl Block in: </b>{projekt.getanzahl_block_in()}<br />
+              <b>Sprache: </b>{projekt.getsprache()}<br />
+              {projektarten.length > 0 && projekt ?
                 <>
-                <b>Projektart: </b>{projektarten[projekt.art-1].name}<br />
-                <b>SWS: </b>{projektarten[projekt.art-1].sws}<br />
-                <b>ECTS: </b>{projektarten[projekt.art-1].ects}<br />
+                  <b>Projektart: </b>{projektarten[projekt.art - 1].name}<br />
+                  <b>SWS: </b>{projektarten[projekt.art - 1].sws}<br />
+                  <b>ECTS: </b>{projektarten[projekt.art - 1].ects}<br />
                 </>
                 :
                 <>
-                <b>ECTS noch nicht geladen</b><br />
+                  <b>ECTS noch nicht geladen</b><br />
                 </>
-                }
-                <b>Präferierter Block: </b>{projekt.getpraeferierte_block()}<br />
+              }
+              <b>Präferierter Block: </b>{projekt.getpraeferierte_block()}<br />
 
             </Typography>
           </AccordionDetails>
