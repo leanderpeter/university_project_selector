@@ -93,7 +93,7 @@ class ModulListeEintrag extends Component {
                     </Grid>
                     <Grid item>
                     <Tooltip title='Löschen' placement="bottom">
-                        <IconButton className={classes.projektDeleteButton}  variant="contained"  onClick={this.modulDeleteButtonClicked}><DeleteIcon /></IconButton>
+                        <IconButton variant="contained"  onClick={this.modulDeleteButtonClicked}><DeleteIcon /></IconButton>
                     </Tooltip>
                     </Grid>
                     </Grid>

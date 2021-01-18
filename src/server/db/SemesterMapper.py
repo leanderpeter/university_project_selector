@@ -58,14 +58,56 @@ class SemesterMapper(Mapper):
         """Reads a tuple with a given ID"""
         pass
 
-    def insert(self):
-        """Add the given object to the database"""
-        pass
 
-    def update(self):
-        """Update an already given object in the DB"""
-        pass
+    def insert(self, semester):
+        '''
+        Einfugen eines Semester BO's in die DB
+        '''
 
-    def delete(self):
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT MAX(id) AS maxid FROM semester")
+        tuples = cursor.fetchall()
+
+
+        for (maxid) in tuples:
+            if maxid[0] is None:
+                semester.set_id(1)
+            else:
+                semester.set_id(maxid[0]+1)
+
+        command = "INSERT INTO semester (id, name) VALUES (%s,%s)"
+        data = (
+            semester.get_id(),
+            semester.get_name(),
+            )
+        cursor.execute(command, data)
+        self._connection.commit()
+        cursor.close()
+
+        return semester
+        
+    def update(self, semester):
+
+        cursor = self._connection.cursor()
+
+        command = "UPDATE semester SET name=%s WHERE id=%s"
+        data = (semester.get_name(), semester.get_id())
+
+        result = semester
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+        
+        return result        
+
+    def delete(self, id):
         """Delete an object from the DB"""
-        pass
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM projekte WHERE halbjahr={}".format(id)
+        command2 = "DELETE FROM semester WHERE id={}".format(id)
+        cursor.execute(command)
+        cursor.execute(command2)
+        self._connection.commit()
+        cursor.close()

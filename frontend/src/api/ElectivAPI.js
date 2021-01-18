@@ -114,6 +114,15 @@ export default class ElectivAPI {
 	//Semester nach projekt Id bekommen
 	#getSemester_by_idURL = (id) => `${this.#ElectivServerBaseURL}/semester/${id}`;
 
+	//Add Semester
+	#addSemesterURL = () => `${this.#ElectivServerBaseURL}/semester`;
+
+	//Update Semester
+	#updateSemesterURL = () => `${this.#ElectivServerBaseURL}/semester`
+
+	//Delete Semester
+	#deleteSemesterURL = (id) => `${this.#ElectivServerBaseURL}/semester?id=${id}`;
+
 
 	//Studenten eines Projekts bekommen
 	#getStudentenByProjektIdURL = (id) => `${this.#ElectivServerBaseURL}/student/projekt/${id}`
@@ -453,6 +462,10 @@ export default class ElectivAPI {
 		})
 	}
 
+	deleteModul(id){
+		return this.#fetchAdvanced(this.#deleteModulURL(id),{method: 'DELETE'})
+	}
+
 	updateUser(id,name,matrNr){
 		return this.#fetchAdvanced(this.#updateUserURL(id,name,matrNr), {
 			method: 'PUT',
@@ -461,10 +474,6 @@ export default class ElectivAPI {
 				'Content-type': 'application/json',
 			}
 		})
-	}
-
-	deleteModul(id){
-		return this.#fetchAdvanced(this.#deleteModulURL(id),{method: 'DELETE'})
 	}
 
 	deleteUser(id){
@@ -531,6 +540,45 @@ export default class ElectivAPI {
 			})
 		})
 	}
+
+	addSemester(semesterBO) {
+		return this.#fetchAdvanced(this.#addSemesterURL(), {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(semesterBO)
+		}).then((responseJSON) => {
+			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
+			let responseSemesterBO = SemesterBO.fromJSON(responseJSON);
+			return new Promise(function (resolve) {
+				resolve(responseSemesterBO);
+			})
+		})
+	}
+
+	updateSemester(semesterBO){
+		return this.#fetchAdvanced(this.#updateSemesterURL(), {
+			method: 'PUT',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(semesterBO)
+		}).then((responseJSON) => {
+			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
+			let responseSemesterBO = SemesterBO.fromJSON(responseJSON);
+			return new Promise(function (resolve) {
+				resolve(responseSemesterBO);
+			})
+		})
+	}
+
+	deleteSemester(id){
+		return this.#fetchAdvanced(this.#deleteSemesterURL(id),{method: 'DELETE'})
+	}
+
 	//gibt alle Studenten als BO zurück
 	getStudenten(){
 		console.log(this.#getStudentenURL());
