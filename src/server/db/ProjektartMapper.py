@@ -127,3 +127,6 @@ class ProjektartMapper(Mapper):
 		cursor.close()
 		
 		return result
+
+	def find_by_id(self):
+		pass

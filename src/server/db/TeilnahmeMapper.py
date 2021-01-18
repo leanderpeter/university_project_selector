@@ -92,7 +92,7 @@ class TeilnahmeMapper(Mapper):
 
         return result
 
-    def find_by_key(self):
+    def find_by_id(self):
         """Reads a tuple with a given ID"""
         pass
 
