@@ -159,9 +159,9 @@ class ProjektListeEintrag extends Component {
           <AccordionDetails className={classes.details}>
             <Typography variant='body1' color={'textSecondary'}>
               <b>Beschreibung: </b> {projekt.getbeschreibung()} <br />
+              <b>Betreuer: </b>{projekt.getbetreuer()}<br />
               <b>Raum: </b>{projekt.getraum()}<br />
               <b>Maximale Teilnehmer: </b>{projekt.getmax_teilnehmer()}<br />
-              <b>Betreuer: </b>{projekt.getbetreuer()}<br />
               <b>Externer Partner: </b>{projekt.getexterner_partner()}<br />
               <b>Wöchentlich: </b>{projekt.getwoechentlich() == "1" ? "Ja" : "Nein"}<br />
               <b>Blocktage vor Prüfungsphase: </b>{projekt.getanzahl_block_vor()}<br />
