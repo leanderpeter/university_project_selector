@@ -7,7 +7,10 @@ export default class SemesterBO extends NamedBusinessObject{
         super();
     }
     */
-    
+	
+	/** 
+   * Returns an Array of SemesterBOs from a given JSON structure
+   */
     static fromJSON(semester) {
 		let results = null;
 		if (Array.isArray(semester)) {
