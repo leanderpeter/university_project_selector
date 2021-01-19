@@ -8,11 +8,19 @@ import LoadingProgress from './LoadingProgress';
 
 import { ElectivAPI, SemesterBO } from '../../api';
 
+/**
+ * Es wird ein Dialog mit einem Formular dargestellt, mit welchem man Semester erstellen / bearbeiten kann 
+ * 
+ * @see See Material-UIs [Dialog](https://material-ui.com/components/dialogs)
+ * 
+ */
 
 class SemesterForm extends Component {
 
 	constructor(props) {
         super(props);
+
+        //gebe einen leeren status
         this.state = {
             name: '',
             nameValidationFailed: false,
@@ -27,6 +35,7 @@ class SemesterForm extends Component {
         this.baseState = this.state;
     }
 
+    // API Anbindung um das Semester über das Backend in die Datenbank einzufügen
     addSemester = () => {
         let newSemester = new SemesterBO()
         newSemester.setID(0)
@@ -34,7 +43,7 @@ class SemesterForm extends Component {
         ElectivAPI.getAPI().addSemester(newSemester).then(semester => {
             this.props.getSemester()
             this.setState(this.baseState);
-            this.props.onClose(semester); //Aufrufen parent in backend
+            this.props.onClose(semester); //Aufrufen parent in Backend
 		}).catch(e => 
 			this.setState({
 				addingInProgress: false,
@@ -48,6 +57,7 @@ class SemesterForm extends Component {
 		});
     }
 
+    // API Anbindung um das Semester über das Backend in der Datenbank upzudaten
     updateSemester = () => {
         let semester = this.props.semester;
         semester.setname(this.state.name)
@@ -68,7 +78,7 @@ class SemesterForm extends Component {
 		});
     }
 
-    // Validierung der Textfeldaenderungen 
+    // Validierung der Textfeldaenderungen um einheitlicher Format des Semesters zu speichern
 	textFieldValueChange = (event) => {
 		const value = event.target.value;
         const re = /(^SS[0-9]{2}$)|(^WS[0-9]{2}\/[0-9]{2}$)/;
@@ -88,6 +98,7 @@ class SemesterForm extends Component {
 		});
     }
     
+    //Infos das zu bearbeutenden Semester laden
     getInfos = () => {
         if (this.props.semester) {
             let name = this.props.semester.getname();
@@ -97,14 +108,13 @@ class SemesterForm extends Component {
 		}
     }
 
-
+    //wird aufgerufen, wenn das Dialog geschlossen wird
     handleClose = () => {
 		this.setState(this.baseState);
 		this.props.onClose(null);
     }
 
-
-    
+    /** Renders the component */
     render() {
 		const { classes, show, semester } = this.props;
         const {             
@@ -121,7 +131,7 @@ class SemesterForm extends Component {
 		let header = '';
 
 		if (semester) {
-			// Projekt objekt true, somit ein edit
+			// Semester objekt true, somit ein edit
 			title = `Semester "${semester.name}" bearbeiten`;
 			header = 'Bitte Format SS** oder WS**/** verwenden';
 		} else {
@@ -162,7 +172,7 @@ class SemesterForm extends Component {
                         Abbrechen
                         </Button>
                         {
-                        // If a Projekt is given, show an update button, else an add button
+                        // If a Semester is given, show an speichern (update) button, else an hinzufügen button
                         semester ?
                         <Button disabled={nameValidationFailed } variant='contained' onClick={this.updateSemester} color='primary'>
                             Speichern
@@ -203,12 +213,6 @@ const styles = theme => ({
     classes: PropTypes.object.isRequired,
     /** If true, the form is rendered */
     show: PropTypes.bool.isRequired,
-    /**  
-     * Handler function which is called, when the dialog is closed.
-     * Sends the edited or created projektBO's as parameter or null, if cancel was pressed.
-     *  
-     * Signature: onClose(ProjektBO's projekt);
-     */
     onClose: PropTypes.func.isRequired,
   }
   

@@ -9,6 +9,12 @@ import AddIcon from '@material-ui/icons/Add';
 import Divider from '@material-ui/core/Divider';
 import {ElectivAPI} from '../../api';
 
+/**
+ * Es wird ein einzelner Student und seiner Matrikelnummer dargestellt
+ * 
+ * Man kann Teilnahme hinzufügen
+ */
+
 
 
 
@@ -16,7 +22,7 @@ class AddStudentEintrag extends Component {
 
     constructor(props){
         super(props);
-
+        // initiiere ein state 
         this.state = {
             student: props.student,
             addButtonDisabled: false,
@@ -25,12 +31,15 @@ class AddStudentEintrag extends Component {
         };
     }
 
+    //fügt Teilnahme zu dem ausgewählten Prjekt hinzu
     addTeilnahme =  () => {
-      //Logik fuer Teilnahme Button
       this.setState({addButtonDisabled:true});
       ElectivAPI.getAPI().setTeilnahme(this.props.currentProjekt, this.state.student.id);
   }
 
+
+
+  /** Renders the component */
     render(){
         const {classes, student} = this.props;
         const {  error, loadingInProgress } = this.state;
@@ -53,6 +62,9 @@ class AddStudentEintrag extends Component {
         );
     }
 }
+
+
+/** Component specific styles */
 const styles = theme => ({
       root: {
         width: '100%',

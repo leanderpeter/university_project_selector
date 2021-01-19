@@ -115,7 +115,7 @@ semesterFormClosed = semester => {
   componentDidMount() {
       this.getSemester();
   }
-
+  
 
   /** Renders the component */
   render() {
