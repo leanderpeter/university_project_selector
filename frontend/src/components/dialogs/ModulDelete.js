@@ -3,13 +3,19 @@ import PropTypes from 'prop-types';
 import { withStyles, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { ElectivAPI } from '../../api';
 
+/**
+ * Es wird ein Dialog dargestellt, mit welchem man ein bestimmtes Modul löschen kann
+ * 
+ * @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
+ * 
+ */
 
 class ModulDelete extends Component {
 
 	constructor(props) {
 		super(props);
 
-		// Status initalisieren
+		//initiiere den state
 		this.state = {
             modul: props.modul,
 
@@ -17,10 +23,12 @@ class ModulDelete extends Component {
 
     }
 
+    //Wenn das Dialog geschlossen wird
     handleClose = () => {
-		this.props.onClose(null);
+		  this.props.onClose(null);
     }
 
+    // API Anbindung um das Modul über das Backend in der Datenbank zu löschen
     deleteModul= () => {
       ElectivAPI.getAPI().deleteModul(this.state.modul.id)
         .then(()=>{
@@ -29,8 +37,8 @@ class ModulDelete extends Component {
         });
     }
     
+    /** Rendert die Komponente */
     render() {
-
         const { show} = this.props;
         const { modul } = this.state;
         return (
@@ -61,6 +69,7 @@ class ModulDelete extends Component {
 
 }
 
+/** Component specific styles */
 const styles = theme => ({
     root: {
       width: '100%',
@@ -71,16 +80,7 @@ const styles = theme => ({
 ModulDelete.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
-    /** The ProjektBO's to be edited */
-    projekt: PropTypes.object,
-    /** If true, the form is rendered */
     show: PropTypes.bool.isRequired,
-    /**  
-     * Handler function which is called, when the dialog is closed.
-     * Sends the edited or created projektBO's as parameter or null, if cancel was pressed.
-     *  
-     * Signature: onClose(ProjektBO's projekt);
-     */
     onClose: PropTypes.func.isRequired,
   }
   

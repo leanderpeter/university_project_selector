@@ -3,13 +3,19 @@ import PropTypes from 'prop-types';
 import { withStyles, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { ElectivAPI } from '../../api';
 
+/**
+ * Es wird ein Dialog dargestellt, mit welchem man ein bestimmtes Projekt löschen kann
+ * 
+ * @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
+ * 
+ */
 
 class ProjektDelete extends Component {
 
 	constructor(props) {
 		super(props);
 
-		// Status initalisieren
+		//initiiere den state
 		this.state = {
             projekt: props.projekt,
 
@@ -17,10 +23,12 @@ class ProjektDelete extends Component {
 
     }
 
+    //Wenn das Dialog geschlossen wird
     handleClose = () => {
-		this.props.onClose(null);
+		  this.props.onClose(null);
     }
 
+    // API Anbindung um das Projekt über das Backend in der Datenbank zu löschen
     deleteProjekt= () => {
         ElectivAPI.getAPI().deleteProjekt(this.state.projekt.id)
         .then(()=>{
@@ -29,10 +37,11 @@ class ProjektDelete extends Component {
         });
     }
     
+    /** Rendert die Komponente */
     render() {
-
         const { show } = this.props;
         const { projekt } = this.state;
+
         return (
             <div>
               <Dialog
@@ -61,6 +70,7 @@ class ProjektDelete extends Component {
 
 }
 
+/** Component specific styles */
 const styles = theme => ({
     root: {
       width: '100%',

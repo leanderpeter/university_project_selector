@@ -18,11 +18,12 @@ import Chip from "@material-ui/core/Chip";
 import ListItemText from "@material-ui/core/ListItemText";
 
 
-/*
-Dieses Form zeigt ein Dialog zum erstllen/updaten von ProjektBO's. Falls ein Projekt bereits besteht wird das Formular als edit konfiguireirt.
-Falls das Projekt Objekt null ist wird das Formular zum erstellen eine PojektBO's konfiguriert.
-Dafuer wird auf die API zugegriffen (Backend zugriff)
-Funktion onClose erstellt/updated/abbruch des Prozesses.
+/** 
+* Dieses Form zeigt ein Dialog zum erstellen/updaten von ProjektBO's. Falls ein Projekt bereits besteht wird das Formular als edit konfiguriert.
+* Falls das Projekt Objekt null ist wird das Formular zum erstellen eines PojektBO's konfiguriert.
+* Dafuer wird auf die API zugegriffen (Backend zugriff)
+*
+* @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
 */
 
 class ProjektForm extends Component {
@@ -40,7 +41,7 @@ class ProjektForm extends Component {
 		}
 		
 
-		//init state
+		//initiiere den state
 		this.state = {
 			name: nm,
 			nameValidationFailed: false,
@@ -130,7 +131,7 @@ class ProjektForm extends Component {
 		this.baseState = this.state;
 	}
 
-	// Projekt hinzufugen
+	// API Anbindung um das Projekt über das Backend in die Datenbank hinzuzufügen
 	addProjekt =  () => {
 		let newProjekt = new ProjektBO(
 			0,
@@ -153,8 +154,10 @@ class ProjektForm extends Component {
 			this.state.anzahlTeilnehmer,
 			this.state.teilnehmerListe,
 			);
+		// ProjektBO über die API in die DBhinzufügen	
 		ElectivAPI.getAPI().addProjekt(newProjekt).then(projekt => {
 			this.props.getProjekte();
+			//Wählbare Module enes Projekts über die API in die DB hinzufügen
 			ElectivAPI.getAPI().postProjekte_hat_module(projekt.id, JSON.stringify(this.state.modulwahl))}).then(projekt => {
 			// Backend erfolgreich
 			// reinitialisierung fuer ein neues leere Projekt
@@ -173,6 +176,7 @@ class ProjektForm extends Component {
 		});
 	}
 
+	// API Anbindung um das Projekt über das Backend in die Datenbank upzudaten
 	updateProjekt = () => {
 		let projekt = this.props.projekt;
 		projekt.setname(this.state.name);
@@ -192,8 +196,10 @@ class ProjektForm extends Component {
 		projekt.setArt(this.state.art);
 		projekt.setAnzahlTeilnehmer(this.state.anzahlTeilnehmer);
 		projekt.setTeilnehmerListe(this.state.teilnehmerListe);
+		// ProjektBO über die API in die DBhinzufügen	
 		ElectivAPI.getAPI().updateProjekt(projekt).then(projekt => {
 			this.props.getProjekte();
+			//Wählbare Module enes Projekts über die API in die DB hinzufügen
 			ElectivAPI.getAPI().updateProjekte_hat_module(projekt.id, JSON.stringify(this.state.modulwahl))}).then(projekt => {
 			// Backend erfolgreich
 			// reinitialisierung fuer ein neues leere Projekt
@@ -212,6 +218,7 @@ class ProjektForm extends Component {
 		});
 	}
 
+	//Infos des zu bearbeitenden Projekts laden
 	getUpdateInfos = () => {
 		let nm = this.props.projekt.getname();
 		let mt = this.props.projekt.getmax_teilnehmer();
@@ -267,10 +274,6 @@ class ProjektForm extends Component {
 		})
 	}
 
-	// ---------------------------------------------------------------
-	//textFieldValueChange fehlt noch
-	// ---------------------------------------------------------------
-
 	// Validierung der Textfeldaenderungen 
 	textFieldValueChange = (event) => {
 		const value = event.target.value;
@@ -286,6 +289,7 @@ class ProjektForm extends Component {
 		});
 	}
 
+	// Validierung der Textfeldaenderungen nur numerische Werte
 	numberValueChange = (event) => {
 		const value = event.target.value;
 		const re = /^[0-9]{1,3}$/;
@@ -305,18 +309,21 @@ class ProjektForm extends Component {
 		});
 	}
 
+	// Änderung der Checkboxes
 	checkboxValueChange = (event) => {
 		this.setState({
 			[event.target.id]: event.target.checked,
 		});
 	}
 
+	// Änderung der Radiobuttons
 	radioValueChange = (event) => {
 		this.setState({
 			sprache: event.target.value,
 		});
 	}
 
+	// API Anbindung um alle Semester über das Backend aus der Datenbank zu laden
 	getSemester = () => {
 		ElectivAPI.getAPI().getSemester()
 		.then(semesterBOs =>
@@ -337,6 +344,7 @@ class ProjektForm extends Component {
 		});
 	}
 
+	// API Anbindung um alle Projektarten über das Backend aus der Datenbank zu laden
 	getProjektart = () => {
 		ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
 		  this.setState({
@@ -372,7 +380,8 @@ class ProjektForm extends Component {
           loadingTeilnahmeError: null
       });
   }
-
+	  
+  	// API Anbindung um alle Module eines zu bearbeitenden Projekts über das Backend aus der Datenbank zu laden
 	getModule_by_projekt_id = () => {
 		ElectivAPI.getAPI().getModule_by_projekt_id(this.props.projekt.id)
 		.then(modulBOs => {
@@ -399,6 +408,7 @@ class ProjektForm extends Component {
 		});
 	}
 
+	// Änderungen des Dropdown Menüs für Semester
 	handleSemesterChange = (semester) => {
 		this.setState({
 		  halbjahr: semester.target.value,
@@ -409,6 +419,7 @@ class ProjektForm extends Component {
 		  }, 0);
 	  };
 
+	// Änderungen des Dropdown Menüs für Projektarten
 	handleArtChange = (projektart) => {
 		this.setState({
 			art: projektart.target.value,
@@ -418,7 +429,8 @@ class ProjektForm extends Component {
 			console.log('Ausgewählte Projektart ID:',this.state.art)
 		  }, 0);
 	  };
-	
+	  
+	// Änderungen des Dropdown Menüs für Module
 	handleModulChange = (event) => {
 		this.setState({
 			modulwahl: event.target.value,
@@ -429,6 +441,7 @@ class ProjektForm extends Component {
 		  }, 0);
 	}
 
+	// Wenn Änderungen an der Modulwahl vorgenommen werden müssen diese mit den IDS der ModulBOS abgeglichen werden
 	modulwahlChange = () => {
 		console.log('Ausgewählte ModulIDs:',this.state.modulwahl)
 		var modulBOs = [];
@@ -444,12 +457,14 @@ class ProjektForm extends Component {
 		});
 	}
 
+	//Wenn das Dialog geschlossen wird
 	handleClose = () => {
 		// State zurucksetzen
 		this.setState(this.baseState);
 		this.props.onClose(null);
 	}
 
+	//Funktion, um alle für die Erstellung/Bearbeitung eines Projekts notwendigen Informationen zu laden
 	getInfos = () => {
 		this.getSemester();
 		this.getProjektart();
@@ -460,8 +475,7 @@ class ProjektForm extends Component {
 		}
 	}
 
-	// Rendering
-
+	/** Rendert die Komponente */
 	render() {
 		const { classes, projekt, show } = this.props;
 		const {

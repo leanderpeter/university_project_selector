@@ -8,11 +8,19 @@ import LoadingProgress from './LoadingProgress';
 
 import { ElectivAPI, ModulBO } from '../../api';
 
+/**
+ * Es wird ein Dialog mit einem Formular dargestellt, mit welchem man Module erstellen und bearbeiten kann
+ * 
+ * @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
+ * 
+ */
 
 class ModulForm extends Component {
 
 	constructor(props) {
         super(props);
+
+        //initiiere einen leeren state
         this.state = {
             name: '',
             nameValidationFailed: false,
@@ -31,6 +39,7 @@ class ModulForm extends Component {
         this.baseState = this.state;
     }
 
+    // API Anbindung um das Modul über das Backend in die Datenbank einzufügen
     addModul = () => {
         let newModul = new ModulBO()
         newModul.setID(0)
@@ -53,6 +62,7 @@ class ModulForm extends Component {
 		});
     }
 
+    // API Anbindung um das Modul über das Backend in die Datenbank upzudaten
     updateModul = () => {
         let modul = this.props.modul;
         modul.setname(this.state.name)
@@ -74,7 +84,7 @@ class ModulForm extends Component {
 		});
     }
 
-    	// Validierung der Textfeldaenderungen 
+    // Validierung der Textfeldaenderungen 
 	textFieldValueChange = (event) => {
 		const value = event.target.value;
 
@@ -89,6 +99,7 @@ class ModulForm extends Component {
 		});
 	}
 
+    // Validierung der Textfeldaenderungen nur numerische Werte
 	numberValueChange = (event) => {
 		const value = event.target.value;
         const re = /^[0-9]{1,10}$/;
@@ -108,6 +119,7 @@ class ModulForm extends Component {
 		});
     }
     
+    //Infos des zu bearbeitenden Moduls laden
     getInfos = () => {
         if (this.props.modul) {
             let name = this.props.modul.getname();
@@ -119,14 +131,14 @@ class ModulForm extends Component {
 		}
     }
 
-
+    //Wenn das Dialog geschlossen wird
     handleClose = () => {
 		this.setState(this.baseState);
 		this.props.onClose(null);
     }
 
 
-    
+    /** Rendert die Komponente */
     render() {
 		const { classes, show, modul } = this.props;
         const {             
@@ -147,11 +159,11 @@ class ModulForm extends Component {
 		let header = '';
 
 		if (modul) {
-			// Projekt objekt true, somit ein edit
+			// Modul objekt true, somit ein edit
 			title = `Modul "${modul.name}" bearbeiten`;
 			header = 'Neue Moduldaten einfügen';
 		} else {
-			title = 'Erstelle ein neues Projekt';
+			title = 'Erstelle ein neues Modul';
 			header = 'Moduldaten einfügen';
 		}
 
@@ -190,7 +202,7 @@ class ModulForm extends Component {
                         Abbrechen
                         </Button>
                         {
-                        // If a Projekt is given, show an update button, else an add button
+                        // If a Modul is given, show an  (update) button, else an hinzufügen (add) button
                         modul ?
                         <Button disabled={nameValidationFailed || edv_nrValidationFailed } variant='contained' onClick={this.updateModul} color='primary'>
                             Speichern
@@ -229,14 +241,7 @@ const styles = theme => ({
   ModulForm.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
-    /** If true, the form is rendered */
     show: PropTypes.bool.isRequired,
-    /**  
-     * Handler function which is called, when the dialog is closed.
-     * Sends the edited or created projektBO's as parameter or null, if cancel was pressed.
-     *  
-     * Signature: onClose(ProjektBO's projekt);
-     */
     onClose: PropTypes.func.isRequired,
   }
   
