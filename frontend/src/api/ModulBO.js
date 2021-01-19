@@ -19,6 +19,7 @@ export default class ModulBO extends NamedBusinessObject{
 		this.edv_nr = aedv_nr;  
     }
 
+	//Return Array bzw. Objekt von Modulen aus einem JSON
     static fromJSON(module) {
 		let results = null;
 		if (Array.isArray(module)) {

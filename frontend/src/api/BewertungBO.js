@@ -1,5 +1,9 @@
 import BusinessObject from "./BusinessObject";
 
+/*
+Realisierung eines BewertungsBO. Dieses besitzt eine Note
+*/
+
 export default class BewertungBO extends BusinessObject{
 
 	constructor(anote){
@@ -8,18 +12,19 @@ export default class BewertungBO extends BusinessObject{
     }
     
 	/*
-	Erhalte 
+	Erhalte Note
 	*/
 	getnote(){
 		return this.note;
 	}
 	/*
-	Setze 
+	Setze Note
 	*/
 	setnote(anote){
 		this.note = anote;  
-    }
-
+	}
+	
+	//Return Array bzw. Objekt von Bewertungen aus einem JSON
     static fromJSON(bewertungen) {
 		let results = null;
 		if (Array.isArray(bewertungen)) {

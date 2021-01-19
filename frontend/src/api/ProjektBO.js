@@ -1,18 +1,10 @@
 import NamedBusinessObject from './NamedBusinessObject';
 
 /*
-Projekt von ElectivApp
+Realisierung eines ProjektBOs mit allen Attributen
 */
 
 export default class ProjektBO extends NamedBusinessObject{
-	/*
-	Erstellt ein BO mit den Parametern:
-  `name` varchar(100) NOT NULL DEFAULT '',
-  `description` varchar(100) NOT NULL DEFAULT '',
-  `instructor` varchar(100) NOT NULL DEFAULT '',
-  `date` varchar(100) NOT NULL DEFAULT '',
-  `max_subscriber` int(11) NOT NULL DEFAULT '0',
-	*/
 	constructor(aid, aname, amax_teilnehmer, aprojektbeschreibung, abetreuer, aexterner_partner, awoechentlich, aanzahl_block_vor, aanzahl_block_in, apraeferierte_block, abes_raum, araum, asprache, adozent, azustand, ahalbjahr, aart, aanzahlTeilnehmer,ateilnehmerListe){
 		super(aid, aname);
 		this.id = aid;
@@ -37,146 +29,150 @@ export default class ProjektBO extends NamedBusinessObject{
 	}
 
 
-			/*
-	Erhalte max_subscriber
+	/*
+	Erhalte max_teilnehmer
 	*/
 	getmax_teilnehmer(){
 		return this.max_teilnehmer;
 	}
 
 	/*
-	Setze max_subscriber
+	Setze max_teilnehmer
 	*/
 	setmax_teilnehmer(amax_teilnehmer){
 		this.max_teilnehmer = amax_teilnehmer;  
 	}
 
-		/*
-	Erhalte description
+	/*
+	Erhalte beschreibung
 	*/
 	getbeschreibung(){
 		return this.beschreibung;
 	}
 	/*
-	Setze description
+	Setze beschreibung
 	*/
 	setbeschreibung(aprojektbeschreibung){
 		this.beschreibung = aprojektbeschreibung;  
 	}
 
-		/*
-	Erhalte instructor 
+	/*
+	Erhalte betreuer 
 	*/
 	getbetreuer(){
 		return this.betreuer;
 	}
 	/*
-	Setze instructor
+	Setze betruer
 	*/
 	setbetreuer(abetreuer){
 		this.betreuer = abetreuer;  
 	}
-		/*
-	usw. Erhalte
+	/*
+	Erhalte externer_partner
 	*/
 	getexterner_partner(){
 		return this.externer_partner;
 	}
 	/*
-	Setze 
+	Setze externer_partner
 	*/
 	setexterner_partner(aexterner_partner){
 		this.externer_partner = aexterner_partner;  
 	}
 	/*
-	Erhalte 
+	Erhalte woechentlich
 	*/
 	getwoechentlich(){
 		return this.woechentlich;
 	}
 	/*
-	Setze 
+	Setze woechentlich
 	*/
 	setwoechentlich(awoechentlich){
 		this.woechentlich = awoechentlich;  
 	}
-		/*
-	Erhalte 
+	/*
+	Erhalte anzahl_block_vor
 	*/
 	getanzahl_block_vor(){
 		return this.anzahl_block_vor;
 	}
 	/*
-	Setze 
+	Setze anzahl_block_vor
 	*/
 	setanzahl_block_vor(aanzahl_block_vor){
 		this.anzahl_block_vor = aanzahl_block_vor;  
-	}
-		/*
-	Erhalte 
+	}	
+	/*
+	Erhalte anzahl_block_in
 	*/
 	getanzahl_block_in(){
 		return this.anzahl_block_in;
 	}
 	/*
-	Setze 
+	Setze anzahl_block_in
 	*/
 	setanzahl_block_in(aanzahl_block_in){
 		this.anzahl_block_in = aanzahl_block_in;  
 	}
-		/*
-	Erhalte 
+	/*
+	Erhalte praeferierte_block
 	*/
 	getpraeferierte_block(){
 		return this.praeferierte_block;
 	}
 	/*
-	Setze 
+	Setze praeferierte_block
 	*/
 	setpraeferierte_block(apraeferierte_block){
 		this.praeferierte_block = apraeferierte_block;  
 	}
-			/*
-	Erhalte 
+	/*
+	Erhalte bes_raum
 	*/
 	getbes_raum(){
 		return this.bes_raum;
 	}
 	/*
-	Setze 
+	Setze bes_raum
 	*/
 	setbes_raum(abes_raum){
 		this.bes_raum = abes_raum;  
 	}
-				/*
-	Erhalte 
+	/*
+	Erhalte raum
 	*/
 	getraum(){
 		return this.raum;
 	}
 	/*
-	Setze 
+	Setze raum
 	*/
 	setraum(araum){
 		this.raum = araum;  
 	}
-			/*
-	Erhalte 
+	/*
+	Erhalte sprache
 	*/
 	getsprache(){
 		return this.sprache;
 	}
 	/*
-	Setze 
+	Setze sprache
 	*/
 	setsprache(asprache){
 		this.sprache = asprache;  
 	}
-
+	/*
+	Erhalte dozent
+	*/
 	getdozent(){
 		return this.dozent;
 	}
-
+	/*
+	Setze dozent
+	*/
 	setdozent(adozent){
 		this.dozent = adozent;
 	}
@@ -194,7 +190,7 @@ export default class ProjektBO extends NamedBusinessObject{
 		this.aktueller_zustand = azustand;  
 	}
 
-		/*
+	/*
 	Erhalte  Halbjahr
 	*/
 	getHalbjahr(){
@@ -222,50 +218,48 @@ export default class ProjektBO extends NamedBusinessObject{
 	}
 
     /*
-	Erhalte  Anzahl Teilnehmer
+	Erhalte Anzahl Teilnehmer
 	*/
 	getAnzahlTeilnehmer(){
 		return this.anzahlTeilnehmer;
 	}
 
     /*
-	Setze  Anzahl Teilnehmer
+	Setze Anzahl Teilnehmer
 	*/
 	setAnzahlTeilnehmer(aanzahlTeilnehmer){
 		this.anzahlTeilnehmer = aanzahlTeilnehmer;
 	}
 
 	/*
-	Erhalte  Anzahl Teilnehmer
+	Erhalte TeilnehmerListe
 	*/
 	getTeilnehmerListe(){
 		return this.teilnehmerListe;
 	}
 
     /*
-	Setze  Anzahl Teilnehmer
+	Setze TeilnehmerListe
 	*/
 	setTeilnehmerListe(ateilnehmerListe){
 		this.teilnehmerListe = ateilnehmerListe;
 	}
 
 	/*
-	Erhalte  Anzahl ECTS
+	Erhalte Anzahl ECTS
 	*/
 	getECTS(){
 		return this.ects;
 	}
 
     /*
-	Setze  Anzahl Teilnehmer
+	Setze Anzahl ECTS
 	*/
 	setECTS(aects){
 		this.ects = aects;
 	}
 	
-	/*
-	Gebe ein Array von Projekt BO's zuruck.
-	*/
+	//Return Array bzw. Objekt von Projekten aus einem JSON
 	static fromJSON(projekte) {
 		let results = null;
 		if (Array.isArray(projekte)) {

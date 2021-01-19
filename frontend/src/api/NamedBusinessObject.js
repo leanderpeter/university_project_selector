@@ -1,5 +1,9 @@
 import BusinessObject from "./BusinessObject";
 
+/*
+Basisklasse fuer alle BO's welche einen Namen besitzen
+*/
+
 export default class NamedBusinessObject extends BusinessObject{
 
 	constructor(aname){
@@ -8,13 +12,13 @@ export default class NamedBusinessObject extends BusinessObject{
     }
     
 	/*
-	Erhalte 
+	Erhalte Namen
 	*/
 	getname(){
 		return this.name;
 	}
 	/*
-	Setze 
+	Setze Namen
 	*/
 	setname(aname){
 		this.name = aname;  
