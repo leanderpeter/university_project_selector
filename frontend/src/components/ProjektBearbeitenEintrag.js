@@ -159,7 +159,7 @@ class ProjektBearbeitenEintrag extends Component {
     }
 
     render(){
-        const {classes} = this.props;
+        const {classes,currentProjekt,currentProjektBO} = this.props;
         const {bewertungen,studentID,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
 
         return(
@@ -196,7 +196,15 @@ class ProjektBearbeitenEintrag extends Component {
                          
                 </StyledTableCell> 
                 <StyledTableCell align="center">
-                  <IconButton className={classes.teilnahmeAbwaehlenButton}  variant="contained"  onClick={this.teilnahmeAbwaehlenButtonClicked}><DeleteIcon /></IconButton>
+                {currentProjektBO.aktueller_zustand === "Bewertung abgeschlossen"?
+                            <>
+                              <IconButton className={classes.teilnahmeAbwaehlenButton}  variant="contained"  onClick={this.teilnahmeAbwaehlenButtonClicked} disabled > <DeleteIcon /></IconButton>
+                            </>
+                            :
+                          <>
+                            <IconButton className={classes.teilnahmeAbwaehlenButton}  variant="contained"  onClick={this.teilnahmeAbwaehlenButtonClicked} > <DeleteIcon /></IconButton>
+                          </>
+                          }
                            
                     
                 </StyledTableCell>

@@ -49,8 +49,10 @@ class ProjektBearbeiten extends Component {
         this.state = {
             teilnahmen:[],
             projekte:[],
+            currentProjektBO : null,
             abgeschlosseneProjekte: [],
-            "currentProjekt": null,
+            currentProjekt: null,
+            semester: null,
             error: null,
             loadingInProgress: false,
             showAddStudent: false,
@@ -177,15 +179,39 @@ class ProjektBearbeiten extends Component {
         loadingProjekteError: null
     });
   }
+
+  // API Anbindung um alle Senester vom Backend zu bekommen 
+  getSemester = () => {
+    ElectivAPI.getAPI().getSemester()
+    .then(semesterBOs =>
+        this.setState({
+            semester: semesterBOs,
+            error: null,
+            loadingInProgress: false,
+        })).catch(e =>
+            this.setState({
+                semester: [],
+                error: e,
+                loadingInProgress: false,
+            }));
+    this.setState({
+        error: null,
+        loadingInProgress: true,
+        loadingTeilnahmeError: null
+    });
+}
+  
     
     //bei Klick Button Bewertung abgeben, wird der Zustand des Projektes in den nächsten Zustand versetzt
     bewertungAbgeschlossenButtonClicked = event => {
       //Logik fuer bewertung abgeschlossen Button
       ElectivAPI.getAPI().setZustandAtProjekt(this.state.currentProjekt, "Bewertung abgeschlossen").then(()=>{
         this.getProjekte()
-        this.getTeilnahmenByProjektId()
+        this.getAbgeschlosseneProjekte()
         this.setState({
           currentProjekt: null,
+          currentProjektBO: null,
+          teilnahmen: null,
         })
       }); 
     }
@@ -209,56 +235,76 @@ class ProjektBearbeiten extends Component {
     componentDidMount() {
       this.getProjekte();
       this.getAbgeschlosseneProjekte();
+      this.getSemester();
     }
 
     //bei Änderung der Select Komponente wird das Projekt als das aktuelle Projekt ausgewählt  
     handleChange = currentProjekt => (event) => {
+      let projektBO= event.target.value
+      
       this.setState({
-        currentProjekt:event.target.value
+        currentProjekt: projektBO.getID(),
+        currentProjektBO: projektBO,
       })
-      this.getTeilnahmenByProjektId(event.target.value)
+      
+      this.getTeilnahmenByProjektId(projektBO.getID())
+      //this.getSemester_by_id(projektBO.getHalbjahr())
+      
+    
     };
 
     render(){
         const { classes } = this.props;
-        const {currentRolle, projekte, abgeschlosseneProjekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;
+        const { projekte, abgeschlosseneProjekte, currentProjekt,currentProjektBO, teilnahmen, semester, error, loadingInProgress, showAddStudent}  = this.state;
         
         return(
           <div className={classes.root}>
+            
                        
             {/*erster sichtbarer Teil wenn noch kein Projekt ausgewählt wurde*/}
             <Grid className={classes.grid} container spacing={2} display="flex" margin="auto">
               <Grid item xs={12} sm={4} >
+               
                   
                     <FormControl className={classes.formControl}>
-                      <InputLabel>aktuelle Projekte</InputLabel>
-                        <Select  className={classes.formControl} style={{ minWidth:"9rem"}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
+                      <InputLabel>aktuelle Projekte </InputLabel>
+                        <Select  className={classes.formControl} style={{ minWidth:"9rem"}}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
                           {
                           projekte.map(projekt =>
-                          <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
+                          <MenuItem value={projekt}><em>{projekt.getname()}</em></MenuItem>
                           )
                           }
                         </Select>                                                              
                     </FormControl>
             </Grid>
             <Grid item xs={12} sm={4} >
-              
+              {semester?
+              <>   
                     <FormControl className={classes.formControl}>
                       <InputLabel>abgeschlossene Projekte</InputLabel>
-                        <Select  className={classes.formControl} style={{ minWidth:"13rem"}}  value={currentProjekt }  onChange={this.handleChange("currentProjekt")}>
+                        <Select  className={classes.formControl} style={{ minWidth:"17rem"}}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
                           {
                           abgeschlosseneProjekte.map(projekt =>
-                          <MenuItem value={projekt.getID()}><em>{projekt.getname()}</em></MenuItem>
+                          <MenuItem value={projekt}><em>{projekt.getname()} ({semester[projekt.halbjahr - 1].name})</em></MenuItem>
                           )
                           }
                         </Select>                                                              
                     </FormControl>
+              </>
+              :
+              <>
+              </>
+              }
               </Grid>
-            
+
             {/*wenn ein Projekt ausgewählt wurde*/}
-                  {currentProjekt?
+                  {currentProjektBO?
                     <>
-                      {currentProjekt.zustand === "in Bewertung"?
+                    {
+                        teilnahmen ?
+                        <>
+
+                      {currentProjektBO.aktueller_zustand === "in Bewertung"?
                         <>
                         <Grid item xs/>
                         <Grid item className={classes.grid} >
@@ -281,12 +327,12 @@ class ProjektBearbeiten extends Component {
                           </Grid>
                         </>
                       }
-                        
+                      
                         <TableContainer component={Paper}>
                           <Table className={classes.table} aria-label="customized table">
                             <TableHead>
                               <StyledTableRow>
-                                <StyledTableCell align="center">Student</StyledTableCell>
+                                <StyledTableCell align="center">Student </StyledTableCell>
                                 <StyledTableCell align="center">Matrikelnr.</StyledTableCell>
                                 <StyledTableCell align="center">Note</StyledTableCell>
                                 <StyledTableCell align="center">Teilnahme</StyledTableCell>
@@ -295,7 +341,7 @@ class ProjektBearbeiten extends Component {
                               <TableBody>
                                 {
                                   teilnahmen.map(teilnahme =>
-                                    <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme} reloadteilnahmen={this.getTeilnahmenByProjektId} currentProjekt = {currentProjekt}  />
+                                    <ProjektBearbeitenEintrag key={teilnahme.getID()} teilnahme = {teilnahme} reloadteilnahmen={this.getTeilnahmenByProjektId} currentProjektBO = {currentProjektBO} currentProjekt = {currentProjekt} />
                                   )
                                 }
                               </TableBody> 
@@ -304,11 +350,12 @@ class ProjektBearbeiten extends Component {
                               <ContextErrorMessage error={error} contextErrorMsg = {'Projekte Bearbeiten konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
                               <AddStudent show={showAddStudent} currentProjekt={currentProjekt} teilnahmen={teilnahmen} onClose={this.addStudentClosed}/>
                         </TableContainer>
+                      
 
                       {/*Bewertung abschließen Button wird nur angezeigt wenn das Projekt sich noch in dem Bewertungszustand befindet*/}
-                      {currentProjekt ?
+                      {currentProjektBO ?
                         <>
-                          {currentProjekt.zustand === "in Bewertung"?
+                          {currentProjektBO.aktueller_zustand === "in Bewertung"?
                             <>
                               <Grid item xs/>
                               <Grid item>
@@ -323,6 +370,11 @@ class ProjektBearbeiten extends Component {
                           
                           </>
                           :null
+                      }
+                      </>
+                      :
+                      <>
+                      </>
                       }
                       
                     </>
