@@ -23,10 +23,20 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import {  Grid, Typography  } from '@material-ui/core';
 
-//Projekt Bearbeiten Datei importieren
-import ProjektBearbeiten from './ProjektBearbeiten';
+//ProjektPflegen Komponente importieren
+import ProjektPflegen from './ProjektPflegen';
 
-//Css Style Klassen für die Tabellen Zellen
+/**
+ * Rendert die Einträge der Projekte (vom Studenten den Namen, die Matrikelnummer, die Note).
+ * Die Teilnahme eines Studenten kann bei einem aktuellen Projekt entfernt werden.
+ * Bei einem abgeschlossenen Projekt kann die Teilnahme eines Studenten nicht mehr entfernt werden.
+ * Die Note kann trotzdem weiterhin nachbearbeitet werden.
+ * 
+ * 
+ * @author [Pascal Gienger](https://github.com/PascalGienger)
+ */
+
+//Css Style für die Tabellen Zellen
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.primary.main,
@@ -37,7 +47,7 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-//Css Style Klassen für die Tabellen Zeilen
+//Css Style für die Tabellen Zeilen
 const StyledTableRow = withStyles((theme) => ({
   root: {
     '&:nth-of-type(odd)': {
@@ -46,13 +56,13 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-class ProjektBearbeitenEintrag extends Component {
+class ProjektPflegenEintrag extends Component {
 
     constructor(props){
         super(props);
 
+        // Initiert den state
         this.state = {
-            
             teilnahmen : [],
             bewertungen: [],
             studentID: null,
@@ -64,7 +74,7 @@ class ProjektBearbeitenEintrag extends Component {
         };
     }
 
-    //Button um die Teilnahme eines Studenten für das aktuell ausgewählte Projekt zu entfernen
+    //Button um die Teilnahme eines Studenten zu entfernen
     teilnahmeAbwaehlenButtonClicked = event => {
       //Logik fuer Teilnahme abwaehlen Button
       this.setState({teilnahmeAbwaehlenButtonDisabled:true});
@@ -76,11 +86,11 @@ class ProjektBearbeitenEintrag extends Component {
     getStudentByID = () => {
         ElectivAPI.getAPI().getStudentByID(this.props.teilnahme.getteilnehmer())
         .then(studentBO =>
-            this.setState({
+            this.setState({                       //neuer status wenn fetch komplett
               studentID: studentBO.getID(),
               studentName: studentBO.getname(),
               mat_nr:studentBO.getmat_nr(),
-              loadingInProgress: false,
+              loadingInProgress: false,           // deaktiviere ladeindikator
               error: null,
             })).then(()=>{
               
@@ -151,13 +161,15 @@ class ProjektBearbeitenEintrag extends Component {
               await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme)
               //this.getBewertung()
     };
-    
+
+    /** Lifecycle Methode, die bei dem Einfügen der Komponente in den Browser DOM aufgerufen wird*/
     componentDidMount() {
       this.getStudentByID();
       this.getBewertung();
       this.getBewertungen();
     }
 
+    /** Rendert die Komponente*/
     render(){
         const {classes,currentProjekt,currentProjektBO} = this.props;
         const {bewertungen,studentID,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
@@ -170,43 +182,37 @@ class ProjektBearbeitenEintrag extends Component {
                 <StyledTableCell align="center">
                 {note && bewertungen?
                     <FormControl className={classes.formControl} >
-                                      <Select value={note } onChange={this.handleChange}  >
-                                          
-                                          {
-                                          bewertungen.map(bewertung =>
-                                          <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
-                                          )
-                                          }
-                                        </Select>  
-
+                            <Select value={note } onChange={this.handleChange}  >
+                                {
+                                bewertungen.map(bewertung =>
+                                <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
+                                )
+                                }
+                            </Select>  
                     </FormControl>                                  
                   :
-                  <FormControl className={classes.formControl}>
-                        
-                          <Select value={note } onChange={this.handleChange}   >
-                              {
-                              bewertungen.map(bewertung =>
-                              <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
-                              )
-                              }
-                          </Select>
-                      
-                  </FormControl>
-                }
-                         
+                    <FormControl className={classes.formControl}>
+                            <Select value={note } onChange={this.handleChange}   >
+                                {
+                                bewertungen.map(bewertung =>
+                                <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
+                                )
+                                }
+                            </Select>  
+                    </FormControl>
+                }      
                 </StyledTableCell> 
+
                 <StyledTableCell align="center">
-                {currentProjektBO.aktueller_zustand === "Bewertung abgeschlossen"?
-                            <>
-                              <IconButton className={classes.teilnahmeAbwaehlenButton}  variant="contained"  onClick={this.teilnahmeAbwaehlenButtonClicked} disabled > <DeleteIcon /></IconButton>
-                            </>
-                            :
-                          <>
-                            <IconButton className={classes.teilnahmeAbwaehlenButton}  variant="contained"  onClick={this.teilnahmeAbwaehlenButtonClicked} > <DeleteIcon /></IconButton>
-                          </>
-                          }
-                           
-                    
+                  {currentProjektBO.aktueller_zustand === "Bewertung abgeschlossen"?
+                    <>
+                      <IconButton className={classes.teilnahmeAbwaehlenButton}  variant="contained"  onClick={this.teilnahmeAbwaehlenButtonClicked} disabled > <DeleteIcon /></IconButton>
+                    </>
+                    :
+                    <>
+                      <IconButton className={classes.teilnahmeAbwaehlenButton}  variant="contained"  onClick={this.teilnahmeAbwaehlenButtonClicked} > <DeleteIcon /></IconButton>
+                    </>
+                  }  
                 </StyledTableCell>
                   <LoadingProgress show={loadingInProgress}></LoadingProgress>
                   <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Projekt konnte nicht geladen werden'} onReload={this.getPerson} />
@@ -215,7 +221,7 @@ class ProjektBearbeitenEintrag extends Component {
     }
 }
 
-//Css Style Klassen
+//Css Komponent Spezifischer Style 
 const styles = theme => ({
     root: {
         width: '100%',
@@ -243,7 +249,7 @@ const styles = theme => ({
     });
 
 /** PropTypes */
-ProjektBearbeitenEintrag.propTypes = {
+ProjektPflegenEintrag.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** Projekt to be rendered */
@@ -268,6 +274,6 @@ ProjektBearbeitenEintrag.propTypes = {
   
 
 
-export default withStyles(styles)(ProjektBearbeitenEintrag);
+export default withStyles(styles)(ProjektPflegenEintrag);
 
 
