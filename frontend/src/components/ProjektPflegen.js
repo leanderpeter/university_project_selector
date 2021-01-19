@@ -20,6 +20,7 @@ import ProjektPflegenEintrag from './ProjektPflegenEintrag';
 
 
 /**
+ * dieser Tab wird unter 2 Rollen angezeigt:
  * Unter der Rolle Dozent:
  * Rendert die aktuellen sowie abgeschlossenen Projekte vom Dozenten 
  * und die Einträge der Projekte mithilfe der ProjektPflegenEintrag Komponente.
