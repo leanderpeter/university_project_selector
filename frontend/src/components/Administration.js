@@ -3,19 +3,26 @@ import PropTypes from 'prop-types';
 import { withStyles, Tabs, Tab, Paper } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
-
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
 
-
+/**
+ * Stellt einen Sub-Header für administrative Verwaltungsmöglichkeiten der einzelnen BOs dar
+ * 
+ * @see See [SemesterListe](#semesterliste)
+ * @see See [ModulListe](#modulliste)
+ * @see See [ProjektartListe](#projektartliste)
+ * @see See [UserListe](#userliste)
+ * 
+ */
 
 class Administration extends Component {
 
   constructor(props) {
     super(props);
 
-    //gebe einen leeren status
+    //initiiere einen leeren state
     this.state = {
         tabindex: 0,
         error: null,
@@ -23,6 +30,7 @@ class Administration extends Component {
     };
   }
 
+  //Funktion, wenn ein Tab gewächselt wurde: setzt den state tabindex auf den aktuellen index 
   handleTabChange = (e, newIndex) => {
     this.setState({
         tabindex: newIndex
@@ -33,8 +41,6 @@ class Administration extends Component {
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
   componentDidMount() {
   }
-
-
 
   /** Renders the component */
   render() {

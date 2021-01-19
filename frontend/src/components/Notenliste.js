@@ -19,6 +19,16 @@ import LoadingProgress from './dialogs/LoadingProgress';
 
 import NotenlisteEintrag from './NotenlisteEintrag';
 
+/**
+ * Es werden alle benoteten Teilnahmen, welche einem bestimmten Modul in einem bestimmten Semester zugewiesen wurden, angezeigt
+ * 
+ * @see See [NotenListeEintrag](#notenlisteeintrag)
+ * 
+ * Hierfür kann zunächst das gewünschte Semester und das gewünschte Modul per Dropdown ausgewählt werden
+ * Zuvor werden alle Semester und alle Module aus der Datenbank geladen
+ */
+
+//Css Style für Tabellen Zellen
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.darkgrey,
@@ -29,6 +39,7 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
+//Css Style für Tabellen Zeilen
 const StyledTableRow = withStyles((theme) => ({
   root: {
     '&:nth-of-type(4n+1)': {
@@ -42,15 +53,7 @@ class Notenliste extends Component {
 	constructor(props) {
 		super(props);
 
-		// let expandedID = null;
-
-    // Muss die expandedID schon vorher mit null deklariert werden?
-
-		if (this.props.location.expandModul){
-			let expandedID = this.props.location.expandModul.getID();
-		}
-
-		//gebe einen leeren status
+		//initiiere einen leeren state
 		this.state = {
       module: [],
       semester: [],
@@ -81,7 +84,7 @@ class Notenliste extends Component {
       });
   }
 
-    // API Anbindung um alle Senester vom Backend zu bekommen 
+    // API Anbindung um alle Semester vom Backend zu bekommen 
     getSemester = () => {
       ElectivAPI.getAPI().getSemester()
       .then(semesterBOs =>
@@ -102,35 +105,38 @@ class Notenliste extends Component {
       });
   }
 
+  //bei Änderung des Semester Dropdown Menüs wird das ausgewählte Semester im State als semesterwahl gesetzt
   handleSemesterChange = (semester) => {
     this.setState({
       semesterwahl: semester.target.value,
     })
     setTimeout(() => {
-      console.log('Ausgewählte Semester ID:',this.state.semesterwahl)   
+    //console.log('Ausgewählte Semester ID:',this.state.semesterwahl)   
     if (this.state.modulwahl != null) {
       this.getTeilnahmen_by_modul_und_semester();
     }
     }, 0);
   };
 
+  //bei Änderung des Modul Dropdown Menüs wird das ausgewählte Modul im State als modulwahl gesetzt
   handleModulChange = (modul) => {
     this.setState({
       modulwahl: modul.target.value,
-      expandedModulID: null
     })
     setTimeout(() => {
-      console.log('Ausgewählte Modul ID:',this.state.modulwahl)   
+      //console.log('Ausgewählte Modul ID:',this.state.modulwahl)   
     if (this.state.semesterwahl != null) {
       this.getTeilnahmen_by_modul_und_semester();
     }
     }, 0);
   };
 
+  //Funktion, die einen Print-Befehl ausführt
   printNotenliste= () => {
     window.print()
   }
 
+  //Funktion, um bei einem Fehler alle notwendigen Informationen zu laden
   handleReload= () => {
     this.getModule();
     this.getSemester();
@@ -164,7 +170,7 @@ class Notenliste extends Component {
       });
     }    
 
-	/** Renders the component */
+	/** Rendert die Komponente */
 	render() {
     
     const { classes } = this.props;
@@ -238,7 +244,6 @@ class Notenliste extends Component {
                                 {
                                     teilnahmen.map(teilnahme => 
                                         <NotenlisteEintrag key={teilnahme.getID()} teilnahme = {teilnahme}
-                                        onExpandedStateChange={this.onExpandedStateChange}
                                         show={this.props.show}
                                     />) 
                                 }

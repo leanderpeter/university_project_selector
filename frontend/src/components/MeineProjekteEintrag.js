@@ -294,13 +294,6 @@ MeineProjekteEintrag.propTypes = {
     classes: PropTypes.object.isRequired,
     /** Projekt to be rendered */
     projekt: PropTypes.object.isRequired,
-    /** The state of this ProjektListeEintrag. If true the customer is shown with its accounts */
-    expandedState: PropTypes.bool.isRequired,
-    /** The handler responsible for handle expanded state changes (exanding/collapsing) of this ProjektListeEintrag 
-     * 
-     * Signature: onExpandedStateChange(CustomerBO customer)
-     */
-    onExpandedStateChange: PropTypes.func.isRequired,
     /** wenn true, dozent wird geladen */
     show: PropTypes.bool.isRequired
   }

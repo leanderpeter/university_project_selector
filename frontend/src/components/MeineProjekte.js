@@ -92,22 +92,7 @@ class MeineProjekte extends Component {
             currentStudentmat_nr: this.props.currentStudent.getmat_nr(),
         })
     }
-
-    onExpandedStateChange = teilnahme => {
-        //  Zum anfang Teilnahme Eintrag = null
-        let newID = null;
     
-        // Falls ein Objekt geclicket wird, collapse
-        if (teilnahme.getID() !== this.state.expandedTeilnahmeID) {
-          // Oeffnen mit neuer Teilnahme ID
-          newID = teilnahme.getID()
-        }
-        this.setState({
-          expandedTeilnahmeID: newID,
-        });
-    
-      }
-
     render(){
 
         const { classes } = this.props;
@@ -136,8 +121,6 @@ class MeineProjekte extends Component {
                                     teilnahmen.map(teilnahme => 
                                         <MeineProjekteEintrag key={teilnahme.getID()} teilnahme = {teilnahme} 
                                         getTeilnahmen = {this.getTeilnahmen}
-                                        expandedState={expandedTeilnahmeID === teilnahme.getID()}
-                                        onExpandedStateChange={this.onExpandedStateChange}
                                         show={this.props.show}
                                     />) 
                                 }

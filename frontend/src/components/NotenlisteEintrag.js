@@ -8,7 +8,13 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 
 
+/**
+ * Die einzelne Teilnahme inklusive aller für den Administrator relevanten Informationen werden dargestellt
+ * 
+ * Hierfür werden der Student inklusive Matrikelnummer, der Dozent sowie die Note angezeigt
+ */
 
+//Css Style für Tabellen Zellen
 const StyledTableCell = withStyles((theme) => ({
     head: {
       backgroundColor: theme.palette.darkgrey,
@@ -18,8 +24,9 @@ const StyledTableCell = withStyles((theme) => ({
       fontSize: 14,
     },
   }))(TableCell);
-  
-  const StyledTableRow = withStyles((theme) => ({
+
+//Css Style für Tabellen Zeilen  
+const StyledTableRow = withStyles((theme) => ({
     root: {
       '&:nth-of-type(4n+1)': {
         backgroundColor: theme.palette.action.hover,
@@ -32,6 +39,7 @@ class NotenlisteEintrag extends Component {
     constructor(props){
         super(props);
 
+        //initiiere einen leeren state
         this.state = {
             studentName: null,
             mat_nr: null,
@@ -43,7 +51,7 @@ class NotenlisteEintrag extends Component {
         };
     }
 
-     //Student vom Backend abfragen
+     // API Anbindung um den Student der Teilnahme vom Backend zu bekommen 
      getStudentByID = () => {
       ElectivAPI.getAPI().getStudentByID(this.props.teilnahme.teilnehmer)
           .then(studentBO =>
@@ -66,7 +74,7 @@ class NotenlisteEintrag extends Component {
           });
       }  
   
-
+    // API Anbindung um die Bewertung der Teilnahme vom Backend zu bekommen 
     getBewertung = () => {
       ElectivAPI.getAPI().getBewertung(this.props.teilnahme.resultat)
       .then(bewertungBO =>
@@ -87,6 +95,7 @@ class NotenlisteEintrag extends Component {
       });
     }
 
+    // API Anbindung um das Projekt der Teilnahme vom Backend zu bekommen 
     getProjekt = () => {
       ElectivAPI.getAPI().getProjekt(this.props.teilnahme.lehrangebot)
       .then(projektBO =>
@@ -109,6 +118,7 @@ class NotenlisteEintrag extends Component {
       });
     }
 
+    // API Anbindung um den Dozent des Projekts der Teilnahme vom Backend zu bekommen 
     getPerson = () => {
       ElectivAPI.getAPI().getPerson(this.state.projekt.dozent)
       .then(personBO =>
@@ -129,12 +139,14 @@ class NotenlisteEintrag extends Component {
       });
     }
 
+    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getStudentByID();
         this.getBewertung();
         this.getProjekt();
     }
 
+    /** Rendert die Komponente */
     render(){
         const { classes } = this.props;
         const { studentName, mat_nr, note, dozentName, loadingInProgress, error } = this.state;
@@ -158,6 +170,7 @@ class NotenlisteEintrag extends Component {
     }
 }
 
+/** Component specific styles */
 const styles = theme => ({
     root: {
         width: '100%',
@@ -177,17 +190,7 @@ const styles = theme => ({
 NotenlisteEintrag.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
-    /** Projekt to be rendered */
     teilnahme: PropTypes.object.isRequired,
-    /** The state of this ProjektListeEintrag. If true the customer is shown with its accounts */
-    expandedState: PropTypes.bool.isRequired,
-    /** The handler responsible for handle expanded state changes (exanding/collapsing) of this ProjektListeEintrag 
-     * 
-     * Signature: onExpandedStateChange(CustomerBO customer)
-     */
-    onExpandedStateChange: PropTypes.func.isRequired,
-
-    /** wenn true, dozent wird geladen */
     show: PropTypes.bool.isRequired
   }
   

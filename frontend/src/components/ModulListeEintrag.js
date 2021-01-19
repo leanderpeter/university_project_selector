@@ -14,6 +14,14 @@ import ModulForm from './dialogs/ModulForm';
 import ModulDelete from './dialogs/ModulDelete';
 
 
+/**
+ * Es wird ein einzelnes Modul mit allen notwendigen Informationen angezeigt
+ * Außerdem lassen sich Moduleinträge löschen und bearbeiten
+ * 
+ * @see See [ModulDelete](#moduldelte)
+ * @see See [ModulForm](#modulform)
+ */
+
 
 
 class ModulListeEintrag extends Component {
@@ -21,6 +29,7 @@ class ModulListeEintrag extends Component {
     constructor(props){
         super(props);
 
+        //initiiere einen leeren state
         this.state = {
             showModulForm: false,
             showModulDelete: false,
@@ -29,10 +38,12 @@ class ModulListeEintrag extends Component {
         };
     }
 
+    //ruft die getModule Funktion in den Props auf
     getModule = () => {
       this.props.getModule();
     }
 
+    //Wird aufgerufen, wenn das Dialog-Fenster Modulform geschlossen wird
     modulFormClosed = (modul) => {
       if (modul){
         this.setState({
@@ -45,7 +56,8 @@ class ModulListeEintrag extends Component {
         });
       }
     }
-  
+    
+    //Öffnet das Dialog-Fenster ModulForm, wenn der Button geklickt wurde
     bearbeitenButtonClicked = event => {
       event.stopPropagation();
       this.setState({
@@ -53,13 +65,15 @@ class ModulListeEintrag extends Component {
       });
     }
     
+    //Öffnet das Dialog-Fenster ModulDelete, wenn der Button geklickt wurde
     modulDeleteButtonClicked =  event => {
       event.stopPropagation();
       this.setState({
         showModulDelete: true
       });
     }
-  
+    
+    //Wird aufgerufen, wenn das Dialog-Fenster ModulDelete geschlossen wird
     modulDeleteClosed = () => {
         this.setState({
           showModulDelete: false
@@ -67,7 +81,7 @@ class ModulListeEintrag extends Component {
         this.getModule();
     }
 
-
+    /** Rendert die Komponente */
     render(){
         const {classes, modul} = this.props;
         const { showModulForm, showModulDelete,  error, loadingInProgress } = this.state;
@@ -108,6 +122,8 @@ class ModulListeEintrag extends Component {
         );
     }
 }
+
+/** Component specific styles */
 const styles = theme => ({
       root: {
         width: '100%',

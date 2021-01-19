@@ -10,18 +10,27 @@ import ClearIcon from '@material-ui/icons/Clear';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import List from '@material-ui/core/List';
+
 import ModulListeEintrag from './ModulListeEintrag';
 import ModulForm from './dialogs/ModulForm';
 
 
-
+/**
+ * Es werden alle Module der Datenbank dargestellt
+ * 
+ * @see See [ModulListeEintrag](#modullisteeintrag)
+ * 
+ * Außerdem kann der Administrator neue Module anlegen
+ * 
+ * @see See [ModulForm](#modulform)
+ */
 
 class ModulListe extends Component {
 
   constructor(props) {
     super(props);
 
-    //gebe einen leeren status
+    //initiiere einen leeren state
     this.state = {
         module: [],
         filteredModule: [],
@@ -33,6 +42,7 @@ class ModulListe extends Component {
     };
   }
 
+  //Öffnet das Dialog-Fenster Modulfrom, wenn der Button geklickt wurde
   addButtonClicked = event => {
     event.stopPropagation();
     this.setState({
@@ -40,6 +50,7 @@ class ModulListe extends Component {
     });
   }
 
+  //Such-Funktion, um nach bestimmten Module zu filtern
   filterFieldValueChange= event => {
     const value = event.target.value.toLowerCase();
     this.setState({
@@ -52,6 +63,7 @@ class ModulListe extends Component {
     });
 }
 
+//Funktion, um die Eingaben der Such-Funktion zu löschen
 clearFilterFieldButtonClicked = () => {
     this.setState({
         filteredModule: [...this.state.module],
@@ -59,6 +71,7 @@ clearFilterFieldButtonClicked = () => {
     });
 }
 
+//Wird aufgerufen, wenn das Dialog-Fenster Modulform geschlossen wird
 modulFormClosed = modul => {
     this.getModule();
     if (modul) {
