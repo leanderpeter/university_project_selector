@@ -20,7 +20,8 @@ class ProjektListeEintrag extends Component {
       teilnahmeButtonDisabled: false,
       teilnahmeAbwaehlenButtonDisabled: true,
       teilnahmeChanged: false,
-      pArten: null
+      pArten: null,
+      person: null
     };
   }
 
@@ -95,10 +96,21 @@ class ProjektListeEintrag extends Component {
         }));
   }
 
+  getDozent = (id) => {
+    ElectivAPI.getAPI().getPerson(id).then(personBOs =>
+      this.setState({
+        person: personBOs
+      })).catch(e =>
+        this.setState({
+
+        }));
+  }
+
 
 
   componentDidMount() {
     this.getProjektart();
+    this.getDozent();
   }
 
 
@@ -113,17 +125,19 @@ class ProjektListeEintrag extends Component {
   */
   //small comment
   /** Renders the component */
+
   render() {
     const { classes, expandedState } = this.props;
     // Use the states projekt
-    const { projekt, projektarten } = this.state;
+    const { projekt, projektarten, person } = this.state;
 
     if (this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
       this.state.teilnahmeButtonDisabled = true;
       this.state.teilnahmeAbwaehlenButtonDisabled = false;
     }
 
-    console.log(projektarten.length)
+    //var doz = this.getDozent(projekt.dozent);
+    //console.log(doz)
 
     return (
       <div>
@@ -214,21 +228,21 @@ const styles = theme => ({
 ProjektListeEintrag.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
-  /** The CustomerBO to be rendered */
-  customer: PropTypes.object.isRequired,
-  /** The state of this ProjektListeEintrag. If true the customer is shown with its accounts */
+  /** The ProjektBO to be rendered */
+  projekt: PropTypes.object.isRequired,
+  /** The state of this ProjektListeEintrag. If true the projekt is shown with its accounts */
   expandedState: PropTypes.bool.isRequired,
   /** The handler responsible for handle expanded state changes (exanding/collapsing) of this ProjektListeEintrag 
    * 
-   * Signature: onExpandedStateChange(CustomerBO customer)
+   * Signature: onExpandedStateChange(ProjektBO projekt)
    */
   onExpandedStateChange: PropTypes.func.isRequired,
   /** 
-   *  Event Handler function which is called after a sucessfull delete of this customer.
+   *  Event Handler function which is called after a sucessfull delete of this projekt.
    * 
-   * Signature: onCustomerDelete(CustomerBO customer)
+   * Signature: onProjektDelete(ProjektBO projekt)
    */
-  onCustomerDeleted: PropTypes.func.isRequired
+  onProjektDeleted: PropTypes.func.isRequired
 }
 
 export default withStyles(styles)(ProjektListeEintrag);

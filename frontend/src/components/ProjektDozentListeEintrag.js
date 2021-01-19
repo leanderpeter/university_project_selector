@@ -112,7 +112,7 @@ class ProjektDozentListeEintrag extends Component {
           >
             <Grid container spacing={1} justify='flex-start' alignItems='center'>
               <Grid item>
-                <Typography variant='body1' className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()} </Typography> <Typography variant='body1' color={'success.main'}>{projekt.getAnzahlTeilnehmer()} / {projekt.getmax_teilnehmer()} Plätze besetzt
+                <Typography variant='body1' className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()} </Typography> <Typography variant='body1' color={'success.main'}>{}
                 </Typography>
               </Grid>
               <Grid item xs />

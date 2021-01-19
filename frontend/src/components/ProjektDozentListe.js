@@ -188,6 +188,8 @@ class ProjektDozentListe extends Component {
     const { classes, currentPerson } = this.props;
     const { filteredProjekte, expandedProjektID, loadingInProgress, error, showProjekteForm, filterValue } = this.state;
 
+    console.log(currentPerson.name)
+
     return (
       <div className={classes.root}>
         <Grid className={classes.projektFilter} container spacing={1} justify='flex-start' alignItems='center'>

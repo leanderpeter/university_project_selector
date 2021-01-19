@@ -347,7 +347,7 @@ export default class ElectivAPI {
 	getPerson(id){
 		return this.#fetchAdvanced(this.#getPersonURL(id)).then((responseJSON) => {
 			let personBO = PersonBO.fromJSON(responseJSON);
-			console.info(personBO)
+			//console.info(personBO)
 			return new Promise(function (resolve){
 				resolve(personBO)
 			})
