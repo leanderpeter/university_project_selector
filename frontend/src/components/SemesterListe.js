@@ -16,7 +16,16 @@ import SemesterListeEintrag from './SemesterListeEintrag';
 import SemesterForm from './dialogs/SemesterForm';
 
 
-
+/**
+ * Es werden alle Semester angezeit, die man bearbeiten, löschen oder neu hinzufügen kann
+ * 
+ * @see See [SemesterListeEintrag](#semesterlisteeintrag)
+ * @see See [SemesterForm](#semesterform)
+ * 
+ * Die Seite ist nur für Admin sichtbar. Er kann die Semester löschen oder mit Hilfe von einem Dialog-Fenster bearbeiten
+ * Mit Hilfe von einem Dialog-Fenster kann er neue Semester anlegen
+ * 
+ */
 
 class SemesterListe extends Component {
 
@@ -35,6 +44,7 @@ class SemesterListe extends Component {
     };
   }
 
+  //Button um neue Semester anlegen. Damit öffnet sich das Dialog Fenster
   addButtonClicked = event => {
     event.stopPropagation();
     this.setState({
@@ -42,6 +52,7 @@ class SemesterListe extends Component {
     });
   }
 
+  //Suche-Funktion zum Suchen von Semester
   filterFieldValueChange= event => {
     const value = event.target.value.toLowerCase();
     this.setState({
@@ -53,6 +64,7 @@ class SemesterListe extends Component {
     });
 }
 
+//Suche leeren
 clearFilterFieldButtonClicked = () => {
     this.setState({
         filteredSemester: [...this.state.semester],
@@ -60,6 +72,7 @@ clearFilterFieldButtonClicked = () => {
     });
 }
 
+//wird aufgerufen, wenn Dialog Fenster geschloßen wird
 semesterFormClosed = semester => {
     if (semester) {
       const newSemesterList = [...this.state.semester, semester];
@@ -98,12 +111,10 @@ semesterFormClosed = semester => {
 }
 
 
-
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
   componentDidMount() {
       this.getSemester();
   }
-
 
 
   /** Renders the component */

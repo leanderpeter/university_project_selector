@@ -30,6 +30,7 @@ const StyledTableCell = withStyles((theme) => ({
       fontSize: 14,
     },
   }))(TableCell);
+
 //Css Style für Tabllen Zeilen
 const StyledTableRow = withStyles((theme) => ({
     root: {
@@ -45,6 +46,7 @@ class ProjektBearbeiten extends Component {
     constructor(props){
         super(props);
 
+        // initiiere einen leeren state
         this.state = {
             teilnahmen:[],
             projekte:[],
@@ -151,7 +153,7 @@ class ProjektBearbeiten extends Component {
         this.getTeilnahmenByProjektId(this.state.currentProjekt);
     }
 
-
+    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
       this.getProjekte();
     }
@@ -164,6 +166,7 @@ class ProjektBearbeiten extends Component {
       this.getTeilnahmenByProjektId(event.target.value)
     };
 
+    /** Renders the component */
     render(){
         const { classes } = this.props;
         const { projekte, currentProjekt, teilnahmen, error, loadingInProgress, showAddStudent}  = this.state;

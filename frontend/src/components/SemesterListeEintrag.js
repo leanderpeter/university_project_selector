@@ -15,13 +15,22 @@ import SemesterForm from './dialogs/SemesterForm';
 import SemesterDelete from './dialogs/SemesterDelete';
 
 
-
+/**
+ * Es wird ein einzelnes Semester angezeigt
+ * 
+ * @see See [SemesterForm](#semesterform)
+ * @see See [SemesterDelete](#semesterdelete)
+ * 
+ * Außerdem lassen sich Semestereinträge löschen und bearbeiten
+ * 
+ */
 
 class SemesterListeEintrag extends Component {
 
     constructor(props){
         super(props);
 
+        //gebe einen leeren status
         this.state = {
             showSemesterForm: false,
             showSemesterDelete: false,
@@ -30,10 +39,12 @@ class SemesterListeEintrag extends Component {
         };
     }
 
+    // API Anbindung um Semester vom Backend zu bekommen 
     getSemester = () => {
       this.props.getSemester();
     }
 
+    // wird aufgerufen, wenn Dialog Fenster geschloßen werden soll
     semesterFormClosed = (semester) => {
       if (semester){
         this.setState({
@@ -47,6 +58,7 @@ class SemesterListeEintrag extends Component {
       }
     }
   
+    // wird aufgerufen, wenn ein Semester bearbeitet werden soll
     bearbeitenButtonClicked = event => {
       event.stopPropagation();
       this.setState({
@@ -54,6 +66,7 @@ class SemesterListeEintrag extends Component {
       });
     }
     
+    // wird aufgerufen, wenn ein Semester gelöscht werden soll
     semesterDeleteButtonClicked =  event => {
       event.stopPropagation();
       this.setState({
@@ -61,6 +74,7 @@ class SemesterListeEintrag extends Component {
       });
     }
   
+    // wird aufgerufen, wenn DELETE Dialog Fenster geschloßen werden soll
     semesterDeleteClosed = () => {
         this.setState({
           showSemesterDelete: false
@@ -68,7 +82,7 @@ class SemesterListeEintrag extends Component {
         this.getSemester();
     }
 
-
+    /** Renders the component */
     render(){
         const {classes, semester} = this.props;
         const { showSemesterForm, showSemesterDelete,  error, loadingInProgress } = this.state;
@@ -106,6 +120,8 @@ class SemesterListeEintrag extends Component {
         );
     }
 }
+
+/** Component specific styles */
 const styles = theme => ({
       root: {
         width: '100%',
@@ -120,7 +136,6 @@ SemesterListeEintrag.propTypes = {
     show: PropTypes.bool.isRequired
   }
   
-
 
 export default withStyles(styles)(SemesterListeEintrag);
 
