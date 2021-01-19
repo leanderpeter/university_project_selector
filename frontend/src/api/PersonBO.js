@@ -8,35 +8,47 @@ export default class PersonBO extends NamedBusinessObject{
         this.email = aemail;
         this.google_user_id = agoogle_user_id;
         this.rolle = arolle;
-	}
-
-
+    }
+    /*
+	erhalte 
+	*/
 	getemail(){
         return this.email;
     }
-
+    /*
+	setze 
+	*/
     setemail(aemail){
         this.email = aemail;
     }
-
-
+    /*
+	erhalte 
+	*/
     getgoogle_user_id(){
         return this.google_user_id;
     }
-
+    /*
+	setze 
+	*/
     setgoogle_user_id(agoogle_user_id){
         this.google_user_id = agoogle_user_id;
     }
-
-
+    /*
+	erhalte 
+	*/
     getrolle(){
         return this.rolle;
     }
-
+    /*
+	setze 
+	*/
     setrolle(arolle){
         this.rolle = arolle;
     }
     
+    /** 
+   * Returns an Array of PersonBOs from a given JSON structure
+   */
     static fromJSON(personen) {
 		let results = null;
 		if (Array.isArray(personen)) {

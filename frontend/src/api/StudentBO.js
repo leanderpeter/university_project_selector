@@ -9,24 +9,36 @@ export default class StudentBO extends PersonBO{
         this.kuerzel = akuerzel;
 	}
 
-
+	/*
+	Erhalte 
+	*/
 	getmat_nr(){
         return this.mat_nr;
     }
 
+	/*
+	setze 
+	*/
     setmat_nr(amat_nr){
         this.mat_nr = amat_nr;
     }
-
-
+	/*
+	Erhalte 
+	*/
     getkuerzel(){
         return this.kuerzel;
     }
-
+	/*
+	setze 
+	*/
     setkuerzel(akuerzel){
         this.kuerzel = akuerzel;
-    }
-
+	}
+	
+	
+	/** 
+   * Returns an Array of StudentBOs from a given JSON structure
+   */
     static fromJSON(studenten) {
 		let results = null;
 		if (Array.isArray(studenten)) {

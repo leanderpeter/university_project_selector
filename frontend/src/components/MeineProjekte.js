@@ -13,10 +13,20 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-//import MeineProjekteEintrag
+
 import MeineProjekteEintrag from './MeineProjekteEintrag';
 
+/**
+ * Es werden alle Projekte des aktuell eingeloggten Studenten angezeigt
+ * 
+ * @see See [MeineProjekteEintrag](#meineprojekteeintrag)
+ * 
+ * Hierfür werden alle Teilnahmen des aktuell eingeloggten Student geladen und in die Componente MeineProjekteEintrag gemappt
+ * 
+ */
 
+
+//Css Style für Tabellen Zellen
 const StyledTableCell = withStyles((theme) => ({
     head: {
       backgroundColor: theme.palette.primary.main,
@@ -27,6 +37,8 @@ const StyledTableCell = withStyles((theme) => ({
     },
   }))(TableCell);
 
+
+//Css Style für Tabllen Zeilen
 const StyledTableRow = withStyles((theme) => ({
     root: {
       '&:nth-of-type(4n+1)': {
@@ -47,7 +59,7 @@ class MeineProjekte extends Component {
             expandedID = this.props.location.expandTeilnahme.getID();
         }
 
-
+        // initiiere einen leeren state
         this.state = {
             teilnahmen : [],
             currentStudentName: null,
@@ -57,7 +69,6 @@ class MeineProjekte extends Component {
             expandedTeilnahmeID: expandedID,
         };
     }
-
 
 
     // API Anbindung um Teilnahmen des Students vom Backend zu bekommen 
@@ -81,10 +92,12 @@ class MeineProjekte extends Component {
             });
     }
 
+    // Funktion, die einen Print-Befehl ausführt
     printSemesterbericht= () => {
       window.print()
     }
 
+    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getTeilnahmen();
         this.setState({
@@ -172,7 +185,6 @@ MeineProjekte.propTypes = {
     classes: PropTypes.object.isRequired,
     /** @ignore */
     location: PropTypes.object.isRequired,
-	// logged in Firebase user/person
     show: PropTypes.bool.isRequired
 }
 

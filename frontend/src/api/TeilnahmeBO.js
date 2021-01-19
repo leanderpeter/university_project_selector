@@ -58,7 +58,10 @@ export default class TeilnahmeBO extends BusinessObject{
 	setResultat(aresultat){
 		this.resultat = aresultat;  
     }
-    
+	
+	/** 
+   * Returns an Array of TeilnahmeBOs from a given JSON structure
+   */
     static fromJSON(teilnahmen) {
 		let results = null;
 		if (Array.isArray(teilnahmen)) {

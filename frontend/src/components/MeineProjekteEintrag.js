@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
 import { withStyles } from '@material-ui/core/styles';
 
-
-
-
 import TableCell from '@material-ui/core/TableCell';
-
-
 import TableRow from '@material-ui/core/TableRow';
 
 import InputLabel from '@material-ui/core/InputLabel';
@@ -18,9 +13,17 @@ import Select from '@material-ui/core/Select';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 
+/**
+ * Es wird eine einzelne Teilnahme an einem Projekt mit allen not wendigen Informationen dargestellt
+ * 
+ * Hierfür werden Projektname, Anzahl der ECTS, Semester, Dozent , die Note angezeigt
+ * 
+ * Außerdem kann der Student nach der Benotung seine Teilnahme einem Modul zuweisen
+ * 
+ */
 
 
-
+//Css Style Klassen für die Tabellen Zellen
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.primary.main,
@@ -31,6 +34,7 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
+//Css Style Klassen für die Tabellen Zeilen
 const StyledTableRow = withStyles((theme) => ({
   root: {
     '&:nth-of-type(4n+1)': {
@@ -39,11 +43,13 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
+
 class MeineProjekteEintrag extends Component {
 
     constructor(props){
         super(props);
 
+        // initiiere einen leeren state
         this.state = {
             projekt: null,
             projektID: null,
@@ -59,6 +65,7 @@ class MeineProjekteEintrag extends Component {
         };
     }
 
+    // API Anbindung um Projekte vom Backend zu bekommen 
     getProjekt = () => {
       ElectivAPI.getAPI().getProjekt(this.props.teilnahme.lehrangebot)
       .then(projektBO =>
@@ -90,6 +97,7 @@ class MeineProjekteEintrag extends Component {
       });
     }
 
+    // API Anbindung um ECTS einer Projektart vom Backend zu bekommen 
     getECTS = () => {
       ElectivAPI.getAPI().getProjektartById(this.state.projekt.art)
       .then(ProjektartBO =>
@@ -110,6 +118,7 @@ class MeineProjekteEintrag extends Component {
       });
     }
 
+    // Wenn die Teilnahme schon bewertet wurde, gebe die Note aus
     getBewertung = () => {
       if (this.props.teilnahme.resultat !== null){
       ElectivAPI.getAPI().getBewertung(this.props.teilnahme.resultat)
@@ -132,6 +141,7 @@ class MeineProjekteEintrag extends Component {
     }
     }
 
+    // API Anbindung um Semester vom Backend zu bekommen 
     getSemester_by_id = () => {
       ElectivAPI.getAPI().getSemester_by_id(this.state.projekt.getHalbjahr())
       .then(semesterBO =>
@@ -152,6 +162,7 @@ class MeineProjekteEintrag extends Component {
       });
     }
 
+    // API Anbindung um wählbare Module für ein Projekt vom Backend zu bekommen 
     getModule_by_projekt_id = () => {
       ElectivAPI.getAPI().getModule_by_projekt_id(this.state.projektID)
       .then(modulBOs =>
@@ -172,7 +183,7 @@ class MeineProjekteEintrag extends Component {
       });
     }
 
-
+// API Anbindung um Dozent vom Backend zu bekommen 
     getPerson = () => {
       ElectivAPI.getAPI().getPerson(this.state.projekt.dozent)
       .then(personBO =>
@@ -193,27 +204,30 @@ class MeineProjekteEintrag extends Component {
       });
     }
 
+    // bei Änderung des Modul-Dropdown-Menüs wird das ausgewähte Modul im Backend als Anrechnung der Teilnahme in die Datenbank eingefügt 
     handleChange = async (edv) => {
       this.props.teilnahme.setAnrechnung(edv.target.value);
-      console.log(`Option selected:`, edv.target.value);
+      // console.log(`Option selected:`, edv.target.value);
       await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme);
       this.props.getTeilnahmen();
     };
 
+    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
       this.getProjekt();
     }
 
+    // Wenn die Componente geupdatet wird
     componentDidUpdate(prevProps){
       if((this.props.show) && (this.props.show !== prevProps.show)) {
         this.getProjekt();
       }
     }
 
-
+    /** Renders the component */
     render(){
         const {classes, teilnahme} = this.props;
-        const {  projektZustand, projektID, projektName, ECTS, semester, module, dozentName, note, loadingInProgress, error } = this.state;
+        const { projektZustand, projektID, projektName, ECTS, semester, module, dozentName, note, loadingInProgress, error } = this.state;
 
         return(
           <>
@@ -259,6 +273,8 @@ class MeineProjekteEintrag extends Component {
         );
     }
 }
+
+/** Component specific styles */
 const styles = theme => ({
     root: {
         width: '100%',
@@ -292,13 +308,10 @@ const styles = theme => ({
 MeineProjekteEintrag.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
-    /** Projekt to be rendered */
     projekt: PropTypes.object.isRequired,
-    /** wenn true, dozent wird geladen */
     show: PropTypes.bool.isRequired
   }
   
-
 
 export default withStyles(styles)(MeineProjekteEintrag);
 

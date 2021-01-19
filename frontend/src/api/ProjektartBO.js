@@ -8,24 +8,34 @@ export default class ProjektartBO extends NamedBusinessObject{
 		this.ects = aects;
 	}
 
+	/*
+	erhalte 
+	*/
 	get_sws(){
 		return this.sws;
 	}
-
+	/*
+	setze 
+	*/
 	set_sws(asws){
 		this.sws = asws
 	}
-
-	// --
-
+	/*
+	erhalte 
+	*/
 	get_ects(){
 		return this.ects;
 	}
-
+	/*
+	setze 
+	*/
 	set_ects(aects){
 		this.ects = aects;
 	}
 
+	/** 
+   * Returns an Array of ProjektartBOs from a given JSON structure
+   */
 	static fromJSON(projektart) {
 		let results = null;
 		if (Array.isArray(projektart)) {

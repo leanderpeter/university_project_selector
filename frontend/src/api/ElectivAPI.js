@@ -123,7 +123,6 @@ export default class ElectivAPI {
 	//Delete Semester
 	#deleteSemesterURL = (id) => `${this.#ElectivServerBaseURL}/semester?id=${id}`;
 
-
 	//Studenten eines Projekts bekommen
 	#getStudentenByProjektIdURL = (id) => `${this.#ElectivServerBaseURL}/student/projekt/${id}`
 	
@@ -222,6 +221,7 @@ export default class ElectivAPI {
 		return this.#fetchAdvanced(this.#deleteProjektartURL(id),{method: 'DELETE'})
 	}
 
+	//Eine Projektart hinzufügen
 	addProjektart(projektartBO) {
 		return this.#fetchAdvanced(this.#addProjektartURL(), {
 			method: 'POST',
@@ -240,6 +240,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//eine Projektart bearbeiten/updaten
 	updateProjektart(projektartBO){
 		return this.#fetchAdvanced(this.#updateProjektartURL(), {
 			method: 'PUT',
@@ -301,6 +302,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//Projekte im Zustand neu bekommen
 	getPendingProjekte() {
 		return this.#fetchAdvanced(this.#getProjektePendingURL(),{method: 'GET'}).then((responseJSON) => {
 			let projektBOs = ProjektBO.fromJSON(responseJSON);
@@ -322,6 +324,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//Projektdaten updaten/bearbeiten
 	updateProjekt(projektBO){
 		return this.#fetchAdvanced(this.#updateProjektPendingURL(), {
 			method: 'PUT',
@@ -339,6 +342,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//Projekt löschen
 	deleteProjekt(id){
 		return this.#fetchAdvanced(this.#deleteProjektURL(id),{method: 'DELETE'})
 	}
@@ -477,6 +481,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//Modul hinzufügen
 	addModul(modulBO) {
 		return this.#fetchAdvanced(this.#addModulURL(), {
 			method: 'POST',
@@ -494,6 +499,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//Modul updaten/bearbeiten
 	updateModul(modulBO){
 		return this.#fetchAdvanced(this.#updateModulURL(), {
 			method: 'PUT',
@@ -511,10 +517,12 @@ export default class ElectivAPI {
 		})
 	}
 
+	//Modul löschen
 	deleteModul(id){
 		return this.#fetchAdvanced(this.#deleteModulURL(id),{method: 'DELETE'})
 	}
 
+	//User updaten
 	updateUser(id,name,matrNr){
 		return this.#fetchAdvanced(this.#updateUserURL(id,name,matrNr), {
 			method: 'PUT',
@@ -525,10 +533,12 @@ export default class ElectivAPI {
 		})
 	}
 
+	//User löschen
 	deleteUser(id){
 		return this.#fetchAdvanced(this.#deleteUserURL(id),{method: 'DELETE'})
 	}
 
+	//alle Module für ein bestimmtes Projekt bekommen
 	getModule_by_projekt_id(id){
 		return this.#fetchAdvanced(this.#getModule_by_projekt_idURL(id)).then((responseJSON) => {
 			let modulBO = ModulBO.fromJSON(responseJSON);
@@ -539,15 +549,17 @@ export default class ElectivAPI {
 		})
 	}
 
-	
+	//Wählbare Module eines Projekts erstellen
 	postProjekte_hat_module(projekt_id, module){
 	   return this.#fetchAdvanced(this.#postProjekte_hat_moduleURL(projekt_id, module),{method: 'POST'})
    }
 
+   //Wählbare Module eines Projekts updaten
    updateProjekte_hat_module(projekt_id, module){
 	   return this.#fetchAdvanced(this.#updateProjekte_hat_moduleURL(projekt_id, module),{method: 'PUT'})
 	}
 
+	//Studenten eines Projekts bekommen
 	getStudentenByProjektId(id){
 		return this.#fetchAdvanced(this.#getStudentenByProjektIdURL(id)).then((responseJSON) => {
 			let studentBOs = StudentBO.fromJSON(responseJSON);
@@ -590,6 +602,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//Semester hinzufügen
 	addSemester(semesterBO) {
 		return this.#fetchAdvanced(this.#addSemesterURL(), {
 			method: 'POST',
@@ -607,6 +620,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//Semester updaten
 	updateSemester(semesterBO){
 		return this.#fetchAdvanced(this.#updateSemesterURL(), {
 			method: 'PUT',
@@ -624,6 +638,7 @@ export default class ElectivAPI {
 		})
 	}
 
+	//Semester löschen
 	deleteSemester(id){
 		return this.#fetchAdvanced(this.#deleteSemesterURL(id),{method: 'DELETE'})
 	}

@@ -3,6 +3,12 @@ import PropTypes from 'prop-types';
 import { withStyles, Button, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from '@material-ui/core';
 import { ElectivAPI } from '../../api';
 
+/**
+ * Es wird ein Dialog dargestellt, mit welchem man ein bestimmtes Semester löschen kann 
+ * 
+ * @see See Material-UIs [Dialog](https://material-ui.com/components/dialogs)
+ * 
+ */
 
 class SemesterDelete extends Component {
 
@@ -17,10 +23,12 @@ class SemesterDelete extends Component {
 
     }
 
+    //wird aufgerufen, wenn das Dialog geschlossen wird
     handleClose = () => {
 		this.props.onClose(null);
     }
 
+    // API Anbindung um das Semester über das Backend aus der Datenbank löschen
     deleteSemester= () => {
       ElectivAPI.getAPI().deleteSemester(this.state.semester.id)
         .then(()=>{
@@ -29,8 +37,8 @@ class SemesterDelete extends Component {
         });
     }
     
+    /** Renders the component */
     render() {
-
         const {classes, show} = this.props;
         const { semester } = this.state;
         return (
@@ -61,6 +69,7 @@ class SemesterDelete extends Component {
 
 }
 
+/** Component specific styles */
 const styles = theme => ({
     root: {
       width: '100%',
