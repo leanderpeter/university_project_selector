@@ -200,14 +200,10 @@ class App extends React.Component {
                     <ProjektBearbeiten currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                   
-                  {currentStudent ?
                   <Route path='/meineprojekte' component={MeineProjekte}>
                     <MeineProjekte currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                   
-                  :
-                  <></>
-                  }
                   <Route path='/notenliste' component={Notenliste}>
                     <Notenliste currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
