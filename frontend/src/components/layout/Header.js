@@ -33,10 +33,10 @@ class Header extends Component {
 		return (
       <Paper className={classes.root} variant='outlined' >
         <ProfileDropDown user={user} />
-        <Typography className={classes.text} variant='h3' component='h1' align='center'>
+        <Typography className={classes.text1} variant='h3' component='h1' align='center'>
           HdM Wahlfach App
         </Typography>
-        <Typography className={classes.text} variant='h5' component='h2' align='center'>
+        <Typography className={classes.text2} variant='h5' component='h2' align='center'>
         STUDIEREN. WISSEN. MACHEN.
         </Typography>
         {
@@ -104,9 +104,14 @@ const styles = theme => ({
     minWidth: 150, // a number of your choice
     width: 150, // a number of your choice
   },
-  text: {
+  text1: {
     paddingLeft: '64px',
-  }
+    marginTop: theme.spacing(2)
+  },
+  text2: {
+    marginBottom: theme.spacing(2),
+  },
+
 });
 
 
