@@ -114,7 +114,7 @@ class ProjektListeEintrag extends Component {
   //small comment
   /** Renders the component */
   render() {
-    const { classes, expandedState } = this.props;
+    const { classes, expandedState, currentStudent } = this.props;
     // Use the states projekt
     const { projekt, projektarten } = this.state;
 
@@ -143,6 +143,10 @@ class ProjektListeEintrag extends Component {
               </Grid>
               <Grid item>
                 {
+                  currentStudent ?
+                <>
+
+                {
                   this.state.teilnahmeButtonDisabled ?
                     <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' size="small" color='secondary' onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
                       abwählen
@@ -153,6 +157,10 @@ class ProjektListeEintrag extends Component {
                       wählen
                    </Button>
                 }
+                </>
+                :
+                null
+              }
               </Grid>
             </Grid>
           </AccordionSummary>
