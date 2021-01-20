@@ -4,6 +4,7 @@ import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, 
 import { Button } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 import { ElectivAPI } from '../api';
 import ProjektForm from './dialogs/ProjektForm';
 
@@ -87,7 +88,7 @@ class ProjektverwaltungListeEintrag extends Component {
 
     return (
       <div>
-        <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
+        <Accordion className={classes.root} defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             id={`projekt${projekt.getID()}Infopanel-header`}
@@ -98,12 +99,6 @@ class ProjektverwaltungListeEintrag extends Component {
                 </Typography>
               </Grid>
               <Grid item xs />
-              <Button className={classes.projektAnnehmenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.annehmenButtonClicked} disabled={this.state.projektAnnehmenButton}>
-                Annehmen
-              </Button>
-              <Button className={classes.projektAblehnenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.ablehnenButtonClicked} disabled={this.state.projektAblehnenButton}>
-                Ablehnen
-              </Button>
               <Grid item>
                 <Typography variant='body2' color={'textSecondary'}>Details</Typography>
               </Grid>
@@ -134,7 +129,21 @@ class ProjektverwaltungListeEintrag extends Component {
               }
               <b>Präferierter Block: </b>{projekt.getpraeferierte_block()}<br />
 
-            </Typography>
+            </Typography>              
+          </AccordionDetails>
+          <AccordionDetails>
+            <Grid container justify="flex-end" alignItems="center" spacing={2}>
+              <Grid item>
+              <Button className={classes.projektAnnehmenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.annehmenButtonClicked} disabled={this.state.projektAnnehmenButton}>
+                Annehmen
+              </Button>
+              </Grid>
+              <Grid item>
+              <Button className={classes.projektAblehnenButton} variant='contained' size="small" color='secondary' startIcon={<RemoveIcon />} onClick={this.ablehnenButtonClicked} disabled={this.state.projektAblehnenButton}>
+                Ablehnen
+              </Button>
+              </Grid>
+            </Grid>
           </AccordionDetails>
 
         </Accordion>
@@ -149,17 +158,11 @@ class ProjektverwaltungListeEintrag extends Component {
 const styles = theme => ({
   root: {
     width: '100%',
+    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(1),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
   },
-  projektAnnehmenButton: {
-    position: 'absolute',
-    right: theme.spacing(30),
-    bottom: theme.spacing(1)
-  },
-  projektAblehnenButton: {
-    position: 'absolute',
-    right: theme.spacing(14),
-    bottom: theme.spacing(1)
-  }
 });
 
 /** PropTypes */

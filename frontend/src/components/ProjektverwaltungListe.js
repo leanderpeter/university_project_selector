@@ -155,10 +155,12 @@ class ProjektverwaltungListe extends Component {
 const styles = theme => ({
   root: {
     width: '100%',
+    marginTop: theme.spacing(2),
   },
   projektFilter: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1),
+    marginLeft: theme.spacing(1)
   }
 });
 

@@ -31,12 +31,12 @@ class Header extends Component {
 	render() {
     const { classes, user, currentStudent, currentPerson } = this.props;
 		return (
-      <Paper variant='outlined' >
+      <Paper className={classes.root} variant='outlined' >
         <ProfileDropDown user={user} />
-        <Typography variant='h3' component='h1' align='center'>
+        <Typography className={classes.text} variant='h3' component='h1' align='center'>
           HdM Wahlfach App
         </Typography>
-        <Typography variant='h5' component='h2' align='center'>
+        <Typography className={classes.text} variant='h5' component='h2' align='center'>
         STUDIEREN. WISSEN. MACHEN.
         </Typography>
         {
@@ -45,11 +45,13 @@ class Header extends Component {
               <>
               {currentStudent ?
                 <>
-                <Tabs indicatorColor='primary' textColor='primary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}>
+                <Paper variant='outlined'>
+                <Tabs indicatorColor='secondary' textColor='secondary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}>
                 <Tab label='Projektwahl' component={RouterLink} to={`/projekte`} />
                 <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'}/>
                 <Tab label='About' component={RouterLink} to={`/about`} />
                 </Tabs>
+                </Paper>
                 </>
                 :null
               }
@@ -57,18 +59,21 @@ class Header extends Component {
                 <>
                   {currentPerson.rolle === "Dozent"?
                   <>
-                  <Tabs indicatorColor='primary' textColor='primary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
+                  <Paper variant='outlined'>
+                  <Tabs indicatorColor='secondary' textColor='secondary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
                   <Tab label='Wahl' component={RouterLink} to={`/projekte`} />
                   <Tab label='Projektpflege' component={RouterLink} to={`/projektbearbeiten`} />
                   <Tab label='Projektverwaltung' component={RouterLink} to={`/projekteDozent`} />
                   <Tab label='About' component={RouterLink} to={`/about`} />
                   </Tabs>
+                  </Paper>
                   </>
                   :null
                   }
                   {currentPerson.rolle === "Admin"?
                   <>
-                  <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
+                  <Paper variant='outlined'>
+                  <Tabs indicatorColor='secondary' textColor='secondary' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
                   <Tab className={classes.tab} label='Wahl' component={RouterLink} to={`/projekte`} />
                   <Tab className={classes.tab} label='Pflege' component={RouterLink} to={`/projektbearbeiten`} />
                   <Tab className={classes.tab} label='Verwaltung' component={RouterLink} to={`/projekteDozent`} />
@@ -76,6 +81,7 @@ class Header extends Component {
                   <Tab className={classes.tab} label="Notenliste" component={RouterLink} to={'/notenliste'}/>
                   <Tab className={classes.tab} label='Administration' component={RouterLink} to={`/administration/semester`} />
                   </Tabs>
+                  </Paper>
                   </>
                   :null
                   }
@@ -97,6 +103,9 @@ const styles = theme => ({
   tab: {
     minWidth: 150, // a number of your choice
     width: 150, // a number of your choice
+  },
+  text: {
+    paddingLeft: '64px',
   }
 });
 

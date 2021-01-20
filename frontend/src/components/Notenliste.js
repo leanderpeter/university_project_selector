@@ -31,7 +31,7 @@ import NotenlisteEintrag from './NotenlisteEintrag';
 //Css Style für Tabellen Zellen
 const StyledTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: theme.palette.darkgrey,
+    backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
   },
   body: {
@@ -305,12 +305,13 @@ const styles = theme => ({
 },
   formControl: {
     minWidth: 150,
+    marginLeft: theme.spacing(1)
   },
   marginLeft: {
     marginLeft: theme.spacing(2)
   },
   warnung: {
-    color: 'red',
+    color: theme.palette.secondary.main,
     paddingTop: theme.spacing(1)
   }
 });

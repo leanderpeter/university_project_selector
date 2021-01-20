@@ -5,16 +5,16 @@ import pascal from '../images/pascal.jpg';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
     padding: theme.spacing(1)
   },
   content: {
     margin: theme.spacing(1),
     textAlign: "center",
-  },
-
-  
+  },  
+  button: {
+    backgroundColor: theme.palette.secondary.main,
+  }
 }));
 
 
@@ -24,33 +24,17 @@ function About() {
   const classes = useStyles();
 
   return (
-    <Paper elevation={0} className={classes.root}>
       <div className={classes.content}>
 
-      
-      <Typography variant='h4' style={{textAlign: "center"}}>Hochschule der Medien
-      </Typography>
-    <Card className={classes.root}>
-      
-      <img alt="Bild HDM" style={{margin:"auto",display: "flex",marginTop:"0%",width:"80%" }}src="https://www.hdm-stuttgart.de/news/news20200414121003/thumbstart" />
-    
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-        Die Hochschule der Medien (HdM) ist eine staatliche Fachhochschule mit Sitz in Stuttgart. Fast 30 akkreditierte Bachelor- und Masterstudiengänge stehen zur Auswahl: vom Druck über audiovisuelle Medien, Informationsmanagement und Informatik, Werbung oder Medienproduktion bis hin zur Medienwirtschaft und Verpackungstechnik.
-        </Typography>
-      </CardContent>
-      <Button style={{margin:"auto", display:"flex",backgroundColor:"red"}} variant="contained" color="secondary"> <a style={{color:"white"}}href="https://www.hdm-stuttgart.de/">Visit Website</a></Button>
-      </Card>
-
-      <Paper>
       <Typography variant='h4' style={{textAlign: "center", marginBottom:"3%", marginTop:"5%"}}>Unser Team
       </Typography>
+      
       <Grid container item xs={12} spacing={3} style={{marginBottom:"2%"}}>
       <React.Fragment>
         <Grid item xs={4}><Paper className={classes.paper1}>
           <Card className={classes.root1}>
      
-        <img alt="Bild Raphael Müller" style={{margin:"auto",display: "flex",marginTop:"0%",width:"68%" }}src="https://www.imago-images.de/bild/sp/0047040892/s.jpg"
+        <img alt="Bild Raphael Müller" style={{margin:"auto",display: "flex",marginTop:"0%",width:"68%" }} src="https://www.imago-images.de/bild/sp/0047040892/s.jpg"
           title="Raphael Müller"
         />
         <CardContent>
@@ -61,7 +45,7 @@ function About() {
           I am a student at the HdM, I do Business Informatics.
           </Typography>
         </CardContent>
-        <Button style={{backgroundColor:"#cfdc00",display: "flex", margin:"auto",marginBottom:"5%"}} variant="contained" > <a style={{color:"#026466"}}href="https://www.xing.com/profile/Raphael_Mueller104/cv ">Xing Profile</a></Button>
+        <Button className={classes.button} style={{display: "flex", margin:"auto",marginBottom:"5%"}} variant="contained" > <a style={{color:"#026466"}}href="https://www.xing.com/profile/Raphael_Mueller104/cv ">Xing Profile</a></Button>
       
       </Card>
       </Paper>
@@ -82,7 +66,7 @@ function About() {
           I am a student at the HdM, I do Business Informatics.
           </Typography>
         </CardContent>
-        <Button style={{backgroundColor:"#cfdc00",display: "flex", margin:"auto",marginBottom:"5%"}} variant="contained" > <a style={{color:"#026466"}}href="https://www.xing.com/profile/Jannik_Merz/cv">Xing Profile</a></Button>
+        <Button className={classes.button} style={{display: "flex", margin:"auto",marginBottom:"5%"}} variant="contained" > <a style={{color:"#026466"}}href="https://www.xing.com/profile/Jannik_Merz/cv">Xing Profile</a></Button>
       
       </Card>
       </Paper>
@@ -103,7 +87,7 @@ function About() {
           I am a student at the HdM, I do Business Informatics.
           </Typography>
         </CardContent>
-        <Button style={{backgroundColor:"#cfdc00",display: "flex", margin:"auto",marginBottom:"5%"}} variant="contained" > <a style={{color:"#026466"}}href="https://www.xing.com/profile/Leander_Peter/cv">Xing Profile</a></Button>
+        <Button className={classes.button} style={{display: "flex", margin:"auto",marginBottom:"5%"}} variant="contained" > <a style={{color:"#026466"}}href="https://www.xing.com/profile/Leander_Peter/cv">Xing Profile</a></Button>
       
       </Card>
       </Paper>
@@ -129,7 +113,7 @@ function About() {
           I am a student at the HdM, I do Business Informatics.
           </Typography>
         </CardContent>
-        <Button style={{backgroundColor:"#cfdc00",display: "flex", margin:"auto",marginBottom:"5%"}} variant="contained" > <a style={{color:"#026466"}}href="https://www.xing.com/profile/Daria_Bilyk/cv">Xing Profile</a></Button>
+        <Button className={classes.button} style={{display: "flex", margin:"auto",marginBottom:"5%"}} variant="contained" > <a style={{color:"#026466"}}href="https://www.xing.com/profile/Daria_Bilyk/cv">Xing Profile</a></Button>
       
       </Card>
       </Paper>
@@ -150,7 +134,7 @@ function About() {
           I am a student at the HdM, I do Business Informatics.
           </Typography>
         </CardContent>
-        <Button style={{backgroundColor:"#cfdc00",display: "flex", margin:"auto",marginBottom:"5%"}} variant="contained" > <a style={{color:"#026466"}}href="https://www.hdm-stuttgart.de/">Xing Profile</a></Button>
+        <Button className={classes.button} style={{display: "flex", margin:"auto",marginBottom:"5%"}} variant="contained" > <a style={{color:"#026466"}}href="https://www.hdm-stuttgart.de/">Xing Profile</a></Button>
       
       </Card>
       </Paper>
@@ -171,7 +155,7 @@ function About() {
           I am a student at the HdM, I do Business Informatics.
           </Typography>
         </CardContent>
-        <Button style={{backgroundColor:"#cfdc00",display: "flex", margin:"auto",marginBottom:"5%"}} variant="contained" > <a style={{color:"#026466"}}href="https://www.xing.com/profile/Pascal_Gienger2/cv">Xing Profile</a></Button>
+        <Button className={classes.button} style={{display: "flex", margin:"auto",marginBottom:"5%"}} variant="contained" > <a style={{color:"#026466"}}href="https://www.xing.com/profile/Pascal_Gienger2/cv">Xing Profile</a></Button>
       
       </Card>
       </Paper>
@@ -179,10 +163,7 @@ function About() {
       
       </React.Fragment>
       </Grid>
-      </Paper>
 
-      
-  
       
       
           
@@ -192,7 +173,6 @@ function About() {
           © Hochschule der Medien 2020, all rights reserved.
         </Typography>
       </div>
-    </Paper>
   )
 }
 

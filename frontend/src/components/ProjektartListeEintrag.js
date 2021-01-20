@@ -77,13 +77,13 @@ class ProjektartListeEintrag extends Component {
           <div>
             <ListItem className={classes.root}>
                   <Grid container  alignItems="center" spacing={2}>
-                    <Grid item>
+                    <Grid item xs={4}>
                         <Typography >{projektart.name}</Typography>
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={2}>
                         <Typography >ECTS: {projektart.ects}</Typography>
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={2}>
                         <Typography >SWS: {projektart.sws}</Typography>
                     </Grid>
                     <Grid item xs/>

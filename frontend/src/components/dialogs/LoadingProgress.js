@@ -16,7 +16,7 @@ class LoadingProgress extends Component {
     return (
       show ?
         <div className={classes.root}>
-          <LinearProgress color='secondary' />
+          <LinearProgress color='primary' />
         </div>
         : null
     );

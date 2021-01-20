@@ -105,14 +105,14 @@ class ProjektDozentListeEintrag extends Component {
     // console.log(this.state);
     return (
       <div>
-        <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
+        <Accordion defaultExpanded={false} className={classes.root} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             id={`projekt${projekt.getID()}Infopanel-header`}
           >
             <Grid container spacing={1} justify='flex-start' alignItems='center'>
               <Grid item>
-                <Typography variant='body1' className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()} </Typography> <Typography variant='body1' color={'success.main'}>{projekt.getAnzahlTeilnehmer()} / {projekt.getmax_teilnehmer()} Plätze besetzt
+                <Typography variant='body1' className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()}
                 </Typography>
               </Grid>
               <Grid item xs />
@@ -172,7 +172,11 @@ class ProjektDozentListeEintrag extends Component {
 /** Component specific styles */
 const styles = theme => ({
   root: {
-    width: '100%',
+      width: '100%',
+      marginBottom: theme.spacing(1),
+      marginTop: theme.spacing(1),
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
   },
 
 });

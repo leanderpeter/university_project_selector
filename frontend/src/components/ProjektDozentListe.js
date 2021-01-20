@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, Grid, Typography } from '@material-ui/core';
+import { withStyles, Button, Grid, Typography, FormControl, InputLabel } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
 import { withRouter } from 'react-router-dom';
@@ -192,22 +192,22 @@ class ProjektDozentListe extends Component {
       <div className={classes.root}>
         <Grid className={classes.projektFilter} container spacing={1} justify='flex-start' alignItems='center'>
           <Grid item>
-            <Typography>
-              Ihre Projekte mit dem Status:
-              </Typography>
           </Grid>
           <Grid item xs={4}>
-            <Select id='projektFilter' value={filterValue} onChange={this.filterFieldValueChange}>
-              <MenuItem value={'Neu'} >Neu</MenuItem>
-              <MenuItem value={'Genehmigt'}>Genehmigt</MenuItem>
-              <MenuItem value={'Abgelehnt'}>Abgelehnt</MenuItem>
-            </Select>
+            <FormControl className={classes.status}>
+              <InputLabel>Status</InputLabel>
+                <Select id='projektFilter' value={filterValue} onChange={this.filterFieldValueChange}>
+                  <MenuItem value={'Neu'} >Neu</MenuItem>
+                  <MenuItem value={'Genehmigt'}>Genehmigt</MenuItem>
+                  <MenuItem value={'Abgelehnt'}>Abgelehnt</MenuItem>
+                </Select>
+            </FormControl>
 
 
           </Grid>
           <Grid item xs />
           <Grid item>
-            <Button variant='contained' color='primary' startIcon={<AddIcon />} onClick={this.addProjektButtonClicked}>
+            <Button variant='contained' className={classes.button} color='primary' startIcon={<AddIcon />} onClick={this.addProjektButtonClicked}>
               Projekt anlegen
           </Button>
           </Grid>
@@ -237,6 +237,12 @@ const styles = theme => ({
   projektFilter: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1),
+  },
+  status: {
+    minWidth: 120
+  },
+  button: {
+    marginRight: theme.spacing(1)
   }
 });
 
