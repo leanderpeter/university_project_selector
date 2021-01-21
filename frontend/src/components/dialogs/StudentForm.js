@@ -11,7 +11,7 @@ import LoadingProgress from './LoadingProgress';
 import {ElectivAPI} from '../../api';
 
 
-class UserForm extends Component {
+class StudentForm extends Component {
 
     constructor(props) {
         super(props);
@@ -19,11 +19,14 @@ class UserForm extends Component {
             name: '',
             nameValidationFailed: false,
             nameEdited: false,
-            email: null,
-            emailValidationFailed: false,
-            emailEdited: false,
+
+            mat_nr: null,
+            mat_nrValidationFailed: false,
+            mat_nrEdited: false,
+
             addingError: null,
             addingInProgress: false,
+
             updatingError: null,
             updatingInProgress: false
         };
@@ -33,8 +36,9 @@ class UserForm extends Component {
     updateUser = () => {
         let user = this.props.user;
         user.name = this.state.name
-        user.email = this.state.email
-        ElectivAPI.getAPI().updateUser(user.id, this.state.name, this.state.email).then(user => {
+        user.mat_nr = this.state.mat_nr
+        ElectivAPI.getAPI().updateStudent(user.id, this.state.name, this.state.mat_nr).then(user => {
+
             this.setState(this.baseState);
             this.props.onClose(user); //Aufrufen parent in backend
         }).catch(e =>
@@ -58,6 +62,10 @@ class UserForm extends Component {
         if (value.trim().length === 0) {
             error = true;
         }
+        this.setStateValueChange(event, error);
+    }
+
+    setStateValueChange(event, error) {
         this.setState({
             [event.target.id]: event.target.value,
             [event.target.id + 'ValidationFailed']: error,
@@ -65,13 +73,27 @@ class UserForm extends Component {
         });
     }
 
+    numberValueChange = (event) => {
+        const value = event.target.value;
+        const re = /^[0-9]{1,10}$/;
+
+        let error = false;
+        if (value.trim().length === 0) {
+            error = true;
+        }
+        if (re.test(event.target.value) === false) {
+            error = true;
+        }
+        this.setStateValueChange(event, error);
+    }
+
     getInfos = () => {
         if (this.props.user) {
             let name = this.props.user.name;
-            let email = this.props.user.email;
+            let mat_nr = this.props.user.mat_nr;
             this.setState({
                 name: name,
-                email: email,
+                mat_nr: mat_nr,
             })
         }
     }
@@ -88,8 +110,8 @@ class UserForm extends Component {
         const {
             name,
             nameValidationFailed,
-            email,
-            emailValidationFailed,
+            mat_nr,
+            mat_nrValidationFailed,
             addingInProgress,
             updatingInProgress,
             updatingError,
@@ -118,8 +140,8 @@ class UserForm extends Component {
                                        onChange={this.textFieldValueChange} error={nameValidationFailed}/>
 
                             <TextField className={classes.textfield} type='text' required fullWidth margin='small'
-                                       id='email' label='email' variant="outlined" value={email}
-                                       onChange={this.textFieldValueChange} error={emailValidationFailed}/>
+                                       id='mat_nr' label='Matrikelnummer' variant="outlined" value={mat_nr}
+                                       onChange={this.numberValueChange} error={mat_nrValidationFailed}/>
                         </form>
                         <LoadingProgress show={addingInProgress || updatingInProgress}/>
                         {
@@ -136,7 +158,7 @@ class UserForm extends Component {
                         </Button>
                         {
                             // If a Projekt is given, show an update button, else an add button
-                            <Button disabled={nameValidationFailed || emailValidationFailed} variant='contained'
+                            <Button disabled={nameValidationFailed || mat_nrValidationFailed} variant='contained'
                                     onClick={this.updateUser} color='primary'>
                                 Speichern
                             </Button>
@@ -167,7 +189,7 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-UserForm.propTypes = {
+StudentForm.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** If true, the form is rendered */
@@ -181,4 +203,4 @@ UserForm.propTypes = {
     onClose: PropTypes.func.isRequired,
 }
 
-export default withStyles(styles)(UserForm);
+export default withStyles(styles)(StudentForm);

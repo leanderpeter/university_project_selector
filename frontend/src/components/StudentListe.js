@@ -9,9 +9,9 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ClearIcon from '@material-ui/icons/Clear';
 
-import UserListeEintrag from './UserListeEintrag';
+import StudentListeEintrag from './StudentListeEintrag';
 
-class UserListe extends Component {
+class StudentListe extends Component {
 
     constructor(props) {
         super(props);
@@ -30,7 +30,7 @@ class UserListe extends Component {
 
     // API Anbindung um alle Module vom Backend zu bekommen
     getUser = () => {
-        ElectivAPI.getAPI().getPersons()
+        ElectivAPI.getAPI().getStudenten()
             .then(userBOs =>
                 this.setState({
                     user: userBOs,
@@ -106,13 +106,13 @@ class UserListe extends Component {
                     <List className={classes.root} dense>
                         {
                             filteredUser.map(user =>
-                                <UserListeEintrag key={user.getID()} user={user} show={this.props.show}
-                                                  getUser={this.getUser}/>)
+                                <StudentListeEintrag key={user.getID()} user={user} show={this.props.show}
+                                                     getUser={this.getUser}/>)
                         }
                         <ListItem>
                             <LoadingProgress show={loadingInProgress}/>
                             <ContextErrorMessage error={error}
-                                                 contextErrorMsg={`Userliste konnte nicht geladen werden.`}
+                                                 contextErrorMsg={`Studentliste konnte nicht geladen werden.`}
                                                  onReload={null}/>
                         </ListItem>
                     </List>
@@ -141,12 +141,12 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-UserListe.propTypes = {
+StudentListe.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** @ignore */
     location: PropTypes.object.isRequired,
 }
 
-export default withRouter(withStyles(styles)(UserListe));
+export default withRouter(withStyles(styles)(StudentListe));
 

@@ -23,7 +23,6 @@ class StudentMapper(Mapper):
         
         cursor.execute("SELECT * from studenten")
         tuples = cursor.fetchall()
-        print(tuples)
         
 
         for (id, name, email, google_user_id,  rolle, mat_nr, kuerzel) in tuples:
@@ -182,7 +181,6 @@ class StudentMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = "DELETE FROM studenten WHERE id={}".format(userID)
-        print(command)
         cursor.execute(command)
 
         self._connection.commit()

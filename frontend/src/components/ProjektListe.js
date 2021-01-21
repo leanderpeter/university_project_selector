@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography, Button } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear'
-import { withRouter } from 'react-router-dom';
-import { ElectivAPI } from '../api';
+import {withRouter} from 'react-router-dom';
+import {ElectivAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
@@ -16,80 +16,71 @@ Erstellt eine Liste von ProjektListeEintrag fuer jedes Projekt
 
 class ProjektListe extends Component {
 
-  constructor(props) {
-    super(props);
-    let expandedID = null;
+    constructor(props) {
+        super(props);
+        let expandedID = null;
 
-    if (this.props.location.expandProjekt) {
-      expandedID = this.props.location.expandProjekt.getID();
-    }
-
-    //gebe einen leeren status
-    this.state = {
-      projekte: [],
-      filteredProjekte: [],
-      projektFilter: '',
-      error: null,
-      loadingInProgress: false,
-      expandedProjektID: expandedID,
-      showProjekteForm: false,
-      ectsCount: 0
-    };
-  }
-
-  //hole alle Projekte vom Backend
-  getProjekte = () => {
-    ElectivAPI.getAPI().getProjekteByZustand("Genehmigt")
-      .then(projekteBOs =>
-        this.setState({								//neuer status wenn fetch komplett
-          projekte: projekteBOs,
-          filteredProjekte: [...projekteBOs],		//speicher eine kopie
-          loadingInProgress: false,				// deaktiviere ladeindikator
+        if (this.props.location.expandProjekt) {
+            expandedID = this.props.location.expandProjekt.getID();
+        }
+        //gebe einen leeren status
+        this.state = {
+          projekte: [],
+          filteredProjekte: [],
+          projektFilter: '',
           error: null,
-        })).catch(e =>
-          this.setState({
-            projekte: [],
-            loadingInProgress: false,
-            error: e
-          }));
-    // setze laden auf wahr
-    // console.log(this.projekte.toString());
-    this.setState({
-      loadingInProgress: true,
-      error: null
-    });
-  }
-
-
-  ectsCountFunc = (ects) => {
-    this.setState({
-      ectsCount: this.state.ectsCount + ects
-    })
-  }
-
-
-  // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
-  componentDidMount() {
-    this.getProjekte();
-  }
-
-  onExpandedStateChange = projekt => {
-    //  Zum anfang Projekt Eintrag = null
-    let newID = null;
-
-    // Falls ein Objekt geclicket wird, collapse
-    if (projekt.getID() !== this.state.expandedProjektID) {
-      // Oeffnen mit neuer Projekt ID
-      newID = projekt.getID()
+          loadingInProgress: false,
+          expandedProjektID: expandedID,
+          showProjekteForm: false,
+          ectsCount: 0
+        };
     }
-    this.setState({
-      expandedProjektID: newID,
-    });
 
-  }
+    ectsCountFunc = (ects) => {
+      this.setState({
+        ectsCount: this.state.ectsCount + ects
+      })
+    }
+    //hole alle Projekte vom Backend
+    getProjekte = () => {
+        ElectivAPI.getAPI().getProjekteByZustand("Genehmigt")
+            .then(projekteBOs =>
+                this.setState({								//neuer status wenn fetch komplett
+                    projekte: projekteBOs,
+                    filteredProjekte: [...projekteBOs],		//speicher eine kopie
+                    loadingInProgress: false,				// deaktiviere ladeindikator
+                    error: null,
+                })).catch(e =>
+            this.setState({
+                projekte: [],
+                loadingInProgress: false,
+                error: e
+            }));
+        // setze laden auf wahr
+        this.setState({
+            loadingInProgress: true,
+            error: null
+        });
+    }
 
+    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
+    componentDidMount() {
+        this.getProjekte();
+    }
 
+    onExpandedStateChange = projekt => {
+        //  Zum anfang Projekt Eintrag = null
+        let newID = null;
 
+        // Falls ein Objekt geclicket wird, collapse
+        if (projekt.getID() !== this.state.expandedProjektID) {
+            // Oeffnen mit neuer Projekt ID
+            newID = projekt.getID()
+        }
+        this.setState({
+            expandedProjektID: newID,
+        });
+    }
 
   /** Renders the component */
   render() {
@@ -119,7 +110,7 @@ class ProjektListe extends Component {
                   <IconButton onClick={this.clearFilterFieldButtonClicked}>
                     <ClearIcon />
                   </IconButton>
-                </InputAdornment>,
+                </InputAdornment>
               }}
             />
           </Grid>
@@ -136,13 +127,13 @@ class ProjektListe extends Component {
               onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
             />)
         }
+                <LoadingProgress show={loadingInProgress}/>
+                <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`}
+                                     onReload={this.getProjekte}/>
 
-        <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`} onReload={this.getProjekte} />
-
-      </div>
-    );
-  }
+            </div>
+        );
+    }
 }
 
 /** Component specific styles */
@@ -152,23 +143,21 @@ const styles = theme => ({
   },
   grid:{
     marginTop: theme.spacing(3),
-  },
-  projektFilter: {
     marginBottom: theme.spacing(1),
     marginLeft: theme.spacing(1)
   },
   ectsCount: {
     marginBottom: theme.spacing(1),
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(2)
   }
 });
 
 /** PropTypes */
 ProjektListe.propTypes = {
-  /** @ignore */
-  classes: PropTypes.object.isRequired,
-  /** @ignore */
-  location: PropTypes.object.isRequired,
+    /** @ignore */
+    classes: PropTypes.object.isRequired,
+    /** @ignore */
+    location: PropTypes.object.isRequired,
 }
 
 export default withRouter(withStyles(styles)(ProjektListe));

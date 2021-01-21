@@ -68,6 +68,11 @@ class ProjektAdministration(object):
         with PersonMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def get_all_persons(self):
+        """Eine Person mit einer bestimmten ID auslesen"""
+        with PersonMapper() as mapper:
+            return mapper.find_all()
+
     def get_user_by_email(self, ):
         pass
 
@@ -101,9 +106,20 @@ class ProjektAdministration(object):
             user.set_rolle(Person.ROLLE_DOZENT)
         elif rolle == "Admin":
             user.set_rolle(Person.ROLLE_ADMIN)
-            
+
         with PersonMapper() as mapper:
             mapper.update(user)
+
+    def update_person_by_id(self, user):
+        """Eine Person speichern"""
+        rolle = user.get_rolle()
+        if rolle == "Dozent":
+            user.set_rolle(Person.ROLLE_DOZENT)
+        elif rolle == "Admin":
+            user.set_rolle(Person.ROLLE_ADMIN)
+
+        with PersonMapper() as mapper:
+            mapper.update_by_id(user)
 
     def save_student(self, user):
         """Einen Studenten speichern"""
@@ -335,7 +351,6 @@ class ProjektAdministration(object):
         projekt.set_anzahlTeilnehmer(anzahlTeilnehmer)
         projekt.set_teilnehmerListe(teilnehmerListe)
         projekt.set_aktueller_zustand(Zustand('Neu'))
-        print(projekt)
 
         with ProjektMapper() as mapper:
             return mapper.insert_pending(projekt)

@@ -11,9 +11,10 @@ import EditIcon from '@material-ui/icons/Edit';
 import Divider from '@material-ui/core/Divider';
 
 
-import UserForm from './dialogs/UserForm';
+import UserForm from './dialogs/StudentForm';
 
-class UserListeEintrag extends Component {
+
+class StudentListeEintrag extends Component {
 
     constructor(props) {
         super(props);
@@ -63,10 +64,7 @@ class UserListeEintrag extends Component {
                             <Typography>{user.name}</Typography>
                         </Grid>
                         <Grid item>
-                            <Typography>{user.email}</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography>{user.rolle}</Typography>
+                            <Typography>{user.mat_nr}</Typography>
                         </Grid>
                         <Grid item xs/>
                         <Grid item>
@@ -99,13 +97,13 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-UserListeEintrag.propTypes = {
+StudentListeEintrag.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     show: PropTypes.bool.isRequired
 }
 
 
-export default withStyles(styles)(UserListeEintrag);
+export default withStyles(styles)(StudentListeEintrag);
 
 

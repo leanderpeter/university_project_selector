@@ -22,6 +22,7 @@ import Administration from './components/Administration';
 import ModulListe from './components/ModulListe';
 import SemesterListe from './components/SemesterListe';
 import ProjektartListe from './components/ProjektartListe';
+import StudentListe from './components/StudentListe';
 import UserListe from './components/UserListe';
 
 
@@ -224,10 +225,13 @@ class App extends React.Component {
                     <ProjektartListe currentPerson= {currentPerson}/>
                   </Route>
 
+                  <Route path='/administration/student' component={StudentListe}>
+                    <StudentListe currentPerson= {currentPerson}/>
+                  </Route>
+
                   <Route path='/administration/user' component={UserListe}>
                     <UserListe currentPerson= {currentPerson}/>
                   </Route>
-
 
                 </>
                 :

@@ -91,8 +91,11 @@ export default class ElectivAPI {
 	//Delete Modul
 	#deleteModulURL = (id) => `${this.#ElectivServerBaseURL}/module?id=${id}`;
 
-    //Delete Modul
-	#updateUserURL = (id,name,matrNr) => `${this.#ElectivServerBaseURL}/studenten?id=${id}&name=${name}&matrNr=${matrNr}`;
+    //Update Student
+	#updateStudentURL = (id,name,matrNr) => `${this.#ElectivServerBaseURL}/studenten?id=${id}&name=${name}&matrNr=${matrNr}`;
+
+	//Update User
+	#updateUserURL = (id,name,email) => `${this.#ElectivServerBaseURL}/personen?id=${id}&name=${name}&email=${email}`;
 
 	//Delete User
 	#deleteUserURL = (id) => `${this.#ElectivServerBaseURL}/student/${id}`;
@@ -144,8 +147,11 @@ export default class ElectivAPI {
     //Loesche eine Projektart nach ID
     #deleteProjektartURL = (id) => `${this.#ElectivServerBaseURL}/projektart?id=${id}`;
   
-	//Alle Semester bekommen
+	//Alle Studenten bekommen
 	#getStudentenURL = () => `${this.#ElectivServerBaseURL}/studenten`;
+
+	//Alle User bekommen
+	#getUserURL = () => `${this.#ElectivServerBaseURL}/personen`;
 
 	/*
 	Singleton/Einzelstuck instanz erhalten
@@ -233,7 +239,6 @@ export default class ElectivAPI {
 		}).then((responseJSON) => {
 			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
 			let responseProjektartBO = ProjektartBO.fromJSON(responseJSON);
-			console.log("TEST TEST")
 			return new Promise(function (resolve) {
 				resolve(responseProjektartBO);
 			})
@@ -263,8 +268,6 @@ export default class ElectivAPI {
 		//immer Zustand 1 (neues Projekt) holen
 		return this.#fetchAdvanced(this.#getProjekteByZustandByDozentURL(zustand_id,dozent_id),{method: 'GET'}).then((responseJSON) => {
 			let projektBOs = ProjektBO.fromJSON(responseJSON);
-			// console.info(projektBOs.toString())
-			console.log(projektBOs)
 			projektBOs.sort((a,b) => (a.ects > b.ects) ? 1: -1); //Sortier alle Objecte im array nach ects, aufsteigend
 			return new Promise(function (resolve){
 				resolve(projektBOs);
@@ -522,9 +525,20 @@ export default class ElectivAPI {
 		return this.#fetchAdvanced(this.#deleteModulURL(id),{method: 'DELETE'})
 	}
 
+	//Student updaten
+	updateStudent(id,name,matrNr){
+		return this.#fetchAdvanced(this.#updateStudentURL(id,name,matrNr), {
+			method: 'PUT',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			}
+		})
+	}
+
 	//User updaten
-	updateUser(id,name,matrNr){
-		return this.#fetchAdvanced(this.#updateUserURL(id,name,matrNr), {
+	updateUser(id,name,email){
+		return this.#fetchAdvanced(this.#updateUserURL(id,name,email), {
 			method: 'PUT',
 			headers: {
 				'Accept': 'application/json, text/plain',
@@ -645,12 +659,22 @@ export default class ElectivAPI {
 
 	//gibt alle Studenten als BO zurück
 	getStudenten(){
-		console.log(this.#getStudentenURL());
 		return this.#fetchAdvanced(this.#getStudentenURL()).then((responseJSON) => {
 			let studentBOs = StudentBO.fromJSON(responseJSON);
 			console.info(studentBOs)
 			return new Promise(function (resolve){
 				resolve(studentBOs)
+			})
+		})
+	}
+
+	//gibt alle Personen als BO zurück
+	getPersons(){
+
+		return this.#fetchAdvanced(this.#getUserURL()).then((responseJSON) => {
+			let personBOs = PersonBO.fromJSON(responseJSON);
+			return new Promise(function (resolve){
+				resolve(personBOs)
 			})
 		})
 	}

@@ -141,7 +141,6 @@ class Projektverwaltungoperation(Resource):
             if id == p.get_aktueller_zustand():
                 result.append(p)
 
-        print(type(projekte), "Type des Objekts")
         return result
 
 @electivApp.route('/projekte/zustand/<string:zustand_id>/dozent/<int:dozent_id>')
@@ -153,7 +152,6 @@ class ProjektByZustandByDozentoperation(Resource):
     def get(self, zustand_id, dozent_id):
         adm = ProjektAdministration()
         projekte = adm.get_projekte_by_zustand_by_dozent(zustand_id,dozent_id)
-        print(projekte)
         return projekte
 
 @electivApp.route('/projekte/zustand')
@@ -258,6 +256,27 @@ class PersonOperationen(Resource):
     def put(self, person_id):
         pass
 
+@electivApp.route('/personen')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class PersonOperationen(Resource):
+    @electivApp.marshal_list_with(person)
+    @secured
+
+    def get(self):
+        adm = ProjektAdministration()
+        persons = adm.get_all_persons()
+        return persons
+
+    def put(self):
+        userId = request.args.get("id")
+        name = request.args.get("name")
+        email = request.args.get("email")
+        adm = ProjektAdministration()
+        user = adm.get_person_by_id(userId)
+        user.set_name(name)
+        user.set_email(email)
+        adm.update_person_by_id(user)
+
 @electivApp.route('/personbygoogle/<string:google_user_id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonByGoogleIDOperationen(Resource):
@@ -328,24 +347,6 @@ class StudentIDOperationen(Resource):
     def delete(self, id):
         adm = ProjektAdministration()
         adm.delete_UserById(id)
-
-    def put(self, student_id):
-        pass
-
-
-@electivApp.route('/student/<int:id>')
-@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class StudentOperationen(Resource):
-    @electivApp.marshal_list_with(student)
-    @secured
-
-    def get(self, id):
-        adm = ProjektAdministration()
-        student = adm.get_student_by_id(id)
-        return student
-
-    def delete(self, student_id):
-        pass
 
     def put(self, student_id):
         pass

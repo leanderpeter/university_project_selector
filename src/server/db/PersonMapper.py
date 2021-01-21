@@ -18,7 +18,7 @@ class PersonMapper(Mapper):
 
         :return Alle Person-Objekte im System
         """
-        result = None
+        result = []
 
         cursor = self._connection.cursor()
 
@@ -27,8 +27,7 @@ class PersonMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            (id, name, email, google_user_id, rolle) = tuples[0]
+        for (id, name, email, google_user_id, rolle) in tuples:
             person = Person()
             person.set_id(id)
             person.set_name(name)
@@ -37,12 +36,9 @@ class PersonMapper(Mapper):
             if rolle == "Dozent":
                 person.set_rolle(Person.ROLLE_DOZENT)
             elif rolle == "Admin":
-                person.set_rolle(Person.ROLLE_ADMIN) 
-            result = person
+                person.set_rolle(Person.ROLLE_ADMIN)
 
-        except IndexError:
-            """empty sequence"""
-            result = None
+            result.append(person)
 
         self._connection.commit()
         cursor.close()
@@ -161,6 +157,22 @@ class PersonMapper(Mapper):
 
         command = "UPDATE personen " + "SET name=%s, email=%s, rolle=%s WHERE google_user_id=%s"
         data = (person.get_name(), person.get_email(), str(person.get_rolle()), person.get_google_user_id())
+
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+    def update_by_id(self, person):
+        """Überschreiben / Aktualisieren eines Person-Objekts in der DB
+
+        :param person -> Person-Objekt
+        :return aktualisiertes Person-Objekt
+        """
+        cursor = self._connection.cursor()
+
+        command = "UPDATE personen " + "SET name=%s, email=%s, rolle=%s WHERE id=%s"
+        data = (person.get_name(), person.get_email(), str(person.get_rolle()), person.get_id())
 
         cursor.execute(command, data)
 
