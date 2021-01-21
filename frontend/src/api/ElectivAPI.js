@@ -239,7 +239,6 @@ export default class ElectivAPI {
 		}).then((responseJSON) => {
 			// zuruck kommt ein array, wir benoetigen aber nur ein Objekt aus dem array
 			let responseProjektartBO = ProjektartBO.fromJSON(responseJSON);
-			console.log("TEST TEST")
 			return new Promise(function (resolve) {
 				resolve(responseProjektartBO);
 			})
@@ -269,8 +268,6 @@ export default class ElectivAPI {
 		//immer Zustand 1 (neues Projekt) holen
 		return this.#fetchAdvanced(this.#getProjekteByZustandByDozentURL(zustand_id,dozent_id),{method: 'GET'}).then((responseJSON) => {
 			let projektBOs = ProjektBO.fromJSON(responseJSON);
-			// console.info(projektBOs.toString())
-			console.log(projektBOs)
 			projektBOs.sort((a,b) => (a.ects > b.ects) ? 1: -1); //Sortier alle Objecte im array nach ects, aufsteigend
 			return new Promise(function (resolve){
 				resolve(projektBOs);
@@ -675,7 +672,6 @@ export default class ElectivAPI {
 	getPersons(){
 
 		return this.#fetchAdvanced(this.#getUserURL()).then((responseJSON) => {
-			console.log(responseJSON);
 			let personBOs = PersonBO.fromJSON(responseJSON);
 			return new Promise(function (resolve){
 				resolve(personBOs)

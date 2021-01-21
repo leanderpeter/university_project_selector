@@ -101,7 +101,7 @@ class ProjektDozentListeEintrag extends Component {
         // Use the states projekt
         const {projekt, projektarten, showProjektForm, showProjektDeleteDialog} = this.state;
 
-        // console.log(this.state);
+
         return (
             <div>
                 <Accordion defaultExpanded={false} className={classes.root} expanded={expandedState}

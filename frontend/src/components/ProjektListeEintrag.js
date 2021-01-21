@@ -123,7 +123,7 @@ class ProjektListeEintrag extends Component {
             this.state.teilnahmeAbwaehlenButtonDisabled = false;
         }
 
-        console.log(projektarten.length)
+
 
         return (
             <div>

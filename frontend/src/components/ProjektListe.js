@@ -52,7 +52,7 @@ class ProjektListe extends Component {
                 error: e
             }));
         // setze laden auf wahr
-        // console.log(this.projekte.toString());
+
         this.setState({
             loadingInProgress: true,
             error: null
