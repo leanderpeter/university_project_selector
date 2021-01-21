@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { ElectivAPI } from '../../api';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 
 class ProjektartDelete extends Component {
@@ -12,10 +14,19 @@ class ProjektartDelete extends Component {
 		// Status initalisieren
 		this.state = {
             projektart: props.projektart,
-
+            showSnackbar: false,
         };
-
     }
+
+    closeSnackbar = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      this.setState({
+        showSnackbar: false
+      });
+    };
+
 
     handleClose = () => {
 		this.props.onClose(null);
@@ -26,13 +37,17 @@ class ProjektartDelete extends Component {
         .then(()=>{
           this.props.getProjektart();
           this.props.onClose(null);
-        });
+        }).catch(e=>{
+          this.setState({
+            showSnackbar: true
+          })
+        })
     }
     
     render() {
 
         const { show } = this.props;
-        const { projektart } = this.state;
+        const { projektart, showSnackbar } = this.state;
         return (
             <div>
               <Dialog
@@ -55,6 +70,11 @@ class ProjektartDelete extends Component {
                   </Button>
                 </DialogActions>
               </Dialog>
+              <Snackbar open={showSnackbar} autoHideDuration={6000}  onClose={this.closeSnackbar}>
+                <Alert onClose={this.closeSnackbar} severity="error">
+                  Diese Projektart kann nicht gelöscht werden
+                </Alert>
+              </Snackbar>
             </div>
         );
     }

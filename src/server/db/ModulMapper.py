@@ -3,6 +3,8 @@
 
 from server.db.Mapper import Mapper
 from server.bo.Modul import Modul
+import mysql.connector as connector
+
 
 
 class ModulMapper(Mapper):
@@ -165,13 +167,8 @@ class ModulMapper(Mapper):
         :param id
         """
         cursor = self._connection.cursor()
-
-        command = "DELETE FROM teilnahmen WHERE anrechnung={}".format(id)
-        command2 = "DELETE FROM projekte_hat_module WHERE modul_id={}".format(id)
-        command3 = "DELETE FROM module WHERE id={}".format(id)
+        command = "DELETE FROM module WHERE id={}".format(id)
         cursor.execute(command)
-        cursor.execute(command2)
-        cursor.execute(command3)
         self._connection.commit()
         cursor.close()
 
@@ -186,6 +183,7 @@ class ModulMapper(Mapper):
 
         command = "DELETE FROM projekte_hat_module WHERE projekt_id ='{}'".format(projekt_id)
         cursor.execute(command)
+        
         self._connection.commit()
         cursor.close()
 

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Button, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from '@material-ui/core';
 import { ElectivAPI } from '../../api';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 /**
  * Es wird ein Dialog dargestellt, mit welchem man ein bestimmtes Semester löschen kann 
@@ -18,10 +20,18 @@ class SemesterDelete extends Component {
 		// Status initalisieren
 		this.state = {
           semester: props.semester,
-
+          showSnackbar: false
         };
-
     }
+
+    closeSnackbar = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      this.setState({
+        showSnackbar: false
+      });
+    };
 
     //wird aufgerufen, wenn das Dialog geschlossen wird
     handleClose = () => {
@@ -34,13 +44,17 @@ class SemesterDelete extends Component {
         .then(()=>{
 			    this.props.getSemester();
           this.props.onClose(null);
-        });
+        }).catch(e=>{
+          this.setState({
+            showSnackbar: true
+          })
+        })
     }
     
     /** Renders the component */
     render() {
         const {classes, show} = this.props;
-        const { semester } = this.state;
+        const { semester, showSnackbar } = this.state;
         return (
             <div>
               <Dialog
@@ -63,6 +77,11 @@ class SemesterDelete extends Component {
                   </Button>
                 </DialogActions>
               </Dialog>
+              <Snackbar open={showSnackbar} autoHideDuration={6000}  onClose={this.closeSnackbar}>
+                <Alert onClose={this.closeSnackbar} severity="error">
+                  Dieses Semester kann nicht gelöscht werden
+                </Alert>
+              </Snackbar>
             </div>
         );
     }

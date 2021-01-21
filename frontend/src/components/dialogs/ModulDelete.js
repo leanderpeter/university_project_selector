@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { ElectivAPI } from '../../api';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 /**
  * Es wird ein Dialog dargestellt, mit welchem man ein bestimmtes Modul löschen kann
@@ -18,10 +20,18 @@ class ModulDelete extends Component {
 		//initiiere den state
 		this.state = {
             modul: props.modul,
-
+            showSnackbar: false,
         };
-
     }
+
+    closeSnackbar = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      this.setState({
+        showSnackbar: false
+      });
+    };
 
     //Wenn das Dialog geschlossen wird
     handleClose = () => {
@@ -34,13 +44,17 @@ class ModulDelete extends Component {
         .then(()=>{
 			    this.props.getModule();
           this.props.onClose(null);
-        });
+        }).catch(e=>{
+          this.setState({
+            showSnackbar: true
+          })
+        })
     }
     
     /** Rendert die Komponente */
     render() {
         const { show} = this.props;
-        const { modul } = this.state;
+        const { modul, showSnackbar } = this.state;
         return (
             <div>
               <Dialog
@@ -63,6 +77,11 @@ class ModulDelete extends Component {
                   </Button>
                 </DialogActions>
               </Dialog>
+              <Snackbar open={showSnackbar} autoHideDuration={6000}  onClose={this.closeSnackbar}>
+                <Alert onClose={this.closeSnackbar} severity="error">
+                  Dieses Modul kann nicht gelöscht werden
+                </Alert>
+              </Snackbar>
             </div>
         );
     }

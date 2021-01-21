@@ -88,26 +88,9 @@ class ProjektartMapper(Mapper):
 
 	def delete(self, id):
 		cursor = self._connection.cursor()
-
-		command1 = "SELECT id FROM projekte WHERE art = {}".format(id)
-		cursor.execute(command1)
-		tuples = cursor.fetchall()
-
-		for i in tuples:
-			'''
-			Diese Schleife ist hoechst behindert. Es werden nur so viele Eintraege in projekt_hat_module geloescht wie i in tuples.
-			Loesung: Noch eine weitere Schleife mit projekte_hat_module -> tuples2 for i in range(len(tuples2))
-			'''
-			command2 = "DELETE FROM projekte_hat_module WHERE projekt_id = {}".format(i[0])
-			cursor.execute(command2)
-			command22 = "DELETE FROM teilnahmen WHERE lehrangebot={}".format(i[0])
-			cursor.execute(command22)
-
-		command3 = "DELETE FROM projekte WHERE art = {}".format(id)
-		cursor.execute(command3)
-
-		command4 = "DELETE FROM projektarten WHERE id={}".format(id)
-		cursor.execute(command4)
+		
+		command = "DELETE FROM projektarten WHERE id={}".format(id)
+		cursor.execute(command)
 
 		self._connection.commit()
 		cursor.close()

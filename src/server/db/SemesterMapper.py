@@ -100,10 +100,9 @@ class SemesterMapper(Mapper):
     def delete(self, id):
         """Delete an object from the DB"""
         cursor = self._connection.cursor()
-
-        command = "DELETE FROM projekte WHERE halbjahr={}".format(id)
-        command2 = "DELETE FROM semester WHERE id={}".format(id)
+        
+        command = "DELETE FROM semester WHERE id={}".format(id)
         cursor.execute(command)
-        cursor.execute(command2)
+        
         self._connection.commit()
         cursor.close()
