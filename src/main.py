@@ -141,7 +141,6 @@ class Projektverwaltungoperation(Resource):
             if id == p.get_aktueller_zustand():
                 result.append(p)
 
-        print(type(projekte), "Type des Objekts")
         return result
 
 @electivApp.route('/projekte/zustand/<string:zustand_id>/dozent/<int:dozent_id>')
@@ -153,7 +152,6 @@ class ProjektByZustandByDozentoperation(Resource):
     def get(self, zustand_id, dozent_id):
         adm = ProjektAdministration()
         projekte = adm.get_projekte_by_zustand_by_dozent(zustand_id,dozent_id)
-        print(projekte)
         return projekte
 
 @electivApp.route('/projekte/zustand')
@@ -257,6 +255,17 @@ class PersonOperationen(Resource):
 
     def put(self, person_id):
         pass
+
+@electivApp.route('/personen')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class PersonOperationen(Resource):
+    @electivApp.marshal_list_with(person)
+    @secured
+
+    def get(self):
+        adm = ProjektAdministration()
+        persons = adm.get_all_persons()
+        return persons
 
 @electivApp.route('/personbygoogle/<string:google_user_id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')

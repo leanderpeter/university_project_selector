@@ -11,9 +11,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import Divider from '@material-ui/core/Divider';
 
 
-import StudentForm from './dialogs/StudentForm';
+import UserForm from './dialogs/StudentForm';
 
-class UserListeEintrag extends Component {
+
+
+
+class StudentListeEintrag extends Component {
 
   constructor(props) {
     super(props);
@@ -64,10 +67,7 @@ class UserListeEintrag extends Component {
               <Typography >{user.name}</Typography>
             </Grid>
             <Grid item>
-              <Typography >{user.email}</Typography>
-            </Grid>
-            <Grid item>
-              <Typography >{user.rolle}</Typography>
+              <Typography >- {user.mat_nr}</Typography>
             </Grid>
             <Grid item xs />
             <Grid item>
@@ -84,7 +84,7 @@ class UserListeEintrag extends Component {
           <ContextErrorMessage error={error} contextErrorMsg={'Der User konnte nicht geladen werden'} onReload={this.getUser} />
         </ListItem>
         <Divider />
-        <StudentForm show={showUserForm} user={user} onClose={this.userFormClosed} getModule={this.getUser} />
+        <UserForm show={showUserForm} user={user} onClose={this.userFormClosed} getModule={this.getUser} />
       </div>
     );
   }
@@ -97,7 +97,7 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-UserListeEintrag.propTypes = {
+StudentListeEintrag.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired
@@ -105,6 +105,6 @@ UserListeEintrag.propTypes = {
 
 
 
-export default withStyles(styles)(UserListeEintrag);
+export default withStyles(styles)(StudentListeEintrag);
 
 

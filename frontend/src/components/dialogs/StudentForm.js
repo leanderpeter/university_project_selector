@@ -9,7 +9,7 @@ import LoadingProgress from './LoadingProgress';
 import { ElectivAPI } from '../../api';
 
 
-class UserForm extends Component {
+class StudentForm extends Component {
 
 	constructor(props) {
         super(props);
@@ -188,7 +188,7 @@ const styles = theme => ({
   });
   
   /** PropTypes */
-  UserForm.propTypes = {
+  StudentForm.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** If true, the form is rendered */
@@ -202,4 +202,4 @@ const styles = theme => ({
     onClose: PropTypes.func.isRequired,
   }
   
-  export default withStyles(styles)(UserForm);
+  export default withStyles(styles)(StudentForm);

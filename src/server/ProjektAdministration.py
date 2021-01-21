@@ -68,6 +68,11 @@ class ProjektAdministration(object):
         with PersonMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def get_all_persons(self):
+        """Eine Person mit einer bestimmten ID auslesen"""
+        with PersonMapper() as mapper:
+            return mapper.find_all()
+
     def get_user_by_email(self, ):
         pass
 
@@ -335,7 +340,6 @@ class ProjektAdministration(object):
         projekt.set_anzahlTeilnehmer(anzahlTeilnehmer)
         projekt.set_teilnehmerListe(teilnehmerListe)
         projekt.set_aktueller_zustand(Zustand('Neu'))
-        print(projekt)
 
         with ProjektMapper() as mapper:
             return mapper.insert_pending(projekt)

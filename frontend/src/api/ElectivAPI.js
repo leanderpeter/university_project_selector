@@ -144,8 +144,11 @@ export default class ElectivAPI {
     //Loesche eine Projektart nach ID
     #deleteProjektartURL = (id) => `${this.#ElectivServerBaseURL}/projektart?id=${id}`;
   
-	//Alle Semester bekommen
+	//Alle Studenten bekommen
 	#getStudentenURL = () => `${this.#ElectivServerBaseURL}/studenten`;
+
+	//Alle User bekommen
+	#getUserURL = () => `${this.#ElectivServerBaseURL}/personen`;
 
 	/*
 	Singleton/Einzelstuck instanz erhalten
@@ -645,12 +648,23 @@ export default class ElectivAPI {
 
 	//gibt alle Studenten als BO zurück
 	getStudenten(){
-		console.log(this.#getStudentenURL());
 		return this.#fetchAdvanced(this.#getStudentenURL()).then((responseJSON) => {
 			let studentBOs = StudentBO.fromJSON(responseJSON);
 			console.info(studentBOs)
 			return new Promise(function (resolve){
 				resolve(studentBOs)
+			})
+		})
+	}
+
+	//gibt alle Personen als BO zurück
+	getPersons(){
+
+		return this.#fetchAdvanced(this.#getUserURL()).then((responseJSON) => {
+			console.log(responseJSON);
+			let personBOs = PersonBO.fromJSON(responseJSON);
+			return new Promise(function (resolve){
+				resolve(personBOs)
 			})
 		})
 	}

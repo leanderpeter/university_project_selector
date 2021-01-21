@@ -54,6 +54,7 @@ class Administration extends Component {
               <Tab label='Semester' component={RouterLink} to={`/administration/semester`} />
               <Tab label="Module" component={RouterLink} to={'/administration/module'}/>
               <Tab label='Projektarten' component={RouterLink} to={`/administration/projektarten`} />
+              <Tab label='Studenten' component={RouterLink} to={`/administration/student`} />
               <Tab label='User' component={RouterLink} to={`/administration/user`} />
         </Tabs>
         <LoadingProgress show={loadingInProgress} />
