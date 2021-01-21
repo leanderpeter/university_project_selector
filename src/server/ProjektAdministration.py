@@ -106,9 +106,20 @@ class ProjektAdministration(object):
             user.set_rolle(Person.ROLLE_DOZENT)
         elif rolle == "Admin":
             user.set_rolle(Person.ROLLE_ADMIN)
-            
+
         with PersonMapper() as mapper:
             mapper.update(user)
+
+    def update_person_by_id(self, user):
+        """Eine Person speichern"""
+        rolle = user.get_rolle()
+        if rolle == "Dozent":
+            user.set_rolle(Person.ROLLE_DOZENT)
+        elif rolle == "Admin":
+            user.set_rolle(Person.ROLLE_ADMIN)
+
+        with PersonMapper() as mapper:
+            mapper.update_by_id(user)
 
     def save_student(self, user):
         """Einen Studenten speichern"""

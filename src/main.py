@@ -267,6 +267,16 @@ class PersonOperationen(Resource):
         persons = adm.get_all_persons()
         return persons
 
+    def put(self):
+        userId = request.args.get("id")
+        name = request.args.get("name")
+        email = request.args.get("email")
+        adm = ProjektAdministration()
+        user = adm.get_person_by_id(userId)
+        user.set_name(name)
+        user.set_email(email)
+        adm.update_person_by_id(user)
+
 @electivApp.route('/personbygoogle/<string:google_user_id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonByGoogleIDOperationen(Resource):
@@ -340,7 +350,6 @@ class StudentIDOperationen(Resource):
 
     def put(self, student_id):
         pass
-
 
 
 @electivApp.route('/teilnahme')

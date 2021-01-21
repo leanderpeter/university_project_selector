@@ -91,8 +91,11 @@ export default class ElectivAPI {
 	//Delete Modul
 	#deleteModulURL = (id) => `${this.#ElectivServerBaseURL}/module?id=${id}`;
 
-    //Delete Modul
-	#updateUserURL = (id,name,matrNr) => `${this.#ElectivServerBaseURL}/studenten?id=${id}&name=${name}&matrNr=${matrNr}`;
+    //Update Student
+	#updateStudentURL = (id,name,matrNr) => `${this.#ElectivServerBaseURL}/studenten?id=${id}&name=${name}&matrNr=${matrNr}`;
+
+	//Update User
+	#updateUserURL = (id,name,email) => `${this.#ElectivServerBaseURL}/personen?id=${id}&name=${name}&email=${email}`;
 
 	//Delete User
 	#deleteUserURL = (id) => `${this.#ElectivServerBaseURL}/student/${id}`;
@@ -525,9 +528,20 @@ export default class ElectivAPI {
 		return this.#fetchAdvanced(this.#deleteModulURL(id),{method: 'DELETE'})
 	}
 
+	//Student updaten
+	updateStudent(id,name,matrNr){
+		return this.#fetchAdvanced(this.#updateStudentURL(id,name,matrNr), {
+			method: 'PUT',
+			headers: {
+				'Accept': 'application/json, text/plain',
+				'Content-type': 'application/json',
+			}
+		})
+	}
+
 	//User updaten
-	updateUser(id,name,matrNr){
-		return this.#fetchAdvanced(this.#updateUserURL(id,name,matrNr), {
+	updateUser(id,name,email){
+		return this.#fetchAdvanced(this.#updateUserURL(id,name,email), {
 			method: 'PUT',
 			headers: {
 				'Accept': 'application/json, text/plain',

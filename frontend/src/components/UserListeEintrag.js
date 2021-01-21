@@ -11,7 +11,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import Divider from '@material-ui/core/Divider';
 
 
-import StudentForm from './dialogs/StudentForm';
+import UserForm from './dialogs/UserForm';
 
 class UserListeEintrag extends Component {
 
@@ -84,7 +84,7 @@ class UserListeEintrag extends Component {
           <ContextErrorMessage error={error} contextErrorMsg={'Der User konnte nicht geladen werden'} onReload={this.getUser} />
         </ListItem>
         <Divider />
-        <StudentForm show={showUserForm} user={user} onClose={this.userFormClosed} getModule={this.getUser} />
+        <UserForm show={showUserForm} user={user} onClose={this.userFormClosed} getModule={this.getUser} />
       </div>
     );
   }

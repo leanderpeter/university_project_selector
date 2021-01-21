@@ -9,7 +9,7 @@ import LoadingProgress from './LoadingProgress';
 import { ElectivAPI } from '../../api';
 
 
-class StudentForm extends Component {
+class UserForm extends Component {
 
 	constructor(props) {
         super(props);
@@ -18,9 +18,9 @@ class StudentForm extends Component {
             nameValidationFailed: false,
             nameEdited: false,
 
-            mat_nr: null,
-            mat_nrValidationFailed: false,
-            mat_nrEdited: false,
+            email: null,
+            emailValidationFailed: false,
+            emailEdited: false,
 
             addingError: null,
             addingInProgress: false,
@@ -34,8 +34,8 @@ class StudentForm extends Component {
     updateUser = () => {
         let user = this.props.user;
         user.name = this.state.name
-        user.mat_nr = this.state.mat_nr
-        ElectivAPI.getAPI().updateStudent(user.id,this.state.name,this.state.mat_nr).then(user => {
+        user.email = this.state.email
+        ElectivAPI.getAPI().updateUser(user.id,this.state.name,this.state.email).then(user => {
 
             this.setState(this.baseState);
             this.props.onClose(user); //Aufrufen parent in backend
@@ -89,10 +89,10 @@ class StudentForm extends Component {
     getInfos = () => {
         if (this.props.user) {
             let name = this.props.user.name;
-		    let mat_nr = this.props.user.mat_nr;
+		    let email = this.props.user.email;
             this.setState({
                 name: name,
-                mat_nr: mat_nr,
+                email: email,
             })
 		}
     }
@@ -109,15 +109,10 @@ class StudentForm extends Component {
 		const { classes, show, user } = this.props;
         const {             
             name, 
-            nameValidationFailed, 
-             
-            
-            mat_nr,
-            mat_nrValidationFailed,
-            
-
+            nameValidationFailed,
+            email,
+            emailValidationFailed,
             addingInProgress,
-            
             updatingInProgress,
             updatingError,  } = this.state;
         
@@ -142,8 +137,8 @@ class StudentForm extends Component {
                         <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='small' id='name' label='Name' variant="outlined" value={name}
                         onChange={this.textFieldValueChange} error={nameValidationFailed}  />
 
-                        <TextField className={classes.textfield} type='text' required fullWidth margin='small' id='mat_nr' label='Matrikelnummer' variant="outlined" value={mat_nr}
-                        onChange={this.numberValueChange} error={mat_nrValidationFailed} />
+                        <TextField className={classes.textfield} type='text' required fullWidth margin='small' id='eMail' label='eMail' variant="outlined" value={email}
+                        onChange={this.numberValueChange} error={emailValidationFailed} />
                         </form>
                         <LoadingProgress show={addingInProgress || updatingInProgress} />
                         {
@@ -158,7 +153,7 @@ class StudentForm extends Component {
                         </Button>
                         {
                         // If a Projekt is given, show an update button, else an add button
-                        <Button disabled={nameValidationFailed || mat_nrValidationFailed } variant='contained' onClick={this.updateUser} color='primary'>
+                        <Button disabled={nameValidationFailed || emailValidationFailed } variant='contained' onClick={this.updateUser} color='primary'>
                             Speichern
                         </Button>
 
@@ -188,7 +183,7 @@ const styles = theme => ({
   });
   
   /** PropTypes */
-  StudentForm.propTypes = {
+  UserForm.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** If true, the form is rendered */
@@ -202,4 +197,4 @@ const styles = theme => ({
     onClose: PropTypes.func.isRequired,
   }
   
-  export default withStyles(styles)(StudentForm);
+  export default withStyles(styles)(UserForm);
