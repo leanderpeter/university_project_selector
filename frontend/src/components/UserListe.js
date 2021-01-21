@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Paper, Grid } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { ElectivAPI } from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
+import { withStyles, IconButton, InputAdornment, TextField,  Paper , Grid} from '@material-ui/core';
 import LoadingProgress from './dialogs/LoadingProgress';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ClearIcon from '@material-ui/icons/Clear';
 
 import UserListeEintrag from './UserListeEintrag';
 
@@ -23,7 +24,7 @@ class UserListe extends Component {
     this.state = {
       user: [],
       filteredUser: [],
-      modulFilter: '',
+      userFilter: '',
       showDeleteForm: false,
       error: null,
       loadingInProgress: false,
@@ -53,6 +54,26 @@ class UserListe extends Component {
     });
   }
 
+  //Suche leeren
+clearFilterFieldButtonClicked = () => {
+    this.setState({
+        filteredSemester: [...this.state.semester],
+        semesterFilter: ''
+    });
+}
+
+  //Suche-Funktion zum Suchen von Semester
+  filterFieldValueChange= event => {
+    const value = event.target.value.toLowerCase();
+    this.setState({
+        filteredUser: this.state.user.filter(user => {
+            let nameContainsValue = user.getname().toLowerCase().includes(value);
+            return nameContainsValue;
+        }),
+        userFilter: value
+    });
+}
+
 
 
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
@@ -65,15 +86,28 @@ class UserListe extends Component {
   /** Renders the component */
   render() {
     const { classes } = this.props;
-    const { loadingInProgress, error, filteredUser } = this.state;
+    const { loadingInProgress, error, filteredUser,userFilter } = this.state;
 
     return (
       <div className={classes.root}>
         <Grid container spacing={2} alignItems="center">
 
-          <Grid item xs />
-          <Grid item>
-          </Grid>
+         <Grid item >
+          <TextField
+                className={classes.filter}
+                type='text'
+                label='User suchen'
+                value={userFilter}
+                onChange={this.filterFieldValueChange}
+                InputProps={{
+                    endAdornment: <InputAdornment position='end'>
+                    <IconButton onClick={this.clearFilterFieldButtonClicked}>
+                        <ClearIcon fontSize="small"/>
+                    </IconButton>
+                    </InputAdornment>,
+                }}
+            />
+        </Grid>
         </Grid>
         <Paper>
           <List className={classes.root} dense>
