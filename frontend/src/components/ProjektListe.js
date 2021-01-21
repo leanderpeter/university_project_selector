@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
+import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography, Button } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear'
 import { withRouter } from 'react-router-dom';
 import { ElectivAPI } from '../api';
@@ -33,6 +33,7 @@ class ProjektListe extends Component {
       loadingInProgress: false,
       expandedProjektID: expandedID,
       showProjekteForm: false,
+      ectsCount: 0
     };
   }
 
@@ -60,7 +61,11 @@ class ProjektListe extends Component {
   }
 
 
-
+  ectsCountFunc = (ects) => {
+    this.setState({
+      ectsCount: this.state.ectsCount + ects
+    })
+  }
 
 
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
@@ -90,13 +95,13 @@ class ProjektListe extends Component {
   render() {
 
     const { classes, currentStudent } = this.props;
-    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error } = this.state;
+    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, ectsCountFunc, ectsCount } = this.state;
 
 
     return (
       <div className={classes.root}>
-        <Grid className={classes.projektFilter} container spacing={1} justify='flex-start' alignItems='center'>
-          <Grid item>
+        <Grid container spacing={1} className={classes.grid} justify='flex-start' alignItems='center'>
+          <Grid item className={classes.projektFilter}>
             <Typography>
               Filter Projekliste nach Namen:
               </Typography>
@@ -119,8 +124,8 @@ class ProjektListe extends Component {
             />
           </Grid>
           <Grid item xs />
-          <Grid item>
-
+          <Grid item className={classes.ectsCount}>
+              <Button variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent',}}>Anzahl ECTS: {ectsCount}</Button>
           </Grid>
         </Grid>
         {
@@ -128,7 +133,7 @@ class ProjektListe extends Component {
           // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters        
           filteredProjekte.map(projekt =>
             <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
-              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent}
+              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
             />)
         }
 
@@ -144,12 +149,17 @@ class ProjektListe extends Component {
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing(2),
+  },
+  grid:{
+    marginTop: theme.spacing(3),
   },
   projektFilter: {
-    marginTop: theme.spacing(3),
     marginBottom: theme.spacing(1),
     marginLeft: theme.spacing(1)
+  },
+  ectsCount: {
+    marginBottom: theme.spacing(1),
+    marginRight: theme.spacing(1)
   }
 });
 

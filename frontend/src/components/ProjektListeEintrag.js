@@ -72,6 +72,8 @@ class ProjektListeEintrag extends Component {
     this.setState({ teilnahmeButtonDisabled: true });
     this.setState({ teilnahmeAbwaehlenButtonDisabled: false });
     this.state.projekt.anzahlTeilnehmer = this.state.projekt.anzahlTeilnehmer + 1;
+    let ects = this.state.projektarten[this.props.projekt.art - 1].ects
+    this.props.ectsCountFunc(ects)
     ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
   }
 
@@ -81,6 +83,8 @@ class ProjektListeEintrag extends Component {
     this.setState({ teilnahmeButtonDisabled: false });
     this.setState({ teilnahmeAbwaehlenButtonDisabled: true });
     this.state.projekt.anzahlTeilnehmer = this.state.projekt.anzahlTeilnehmer - 1;
+    let ects = -this.state.projektarten[this.props.projekt.art - 1].ects
+    this.props.ectsCountFunc(ects)
     ElectivAPI.getAPI().deleteTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
     this.setState({ teilnahmeChanged: true })
   }
@@ -89,13 +93,21 @@ class ProjektListeEintrag extends Component {
     ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
       this.setState({
         projektarten: projektartBOs
-      })).catch(e =>
+      })).then(()=>this.getInfos())
+      .catch(e =>
         this.setState({
           //projektarten: []
         }));
   }
 
-
+  getInfos = () => {
+    if (this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
+      if(this.state.projektarten.length > 0 && this.props.projekt){
+        let ects = this.state.projektarten[this.props.projekt.art - 1].ects
+        this.props.ectsCountFunc(ects)
+      }
+    }
+  }
 
   componentDidMount() {
     this.getProjektart();
@@ -114,7 +126,7 @@ class ProjektListeEintrag extends Component {
   //small comment
   /** Renders the component */
   render() {
-    const { classes, expandedState, currentStudent } = this.props;
+    const { classes, expandedState, currentStudent,  } = this.props;
     // Use the states projekt
     const { projekt, projektarten } = this.state;
 
