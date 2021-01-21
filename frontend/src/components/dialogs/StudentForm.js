@@ -62,6 +62,10 @@ class StudentForm extends Component {
         if (value.trim().length === 0) {
             error = true;
         }
+        this.setStateValueChange(event, error);
+    }
+
+    setStateValueChange(event, error) {
         this.setState({
             [event.target.id]: event.target.value,
             [event.target.id + 'ValidationFailed']: error,
@@ -80,12 +84,7 @@ class StudentForm extends Component {
         if (re.test(event.target.value) === false) {
             error = true;
         }
-
-        this.setState({
-            [event.target.id]: event.target.value,
-            [event.target.id + 'ValidationFailed']: error,
-            [event.target.id + 'Edited']: true
-        });
+        this.setStateValueChange(event, error);
     }
 
     getInfos = () => {
@@ -111,14 +110,9 @@ class StudentForm extends Component {
         const {
             name,
             nameValidationFailed,
-
-
             mat_nr,
             mat_nrValidationFailed,
-
-
             addingInProgress,
-
             updatingInProgress,
             updatingError,
         } = this.state;

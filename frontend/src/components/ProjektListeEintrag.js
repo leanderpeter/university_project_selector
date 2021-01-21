@@ -181,7 +181,7 @@ class ProjektListeEintrag extends Component {
                             <b>Raum: </b>{projekt.getraum()}<br/>
                             <b>Maximale Teilnehmer: </b>{projekt.getmax_teilnehmer()}<br/>
                             <b>Externer Partner: </b>{projekt.getexterner_partner()}<br/>
-                            <b>Wöchentlich: </b>{projekt.getwoechentlich() == "1" ? "Ja" : "Nein"}<br/>
+                            <b>Wöchentlich: </b>{projekt.getwoechentlich() === "1" ? "Ja" : "Nein"}<br/>
                             <b>Blocktage vor Prüfungsphase: </b>{projekt.getanzahl_block_vor()}<br/>
                             <b>Blocktage während Prüfungsphase: </b>{projekt.getanzahl_block_in()}<br/>
                             <b>Sprache: </b>{projekt.getsprache()}<br/>

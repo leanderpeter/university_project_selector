@@ -63,8 +63,7 @@ class UserListe extends Component {
         const value = event.target.value.toLowerCase();
         this.setState({
             filteredUser: this.state.user.filter(user => {
-                let nameContainsValue = user.getname().toLowerCase().includes(value);
-                return nameContainsValue;
+                return user.getname().toLowerCase().includes(value);
             }),
             userFilter: value
         });

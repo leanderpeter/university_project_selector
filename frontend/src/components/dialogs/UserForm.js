@@ -19,14 +19,11 @@ class UserForm extends Component {
             name: '',
             nameValidationFailed: false,
             nameEdited: false,
-
             email: null,
             emailValidationFailed: false,
             emailEdited: false,
-
             addingError: null,
             addingInProgress: false,
-
             updatingError: null,
             updatingInProgress: false
         };
@@ -38,7 +35,6 @@ class UserForm extends Component {
         user.name = this.state.name
         user.email = this.state.email
         ElectivAPI.getAPI().updateUser(user.id, this.state.name, this.state.email).then(user => {
-
             this.setState(this.baseState);
             this.props.onClose(user); //Aufrufen parent in backend
         }).catch(e =>
@@ -62,25 +58,6 @@ class UserForm extends Component {
         if (value.trim().length === 0) {
             error = true;
         }
-        this.setState({
-            [event.target.id]: event.target.value,
-            [event.target.id + 'ValidationFailed']: error,
-            [event.target.id + 'Edited']: true
-        });
-    }
-
-    numberValueChange = (event) => {
-        const value = event.target.value;
-        const re = /^[0-9]{1,10}$/;
-
-        let error = false;
-        if (value.trim().length === 0) {
-            error = true;
-        }
-        if (re.test(event.target.value) === false) {
-            error = true;
-        }
-
         this.setState({
             [event.target.id]: event.target.value,
             [event.target.id + 'ValidationFailed']: error,
@@ -141,8 +118,8 @@ class UserForm extends Component {
                                        onChange={this.textFieldValueChange} error={nameValidationFailed}/>
 
                             <TextField className={classes.textfield} type='text' required fullWidth margin='small'
-                                       id='eMail' label='eMail' variant="outlined" value={email}
-                                       onChange={this.numberValueChange} error={emailValidationFailed}/>
+                                       id='email' label='email' variant="outlined" value={email}
+                                       onChange={this.textFieldValueChange} error={emailValidationFailed}/>
                         </form>
                         <LoadingProgress show={addingInProgress || updatingInProgress}/>
                         {

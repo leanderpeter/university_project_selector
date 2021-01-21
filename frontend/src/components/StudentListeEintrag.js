@@ -64,7 +64,7 @@ class StudentListeEintrag extends Component {
                             <Typography>{user.name}</Typography>
                         </Grid>
                         <Grid item>
-                            <Typography>- {user.mat_nr}</Typography>
+                            <Typography>{user.mat_nr}</Typography>
                         </Grid>
                         <Grid item xs/>
                         <Grid item>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {withStyles, Button, Grid, Typography, FormControl, InputLabel} from '@material-ui/core';
+import {withStyles, Button, Grid, FormControl, InputLabel} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
 import {withRouter} from 'react-router-dom';
@@ -165,8 +165,8 @@ class ProjektDozentListe extends Component {
     filterFieldValueChange = event => {
 
 
-        var filteredProjekte = []
-        for (var i = 0; i < this.state.projekte.length; i++) {
+        const filteredProjekte = [];
+        for (let i = 0; i < this.state.projekte.length; i++) {
             if (this.state.projekte[i].aktueller_zustand === event.target.value) {
                 filteredProjekte.push(this.state.projekte[i]);
             }
