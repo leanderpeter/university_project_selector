@@ -342,23 +342,6 @@ class StudentIDOperationen(Resource):
         pass
 
 
-@electivApp.route('/student/<int:id>')
-@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class StudentOperationen(Resource):
-    @electivApp.marshal_list_with(student)
-    @secured
-
-    def get(self, id):
-        adm = ProjektAdministration()
-        student = adm.get_student_by_id(id)
-        return student
-
-    def delete(self, student_id):
-        pass
-
-    def put(self, student_id):
-        pass
-
 
 @electivApp.route('/teilnahme')
 @electivApp.response(500, 'Something went wrong')
