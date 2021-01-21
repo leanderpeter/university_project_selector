@@ -206,10 +206,15 @@ class MeineProjekteEintrag extends Component {
 
     // bei Änderung des Modul-Dropdown-Menüs wird das ausgewähte Modul im Backend als Anrechnung der Teilnahme in die Datenbank eingefügt 
     handleChange = async (edv) => {
-      this.props.teilnahme.setAnrechnung(edv.target.value);
-      // console.log(`Option selected:`, edv.target.value);
-      await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme);
-      this.props.getTeilnahmen();
+      if (this.state.note === null){
+        this.props.teilnahme.setAnrechnung(edv.target.value);
+        // console.log(`Option selected:`, edv.target.value);
+        await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme);
+        this.props.getTeilnahmen();
+      }else{
+
+      }
+      
     };
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
@@ -242,7 +247,7 @@ class MeineProjekteEintrag extends Component {
                   <StyledTableCell align="center"></StyledTableCell> 
                   }
                   <StyledTableCell align="right" className={classes.breite}>               
-                                  { module && note ?
+                                  { module ?
                                     <FormControl className={classes.formControl}>
                                       <InputLabel>Modul</InputLabel> 
                                         <Select value = {teilnahme.anrechnung} onChange={this.handleChange}>
@@ -257,7 +262,7 @@ class MeineProjekteEintrag extends Component {
                                     <FormControl className={classes.formControl}>
                                       <InputLabel>Modul</InputLabel>
                                         <Select value="">
-                                          <MenuItem value=""><em>Noch nicht benotet</em></MenuItem>
+                                          <MenuItem value=""><em></em></MenuItem>
                                         </Select>
                                     </FormControl>
                                   }

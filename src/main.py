@@ -86,7 +86,7 @@ teilnahme = api.inherit('Teilnahme', bo, {
     'teilnehmer': fields.Integer(attribute='_teilnehmer', description='Die ID des Studenten der Teilnahme'),
     'lehrangebot': fields.Integer(attribute='_lehrangebot', description='Die ID des Projekts der Teilnahme'),
     'anrechnung': NullableInteger(attribute='_anrechnung', description='Das Modul auf das die Teilnahme angerechnet wurde'),
-    'resultat': fields.Integer(attribute='_resultat', description='Die ID der Note einer Teilnahme')
+    'resultat': NullableInteger(attribute='_resultat', description='Die ID der Note einer Teilnahme')
 })
 
 projektart = api.inherit('Projektart', nbo, {
