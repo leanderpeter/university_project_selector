@@ -2,14 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
 import { withStyles } from '@material-ui/core/styles';
-
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 
@@ -237,8 +231,8 @@ class SemesterberichtEintrag extends Component {
         return(
           <>
                 <StyledTableRow key={projektID}>
-                  <StyledTableCell align="left">{projektName}</StyledTableCell>
-                  <StyledTableCell align="center">{dozentName}</StyledTableCell> 
+                  <StyledTableCell align="left" className={classes.projekt}>{projektName}</StyledTableCell>
+                  <StyledTableCell align="center" className={classes.dozent}>{dozentName}</StyledTableCell> 
                   <StyledTableCell align="center">{ECTS}</StyledTableCell>
                   { projektZustand === 'Bewertung abgeschlossen' ?
                   <StyledTableCell align="center">{note}</StyledTableCell>
@@ -261,29 +255,18 @@ class SemesterberichtEintrag extends Component {
 const styles = theme => ({
     root: {
         width: '100%',
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-        padding: theme.spacing(1),
     },
-    content: {
-        margin: theme.spacing(1),
-      },
     table: {
         minWidth: 700,
       },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 200,
-        textAlign: "left"
-    },
-    button: {
-        margin: theme.spacing(1),
-        },
     laden: {
       padding: 0
     },
-    breite: {
-      width: 220
+    projekt:{
+      width: 300
+    },
+    dozent:{
+      width: 250
     }
     });
 

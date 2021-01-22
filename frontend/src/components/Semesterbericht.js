@@ -15,14 +15,14 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import SemesterberichtEintrag from './SemesterberichtEintrag';
-import { ModulBO } from '../api';
 
 /**
- * Es werden alle Projekte des aktuell eingeloggten Studenten angezeigt
+ * Es werden alle Projekte des aktuell eingeloggten Studenten nach dem ausgewählten Semester angezeigt
  * 
- * @see See [MeineProjekteEintrag](#meineprojekteeintrag)
+ * @see See [SemesterberichtEintrag](#semesterberichteintrag)
  * 
- * Hierfür werden alle Teilnahmen des aktuell eingeloggten Student geladen und in die Componente MeineProjekteEintrag gemappt
+ * Hierfür werden alle Teilnahmen des aktuell eingeloggten Student eines bestimmten Semesters geladen 
+ * und in die Componente MeineProjekteEintrag gemappt
  * 
  */
 
@@ -69,7 +69,7 @@ class Semesterbericht extends Component {
 
     // API Anbindung um Teilnahmen des Students vom Backend zu bekommen 
     getTeilnahmen = () => {
-            ElectivAPI.getAPI().getTeilnahmen(this.props.currentStudent.id)
+            ElectivAPI.getAPI().getTeilnahmenBySemester(this.props.currentStudent.id, this.state.semesterwahl)
             .then(teilnahmeBOs =>
                 this.setState({
                     teilnahmen: teilnahmeBOs,
@@ -109,6 +109,16 @@ class Semesterbericht extends Component {
         });
     }
 
+  //bei Änderung des Semester Dropdown Menüs wird das ausgewählte Semester im State als semesterwahl gesetzt
+  semesterChange = (semester) => {
+    this.setState({
+      semesterwahl: semester.target.value,
+    })
+    setTimeout(() => {
+    //console.log('Ausgewählte Semester ID:',this.state.semesterwahl)   
+    this.getTeilnahmen();
+    }, 0);
+  };
 
     // Funktion, die einen Print-Befehl ausführt
     printSemesterbericht= () => {
@@ -131,16 +141,12 @@ class Semesterbericht extends Component {
         
         return(
             <div className={classes.root}>
-                <Grid container spacing={2}>
+                <Grid container className={classes.header} justify="center" alignItems="center" spacing={2}>
                     <Grid item>
-                        <Typography className={classes.header}>Projekte von {currentStudentName}, Matrikelnummer: {currentStudentmat_nr}</Typography>
-                    </Grid>
-                    <Grid item xs/>
-                    <Grid item xs={2}>
                     { semester ?
                         <FormControl className={classes.formControl}>
                         <InputLabel>Semester</InputLabel> 
-                            <Select value = {semesterwahl} onChange={this.semesterChange}>
+                            <Select value={semesterwahl} onChange={this.semesterChange}>
                             {
                             semester.map(semester =>
                             <MenuItem value={semester.getID()}><em>{semester.getname()}</em></MenuItem>
@@ -157,7 +163,15 @@ class Semesterbericht extends Component {
                         </FormControl>
                     }
                     </Grid>
+                    <Grid item xs/>
+                    <Grid item>
+                        <Button variant="outlined" color="primary" disableRipple 
+                        style={{ backgroundColor: 'transparent', textTransform: 'None'}}
+                        >Name: {currentStudentName}<br/>Matrikelnummer: {currentStudentmat_nr}</Button>
+                    </Grid>
                 </Grid>
+                { semesterwahl ? 
+                <>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="customized table">
                         <TableHead>
@@ -190,7 +204,15 @@ class Semesterbericht extends Component {
                 </TableContainer>
                 <Button variant="contained" color="primary" size="medium" className={classes.button} startIcon={<SaveIcon />} onClick={this.printSemesterbericht}>
                 Semesterbericht
-                </Button>             
+                </Button> 
+                </>
+                :
+                <>
+                <Typography className={classes.warnung}> Bitte wählen Sie zunächst ein Semester aus</Typography>
+                <LoadingProgress show={loadingInProgress} />
+                <ContextErrorMessage error={error} contextErrorMsg={`Semester und Module konnten nicht geladen werden`} onReload={this.handleReload}/>
+                </>
+                }            
             </div>
         )
     }
@@ -201,18 +223,15 @@ const styles = theme => ({
     root: {
         width: '100%',
         marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-        padding: theme.spacing(1)
-      },
-      content: {
-        margin: theme.spacing(1),
+        marginBottom: theme.spacing(2)
       },
       table: {
         minWidth: 700,
       },
       header:{
-        marginBottom: theme.spacing(2),
-
+        marginBottom: theme.spacing(1),
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1)
       },
       button:{
           marginTop: theme.spacing(2),
@@ -221,7 +240,11 @@ const styles = theme => ({
       },
       formControl: {
           minWidth: 120,
-          marginBottom: theme.spacing(2)
+          marginBottom: theme.spacing(2),
+      },
+      warnung: {
+        color: theme.palette.secondary.main,
+        paddingLeft: theme.spacing(1)
       }
   });
 

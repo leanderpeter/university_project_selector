@@ -299,6 +299,11 @@ class ProjektAdministration(object):
         with TeilnahmeMapper() as mapper:
             return mapper.find_by_modul_und_semester(modul_id, semester_id)
 
+    def get_teilnahmen_by_semester(self, student_id, semester_id): 
+        """ Alle Teilnamen eines Studenten in einem bestimmten Semester auslesen"""
+        with TeilnahmeMapper() as mapper:
+            return mapper.find_by_semester(student_id, semester_id)
+
     def get_teilnahmen_by_projekt_id(self, id):
         """ Alle Teilnamen eines bestimmten Projekts auslesen"""
         with TeilnahmeMapper() as mapper:
