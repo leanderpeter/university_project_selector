@@ -11,10 +11,10 @@ class ProjektListeEintrag extends Component {
 
     constructor(props) {
         super(props);
-
+        console.log(props)
         this.state = {
             projekt: props.projekt,
-            projektarten: [],
+            projektarten: props.projektarten,
             showProjektForm: false,
             showProjektDeleteDialog: false,
             teilnahmeButtonDisabled: false,
@@ -64,16 +64,7 @@ expansionPanelStateChanged= () => {
     this.setState({ teilnahmeChanged: true })
   }
 
-  getProjektart = () => {
-    ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
-      this.setState({
-        projektarten: projektartBOs
-      })).then(()=>this.getInfos())
-      .catch(e =>
-        this.setState({
-          //projektarten: []
-        }));
-  }
+
 
   getInfos = () => {
     if (this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
@@ -85,7 +76,7 @@ expansionPanelStateChanged= () => {
   }
 
   componentDidMount() {
-    this.getProjektart();
+    //this.getProjektart();
   }
 
 
@@ -101,9 +92,13 @@ expansionPanelStateChanged= () => {
   //small comment
   /** Renders the component */
   render() {
+
+
+
     const { classes, expandedState, currentStudent} = this.props;
     // Use the states projekt
     const { projekt, projektarten } = this.state;
+
 
     if (this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
       this.state.teilnahmeButtonDisabled = true;
