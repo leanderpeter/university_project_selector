@@ -22,6 +22,8 @@ from SecurityDecorator import secured
 
 
 class NullableInteger(fields.Integer):
+    """Diese Klasse ermöglicht die Umsetzung eines Integers, welcher auch den Wert null bzw. None haben kann 
+    """
     __schema_type__ = ['integer', 'null']
     __schema_example__ = 'nullable integer'
 
@@ -241,7 +243,7 @@ class StudentListeByProjektOperationen(Resource):
 
 @electivApp.route('/person/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class PersonOperationen(Resource):
+class PersonByIDOperationen(Resource):
     @electivApp.marshal_list_with(person)
     @secured
 
