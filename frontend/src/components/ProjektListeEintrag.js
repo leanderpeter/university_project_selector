@@ -148,7 +148,7 @@ expansionPanelStateChanged= () => {
                                                     <Button className={classes.teilnahmeButton} variant='contained'
                                                             color='primary' size="small" startIcon={<AddIcon/>}
                                                             onClick={this.teilnahmeButtonClicked}
-                                                            disabled={this.state.teilnahmeButtonDisabled}>
+                                                            disabled={this.state.teilnahmeButtonDisabled || this.state.projekt.anzahlTeilnehmer >= this.state.projekt.max_teilnehmer}>
                                                         wählen
                                                     </Button>
                                             }
