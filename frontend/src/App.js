@@ -11,6 +11,7 @@ import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import MeineProjekte from './components/MeineProjekte';
+import Semesterbericht from './components/Semesterbericht';
 import ProjektBearbeiten from './components/ProjektBearbeiten';
 import Notenliste from './components/Notenliste';
 import LoadingProgress from './components/dialogs/LoadingProgress';
@@ -202,7 +203,11 @@ class App extends React.Component {
                   </Route>
                   
                   <Route path='/meineprojekte' component={MeineProjekte}>
-                    <MeineProjekte currentStudent={currentStudent} currentPerson= {currentPerson}/>
+                    <MeineProjekte currentStudent={currentStudent} />
+                  </Route>
+
+                  <Route path='/semesterbericht' component={Semesterbericht}>
+                    <Semesterbericht currentStudent={currentStudent}/>
                   </Route>
                   
                   <Route path='/notenliste' component={Notenliste}>

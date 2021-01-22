@@ -47,9 +47,10 @@ class Header extends Component {
                 <>
                 <Paper variant='outlined'>
                 <Tabs indicatorColor='secondary' textColor='secondary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}>
-                <Tab label='Projektwahl' component={RouterLink} to={`/projekte`} />
-                <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'}/>
-                <Tab label='About' component={RouterLink} to={`/about`} />
+                  <Tab label='Projektwahl' component={RouterLink} to={`/projekte`} />
+                  <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'}/>
+                  <Tab label="Semesterbericht" component={RouterLink} to={'/semesterbericht'}/>
+                  <Tab label='About' component={RouterLink} to={`/about`} />
                 </Tabs>
                 </Paper>
                 </>

@@ -115,7 +115,7 @@ class ProjektListe extends Component {
             />
           </Grid>
           <Grid item xs />
-          { currentStudent ? 
+          { currentStudent ?  
           <Grid item className={classes.ectsCount}>
               <Button variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent',}}>Anzahl ECTS: {ectsCount}</Button>
           </Grid>

@@ -14,7 +14,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-import MeineProjekteEintrag from './MeineProjekteEintrag';
+import SemesterberichtEintrag from './SemesterberichtEintrag';
 
 /**
  * Es werden alle Projekte des aktuell eingeloggten Studenten angezeigt
@@ -48,7 +48,7 @@ const StyledTableRow = withStyles((theme) => ({
   }))(TableRow);
 
 
-class MeineProjekte extends Component {
+class Semesterbericht extends Component {
 
     constructor(props){
         super(props);
@@ -125,7 +125,7 @@ class MeineProjekte extends Component {
                                 <>
                                 {
                                     teilnahmen.map(teilnahme => 
-                                        <MeineProjekteEintrag key={teilnahme.getID()} teilnahme = {teilnahme} 
+                                        <SemesterberichtEintrag key={teilnahme.getID()} teilnahme = {teilnahme} 
                                         getTeilnahmen = {this.getTeilnahmen}
                                         show={this.props.show}
                                     />) 
@@ -173,7 +173,7 @@ const styles = theme => ({
   });
 
 /** PropTypes */
-MeineProjekte.propTypes = {
+Semesterbericht.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** @ignore */
@@ -183,7 +183,7 @@ MeineProjekte.propTypes = {
 
 
 
-export default withRouter(withStyles(styles)(MeineProjekte));
+export default withRouter(withStyles(styles)(Semesterbericht));
 
 
 
