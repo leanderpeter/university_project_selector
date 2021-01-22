@@ -401,10 +401,22 @@ class Teilnahme2Operationen(Resource):
 class TeilnahmenByModulundSemesterOperationen(Resource):
     @electivApp.marshal_list_with(teilnahme)
 
+    @secured
     def get(self, modul_id, semester_id):
         adm = ProjektAdministration()
         teilnahmen = adm.get_teilnahmen_by_modul_und_semester(modul_id, semester_id)
         return teilnahmen
+
+@electivApp.route('/semesterofstudent/<int:id>')
+@electivApp.response(500, 'Something went wrong')
+class SemesterOfStudentOperationen(Resource):
+    @electivApp.marshal_list_with(semester)
+
+    @secured
+    def get(self, id):
+        adm = ProjektAdministration()
+        semester = adm.get_semester_of_student(id)
+        return semester
 
 @electivApp.route('/bewertung/<int:id>')
 @electivApp.response(500, 'Something went wrong')

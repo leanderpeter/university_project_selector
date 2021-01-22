@@ -232,41 +232,19 @@ class SemesterberichtEintrag extends Component {
     /** Renders the component */
     render(){
         const {classes, teilnahme} = this.props;
-        const { projektZustand, projektID, projektName, ECTS, semester, module, dozentName, note, loadingInProgress, error } = this.state;
+        const { projektZustand, projektID, projektName, ECTS, semester, dozentName, note, loadingInProgress, error } = this.state;
 
         return(
           <>
                 <StyledTableRow key={projektID}>
                   <StyledTableCell align="left">{projektName}</StyledTableCell>
-                  <StyledTableCell align="center">{ECTS}</StyledTableCell>
-                  <StyledTableCell align="center">{semester}</StyledTableCell>
                   <StyledTableCell align="center">{dozentName}</StyledTableCell> 
+                  <StyledTableCell align="center">{ECTS}</StyledTableCell>
                   { projektZustand === 'Bewertung abgeschlossen' ?
                   <StyledTableCell align="center">{note}</StyledTableCell>
                   :
                   <StyledTableCell align="center"></StyledTableCell> 
                   }
-                  <StyledTableCell align="right" className={classes.breite}>               
-                                  { module ?
-                                    <FormControl className={classes.formControl}>
-                                      <InputLabel>Modul</InputLabel> 
-                                        <Select value = {teilnahme.anrechnung} onChange={this.handleChange}>
-                                          {
-                                          module.map(modul =>
-                                          <MenuItem value={modul.getID()}><em>{modul.getname()}</em></MenuItem>
-                                          )
-                                          }
-                                        </Select>                                                                
-                                    </FormControl>                                  
-                                    :
-                                    <FormControl className={classes.formControl}>
-                                      <InputLabel>Modul</InputLabel>
-                                        <Select value="">
-                                          <MenuItem value=""><em></em></MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                  }
-                  </StyledTableCell>
                   </StyledTableRow>
                   <StyledTableRow> 
                     <StyledTableCell colspan="10" className={classes.laden}>

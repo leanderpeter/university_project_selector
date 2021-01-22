@@ -54,6 +54,31 @@ class SemesterMapper(Mapper):
         cursor.close()
         return result
 
+    def find_semester_of_student(self, id):
+        """finde alle Semester eines Studenten, in welcher er eine Teilnahme hat in der Datenbank"""
+        result = []
+
+        cursor = self._connection.cursor()
+
+        command = "SELECT semester.id, semester.name FROM teilnahmen INNER JOIN projekte on teilnahmen.lehrangebot = projekte.id \
+                    INNER JOIN semester on projekte.halbjahr = semester.id WHERE teilnahmen.teilnehmer ='{}'".format(id)
+
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        filtered_tuples = list(set(tuples)) #entfernt doppelte Semester
+
+        for (id, name) in filtered_tuples:
+            semester = Semester()
+            semester.set_id(id)
+            semester.set_name(name)
+            result.append(semester)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
 
     def insert(self, semester):
         '''

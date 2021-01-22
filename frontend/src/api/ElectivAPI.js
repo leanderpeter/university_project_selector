@@ -126,6 +126,9 @@ export default class ElectivAPI {
 	//Delete Semester
 	#deleteSemesterURL = (id) => `${this.#ElectivServerBaseURL}/semester?id=${id}`;
 
+	//Alle Semester eines Studenten bekommen
+	#getSemesterOfStudentURL = (id) => `${this.#ElectivServerBaseURL}/semesterofstudent/${id}`
+
 	//Studenten eines Projekts bekommen
 	#getStudentenByProjektIdURL = (id) => `${this.#ElectivServerBaseURL}/student/projekt/${id}`
 	
@@ -655,6 +658,17 @@ export default class ElectivAPI {
 	//Semester löschen
 	deleteSemester(id){
 		return this.#fetchAdvanced(this.#deleteSemesterURL(id),{method: 'DELETE'})
+	}
+
+	//Alle Semester eines Studenten bekommen, in der er eine Teilnahme hat
+	getSemesterOfStudent(id){
+		return this.#fetchAdvanced(this.#getSemesterOfStudentURL(id)).then((responseJSON) => {
+			let semesterBOs = SemesterBO.fromJSON(responseJSON);
+			console.info(semesterBOs)
+			return new Promise(function (resolve){
+				resolve(semesterBOs)
+			})
+		})
 	}
 
 	//gibt alle Studenten als BO zurück

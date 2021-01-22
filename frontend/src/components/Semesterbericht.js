@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles, Button, Typography } from '@material-ui/core';
+import { withStyles, Button, Typography, Grid, MenuItem, FormControl, InputLabel, Select } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -15,6 +15,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import SemesterberichtEintrag from './SemesterberichtEintrag';
+import { ModulBO } from '../api';
 
 /**
  * Es werden alle Projekte des aktuell eingeloggten Studenten angezeigt
@@ -56,6 +57,8 @@ class Semesterbericht extends Component {
         // initiiere einen leeren state
         this.state = {
             teilnahmen : [],
+            semester: [],
+            semesterwahl: null,
             currentStudentName: null,
             currentStudentmat_nr: null,
             error: null,
@@ -85,6 +88,28 @@ class Semesterbericht extends Component {
             });
     }
 
+    // API Anbindung um alle Semester vom Backend zu bekommen 
+    getSemesterOfStudent = () => {
+        ElectivAPI.getAPI().getSemesterOfStudent(this.props.currentStudent.id)
+        .then(semesterBOs =>
+            this.setState({
+                semester: semesterBOs,
+                error: null,
+                loadingInProgress: false,
+            })).catch(e =>
+                this.setState({
+                    semester: [],
+                    error: e,
+                    loadingInProgress: false,
+                }));
+        this.setState({
+            error: null,
+            loadingInProgress: true,
+            loadingTeilnahmeError: null
+        });
+    }
+
+
     // Funktion, die einen Print-Befehl ausführt
     printSemesterbericht= () => {
       window.print()
@@ -92,7 +117,7 @@ class Semesterbericht extends Component {
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
-        this.getTeilnahmen();
+        this.getSemesterOfStudent();
         this.setState({
             currentStudentName: this.props.currentStudent.getname(),
             currentStudentmat_nr: this.props.currentStudent.getmat_nr(),
@@ -102,21 +127,45 @@ class Semesterbericht extends Component {
     render(){
 
         const { classes } = this.props;
-        const { teilnahmen, currentStudentName, currentStudentmat_nr, error, loadingInProgress} = this.state;
+        const {  semesterwahl, teilnahmen, semester, currentStudentName, currentStudentmat_nr, error, loadingInProgress} = this.state;
         
         return(
             <div className={classes.root}>
-                <Typography className={classes.header}>Projekte von {currentStudentName}, Matrikelnummer: {currentStudentmat_nr}</Typography>
+                <Grid container spacing={2}>
+                    <Grid item>
+                        <Typography className={classes.header}>Projekte von {currentStudentName}, Matrikelnummer: {currentStudentmat_nr}</Typography>
+                    </Grid>
+                    <Grid item xs/>
+                    <Grid item xs={2}>
+                    { semester ?
+                        <FormControl className={classes.formControl}>
+                        <InputLabel>Semester</InputLabel> 
+                            <Select value = {semesterwahl} onChange={this.semesterChange}>
+                            {
+                            semester.map(semester =>
+                            <MenuItem value={semester.getID()}><em>{semester.getname()}</em></MenuItem>
+                            )
+                            }
+                            </Select>                                                                
+                        </FormControl>                                  
+                        :
+                        <FormControl className={classes.formControl}>
+                        <InputLabel>Semester</InputLabel>
+                            <Select value="">
+                            <MenuItem value=""><em>Semester noch nicht geladen</em></MenuItem>
+                            </Select>
+                        </FormControl>
+                    }
+                    </Grid>
+                </Grid>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="customized table">
                         <TableHead>
                             <StyledTableRow>
-                                <StyledTableCell>Projekt</StyledTableCell>
-                                <StyledTableCell align="center">ECTS</StyledTableCell>
-                                <StyledTableCell align="center">Semester</StyledTableCell>
+                                <StyledTableCell>Projekt</StyledTableCell>                                
                                 <StyledTableCell align="center">Dozent</StyledTableCell>
+                                <StyledTableCell align="center">ECTS</StyledTableCell>
                                 <StyledTableCell align="center">Note</StyledTableCell>
-                                <StyledTableCell align="center">Modulzuweisung</StyledTableCell>
                             </StyledTableRow>
                         </TableHead>
                         <TableBody>
@@ -140,7 +189,7 @@ class Semesterbericht extends Component {
                     <ContextErrorMessage error={error} contextErrorMsg = {'Deine Projekte konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
                 </TableContainer>
                 <Button variant="contained" color="primary" size="medium" className={classes.button} startIcon={<SaveIcon />} onClick={this.printSemesterbericht}>
-                Notenspiegel
+                Semesterbericht
                 </Button>             
             </div>
         )
@@ -169,6 +218,10 @@ const styles = theme => ({
           marginTop: theme.spacing(2),
           marginBottom: theme.spacing(3),
           float: 'right'
+      },
+      formControl: {
+          minWidth: 120,
+          marginBottom: theme.spacing(2)
       }
   });
 

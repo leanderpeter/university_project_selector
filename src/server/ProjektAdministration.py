@@ -230,6 +230,11 @@ class ProjektAdministration(object):
         """Semester löschen"""
         with SemesterMapper() as mapper:
             return mapper.delete(id)
+    
+    def get_semester_of_student(self, id):
+        """Alle Semester eines Studenten auslesen, in der er eine Teilnahme hat"""
+        with SemesterMapper() as mapper:
+            return mapper.find_semester_of_student(id)
 
     def get_alle_module(self):
         """Alle Module auslesen"""
