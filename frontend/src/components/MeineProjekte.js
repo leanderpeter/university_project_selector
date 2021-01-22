@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles, Button, Typography } from '@material-ui/core';
+import { withStyles, Button, Typography, Grid } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -106,7 +106,14 @@ class MeineProjekte extends Component {
         
         return(
             <div className={classes.root}>
-                <Typography className={classes.header}>Projekte von {currentStudentName}, Matrikelnummer: {currentStudentmat_nr}</Typography>
+                 <Grid container className={classes.header} justify="flex-end" alignItems="center" spacing={2}>
+                    <Grid item xs/>
+                    <Grid item>
+                    <Button variant="outlined" color="primary" disableRipple 
+                    style={{ backgroundColor: 'transparent', textTransform: 'None'}}
+                    >Name: {currentStudentName}<br/>Matrikelnummer: {currentStudentmat_nr}</Button>
+                    </Grid>
+                </Grid>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="customized table">
                         <TableHead>
@@ -153,7 +160,6 @@ const styles = theme => ({
         width: '100%',
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
-        padding: theme.spacing(1)
       },
       content: {
         margin: theme.spacing(1),
@@ -162,8 +168,9 @@ const styles = theme => ({
         minWidth: 700,
       },
       header:{
-        marginBottom: theme.spacing(2),
-
+        marginBottom: theme.spacing(1),
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
       },
       button:{
           marginTop: theme.spacing(2),
