@@ -26,6 +26,7 @@ class ProjektListe extends Component {
         //gebe einen leeren status
         this.state = {
           projekte: [],
+          projektarten: [],
           filteredProjekte: [],
           projektFilter: '',
           error: null,
@@ -41,6 +42,28 @@ class ProjektListe extends Component {
         ectsCount: this.state.ectsCount + ects
       })
     }
+    
+    getProjektart = () => {
+      ElectivAPI.getAPI().getProjektart()
+      .then(projektartBOs =>
+          this.setState({
+              projektarten: projektartBOs,
+              error: null,
+              loadingInProgress: false,
+          })).catch(e =>
+              this.setState({
+                  projektarten: ['lel'],
+                  error: e,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+      });
+  }
+
+
+
     //hole alle Projekte vom Backend
     getProjekte = () => {
         ElectivAPI.getAPI().getProjekteByZustand("Genehmigt")
@@ -66,6 +89,7 @@ class ProjektListe extends Component {
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getProjekte();
+        this.getProjektart();
     }
 
     onExpandedStateChange = projekt => {
@@ -82,12 +106,15 @@ class ProjektListe extends Component {
         });
     }
 
+
+
   /** Renders the component */
   render() {
 
     const { classes, currentStudent } = this.props;
-    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, ectsCountFunc, ectsCount } = this.state;
+    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, ectsCountFunc, ectsCount, projektarten } = this.state;
 
+    console.log(this.state.projektarten)
 
     return (
       <div className={classes.root}>
@@ -124,17 +151,30 @@ class ProjektListe extends Component {
           </>
           }
         </Grid>
+        {projektarten.length > 0  && filteredProjekte.length > 0 ?
+                                <>
+                                {
+                                // Show the list of ProjektListeEintrag components
+                                // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters        
+                                filteredProjekte.map(projekt =>
+                                <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
+                                onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
+                                projektarten = {this.state.projektarten}
+                                />)
+                                }
+                                </>
+                                :
+                                <>
+                                    <b>Daten noch nicht geladen</b><br/>
+                                </>
+                            }
         {
-          // Show the list of ProjektListeEintrag components
-          // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters        
-          filteredProjekte.map(projekt =>
-            <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
-              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
-            />)
+
         }
+        
                 <LoadingProgress show={loadingInProgress}/>
                 <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`}
-                                     onReload={this.getProjekte}/>
+                                     onReload={this.getProjekte, this.getProjektart}/>
 
             </div>
         );
