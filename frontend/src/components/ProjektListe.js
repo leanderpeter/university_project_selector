@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography, Button } from '@material-ui/core';
+import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography, Button, FormControl,InputLabel,Select,MenuItem } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear'
 import {withRouter} from 'react-router-dom';
 import {ElectivAPI} from '../api';
@@ -29,6 +29,8 @@ class ProjektListe extends Component {
           filteredProjekte: [],
           projektFilter: '',
           error: null,
+          projektarten:[],
+          ausgewaehlteEcts: null,
           loadingInProgress: false,
           expandedProjektID: expandedID,
           showProjekteForm: false,
@@ -62,10 +64,30 @@ class ProjektListe extends Component {
             error: null
         });
     }
+    getProjektarten = () => {
+      ElectivAPI.getAPI().getProjektart()
+          .then(projekteartBos =>
+              this.setState({								//neuer status wenn fetch komplett
+                  projektarten: projekteartBos,
+                  loadingInProgress: false,				// deaktiviere ladeindikator
+                  error: null,
+              })).catch(e =>
+          this.setState({
+              projektarten: [],
+              loadingInProgress: false,
+              error: e
+          }));
+      // setze laden auf wahr
+      this.setState({
+          loadingInProgress: true,
+          error: null
+      });
+  }
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getProjekte();
+        this.getProjektarten();
     }
 
     onExpandedStateChange = projekt => {
@@ -81,12 +103,16 @@ class ProjektListe extends Component {
             expandedProjektID: newID,
         });
     }
-
+    onChange = e => {
+      this.setState({
+        ausgewaehlteEcts: e.target.value
+      })
+    }
   /** Renders the component */
   render() {
 
     const { classes, currentStudent } = this.props;
-    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, ectsCountFunc, ectsCount } = this.state;
+    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, ectsCountFunc, ectsCount,ausgewaehlteEcts,projektarten } = this.state;
 
 
     return (
@@ -114,6 +140,18 @@ class ProjektListe extends Component {
               }}
             />
           </Grid>
+          <Grid item xs={3}>
+          <FormControl className={classes.formControl}>
+            <InputLabel>ects</InputLabel>
+              <Select  className={classes.formControl} style={{ minWidth:"8rem"}}  value={ausgewaehlteEcts } onChange ={this.onChange} >
+                {
+                projektarten.map(projektart =>
+                <MenuItem value= {projektart}><em>{projektart.get_ects()}</em></MenuItem>
+                )
+                }
+              </Select>                                                              
+          </FormControl>
+          </Grid>
           <Grid item xs />
           <Grid item className={classes.ectsCount}>
               <Button variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent',}}>Anzahl ECTS: {ectsCount}</Button>
@@ -122,10 +160,11 @@ class ProjektListe extends Component {
         {
           // Show the list of ProjektListeEintrag components
           // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters        
-          filteredProjekte.map(projekt =>
-            <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
+          filteredProjekte.map(projekt => {
+            if ( ausgewaehlteEcts==null|| projekt.getArt()==ausgewaehlteEcts.getID()) {
+             return( <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
-            />)
+            />)}})
         }
                 <LoadingProgress show={loadingInProgress}/>
                 <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`}
