@@ -71,6 +71,7 @@ class ProjektPflegen extends Component {
         // Initiert den state
         this.state = {
             teilnahmen:[],
+            projektzustand: null,
             projekte:[],
             currentProjektBO : null,
             abgeschlosseneProjekte: [],
@@ -268,46 +269,77 @@ class ProjektPflegen extends Component {
     this.getTeilnahmenByProjektId(projektBO.getID())
   };
 
+  //bei Änderung der Select Komponente des Zeiptunktes wird der neue Zeitpunkt ausgewählt  
+  handleChangeProjektzustand =  projektzustand => (event) => {
+    this.setState({
+      projektzustand: event.target.value
+    })      
+  };
+
+
     /** Rendert die Komponente*/
     render(){
         const { classes } = this.props;
-        const { projekte, abgeschlosseneProjekte, currentProjekt,currentProjektBO, teilnahmen, semester, error, loadingInProgress, showAddStudent}  = this.state;
+        const { projektzustand,projekte, abgeschlosseneProjekte, currentProjekt,currentProjektBO, teilnahmen, semester, error, loadingInProgress, showAddStudent}  = this.state;
         
         return(
           <div className={classes.root}>          
             {/*erster sichtbarer Teil wenn noch kein Projekt ausgewählt wurde*/}
             <Grid className={classes.grid} container spacing={2} display="flex" margin="auto">
               <Grid item xs={12} sm={4} >
-                    <FormControl className={classes.formControl}>
-                      <InputLabel>aktuelle Projekte </InputLabel>
-                        <Select  className={classes.formControl} style={{ minWidth:"9rem"}}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
-                          {
-                            projekte.map(projekt =>
-                            <MenuItem value={projekt}><em>{projekt.getname()}</em></MenuItem>
-                            )
-                          }
-                        </Select>                                                              
-                    </FormControl>
+
+                <FormControl className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-label">Projektzustand</InputLabel>
+                  <Select value={projektzustand} onChange={this.handleChangeProjektzustand} style={{ minWidth:"17rem"}}>
+                    <MenuItem value={10}>Aktuell</MenuItem>
+                    <MenuItem value={20}>Archiviert</MenuItem>
+                  </Select>
+                </FormControl>
+                {projektzustand ?
+                        <>
+                        {/*wenn der aktuelle Zustand des Projektes aktuell ist*/}
+                        {projektzustand === 10?
+                          <>
+                          <FormControl className={classes.formControl}>
+                            <InputLabel>aktuelle Projekte </InputLabel>
+                              <Select  className={classes.formControl} style={{ minWidth:"9rem"}}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
+                                {
+                                  projekte.map(projekt =>
+                                  <MenuItem value={projekt}><em>{projekt.getname()}</em></MenuItem>
+                                  )
+                                }
+                              </Select>                                                              
+                          </FormControl>
+                          </>
+                          :
+                          <>
+                          <Grid item xs={12} sm={4} >
+                            {semester?
+                              <>   
+                                  <FormControl className={classes.formControl}>
+                                    <InputLabel>abgeschlossene Projekte</InputLabel>
+                                      <Select  className={classes.formControl} style={{ minWidth:"17rem"}}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
+                                        {
+                                        abgeschlosseneProjekte.map(projekt =>
+                                        <MenuItem value={projekt}><em>{projekt.getname()} ({semester[projekt.halbjahr - 1].name})</em></MenuItem>
+                                        )
+                                        }
+                                      </Select>                                                              
+                                  </FormControl>
+                              </>
+                              :
+                              <>
+                              </>
+                            }
+                            </Grid>
+                          </>
+                        }
+                  </>
+                  :
+                  <>
+                  </>
+                }
             </Grid>
-            <Grid item xs={12} sm={4} >
-              {semester?
-                <>   
-                    <FormControl className={classes.formControl}>
-                      <InputLabel>abgeschlossene Projekte</InputLabel>
-                        <Select  className={classes.formControl} style={{ minWidth:"17rem"}}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
-                          {
-                          abgeschlosseneProjekte.map(projekt =>
-                          <MenuItem value={projekt}><em>{projekt.getname()} ({semester[projekt.halbjahr - 1].name})</em></MenuItem>
-                          )
-                          }
-                        </Select>                                                              
-                    </FormControl>
-                </>
-                :
-                <>
-                </>
-              }
-              </Grid>
 
             {/*wenn ein Projekt ausgewählt wurde*/}
                   {currentProjektBO?
