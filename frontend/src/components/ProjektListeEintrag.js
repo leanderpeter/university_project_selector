@@ -20,7 +20,7 @@ class ProjektListeEintrag extends Component {
             teilnahmeButtonDisabled: false,
             teilnahmeAbwaehlenButtonDisabled: true,
             teilnahmeChanged: false,
-            pArten: null
+            ectsAdded: false
         };
     }
   
@@ -66,19 +66,47 @@ expansionPanelStateChanged= () => {
 
 
 
-  getInfos = () => {
-    if (this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
-      if(this.state.projektarten.length > 0 && this.props.projekt){
-        let ects = this.state.projektarten[this.props.projekt.art - 1].ects
-        this.props.ectsCountFunc(ects)
-      }
+  getInfosMount = () => {
+        if (this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
+            if(this.props.projektarten.length > 0 && this.props.projekt){
+                let ects = this.props.projektarten[this.props.projekt.art - 1].ects
+                this.props.ectsCountFunc(ects)
+                this.setState({ectsAdded: true})
+            }
+        }
+  }
+
+  getInfosUpdate = () => {
+    console.log('hallo', this.state.ectsAdded)
+    if (this.state.ectsAdded === false){
+        this.setState({ectsAdded: true})
+        
+        if (this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
+            if(this.props.projektarten.length > 0 && this.props.projekt){
+                let ects = this.props.projektarten[this.props.projekt.art - 1].ects
+                this.props.ectsCountFunc(ects)
+                
+            }
+        }
     }
   }
 
-  componentDidMount() {
-    //this.getProjektart();
+  componentDidMount(){
+      this.getInfosMount();
   }
 
+  componentWillUnmount(){
+      this.setState({
+          ectsAdded: false
+      })
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.ectsCount === 0 & prevProps.projektarten.length > 0) {
+        this.getInfosUpdate()
+    
+    }
+  }
 
   /**
      <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
