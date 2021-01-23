@@ -286,23 +286,24 @@ class ProjektPflegen extends Component {
           <div className={classes.root}>          
             {/*erster sichtbarer Teil wenn noch kein Projekt ausgewählt wurde*/}
             <Grid className={classes.grid} container spacing={2} display="flex" margin="auto">
+              
               <Grid item xs={12} sm={4} >
-
                 <FormControl className={classes.formControl}>
                   <InputLabel id="demo-simple-select-label">Projektzustand</InputLabel>
-                  <Select value={projektzustand} onChange={this.handleChangeProjektzustand} style={{ minWidth:"17rem"}}>
+                  <Select value={projektzustand} onChange={this.handleChangeProjektzustand} className={classes.select}>
                     <MenuItem value={10}>Aktuell</MenuItem>
                     <MenuItem value={20}>Archiviert</MenuItem>
                   </Select>
                 </FormControl>
+              </Grid>
                 {projektzustand ?
-                        <>
-                        {/*wenn der aktuelle Zustand des Projektes aktuell ist*/}
-                        {projektzustand === 10?
-                          <>
+                  <>{/*wenn der aktuelle Zustand des Projektes aktuell ist*/}
+                    {projektzustand === 10?
+                      <>
+                        <Grid item xs={12} sm={4} >
                           <FormControl className={classes.formControl}>
-                            <InputLabel>aktuelle Projekte </InputLabel>
-                              <Select  className={classes.formControl} style={{ minWidth:"9rem"}}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
+                            <InputLabel>Projekte </InputLabel>
+                              <Select  className={classes.formControl} className={classes.select}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
                                 {
                                   projekte.map(projekt =>
                                   <MenuItem value={projekt}><em>{projekt.getname()}</em></MenuItem>
@@ -310,67 +311,76 @@ class ProjektPflegen extends Component {
                                 }
                               </Select>                                                              
                           </FormControl>
-                          </>
-                          :
-                          <>
-                          <Grid item xs={12} sm={4} >
-                            {semester?
-                              <>   
-                                  <FormControl className={classes.formControl}>
-                                    <InputLabel>abgeschlossene Projekte</InputLabel>
-                                      <Select  className={classes.formControl} style={{ minWidth:"17rem"}}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
-                                        {
-                                        abgeschlosseneProjekte.map(projekt =>
-                                        <MenuItem value={projekt}><em>{projekt.getname()} ({semester[projekt.halbjahr - 1].name})</em></MenuItem>
-                                        )
-                                        }
-                                      </Select>                                                              
-                                  </FormControl>
-                              </>
-                              :
-                              <>
-                              </>
-                            }
-                            </Grid>
-                          </>
-                        }
+                        </Grid>
+                      </>
+                      :
+                      <>
+                        <Grid item xs={12} sm={4} >
+                          {semester?
+                            <>
+                              <FormControl className={classes.formControl}>
+                                  <InputLabel>Projekte</InputLabel>
+                                    <Select  className={classes.formControl} className={classes.select}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
+                                      {
+                                      abgeschlosseneProjekte.map(projekt =>
+                                      <MenuItem value={projekt}><em>{projekt.getname()} ({semester[projekt.halbjahr - 1].name})</em></MenuItem>
+                                      )
+                                      }
+                                    </Select>                                                              
+                              </FormControl>
+                            </>
+                            :
+                            <>
+                            </>
+                          }
+                        </Grid>
+                      </>
+                    }
                   </>
                   :
                   <>
                   </>
                 }
-            </Grid>
+            
 
             {/*wenn ein Projekt ausgewählt wurde*/}
-                  {currentProjektBO?
+            
+              {currentProjektBO?
                     <>
+                    
                     {teilnahmen ?
                         <>
                         {/*wenn der aktuelle Zustand des Projektes in Bewertung ist*/}
                         {currentProjektBO.aktueller_zustand === "in Bewertung"?
                         <>
-                        <Grid item xs/>
-                        <Grid item className={classes.grid} >
-                            <Tooltip title='Teilnehmer hinzufügen' placement="left">
-                              <Fab size="small" align="right" className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
-                                <AddIcon />
-                              </Fab> 
-                              </Tooltip>
+                        <Grid item xs={12} sm={4} align="right">
+                          <Grid item className={classes.grid} >
+                              <Tooltip title='Teilnehmer hinzufügen' placement="left">
+                                <Fab size="small" align="right" className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
+                                  <AddIcon />
+                                </Fab> 
+                                </Tooltip>
+                          </Grid>
                         </Grid>
                         </>
                           :
                         <>
                         {/*wenn der aktuelle Zustand des Projektes nicht in Bewertung ist, wird er nicht anklickbar angezeigt */}
-                          <Grid item xs/>
-                          <Grid item className={classes.grid} >
-                              <Tooltip title='Teilnehmer hinzufügen' placement="left">
-                                <Fab size="small" align="right" className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked} disabled>
-                                  <AddIcon />
-                                </Fab> 
-                                </Tooltip>
+                          <Grid item xs={12} sm={4} align="right">
+                            <Grid item className={classes.grid} >
+                                <Tooltip title='Teilnehmer hinzufügen' placement="left">
+                                  <Fab size="small" align="right" className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked} disabled>
+                                    <AddIcon />
+                                  </Fab> 
+                                  </Tooltip>
+                            </Grid>
                           </Grid>
                         </>
+                        
                       }
+                      
+                      
+            
 
                       {/*Tabellen Header Zeileninhalte*/}
                       <TableContainer component={Paper}>
@@ -425,8 +435,11 @@ class ProjektPflegen extends Component {
                     :
                     <>
                     </>
-                  }   
-                  </Grid>           
+                    
+                  } 
+                  </Grid>
+                    
+                             
           </div>
         )
     }
@@ -440,13 +453,17 @@ const styles = theme => ({
         marginBottom: theme.spacing(2),
         padding: theme.spacing(1)
       },
-      content: {
-        margin: theme.spacing(1),
-      },
-      addButton: {
-      },
-      grid:{
-      }
+    content: {
+      margin: theme.spacing(1),
+    },
+    addButton: {
+    },
+    grid:{
+    },
+    select:{
+      minWidth:"7rem",
+    }
+
   });
 
 /** PropTypes */
