@@ -6,8 +6,14 @@ import ProfileDropDown from '../dialogs/ProfileDropDown';
 import { withRouter } from 'react-router-dom';
 
 /**
-
-@author Leander Peter github.com/leander_peter
+ * 
+ * Zeigt den Header mit den verfügbaren Navigations Tabs.
+ * Je nach Rolle (Student, Dozent, Admin) sind andere Tabs zum auswählen verfügbar.
+ * 
+ * @see See Material-UIs [Tabs](https://material-ui.com/components/tabs/)
+ * @see See Material-UIs [Paper](https://material-ui.com/components/paper/)
+ * 
+ * @author Leander Peter github.com/leander_peter
 
 **/
 
@@ -27,7 +33,7 @@ class Header extends Component {
 			tabindex: newIndex
 		})
 	};
-	// Render component
+	// Rendert Komponente
 	render() {
     const { classes, user, currentStudent, currentPerson } = this.props;
 		return (

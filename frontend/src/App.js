@@ -6,6 +6,7 @@ import 'firebase/auth'; //Firebase module
 import Header from './components/layout/Header';
 import ProjektListe from './components/ProjektListe';
 import ProjektDozentListe from './components/ProjektDozentListe';
+  
 // import Electivs from '/components/Electivs';
 import About from './components/pages/About';
 import Theme from './Theme';
