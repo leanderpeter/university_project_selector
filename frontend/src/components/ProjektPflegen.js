@@ -71,7 +71,7 @@ class ProjektPflegen extends Component {
         // Initiert den state
         this.state = {
             teilnahmen:[],
-            projektzustand: null,
+            projektzustand: 10,
             projekte:[],
             currentProjektBO : null,
             abgeschlosseneProjekte: [],
@@ -270,7 +270,7 @@ class ProjektPflegen extends Component {
   };
 
   //bei Änderung der Select Komponente des Zeiptunktes wird der neue Zeitpunkt ausgewählt  
-  handleChangeProjektzustand =  projektzustand => (event) => {
+  handleChangeProjektzustand =  (event) => {
     this.setState({
       projektzustand: event.target.value
     })      
