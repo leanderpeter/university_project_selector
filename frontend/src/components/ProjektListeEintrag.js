@@ -81,7 +81,7 @@ expansionPanelStateChanged= () => {
     if (this.state.ectsAdded === false){
         this.setState({ectsAdded: true})
         
-        if (this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
+        if (this.props.currentStudent != null && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
             if(this.props.projektarten.length > 0 && this.props.projekt){
                 let ects = this.props.projektarten[this.props.projekt.art - 1].ects
                 this.props.ectsCountFunc(ects)
