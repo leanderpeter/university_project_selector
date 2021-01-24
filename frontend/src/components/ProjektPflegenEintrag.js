@@ -33,7 +33,6 @@ import ProjektPflegen from './ProjektPflegen';
  * Die Note kann trotzdem weiterhin nachbearbeitet werden.
  * 
  * 
- * @author [Pascal Gienger](https://github.com/PascalGienger)
  */
 
 //Css Style für die Tabellen Zellen
@@ -177,7 +176,7 @@ class ProjektPflegenEintrag extends Component {
         return(
               //Tabelleneinträge für die Tabelle in der ProjektBearbeiten.js File
               <StyledTableRow >
-                <StyledTableCell align="center" component="th" scope="row">{studentName}</StyledTableCell>
+                <StyledTableCell align="left" component="th" scope="row">{studentName}</StyledTableCell>
                 <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
                 <StyledTableCell align="center">
                 {note && bewertungen?

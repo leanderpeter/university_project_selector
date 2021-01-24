@@ -168,7 +168,7 @@ class ProjektListe extends Component {
                                 </>
                                 :
                                 <>
-                                    <b>Daten noch nicht geladen</b><br/>
+                                    <Typography>Daten noch nicht geladen</Typography>
                                 </>
                             }
         {

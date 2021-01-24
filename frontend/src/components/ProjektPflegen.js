@@ -40,7 +40,6 @@ import ProjektPflegenEintrag from './ProjektPflegenEintrag';
  * @see See component [ProjektPflegenEintrag](#projektpflegeneintrag)
  * @see See dialong   [AddStudent](#addstudent)
  * 
- * @author [Pascal Gienger](https://github.com/PascalGienger)
  */
 
 //Css Style für Tabellen Zellen
@@ -272,7 +271,10 @@ class ProjektPflegen extends Component {
   //bei Änderung der Select Komponente des Zeiptunktes wird der neue Zeitpunkt ausgewählt  
   handleChangeProjektzustand =  (event) => {
     this.setState({
-      projektzustand: event.target.value
+      projektzustand: event.target.value,
+      currentProjekt: null,
+      currentProjektBO: null,
+      teilnahmen: null,
     })      
   };
 
@@ -280,16 +282,16 @@ class ProjektPflegen extends Component {
     /** Rendert die Komponente*/
     render(){
         const { classes } = this.props;
-        const { projektzustand,projekte, abgeschlosseneProjekte, currentProjekt,currentProjektBO, teilnahmen, semester, error, loadingInProgress, showAddStudent}  = this.state;
+        const { projektzustand, projekte, abgeschlosseneProjekte, currentProjekt, currentProjektBO, teilnahmen, semester, error, loadingInProgress, showAddStudent}  = this.state;
         
         return(
           <div className={classes.root}>          
             {/*erster sichtbarer Teil wenn noch kein Projekt ausgewählt wurde*/}
-            <Grid className={classes.grid} container spacing={2} display="flex" margin="auto">
+            <Grid className={classes.grid} container spacing={1} display="flex" margin="auto">
               
-              <Grid item xs={12} sm={4} >
+              <Grid item sm={2} >
                 <FormControl className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-label">Projektzustand</InputLabel>
+                  <InputLabel id="demo-simple-select-label">Status</InputLabel>
                   <Select value={projektzustand} onChange={this.handleChangeProjektzustand} className={classes.select}>
                     <MenuItem value={10}>Aktuell</MenuItem>
                     <MenuItem value={20}>Archiviert</MenuItem>
@@ -300,10 +302,10 @@ class ProjektPflegen extends Component {
                   <>{/*wenn der aktuelle Zustand des Projektes aktuell ist*/}
                     {projektzustand === 10?
                       <>
-                        <Grid item xs={12} sm={4} >
+                        <Grid item sm={2} >
                           <FormControl className={classes.formControl}>
-                            <InputLabel>Projekte </InputLabel>
-                              <Select  className={classes.formControl} className={classes.select}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
+                            <InputLabel>Projekt </InputLabel>
+                              <Select  className={classes.formControl} className={classes.selectprojekt}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
                                 {
                                   projekte.map(projekt =>
                                   <MenuItem value={projekt}><em>{projekt.getname()}</em></MenuItem>
@@ -315,12 +317,12 @@ class ProjektPflegen extends Component {
                       </>
                       :
                       <>
-                        <Grid item xs={12} sm={4} >
+                        <Grid item sm={2} >
                           {semester?
                             <>
                               <FormControl className={classes.formControl}>
-                                  <InputLabel>Projekte</InputLabel>
-                                    <Select  className={classes.formControl} className={classes.select}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
+                                  <InputLabel>Projekt </InputLabel>
+                                    <Select  className={classes.formControl} className={classes.selectprojekt}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
                                       {
                                       abgeschlosseneProjekte.map(projekt =>
                                       <MenuItem value={projekt}><em>{projekt.getname()} ({semester[projekt.halbjahr - 1].name})</em></MenuItem>
@@ -341,11 +343,10 @@ class ProjektPflegen extends Component {
                   <>
                   </>
                 }
-            
 
             {/*wenn ein Projekt ausgewählt wurde*/}
             
-              {currentProjektBO?
+              {currentProjektBO ?
                     <>
                     
                     {teilnahmen ?
@@ -353,10 +354,10 @@ class ProjektPflegen extends Component {
                         {/*wenn der aktuelle Zustand des Projektes in Bewertung ist*/}
                         {currentProjektBO.aktueller_zustand === "in Bewertung"?
                         <>
-                        <Grid item xs={12} sm={4} align="right">
+                        <Grid item sm={8} align="right">
                           <Grid item className={classes.grid} >
                               <Tooltip title='Teilnehmer hinzufügen' placement="left">
-                                <Fab size="small" align="right" className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
+                                <Fab size="medium" align="right" className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
                                   <AddIcon />
                                 </Fab> 
                                 </Tooltip>
@@ -365,29 +366,17 @@ class ProjektPflegen extends Component {
                         </>
                           :
                         <>
-                        {/*wenn der aktuelle Zustand des Projektes nicht in Bewertung ist, wird er nicht anklickbar angezeigt */}
-                          <Grid item xs={12} sm={4} align="right">
-                            <Grid item className={classes.grid} >
-                                <Tooltip title='Teilnehmer hinzufügen' placement="left">
-                                  <Fab size="small" align="right" className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked} disabled>
-                                    <AddIcon />
-                                  </Fab> 
-                                  </Tooltip>
-                            </Grid>
-                          </Grid>
                         </>
                         
                       }
-                      
-                      
-            
-
+                      { teilnahmen.length > 0 ?
+                      <>
                       {/*Tabellen Header Zeileninhalte*/}
-                      <TableContainer component={Paper}>
-                        <Table className={classes.table} aria-label="customized table">
+                      <TableContainer className={classes.table} component={Paper}>
+                        <Table aria-label="customized table">
                           <TableHead>
                             <StyledTableRow>
-                              <StyledTableCell align="center">Student </StyledTableCell>
+                              <StyledTableCell align="left">Student </StyledTableCell>
                               <StyledTableCell align="center">Matrikelnr.</StyledTableCell>
                               <StyledTableCell align="center">Note</StyledTableCell>
                               <StyledTableCell align="center">Teilnahme</StyledTableCell>
@@ -403,20 +392,23 @@ class ProjektPflegen extends Component {
                             </TableBody> 
                         </Table>
                             <LoadingProgress show={loadingInProgress} />
-                            <ContextErrorMessage error={error} contextErrorMsg = {'Projekte Bearbeiten konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
-                            {/*AddStudent Komponente*/}
-                            <AddStudent show={showAddStudent} currentProjekt={currentProjekt} teilnahmen={teilnahmen} onClose={this.addStudentClosed}/>
+                            <ContextErrorMessage error={error} contextErrorMsg = {'Projekte bearbeiten konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
                       </TableContainer>
-                      
+                      </>
+                      : 
+                      <>
+                      <Typography className={classes.warnung}>Dieses Projekt hat keine Teilnahmen</Typography>
+                      </>
+                       }
 
                       {/*Bewertung abschließen Button wird nur angezeigt wenn das Projekt sich noch in dem Bewertungszustand befindet*/}
-                      {currentProjektBO ?
+                      {currentProjektBO && teilnahmen.length !== 0? 
                         <>
                           {currentProjektBO.aktueller_zustand === "in Bewertung"?
                             <>
                               <Grid item xs/>
                               <Grid item>
-                                <Button variant="contained" color="primary" onClick={this.bewertungAbgeschlossenButtonClicked}  >Bewertung abgeben</Button>
+                                <Button variant="contained" color="primary" className={classes.button} onClick={this.bewertungAbgeschlossenButtonClicked} >Bewertung abgeben</Button>
                               </Grid>
                             </>
                             :
@@ -434,12 +426,16 @@ class ProjektPflegen extends Component {
                     </>
                     :
                     <>
+                      <Typography className={classes.warnung}>Bitte wählen Sie ein Projekt aus</Typography>
+                      <LoadingProgress show={loadingInProgress} />
+                      <ContextErrorMessage error={error} contextErrorMsg={`Projekt konnte nicht geladen werden`} onReload={this.handleReload}/>
                     </>
                     
                   } 
-                  </Grid>
-                    
-                             
+                  
+            </Grid>
+            {/*AddStudent Komponente*/}
+            <AddStudent show={showAddStudent} currentProjekt={currentProjekt} teilnahmen={teilnahmen} onClose={this.addStudentClosed}/>   
           </div>
         )
     }
@@ -456,12 +452,22 @@ const styles = theme => ({
     content: {
       margin: theme.spacing(1),
     },
-    addButton: {
-    },
-    grid:{
+    warnung: {
+      color: theme.palette.secondary.main,
+      marginTop: theme.spacing(2),
+      width: '100%'
     },
     select:{
       minWidth:"7rem",
+    },
+    selectprojekt: {
+      minWidth: 220
+    },
+    table: {
+      marginTop: theme.spacing(2)
+    },
+    button: {
+      marginTop: theme.spacing(1)
     }
 
   });
