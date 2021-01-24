@@ -69,7 +69,7 @@ class Header extends Component {
                   <Paper variant='outlined'>
                   <Tabs indicatorColor='secondary' textColor='secondary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
                   <Tab label='Wahl' component={RouterLink} to={`/projekte`} />
-                  <Tab label='Projektpflege' component={RouterLink} to={`/projektbearbeiten`} />
+                  <Tab label='Projektpflege' component={RouterLink} to={`/projektpflegen`} />
                   <Tab label='Projektverwaltung' component={RouterLink} to={`/projekteDozent`} />
                   <Tab label='About' component={RouterLink} to={`/about`} />
                   </Tabs>
@@ -82,7 +82,7 @@ class Header extends Component {
                   <Paper variant='outlined'>
                   <Tabs indicatorColor='secondary' textColor='secondary' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
                   <Tab className={classes.tab} label='Wahl' component={RouterLink} to={`/projekte`} />
-                  <Tab className={classes.tab} label='Pflege' component={RouterLink} to={`/projektbearbeiten`} />
+                  <Tab className={classes.tab} label='Pflege' component={RouterLink} to={`/projektpflegen`} />
                   <Tab className={classes.tab} label='Verwaltung' component={RouterLink} to={`/projekteDozent`} />
                   <Tab className={classes.tab} label='Prüfung' component={RouterLink} to={`/projektverwaltung`} />
                   <Tab className={classes.tab} label="Notenliste" component={RouterLink} to={'/notenliste'}/>
