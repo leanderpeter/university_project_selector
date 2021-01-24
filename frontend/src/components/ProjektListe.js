@@ -38,9 +38,12 @@ class ProjektListe extends Component {
     }
 
     ectsCountFunc = (ects) => {
-      this.setState({
-        ectsCount: this.state.ectsCount + ects
-      })
+      setTimeout(() => { 
+        this.setState({
+          ectsCount: this.state.ectsCount + ects
+        })
+        }, 0);
+      
     }
     
     getProjektart = () => {
@@ -112,7 +115,7 @@ class ProjektListe extends Component {
   render() {
 
     const { classes, currentStudent } = this.props;
-    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, ectsCountFunc, ectsCount, projektarten } = this.state;
+    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, ectsCount, projektarten } = this.state;
 
     console.log(this.state.projektarten)
 
@@ -158,7 +161,7 @@ class ProjektListe extends Component {
                                 // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters        
                                 filteredProjekte.map(projekt =>
                                 <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
-                                onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
+                                onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCount={ectsCount} ectsCountFunc={this.ectsCountFunc}
                                 projektarten = {this.state.projektarten}
                                 />)
                                 }
