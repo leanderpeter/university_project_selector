@@ -169,35 +169,6 @@ class TeilnahmeMapper(Mapper):
 
         return result
 
-    def find_by_semester(self, student_id, semester_id):
-        """finde alle Teilnahmen eines Studenten in einem bestimmten Semester in der Datenbank"""
-        result = []
-
-        cursor = self._connection.cursor()
-
-        command = "SELECT teilnahmen.id, teilnahmen.lehrangebot, teilnahmen.teilnehmer, teilnahmen.anrechnung, teilnahmen.resultat \
-                    FROM teilnahmen INNER JOIN projekte on teilnahmen.lehrangebot = projekte.id \
-                    WHERE teilnahmen.teilnehmer =%s AND projekte.halbjahr =%s" 
-        
-        data = (student_id, semester_id)
-
-        cursor.execute(command, data)
-        tuples = cursor.fetchall()
-
-        for (id, lehrangebot, teilnehmer, anrechnung, resultat) in tuples:
-            teilnahme = Teilnahme()
-            teilnahme.set_id(id)
-            teilnahme.set_lehrangebot(lehrangebot)
-            teilnahme.set_teilnehmer(teilnehmer)
-            teilnahme.set_anrechnung(anrechnung)
-            teilnahme.set_resultat(resultat)
-            result.append(teilnahme)
-
-        self._connection.commit()
-        cursor.close()
-
-        return result
-
 '''Nur zum testen'''
 
 if (__name__ == "__main__"):

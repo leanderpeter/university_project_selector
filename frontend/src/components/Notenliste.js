@@ -232,8 +232,8 @@ class Notenliste extends Component {
                       <TableHead>
                           <StyledTableRow>
                               <StyledTableCell align="left">Student</StyledTableCell>
-                              <StyledTableCell align="center">Matrikelnummer</StyledTableCell>
-                              <StyledTableCell align="center">Dozent</StyledTableCell>
+                              <StyledTableCell align="left">Matrikelnummer</StyledTableCell>
+                              <StyledTableCell align="left">Dozent</StyledTableCell>
                               <StyledTableCell align="center">Note</StyledTableCell>
                           </StyledTableRow>
                       </TableHead>

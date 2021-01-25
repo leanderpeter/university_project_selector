@@ -11,16 +11,16 @@ class ProjektListeEintrag extends Component {
 
     constructor(props) {
         super(props);
-        console.log(props)
+
         this.state = {
             projekt: props.projekt,
-            projektarten: props.projektarten,
+            projektarten: [],
             showProjektForm: false,
             showProjektDeleteDialog: false,
             teilnahmeButtonDisabled: false,
             teilnahmeAbwaehlenButtonDisabled: true,
             teilnahmeChanged: false,
-            ectsAdded: false
+            pArten: null
         };
     }
   
@@ -64,49 +64,30 @@ expansionPanelStateChanged= () => {
     this.setState({ teilnahmeChanged: true })
   }
 
-
-
-  getInfosMount = () => {
-        if (this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
-            if(this.props.projektarten.length > 0 && this.props.projekt){
-                let ects = this.props.projektarten[this.props.projekt.art - 1].ects
-                this.props.ectsCountFunc(ects)
-                this.setState({ectsAdded: true})
-            }
-        }
-  }
-
-  getInfosUpdate = () => {
-    console.log('hallo', this.state.ectsAdded)
-    if (this.state.ectsAdded === false){
-        this.setState({ectsAdded: true})
-        
-        if (this.props.currentStudent != null && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
-            if(this.props.projektarten.length > 0 && this.props.projekt){
-                let ects = this.props.projektarten[this.props.projekt.art - 1].ects
-                this.props.ectsCountFunc(ects)
-                
-            }
-        }
-    }
-  }
-
-  componentDidMount(){
-      this.getInfosMount();
-  }
-
-  componentWillUnmount(){
+  getProjektart = () => {
+    ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
       this.setState({
-          ectsAdded: false
-      })
+        projektarten: projektartBOs
+      })).then(()=>this.getInfos())
+      .catch(e =>
+        this.setState({
+          //projektarten: []
+        }));
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.ectsCount === 0 & prevProps.projektarten.length > 0) {
-        this.getInfosUpdate()
-    
+  getInfos = () => {
+    if (this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
+      if(this.state.projektarten.length > 0 && this.props.projekt){
+        let ects = this.state.projektarten[this.props.projekt.art - 1].ects
+        this.props.ectsCountFunc(ects)
+      }
     }
   }
+
+  componentDidMount() {
+    this.getProjektart();
+  }
+
 
   /**
      <Button className={classes.teilnahmeAbwaehlenButton} variant='contained' size="small" color='primary' startIcon={<AddIcon />} onClick={this.teilnahmeAbwaehlenButtonClicked} disabled={this.state.teilnahmeAbwaehlenButtonDisabled}>
@@ -120,13 +101,9 @@ expansionPanelStateChanged= () => {
   //small comment
   /** Renders the component */
   render() {
-
-
-
-    const { classes, expandedState, currentStudent, projektarten} = this.props;
+    const { classes, expandedState, currentStudent} = this.props;
     // Use the states projekt
-    const { projekt } = this.state;
-
+    const { projekt, projektarten } = this.state;
 
     if (this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
       this.state.teilnahmeButtonDisabled = true;

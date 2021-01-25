@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles, Button, Typography, Grid } from '@material-ui/core';
+import { withStyles, Button, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -53,6 +53,12 @@ class MeineProjekte extends Component {
     constructor(props){
         super(props);
 
+        let expandedID = null;
+
+        if (this.props.location.expandTeilnahme){
+            expandedID = this.props.location.expandTeilnahme.getID();
+        }
+
         // initiiere einen leeren state
         this.state = {
             teilnahmen : [],
@@ -60,6 +66,7 @@ class MeineProjekte extends Component {
             currentStudentmat_nr: null,
             error: null,
             loadingInProgress: false, 
+            expandedTeilnahmeID: expandedID,
         };
     }
 
@@ -102,23 +109,16 @@ class MeineProjekte extends Component {
     render(){
 
         const { classes } = this.props;
-        const { teilnahmen, currentStudentName, currentStudentmat_nr, error, loadingInProgress} = this.state;
+        const { teilnahmen, currentStudentName, currentStudentmat_nr, expandedTeilnahmeID, error, loadingInProgress} = this.state;
         
         return(
             <div className={classes.root}>
-                 <Grid container className={classes.header} justify="flex-end" alignItems="center" spacing={2}>
-                    <Grid item xs/>
-                    <Grid item>
-                    <Button variant="outlined" color="primary" disableRipple 
-                    style={{ backgroundColor: 'transparent', textTransform: 'None'}}
-                    >Name: {currentStudentName}<br/>Matrikelnummer: {currentStudentmat_nr}</Button>
-                    </Grid>
-                </Grid>
+                <Typography className={classes.header}>Projekte von {currentStudentName}, Matrikelnummer: {currentStudentmat_nr}</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="customized table">
                         <TableHead>
                             <StyledTableRow>
-                                <StyledTableCell>Projekt</StyledTableCell>
+                                <StyledTableCell>Projekte</StyledTableCell>
                                 <StyledTableCell align="center">ECTS</StyledTableCell>
                                 <StyledTableCell align="center">Semester</StyledTableCell>
                                 <StyledTableCell align="center">Dozent</StyledTableCell>
@@ -160,6 +160,7 @@ const styles = theme => ({
         width: '100%',
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
+        padding: theme.spacing(1)
       },
       content: {
         margin: theme.spacing(1),
@@ -168,9 +169,8 @@ const styles = theme => ({
         minWidth: 700,
       },
       header:{
-        marginBottom: theme.spacing(1),
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
+        marginBottom: theme.spacing(2),
+
       },
       button:{
           marginTop: theme.spacing(2),

@@ -562,15 +562,15 @@ class ProjektForm extends Component {
               {header}
             </DialogContentText>
             <form className={classes.root} noValidate autoComplete='off'>
-				<TextField autoFocus type='text' required fullWidth margin='normal' id='name' label='Projektname' variant="outlined" value={name}
+				<TextField autoFocus type='text' required fullWidth margin='small' id='name' label='Projektname' variant="outlined" value={name}
 				onChange={this.textFieldValueChange} error={nameValidationFailed} 
-				helperText={nameValidationFailed ? 'Bitte geben Sie einen Projektnamen an' : ' '} />
-				<TextField className={classes.max_teilnehmer} type='text' required margin='normal' id='max_teilnehmer' label='Maximale Teilnehmeranzahl' variant="outlined" value={max_teilnehmer}
+				helperText={nameValidationFailed ? 'The name must contain at least one character' : ' '} />
+				<TextField className={classes.max_teilnehmer} type='text' required margin='small' id='max_teilnehmer' label='Maximale Teilnehmeranzahl' variant="outlined" value={max_teilnehmer}
 				onChange={this.numberValueChange} error={max_teilnehmerValidationFailed}
-				helperText={max_teilnehmerValidationFailed ? 'Bitte eine Anzahl eingeben' : ' '} />
+				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
 				
 				<FormControl component="fieldset">
-					<RadioGroup  className={classes.radio} row aria-label="position" value= {sprache} defaultValue="deutsch" onChange={this.radioValueChange}>
+					<RadioGroup  row aria-label="position" value= {sprache} defaultValue="deutsch" onChange={this.radioValueChange}>
 						<FormControlLabel
 						value="deutsch" 
 						control={<Radio color="primary" />}
@@ -695,9 +695,9 @@ class ProjektForm extends Component {
 				/>
 				</FormGroup>
 				{ bes_raum === true || bes_raum === 1 ?
-					<TextField type='text' required fullWidth margin='normal' id='raum' label='Raum' variant="outlined" value={raum}
+					<TextField type='text' required fullWidth margin='small' id='raum' label='Raum' variant="outlined" value={raum}
 					onChange={this.textFieldValueChange} error={raumValidationFailed}
-					helperText={raumValidationFailed ? 'Dieses Feld darf nicht leer sein' : ' '} />
+					helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
 				:
 				<></>
 				}
@@ -715,9 +715,9 @@ class ProjektForm extends Component {
 				/>
 				</FormGroup>
 				{ boolBlock_vor === true ?
-					<TextField type='text' required fullWidth margin='normal' id='anzahl_block_vor' label='Anzahl Blocktage'variant="outlined"  value={anzahl_block_vor}
+					<TextField type='text' required fullWidth margin='small' id='anzahl_block_vor' label='Anzahl Blocktage'variant="outlined"  value={anzahl_block_vor}
 					onChange={this.numberValueChange} error={anzahl_block_vorValidationFailed}
-					helperText={anzahl_block_vorValidationFailed ? 'Dieses Feld darf nicht leer sein' : ' '} />
+					helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
 				:
 				<></>
 				}
@@ -735,9 +735,9 @@ class ProjektForm extends Component {
 				/>
 				</FormGroup>
 				{ boolBlock_in === true ?
-					<TextField type='text' required fullWidth margin='normal' id='anzahl_block_in' label='Anzahl Blocktage'variant="outlined"  value={anzahl_block_in}
+					<TextField type='text' required fullWidth margin='small' id='anzahl_block_in' label='Anzahl Blocktage'variant="outlined"  value={anzahl_block_in}
 					onChange={this.numberValueChange} error={anzahl_block_inValidationFailed}
-					helperText={anzahl_block_inValidationFailed ? 'Dieses Feld darf nicht leer sein' : ' '} />
+					helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
 				:
 				<></>
 				}
@@ -755,19 +755,21 @@ class ProjektForm extends Component {
 				/>
 				</FormGroup>
 				{ boolBlockpraef === true ?
-					<TextField type='text' required fullWidth margin='normal' id='praeferierte_block' label='Präferierte Tage' variant="outlined" value={praeferierte_block}
+					<TextField type='text' required fullWidth margin='small' id='praeferierte_block' label='Präferierte Tage' variant="outlined" value={praeferierte_block}
 					onChange={this.textFieldValueChange} error={praeferierte_blockValidationFailed}
-					helperText={praeferierte_blockValidationFailed ? 'Dieses Feld darf nicht leer sein' : ' '} />
+					helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
 				:
 				<></>
 				}
-				<TextField type='text' fullWidth margin='normal' id='betreuer' label='Betreuer' variant="outlined" value={betreuer}
-				onChange={this.textFieldValueChange}/>
-				<TextField type='text' fullWidth margin='normal' id='externer_partner' label='Externe Partner' variant="outlined" value={externer_partner}
-				onChange={this.textFieldValueChange} />
-				<TextField type='text' required fullWidth margin='normal' id='beschreibung' label='Projektbeschreibung' multiline rows= {4} variant="outlined" value={beschreibung}
+				<TextField type='text' fullWidth margin='small' id='betreuer' label='Betreuer' variant="outlined" value={betreuer}
+				onChange={this.textFieldValueChange} error={betreuerValidationFailed}
+				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
+				<TextField type='text' fullWidth margin='small' id='externer_partner' label='Externe Partner' variant="outlined" value={externer_partner}
+				onChange={this.textFieldValueChange} error={externer_partnerValidationFailed}
+				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
+				<TextField type='text' required fullWidth margin='small' id='beschreibung' label='Projektbeschreibung' multiline rows= {4} variant="outlined" value={beschreibung}
 				onChange={this.textFieldValueChange} error={beschreibungValidationFailed}
-				helperText={beschreibungValidationFailed ? 'Bitte geben Sie eine Beschreibung ein' : ' '} />
+				helperText={nameValidationFailed ? 'The Teilnehmeranzahl must contain at least one character' : ' '} />
             </form>
             <LoadingProgress show={addingInProgress || updatingInProgress} />
             {
@@ -829,9 +831,6 @@ const styles = theme => ({
 	width: 435,
 	marginTop: theme.spacing(2),
 	marginBottom: theme.spacing(2),
-  },
-  radio: {
-	marginTop: theme.spacing(2)
   },
   chips: {
 	  display: 'flex',

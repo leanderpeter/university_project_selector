@@ -58,7 +58,6 @@ class ProjektDozentListeEintrag extends Component {
                 showProjektForm: false
             });
         }
-        this.props.projektFormClosed()
     }
 
     bearbeitenButtonClicked = event => {
