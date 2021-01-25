@@ -1,6 +1,6 @@
 import React from 'react'
 import {makeStyles, Paper, Typography, Grid, Card, CardContent, Button, } from '@material-ui/core';
-import Pascal from '../images/Pascal.jpg';
+import Pascal from '../images/pascal.jpg';
 import Alex from '../images/Alex.jpg';
 import Daria from '../images/Daria.jpg';
 import Jannik from '../images/Jannik.jpg';

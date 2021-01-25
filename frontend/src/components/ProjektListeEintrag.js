@@ -123,9 +123,9 @@ expansionPanelStateChanged= () => {
 
 
 
-    const { classes, expandedState, currentStudent} = this.props;
+    const { classes, expandedState, currentStudent, projektarten} = this.props;
     // Use the states projekt
-    const { projekt, projektarten } = this.state;
+    const { projekt } = this.state;
 
 
     if (this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {

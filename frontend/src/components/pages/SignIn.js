@@ -106,6 +106,7 @@ import {Card, Button, Grid, Typography, withStyles, Paper, FormControl, InputLab
 		const {rolle, rolleEdited, nameValidationFailed, nameEdited, kuerzelValidationFailed, kuerzelEdited, mat_nrValidationFailed, mat_nrEdited} = this.state;
 		const { classes } = this.props;
 
+
 		return <div>
 				<Paper>
 				<Card>
