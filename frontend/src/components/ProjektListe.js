@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography, Button, FormControl,InputLabel,Select,MenuItem } from '@material-ui/core';
+import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography, Button, FormControl,InputLabel,Select,MenuItem, Card } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear'
 import {withRouter} from 'react-router-dom';
 import {ElectivAPI} from '../api';
@@ -140,32 +140,49 @@ class ProjektListe extends Component {
               }}
             />
           </Grid>
-          <Grid item xs={3}>
-          <FormControl className={classes.formControl}>
-            <InputLabel>ects</InputLabel>
-              <Select  className={classes.formControl} style={{ minWidth:"8rem"}}  value={ausgewaehlteEcts } onChange ={this.onChange} >
-                {
-                projektarten.map(projektart =>
-                <MenuItem value= {projektart}><em>{projektart.get_ects()}</em></MenuItem>
-                )
-                }
-              </Select>                                                              
-          </FormControl>
-          </Grid>
-          <Grid item xs />
+
           <Grid item className={classes.ectsCount}>
               <Button variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent',}}>Anzahl ECTS: {ectsCount}</Button>
           </Grid>
         </Grid>
+        <Card> 
+        <Typography>5 ECTS</Typography>
         {
           // Show the list of ProjektListeEintrag components
           // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters        
           filteredProjekte.map(projekt => {
-            if ( ausgewaehlteEcts==null|| projekt.getArt()==ausgewaehlteEcts.getID()) {
+            if (projekt.getArt()==1) {
              return( <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
             />)}})
-        }
+        } 
+        <br></br>
+        </Card>
+        <br></br>
+        <Card> 
+        <Typography>10 ECTS</Typography>
+        {        
+          filteredProjekte.map(projekt => {
+            if (projekt.getArt()==2) {
+             return( <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
+              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
+            />)}})
+        } 
+        <br></br>
+        </Card>
+        <br></br>
+        <Card> 
+        <Typography>20 ECTS</Typography>
+        {
+                
+          filteredProjekte.map(projekt => {
+            if (projekt.getArt()==3) {
+             return( <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
+              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
+            />)}})
+        } 
+        <br></br>
+        </Card>
                 <LoadingProgress show={loadingInProgress}/>
                 <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`}
                                      onReload={this.getProjekte}/>
@@ -173,7 +190,7 @@ class ProjektListe extends Component {
             </div>
         );
     }
-}
+  }
 
 /** Component specific styles */
 const styles = theme => ({
