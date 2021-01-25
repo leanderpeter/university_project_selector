@@ -45,19 +45,8 @@ const useStyles = makeStyles(theme => ({
     margin:"auto",
     marginTop: "-3%",
     marginBottom:"5%",
-    
-    
   },
-  button1:{
-    backgroundColor: "white", 
-    color: "black", 
-    border: "2px solid #008CBA",
-  },
-  
-  
-
   hyperlink:{
-    color:"white",
     textDecoration: "none",
     color: theme.palette.primary.main,
   }
