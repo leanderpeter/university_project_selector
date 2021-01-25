@@ -2,7 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {Card, Button, Grid, Typography, withStyles, Paper, FormControl, InputLabel, Select, MenuItem, TextField} from '@material-ui/core';
 
-class SignIn extends Component {
+/** 
+ * Render eine Seite für nicht eingeloggte Nutzer.
+ * Dafür wird eine existierende Google Account Sign in Komponente verwendet. 
+ * Die Komponente nutzt eine Firebase für einen redirect.
+ * 
+ * @see See Googles [firebase authentication](https://firebase.google.com/docs/web/setup)
+ * @see See Googles [firebase API reference](https://firebase.google.com/docs/reference/js)
+ * 
+ */
+
+ class SignIn extends Component {
 
 	constructor(props){
 		super(props);
@@ -59,7 +69,7 @@ class SignIn extends Component {
 		},500);
 	};
 
-	// Validierung der textfeldaenderungen 
+	// Validierung der Textfeldaenderungen 
 	textFieldValueChange = (event) => {
 		const value = event.target.value;
 
@@ -91,10 +101,11 @@ class SignIn extends Component {
 	}
 
 
-	// renders the component/signIn page
+	// rendert die  Komponente SignIn Seite
 	render() {
 		const {rolle, rolleEdited, nameValidationFailed, nameEdited, kuerzelValidationFailed, kuerzelEdited, mat_nrValidationFailed, mat_nrEdited} = this.state;
 		const { classes } = this.props;
+
 
 		return <div>
 				<Paper>
@@ -141,8 +152,6 @@ class SignIn extends Component {
 			</div>
 	}
 }
-
-/*** Someone should check if we need this cludde after this comment! */
 
 
 /** Component specific styles */

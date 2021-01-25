@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles, Button, Typography, Grid } from '@material-ui/core';
+import { withStyles, Button, Typography, Grid, MenuItem, FormControl, InputLabel, Select } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -14,14 +14,15 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-import MeineProjekteEintrag from './MeineProjekteEintrag';
+import SemesterberichtEintrag from './SemesterberichtEintrag';
 
 /**
- * Es werden alle Projekte des aktuell eingeloggten Studenten angezeigt
+ * Es werden alle Projekte des aktuell eingeloggten Studenten nach dem ausgewählten Semester angezeigt
  * 
- * @see See [MeineProjekteEintrag](#meineprojekteeintrag)
+ * @see See [SemesterberichtEintrag](#semesterberichteintrag)
  * 
- * Hierfür werden alle Teilnahmen des aktuell eingeloggten Student geladen und in die Componente MeineProjekteEintrag gemappt
+ * Hierfür werden alle Teilnahmen des aktuell eingeloggten Student eines bestimmten Semesters geladen 
+ * und in die Componente MeineProjekteEintrag gemappt
  * 
  */
 
@@ -48,7 +49,7 @@ const StyledTableRow = withStyles((theme) => ({
   }))(TableRow);
 
 
-class MeineProjekte extends Component {
+class Semesterbericht extends Component {
 
     constructor(props){
         super(props);
@@ -56,6 +57,8 @@ class MeineProjekte extends Component {
         // initiiere einen leeren state
         this.state = {
             teilnahmen : [],
+            semester: [],
+            semesterwahl: null,
             currentStudentName: null,
             currentStudentmat_nr: null,
             error: null,
@@ -66,7 +69,7 @@ class MeineProjekte extends Component {
 
     // API Anbindung um Teilnahmen des Students vom Backend zu bekommen 
     getTeilnahmen = () => {
-            ElectivAPI.getAPI().getTeilnahmen(this.props.currentStudent.id)
+            ElectivAPI.getAPI().getTeilnahmenBySemester(this.props.currentStudent.id, this.state.semesterwahl)
             .then(teilnahmeBOs =>
                 this.setState({
                     teilnahmen: teilnahmeBOs,
@@ -85,6 +88,38 @@ class MeineProjekte extends Component {
             });
     }
 
+    // API Anbindung um alle Semester vom Backend zu bekommen 
+    getSemesterOfStudent = () => {
+        ElectivAPI.getAPI().getSemesterOfStudent(this.props.currentStudent.id)
+        .then(semesterBOs =>
+            this.setState({
+                semester: semesterBOs,
+                error: null,
+                loadingInProgress: false,
+            })).catch(e =>
+                this.setState({
+                    semester: [],
+                    error: e,
+                    loadingInProgress: false,
+                }));
+        this.setState({
+            error: null,
+            loadingInProgress: true,
+            loadingTeilnahmeError: null
+        });
+    }
+
+  //bei Änderung des Semester Dropdown Menüs wird das ausgewählte Semester im State als semesterwahl gesetzt
+  semesterChange = (semester) => {
+    this.setState({
+      semesterwahl: semester.target.value,
+    })
+    setTimeout(() => {
+    //console.log('Ausgewählte Semester ID:',this.state.semesterwahl)   
+    this.getTeilnahmen();
+    }, 0);
+  };
+
     // Funktion, die einen Print-Befehl ausführt
     printSemesterbericht= () => {
       window.print()
@@ -92,7 +127,7 @@ class MeineProjekte extends Component {
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
-        this.getTeilnahmen();
+        this.getSemesterOfStudent();
         this.setState({
             currentStudentName: this.props.currentStudent.getname(),
             currentStudentmat_nr: this.props.currentStudent.getmat_nr(),
@@ -102,28 +137,49 @@ class MeineProjekte extends Component {
     render(){
 
         const { classes } = this.props;
-        const { teilnahmen, currentStudentName, currentStudentmat_nr, error, loadingInProgress} = this.state;
+        const {  semesterwahl, teilnahmen, semester, currentStudentName, currentStudentmat_nr, error, loadingInProgress} = this.state;
         
         return(
             <div className={classes.root}>
-                 <Grid container className={classes.header} justify="flex-end" alignItems="center" spacing={2}>
+                <Grid container className={classes.header} justify="center" alignItems="center" spacing={2}>
+                    <Grid item>
+                    { semester ?
+                        <FormControl className={classes.formControl}>
+                        <InputLabel>Semester</InputLabel> 
+                            <Select value={semesterwahl} onChange={this.semesterChange}>
+                            {
+                            semester.map(semester =>
+                            <MenuItem value={semester.getID()}><em>{semester.getname()}</em></MenuItem>
+                            )
+                            }
+                            </Select>                                                                
+                        </FormControl>                                  
+                        :
+                        <FormControl className={classes.formControl}>
+                        <InputLabel>Semester</InputLabel>
+                            <Select value="">
+                            <MenuItem value=""><em>Semester noch nicht geladen</em></MenuItem>
+                            </Select>
+                        </FormControl>
+                    }
+                    </Grid>
                     <Grid item xs/>
                     <Grid item>
-                    <Button variant="outlined" color="primary" disableRipple 
-                    style={{ backgroundColor: 'transparent', textTransform: 'None'}}
-                    >Name: {currentStudentName}<br/>Matrikelnummer: {currentStudentmat_nr}</Button>
+                        <Button variant="outlined" color="primary" disableRipple 
+                        style={{ backgroundColor: 'transparent', textTransform: 'None'}}
+                        >Name: {currentStudentName}<br/>Matrikelnummer: {currentStudentmat_nr}</Button>
                     </Grid>
                 </Grid>
+                { semesterwahl ? 
+                <>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="customized table">
                         <TableHead>
                             <StyledTableRow>
-                                <StyledTableCell>Projekt</StyledTableCell>
-                                <StyledTableCell align="center">ECTS</StyledTableCell>
-                                <StyledTableCell align="center">Semester</StyledTableCell>
+                                <StyledTableCell>Projekt</StyledTableCell>                                
                                 <StyledTableCell align="center">Dozent</StyledTableCell>
+                                <StyledTableCell align="center">ECTS</StyledTableCell>
                                 <StyledTableCell align="center">Note</StyledTableCell>
-                                <StyledTableCell align="center">Modulzuweisung</StyledTableCell>
                             </StyledTableRow>
                         </TableHead>
                         <TableBody>
@@ -132,7 +188,7 @@ class MeineProjekte extends Component {
                                 <>
                                 {
                                     teilnahmen.map(teilnahme => 
-                                        <MeineProjekteEintrag key={teilnahme.getID()} teilnahme = {teilnahme} 
+                                        <SemesterberichtEintrag key={teilnahme.getID()} teilnahme = {teilnahme} 
                                         getTeilnahmen = {this.getTeilnahmen}
                                         show={this.props.show}
                                     />) 
@@ -147,8 +203,16 @@ class MeineProjekte extends Component {
                     <ContextErrorMessage error={error} contextErrorMsg = {'Deine Projekte konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
                 </TableContainer>
                 <Button variant="contained" color="primary" size="medium" className={classes.button} startIcon={<SaveIcon />} onClick={this.printSemesterbericht}>
-                Notenspiegel
-                </Button>             
+                Semesterbericht
+                </Button> 
+                </>
+                :
+                <>
+                <Typography className={classes.warnung}> Bitte wählen Sie zunächst ein Semester aus</Typography>
+                <LoadingProgress show={loadingInProgress} />
+                <ContextErrorMessage error={error} contextErrorMsg={`Semester und Module konnten nicht geladen werden`} onReload={this.handleReload}/>
+                </>
+                }            
             </div>
         )
     }
@@ -159,10 +223,7 @@ const styles = theme => ({
     root: {
         width: '100%',
         marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-      },
-      content: {
-        margin: theme.spacing(1),
+        marginBottom: theme.spacing(2)
       },
       table: {
         minWidth: 700,
@@ -170,17 +231,25 @@ const styles = theme => ({
       header:{
         marginBottom: theme.spacing(1),
         paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
+        paddingRight: theme.spacing(1)
       },
       button:{
           marginTop: theme.spacing(2),
           marginBottom: theme.spacing(3),
           float: 'right'
+      },
+      formControl: {
+          minWidth: 120,
+          marginBottom: theme.spacing(2),
+      },
+      warnung: {
+        color: theme.palette.secondary.main,
+        paddingLeft: theme.spacing(1)
       }
   });
 
 /** PropTypes */
-MeineProjekte.propTypes = {
+Semesterbericht.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** @ignore */
@@ -190,7 +259,7 @@ MeineProjekte.propTypes = {
 
 
 
-export default withRouter(withStyles(styles)(MeineProjekte));
+export default withRouter(withStyles(styles)(Semesterbericht));
 
 
 

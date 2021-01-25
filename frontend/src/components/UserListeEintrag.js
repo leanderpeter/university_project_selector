@@ -59,14 +59,14 @@ class UserListeEintrag extends Component {
             <div>
                 <ListItem className={classes.root}>
                     <Grid container alignItems="center" spacing={2}>
-                        <Grid item>
+                        <Grid item xs={2}>
+                            <Typography>{user.rolle}</Typography>
+                        </Grid>
+                        <Grid item xs={3}>
                             <Typography>{user.name}</Typography>
                         </Grid>
-                        <Grid item>
+                        <Grid item xs={3}>
                             <Typography>{user.email}</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography>{user.rolle}</Typography>
                         </Grid>
                         <Grid item xs/>
                         <Grid item>

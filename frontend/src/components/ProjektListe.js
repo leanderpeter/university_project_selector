@@ -26,6 +26,7 @@ class ProjektListe extends Component {
         //gebe einen leeren status
         this.state = {
           projekte: [],
+          projektarten: [],
           filteredProjekte: [],
           projektFilter: '',
           error: null,
@@ -39,10 +40,35 @@ class ProjektListe extends Component {
     }
 
     ectsCountFunc = (ects) => {
-      this.setState({
-        ectsCount: this.state.ectsCount + ects
-      })
+      setTimeout(() => { 
+        this.setState({
+          ectsCount: this.state.ectsCount + ects
+        })
+        }, 0);
+      
     }
+    
+    getProjektart = () => {
+      ElectivAPI.getAPI().getProjektart()
+      .then(projektartBOs =>
+          this.setState({
+              projektarten: projektartBOs,
+              error: null,
+              loadingInProgress: false,
+          })).catch(e =>
+              this.setState({
+                  projektarten: ['lel'],
+                  error: e,
+                  loadingInProgress: false,
+              }));
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+      });
+  }
+
+
+
     //hole alle Projekte vom Backend
     getProjekte = () => {
         ElectivAPI.getAPI().getProjekteByZustand("Genehmigt")
@@ -114,6 +140,7 @@ class ProjektListe extends Component {
     const { classes, currentStudent } = this.props;
     const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, ectsCountFunc, ectsCount,ausgewaehlteEcts,projektarten } = this.state;
 
+    console.log(this.state.projektarten)
 
     return (
       <div className={classes.root}>
@@ -140,10 +167,13 @@ class ProjektListe extends Component {
               }}
             />
           </Grid>
-
           <Grid item className={classes.ectsCount}>
               <Button variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent',}}>Anzahl ECTS: {ectsCount}</Button>
           </Grid>
+          :
+          <>
+          </>
+          
         </Grid>
         <Card> 
         <Typography>5 ECTS</Typography>
@@ -185,7 +215,7 @@ class ProjektListe extends Component {
         </Card>
                 <LoadingProgress show={loadingInProgress}/>
                 <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`}
-                                     onReload={this.getProjekte}/>
+                                     onReload={this.getProjekte, this.getProjektart}/>
 
             </div>
         );
