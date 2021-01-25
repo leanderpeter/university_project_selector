@@ -12,7 +12,6 @@ import Leander from '../images/Leander.jpg';
  * Link zu Xing Profil der Gruppenmitglieder
  * und Impressum
  * 
- * @author [Pascal Gienger](https://github.com/PascalGienger)
  */
 
 const useStyles = makeStyles(theme => ({
