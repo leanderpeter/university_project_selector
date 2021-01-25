@@ -1,9 +1,16 @@
 import React from 'react'
 import {makeStyles, Paper, Typography, Grid, Card, CardContent, Button, } from '@material-ui/core';
-import pascal from '../images/pascal.jpg';
+import Pascal from '../images/Pascal.jpg';
+import Alex from '../images/Alex.jpg';
+import Daria from '../images/Daria.jpg';
+import Jannik from '../images/Jannik.jpg';
+import Raphael from '../images/Raphael.jpg';
+import Leander from '../images/Leander.jpg';
 
 /**
- * About Page und Impressum
+ * About Page 
+ * Link zu Xing Profil der Gruppenmitglieder
+ * und Impressum
  * 
  * @author [Pascal Gienger](https://github.com/PascalGienger)
  */
@@ -29,18 +36,30 @@ const useStyles = makeStyles(theme => ({
   img:{
     margin:"auto",
     display: "flex",
-    marginTop:"0%",
+    marginTop:"5%",
     paddingTop:"4%",
     width:"68%", 
   },
   button:{
     display: "flex",
     margin:"auto",
+    marginTop: "-3%",
     marginBottom:"5%",
-    backgroundColor: theme.palette.secondary.main,
+    
+    
   },
+  button1:{
+    backgroundColor: "white", 
+    color: "black", 
+    border: "2px solid #008CBA",
+  },
+  
+  
+
   hyperlink:{
-    color:"#026466",
+    color:"white",
+    textDecoration: "none",
+    color: theme.palette.primary.main,
   }
 }));
 
@@ -52,6 +71,7 @@ function About() {
 
   return (
     <div className={classes.content}>
+      
         <Typography variant='h4' className={classes.header}>
           Unser Team
         </Typography>
@@ -61,13 +81,13 @@ function About() {
                 <Grid item xs={4}>
                   <Paper className={classes.paper1}>
                     <Card className={classes.root1}>
-                      <img alt="Bild Raphael Müller" className={classes.img} src="https://www.imago-images.de/bild/sp/0047040892/s.jpg" title="Raphael Müller"/>
+                      <img alt="Bild Raphael Müller" className={classes.img} src={Raphael} title="Raphael Müller"/>
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
                           Raphael Müller
                         </Typography>
                       </CardContent>
-                      <Button className={classes.button} variant="contained" > <a className={classes.hyperlink} href="https://www.xing.com/profile/Raphael_Mueller104/cv ">Xing Profile</a></Button>
+                      <Button className={classes.button} variant="contained" > <a className={classes.hyperlink}  href="https://www.xing.com/profile/Raphael_Mueller104/cv ">Xing Profile</a></Button>
                     </Card>
                   </Paper>
                 </Grid>
@@ -75,7 +95,7 @@ function About() {
                 <Grid item xs={4}>
                   <Paper className={classes.paper}>
                     <Card className={classes.root1}>
-                      <img alt="Bild Jannik Merz" className={classes.img} src="https://profile-images.xing.com/images/15a25d6e24511f62164df882d9ecb497-1/jannik-merz.1024x1024.jpg" title="Jannik Merz"/>
+                      <img alt="Bild Jannik Merz" className={classes.img} src={Jannik}title="Jannik Merz"/>
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
                           Jannik Merz
@@ -89,7 +109,7 @@ function About() {
                 <Grid item xs={4}>
                   <Paper className={classes.paper}>
                     <Card className={classes.root1}>
-                      <img alt="Bild Leander Peter" className={classes.img} src="https://pbs.twimg.com/profile_images/1321033014906966022/FfIl7cGE.jpg" title="Leander Peter"/>
+                      <img alt="Bild Leander Peter" className={classes.img} src={Leander} title="Leander Peter"/>
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
                           Leander Peter
@@ -103,12 +123,12 @@ function About() {
           </Grid>
 
 
-          <Grid container item xs={12} spacing={3} style={{marginBottom:"5%"}}>
+          <Grid container item xs={12} spacing={3} className={classes.container}>
             <React.Fragment>
                 <Grid item xs={4}>
                   <Paper className={classes.paper1}>
                     <Card className={classes.root1}>
-                      <img alt="Bild Daria Bilyk" className={classes.img} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIeqgZiptkRGerhe8HeYd6LDMWfSsaohvs5g&usqp=CAU" title="Daria Bilyk"/>
+                      <img alt="Bild Daria Bilyk" className={classes.img} src={Daria} title="Daria Bilyk"/>
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
                           Daria Bilyk
@@ -122,7 +142,7 @@ function About() {
                 <Grid item xs={4}>
                   <Paper className={classes.paper}>
                     <Card className={classes.root1}>
-                      <img alt="Bild Alexander Hofstetter" className={classes.img} src="https://cdn.pixabay.com/photo/2016/10/02/03/15/smiley-1708870_960_720.png" title="Alexander Hofstetter"/>
+                      <img alt="Bild Alexander Hofstetter" className={classes.img} src={Alex} title="Alexander Hofstetter"/>
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
                           Alexander Hofstetter
@@ -136,7 +156,7 @@ function About() {
                 <Grid item xs={4}>
                   <Paper className={classes.paper}>
                     <Card className={classes.root1}>
-                      <img alt="Bild Pascal Gienger" className={classes.img} src={pascal} title="Pascal Gienger"/>
+                      <img alt="Bild Pascal Gienger" className={classes.img} src={Pascal} title="Pascal Gienger"/>
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
                           Pascal Gienger
