@@ -18,8 +18,6 @@ from server.bo.Projektart import Projektart
 #SecurityDecorator
 from SecurityDecorator import secured
 
-# ..weitere Imports notwendig z.B. BO-Klassen und SecurityDecorator
-
 
 class NullableInteger(fields.Integer):
     """Diese Klasse ermöglicht die Umsetzung eines Integers, welcher auch den Wert null bzw. None haben kann 
@@ -35,8 +33,11 @@ CORS(app, resources=r'/electivApp/*')
 api = Api(app, version='1.0', title='electivApp API',
           description='Web App for choosing electiv subjects for the university')
 
+"""Namespaces"""
 electivApp = api.namespace('electivApp', description='Functions of electivApp')
 
+"""Hier wird definiert, wie die Businessobjects beim Marshelling definiert 
+werden sollen"""
 bo = api.model('BusinessObject', {
     'id': fields.Integer(attribute='_id', description='ID des BOs'),
 })
@@ -82,7 +83,6 @@ projekt = api.inherit('Projekt', nbo, automat, {
     'teilnehmerListe': fields.String(attribute='_teilnehmerListe', description='Liste mit IDs der Teilnehmer')
 })
 
-# Moduloption aus projekt entfernt !!INFO!!
 
 teilnahme = api.inherit('Teilnahme', bo, {
     'teilnehmer': fields.Integer(attribute='_teilnehmer', description='Die ID des Studenten der Teilnahme'),
@@ -113,9 +113,13 @@ semester = api.inherit('Semester', nbo, {
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektListeOperationen(Resource):
     @electivApp.marshal_list_with(projekt)
+   
     @secured
-
     def get(self):
+        """Auslesen aller Projekte-Objekte mit Zustand NEU.
+
+        Sollten keine Projekte-Objekte verfügbar sein, so wird eine
+        leere Sequenz zurückgegeben."""
         adm = ProjektAdministration()
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
         zus = "Neu"
@@ -123,19 +127,15 @@ class ProjektListeOperationen(Resource):
         projekte = adm.get_projekte_by_zustand('"{}"'.format(zus))
         return projekte
 
-    def delete(self, projekt_id):
-        pass
-
-    def put(self, projekt_id):
-        pass
-
 @electivApp.route('/projekte/zustand/<string:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class Projektverwaltungoperation(Resource):
     @electivApp.marshal_list_with(projekt)
-    # @secured
 
+    @secured
     def get(self, id):
+        """Auslesen eines bestimmten Projekte-Objekts mit dem aktuellen Zustand
+        """
         result = []
         adm = ProjektAdministration()
         projekte = adm.get_projekte()
@@ -149,9 +149,10 @@ class Projektverwaltungoperation(Resource):
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektByZustandByDozentoperation(Resource):
     @electivApp.marshal_list_with(projekt)
-    
-
+    @secured
     def get(self, zustand_id, dozent_id):
+        """Auslesen eines Projekte-Objekts mit einem bestimmten Zustand und für einen bestimmten Dozent
+        """
         adm = ProjektAdministration()
         projekte = adm.get_projekte_by_zustand_by_dozent(zustand_id,dozent_id)
         return projekte
@@ -160,9 +161,10 @@ class ProjektByZustandByDozentoperation(Resource):
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class Projektverwaltungzustandoperation(Resource):
     @electivApp.marshal_list_with(projekt)
+    
     @secured
-
-    def put(self):
+    def put(self):       
+        """Update Zustand ID für eine bestimmte Projekt ID"""
         projektId = request.args.get("projektId")
         zustandId = request.args.get("zustandId")
         adm = ProjektAdministration()
@@ -173,90 +175,91 @@ class Projektverwaltungzustandoperation(Resource):
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektOperationen(Resource):
     @electivApp.marshal_list_with(projekt)
+    
     @secured
-
     def get(self, id):
+        """Auslesen eines bestimmten Projekt-Objekts.
+
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
         adm = ProjektAdministration()
         projekt = adm.get_projekt_by_id(id)
         return projekt
 
+    @secured
     def delete(self, id):
+        """Löschen eines bestimmten Projekt-Objekts.
+
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
         adm = ProjektAdministration()
         adm.delete_projekt(id)
-
-    def put(self, projekt_id):
-        pass
-
 
 @electivApp.route('/teilnahmen/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeListeOperationen(Resource):
     @electivApp.marshal_list_with(teilnahme)
+    
     @secured
- 
     def get(self, id):
+        """Auslesen eines bestimmten Teilnahmen-Objekts.
+
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+
         adm = ProjektAdministration()
-        """TODO 1 SQL Abfrage machen"""
         teilnahmen = adm.get_teilnahmen_von_student(id)
         return teilnahmen
 
-    def delete(self, ):
-        pass
-
-    def put(self, ):
-        pass
 
 @electivApp.route('/teilnahmen/projekt/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeListeByProjektOperationen(Resource):
     @electivApp.marshal_list_with(teilnahme)
+   
     @secured
- 
     def get(self, id):
+        """Auslesen von Teilnahmen eines bestimmten Projekts.
+
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
         adm = ProjektAdministration()
         teilnahmen = adm.get_teilnahmen_by_projekt_id(id)
         return teilnahmen
-
-    def delete(self, ):
-        pass
-
-    def put(self, ):
-        pass
 
 
 @electivApp.route('/student/projekt/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class StudentListeByProjektOperationen(Resource):
     @electivApp.marshal_list_with(student)
+    
     @secured
- 
     def get(self, id):
+        """Auslesen von Studenten eines bestimmten Projekts.
+
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+
         adm = ProjektAdministration()
         students = adm.get_students_by_projekt_id(id)
         return students
 
-    def delete(self, ):
-        pass
-
-    def put(self, ):
-        pass
 
 @electivApp.route('/person/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonByIDOperationen(Resource):
     @electivApp.marshal_list_with(person)
+   
     @secured
-
     def get(self, id):
+        """Auslesen eines bestimmten Person-Objekts.
+
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
         adm = ProjektAdministration()
         person = adm.get_person_by_id(id)
         return person
 
-    def delete(self, person_id):
-        pass
-
-    def put(self, person_id):
-        pass
 
 @electivApp.route('/persona/<string:rolle>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -279,14 +282,22 @@ class PersonByIDOperationen(Resource):
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonOperationen(Resource):
     @electivApp.marshal_list_with(person)
+    
     @secured
-
     def get(self):
+        """Auslesen aller Personen-Objekte.
+
+        Sollten keine User-Objekte verfügbar sein,
+        so wird eine leere Sequenz zurückgegeben."""
+
         adm = ProjektAdministration()
         persons = adm.get_all_persons()
         return persons
 
+    @secured
     def put(self):
+        """Update des User-Objekts."""
+
         userId = request.args.get("id")
         name = request.args.get("name")
         email = request.args.get("email")
@@ -300,48 +311,52 @@ class PersonOperationen(Resource):
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonByGoogleIDOperationen(Resource):
     @electivApp.marshal_list_with(person)
+    
     @secured
-
     def get(self, google_user_id):
+        """Auslesen eines bestimmten User-Objekts.
+
+        Das auszulesende Objekt wird durch die google_user_id in dem URI bestimmt.
+        """
         adm = ProjektAdministration()
         person = adm.get_person_by_google_user_id(google_user_id)
         return person
 
-    def delete(self, student_id):
-        pass
-
-    def put(self, student_id):
-        pass
 
 @electivApp.route('/studentbygoogle/<string:google_user_id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class StudentByGoogleIDOperationen(Resource):
     @electivApp.marshal_list_with(student)
+    
     @secured
-
     def get(self, google_user_id):
+        """Auslesen eines bestimmten Student-Objekts.
+
+        Das auszulesende Objekt wird durch die google_user_id in dem URI bestimmt.
+        """
         adm = ProjektAdministration()
         student = adm.get_student_by_google_user_id(google_user_id)
         return student
-
-    def delete(self, student_id):
-        pass
-
-    def put(self, student_id):
-        pass
 
 @electivApp.route('/studenten')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class StudentenOperationen(Resource):
     @electivApp.marshal_list_with(student)
     
-
+    @secured
     def get(self):
+        """Auslesen aller Studenten-Objekte.
+
+        Sollten keine Studenten-Objekte verfügbar sein,
+        so wird eine leere Sequenz zurückgegeben."""
         adm = ProjektAdministration()
         studenten = adm.get_alle_studenten()
         return studenten
 
+    @secured
     def put(self):
+        """Update des Studenten-Objekts."""
+
         userId = request.args.get("id")
         name = request.args.get("name")
         matrNr = request.args.get("matrNr")
@@ -356,34 +371,44 @@ class StudentenOperationen(Resource):
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class StudentIDOperationen(Resource):
     @electivApp.marshal_list_with(student)
+    
     @secured
-
     def get(self,id):
+        """Auslesen eines bestimmten Student-Objekts.
+
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
         adm = ProjektAdministration()
         student = adm.get_student_by_id(id)
         return student
 
+    @secured
     def delete(self, id):
+        """Löschen eines bestimmten Student-Objekts.
+
+         Das zu löschende Objekt wird durch die id in dem URI bestimmt.
+        """
         adm = ProjektAdministration()
         adm.delete_UserById(id)
 
-    def put(self, student_id):
-        pass
-
-
+ 
 @electivApp.route('/teilnahme')
 @electivApp.response(500, 'Something went wrong')
 class TeilnahmeOperationen(Resource):
-    def get(self, teilname_id):
-        pass
-
+    @secured
     def delete(self):
+        """Löschen eines bestimmten Teihnahme-Objekts.
+        
+        Anhand der Lehrangebot ID und Teilnehmer ID
+        """
         lehrangebotId = request.args.get("lehrangebotId")
         teilnehmerId = request.args.get("teilnehmerId")
         projektAdministration = ProjektAdministration()
         projektAdministration.delete_teilnahme(lehrangebotId, teilnehmerId)
 
+    @secured
     def post(self):
+        """Anlegen eines neuen Teinahme-Objekts für ein bestimmtes Lehrangebot."""
         lehrangebotId = request.args.get("lehrangebotId")
         teilnehmerId = request.args.get("teilnehmerId")
         projektAdministration = ProjektAdministration()
@@ -392,24 +417,25 @@ class TeilnahmeOperationen(Resource):
 @electivApp.route('/teilnahme/<int:id>')
 @electivApp.response(500, 'Something went wrong')
 class TeilnahmeByIdOperationen(Resource):
-    def get(self, teilname_id):
-        pass
-
-    def delete(self, teilnahme_id):
-        pass  
-
     @electivApp.marshal_with(teilnahme)
     @electivApp.expect(teilnahme, validate=True)
     @secured
     def put(self, id):
+        """Update eines bestimmten Teilnahme-Objekts."""
+
         adm = ProjektAdministration()
         teilnahme = Teilnahme.from_dict(api.payload)
 
         if teilnahme is not None:
+            """ Wir verwenden id des Proposals für
+             die Erzeugung eines Teilnahme-Objekts. Das serverseitig erzeugte 
+             Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
             teilnahme.set_id(id)
             adm.save_teilnahme(teilnahme)
             return '', 200
         else:
+            """ Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und
+            werfen einen Server-Fehler. """
             return '', 500
 
 @electivApp.route('/teilnahmen/<int:modul_id>/<int:semester_id>')
@@ -419,6 +445,10 @@ class TeilnahmenByModulundSemesterOperationen(Resource):
 
     @secured
     def get(self, modul_id, semester_id):
+        """Auslesen von Teinahmen
+
+        Anhand der Modul ID und Semester ID
+        """
         adm = ProjektAdministration()
         teilnahmen = adm.get_teilnahmen_by_modul_und_semester(modul_id, semester_id)
         return teilnahmen
@@ -431,9 +461,12 @@ class TeilnahmenBySemesterOperationen(Resource):
 
     @secured
     def get(self, student_id, semester_id):
+        """Auslesen von Teinahmen für ein bestimmtes Semester
+
+        Anhand der Student ID und Semester ID
+        """
         adm = ProjektAdministration()
         teilnahmen = adm.get_teilnahmen_by_semester(student_id, semester_id)
-        print(teilnahmen, 'heeee')
         return teilnahmen
 
 
@@ -444,6 +477,9 @@ class SemesterOfStudentOperationen(Resource):
 
     @secured
     def get(self, id):
+        """Auslesen aller Semester in dem ein Student eine Teilnahme hat
+
+        """
         adm = ProjektAdministration()
         semester = adm.get_semester_of_student(id)
         return semester
@@ -453,60 +489,62 @@ class SemesterOfStudentOperationen(Resource):
 class BewertungOperationen(Resource):
     @electivApp.marshal_list_with(bewertung)
     @secured
-    
     def get(self, id):
+        """Auslesen eines bestimmten Bewertung-Objekts.
+            
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
         adm = ProjektAdministration()
         bewertung = adm.get_bewertung_by_id(id)
         return bewertung
 
-    def delete(self, bewertung_id):
-        pass
-
-    def put(self, bewertung_id):
-        pass
 
 @electivApp.route('/bewertungen')
 @electivApp.response(500, 'Something went wrong')
 class BewertungenOperationen(Resource):
     @electivApp.marshal_list_with(bewertung)
     @secured
-    
     def get(self):
+        """Auslesen aller Bewertungen-Objekte.
+
+        Sollten keine Bewertungen-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
         adm = ProjektAdministration()
         bewertungen = adm.get_alle_bewertungen()
         return bewertungen
-
-    
-
 
 @electivApp.route('/modul/<int:projekt_id>')
 @electivApp.response(500, 'Something went wrong')
 class ModulByProjektIDOperationen(Resource):
     @electivApp.marshal_list_with(modul)
     @secured
-
     def get(self, projekt_id):
+        """Auslesen eines bestimmten Modul-Objekts.
+
+        Das auszulesende Objekt wird durch die projekt_id in dem URI bestimmt.
+        """
         adm = ProjektAdministration()
         modul = adm.get_module_by_projekt_id(projekt_id)
         return modul
 
-    def delete(self, id):
-        pass
-
-    def put(self, id):
-        pass
 
 @electivApp.route('/module')
 @electivApp.response(500, 'Something went wrong')
 class ModulOperationen(Resource):
     @electivApp.marshal_list_with(modul)
-
+    @secured
     def get(self):
+        """Auslesen aller Module-Objekte.
+
+        Sollten keine Module-Objekte verfügbar sein,
+        so wird eine leere Sequenz zurückgegeben."""
         adm = ProjektAdministration()
         module = adm.get_alle_module()
         return module
-
+    @secured
     def delete(self):
+        """Löschen von Module-Objekten.
+
+        """
         id = request.args.get("id")
         adm = ProjektAdministration()
         adm.delete_modul(id)
@@ -518,26 +556,38 @@ class ModulOperationen(Resource):
         '''
         Updaten eines Moduls
         '''
+
         adm = ProjektAdministration()
         modul = Modul.from_dict(api.payload)
 
         if modul is not None:
+            """ Wir verwenden modul des Proposals für
+             die Erzeugung eines Modul-Objekts. Das serverseitig erzeugte 
+             Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
             response = adm.save_modul(modul)
             return response, 200
         else:
+            """ Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und
+            werfen einen Server-Fehler. """
             return '', 500
 
     @electivApp.marshal_with(modul, code=200)
     @electivApp.expect(modul)
     @secured
     def post (self):
+        """Anlegen eines neuen Modul-Objekts."""
         adm = ProjektAdministration()
         modul = Modul.from_dict(api.payload)
 
         if modul is not None:
+            """ Wir verwenden modul des Proposals für
+             die Erzeugung eines Modul-Objekts. Das serverseitig erzeugte 
+             Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
             m = adm.create_modul(modul)
             return m, 200
         else: 
+            """ Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und
+            werfen einen Server-Fehler. """
             return '', 500
 
 @electivApp.route('/projekte_hat_module')
@@ -546,6 +596,8 @@ class ProjektehatModuleOperationen(Resource):
     @electivApp.marshal_list_with(modul)
     @secured
     def put(self):
+        """Update von wählbaren Modulen eines bestimmten Projektes."""
+
         projekt_id = request.args.get("projekt_id")
         module = json.loads(request.args.get("module"))
         adm = ProjektAdministration()
@@ -553,6 +605,8 @@ class ProjektehatModuleOperationen(Resource):
 
     @secured
     def post (self):
+        """Anlegen der wählbaren Module für ein bestimmtes Projekt."""
+
         projekt_id = request.args.get("projekt_id")
         module = json.loads(request.args.get("module"))
         adm = ProjektAdministration()
@@ -563,13 +617,21 @@ class ProjektehatModuleOperationen(Resource):
 class SemesterOperationen(Resource):
     @electivApp.marshal_list_with(semester)
     @secured
-
     def get(self):
+        """Auslesen aller Semester-Objekten.
+        
+        Sollten keine User-Objekte verfügbar sein,
+        so wird eine leere Sequenz zurückgegeben.
+        """
         adm = ProjektAdministration()
         semester = adm.get_alle_semester()
         return semester
 
+    @secured
     def delete(self):
+        """Löschen eines bestimmten Semester-Objekts nach id.
+
+        """
         id = request.args.get("id")
         adm = ProjektAdministration()
         adm.delete_semester(id)
@@ -585,22 +647,33 @@ class SemesterOperationen(Resource):
         semester = Semester.from_dict(api.payload)
 
         if semester is not None:
+            """ Wir verwenden semester des Proposals für
+             die Erzeugung eines Semester-Objekts. Das serverseitig erzeugte 
+             Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
             response = adm.save_semester(semester)
             return response, 200
         else:
+            """ Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und
+            werfen einen Server-Fehler. """
             return '', 500
 
     @electivApp.marshal_with(semester, code=200)
     @electivApp.expect(semester)
     @secured
     def post (self):
+        """Anlegen eines neuen Semester-Objekts."""
         adm = ProjektAdministration()
         semester = Semester.from_dict(api.payload)
 
         if semester is not None:
+            """ Wir verwenden semester des Proposals für
+             die Erzeugung eines Modul-Objekts. Das serverseitig erzeugte 
+             Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
             m = adm.create_semester(semester)
             return m, 200
         else: 
+            """ Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und
+            werfen einen Server-Fehler. """
             return '', 500
 
 @electivApp.route('/semester/<int:id>')
@@ -608,8 +681,12 @@ class SemesterOperationen(Resource):
 class SemesterByIDOperationen(Resource):
     @electivApp.marshal_list_with(semester)
     @secured
-
     def get(self, id):
+        """Auslesen eines bestimmten Semester-Objekts.
+
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+
         adm = ProjektAdministration()
         semester = adm.get_semester_by_id(id)
         return semester
@@ -670,13 +747,18 @@ class ProjektGenehmigungOperation(Resource):
 class ProjektartOperationen(Resource):
     @electivApp.marshal_list_with(projektart)
     @secured
-
     def get(self):
+        """Auslesen aller Projektart-Objekten.
+        """
         adm = ProjektAdministration()
         projektart = adm.get_alle_projektarten()
         return projektart
 
+    @secured
     def delete(self):
+        """Löschen eines bestimmten Projektart-Objekts nach id.
+
+        """
         id = request.args.get("id")
         adm = ProjektAdministration()
         adm.delete_projektart(id)
@@ -685,29 +767,40 @@ class ProjektartOperationen(Resource):
     @electivApp.expect(projektart)
     @secured
     def put(self):
-        '''
-        Updaten einer Projektart
-        '''
+        
+        """Update eines bestimmten Projektart-Objekts."""
         adm = ProjektAdministration()
         projektart = Projektart.from_dict(api.payload)
 
         if projektart is not None:
+            """ Wir verwenden projektart des Proposals für
+             die Erzeugung eines Projektart-Objekts. Das serverseitig erzeugte 
+             Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
             response = adm.save_projektart(projektart)
             return response, 200
         else:
+            """ Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und
+            werfen einen Server-Fehler. """
             return '', 500
 
     @electivApp.marshal_with(projektart, code=200)
     @electivApp.expect(projektart)
     @secured
     def post (self):
+        
+        """Anlegen eines neuen Projektart-Objekts."""
         adm = ProjektAdministration()
         projektart = Projektart.from_dict(api.payload)
 
         if projektart is not None:
+            """ Wir verwenden projektart des Proposals für
+             die Erzeugung eines Projektart-Objekts. Das serverseitig erzeugte 
+             Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
             p = adm.create_projektart(projektart)
             return p, 200
         else: 
+            """ Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und
+            werfen einen Server-Fehler. """
             return '', 500
 
 
@@ -716,8 +809,11 @@ class ProjektartOperationen(Resource):
 class ProjektartByID(Resource):
     @electivApp.marshal_list_with(projektart)
     @secured
-
     def get(self, id):
+        """ Auslesen des Projektart-Objekts
+
+        Die auszulesenden Objekte werden durch id in dem URI bestimmt.
+        """
         adm = ProjektAdministration()
         projektart = adm.get_projektart_by_id(id)
         return projektart

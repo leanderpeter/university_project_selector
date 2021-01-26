@@ -6,10 +6,17 @@ from server.db.Mapper import Mapper
 
 
 class ProjektMapper(Mapper):
+    """Mapper-Klasse, die Projekt Objekte auf der relationealen Datenbank abbildet.
+    Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt
+    """
     def __init__(self):
         super().__init__()
 
     def find_all(self):
+        """Auslesen aller Projekte aus der Datenbank
+
+        :return Alle Projekt-Objekte im System
+        """
 
         result = []
         cursor = self._connection.cursor()

@@ -6,10 +6,19 @@ from server.bo.Projektart import Projektart
 
 
 class ProjektartMapper(Mapper):
+	"""Mapper-Klasse, die Bewertung Objekte auf der relationealen Datenbank abbildet.
+    Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt
+    """
+
 	def __init__(self):
 		super().__init__()
 
 	def find_all(self):
+		"""
+		 Auslesen aller Projektarten aus der Datenbank
+
+        :return Eine Sammlung aller Projektart-Objekten
+        """
 		results = []
 		cursor = self._connection.cursor()
 		cursor.execute(
@@ -25,6 +34,12 @@ class ProjektartMapper(Mapper):
 		return results
 
 	def create_projektart(self, id, name, ects, sws):
+		"""Einfügen eines Projektart-Objekts in die DB
+
+        :param id, name, ects, sws 
+        :return das bereits übergebene Semester-Objekt mit aktualisierten Daten
+        """
+
 		projektart = Projektart()
 		projektart.set_id(id)
 		projektart.set_name(name)
@@ -34,6 +49,13 @@ class ProjektartMapper(Mapper):
 		return projektart
 
 	def find_projektart_by_id(self, id):
+		"""Suchen einer Projektart nach der übergebenen ID. 
+
+        :param id Primärschlüsselattribut aus der Datenbank
+        :return Projektart-Objekt, welche mit der ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
+
 		result = None
 
 		cursor = self._connection.cursor()
@@ -60,6 +82,9 @@ class ProjektartMapper(Mapper):
 	def insert(self, projektart):
 		'''
 		Einfugen eines Projektart BO's in die DB
+
+		:param projektart 
+        :return das bereits übergebene Projektart-Objekt mit aktualisierten Daten
 		'''
 
 		cursor = self._connection.cursor()
@@ -87,6 +112,10 @@ class ProjektartMapper(Mapper):
 		return projektart
 
 	def delete(self, id):
+		"""Löschen der Daten eines Projektart-Objekts aus der Datenbank 
+    
+        :param id
+        """
 		cursor = self._connection.cursor()
 		
 		command = "DELETE FROM projektarten WHERE id={}".format(id)
@@ -97,6 +126,11 @@ class ProjektartMapper(Mapper):
 
 
 	def update(self, projektart):
+		"""Überschreiben / Aktualisieren eines Projektart-Objekts in der DB
+
+        :param projektart
+        :return aktualisiertes Projektart-Objekt
+        """
 
 		cursor = self._connection.cursor()
 
