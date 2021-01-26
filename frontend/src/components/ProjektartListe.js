@@ -48,8 +48,7 @@ class ProjektartListe extends Component {
     this.setState({
         filteredProjektarten: this.state.projektarten.filter(projektart => {
             let nameContainsValue = projektart.getname().toLowerCase().includes(value);
-            let edv_nrContainsValue = projektart.getEdv_nr().toString().includes(value);
-            return nameContainsValue || edv_nrContainsValue;
+            return nameContainsValue;
         }),
         projektartFilter: value
     });

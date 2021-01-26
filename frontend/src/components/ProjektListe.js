@@ -27,6 +27,7 @@ class ProjektListe extends Component {
     this.state = {
       projekte: [],
       projektarten: [],
+      filteredProjekte: [],
       projektFilter: '',
       error: null,
       ausgewaehlteEcts: null,
@@ -47,17 +48,40 @@ class ProjektListe extends Component {
 
   }
 
+  //Suche-Funktion zum Suchen von Projekten
+  filterFieldValueChange= event => {
+    const value = event.target.value.toLowerCase();
+    this.setState({
+        filteredProjekte: this.state.projekte.filter(projekt => {
+            let nameContainsValue = projekt.getname().toLowerCase().includes(value);
+            return nameContainsValue;
+        }),
+        projektFilter: value
+    });
+  }
+
+  //Suche leeren
+  clearFilterFieldButtonClicked = () => {
+    this.setState({
+        filteredProjekte: [...this.state.projekte],
+        projektFilter: ''
+    });
+  }
+
+
   //hole alle Projekte vom Backend
   getProjekte = () => {
     ElectivAPI.getAPI().getProjekteByZustand("Genehmigt")
       .then(projekteBOs =>
         this.setState({								//neuer status wenn fetch komplett
           projekte: projekteBOs,
+          filteredProjekte: [...projekteBOs],
           loadingInProgress: false,				// deaktiviere ladeindikator
           error: null,
         })).catch(e =>
           this.setState({
             projekte: [],
+            filteredProjekte: [],
             loadingInProgress: false,
             error: e
           }));
@@ -135,8 +159,7 @@ class ProjektListe extends Component {
   render() {
 
     const { classes, currentStudent } = this.props;
-    const { projekte, projektFilter, expandedProjektID, loadingInProgress, error, ectsCount, projektarten, personen } = this.state;
-
+    const { projekte, projektFilter, filteredProjekte, expandedProjektID, loadingInProgress, error, ectsCount, projektarten, personen } = this.state;
 
     return (
       <div className={classes.root}>
@@ -147,20 +170,19 @@ class ProjektListe extends Component {
               </Typography>
           </Grid>
           <Grid item xs={4}>
-            <TextField
-              autoFocus
-              fullWidth
-              id='projektFilter'
-              type='text'
-              value={projektFilter}
-              onChange={this.filterFieldValueChange}
-              InputProps={{
-                endAdornment: <InputAdornment position='end'>
-                  <IconButton onClick={this.clearFilterFieldButtonClicked}>
-                    <ClearIcon />
-                  </IconButton>
-                </InputAdornment>
-              }}
+          <TextField
+                className={classes.filter}
+                type='text'
+                label=''
+                value={projektFilter}
+                onChange={this.filterFieldValueChange}
+                InputProps={{
+                    endAdornment: <InputAdornment position='end'>
+                    <IconButton onClick={this.clearFilterFieldButtonClicked}>
+                        <ClearIcon fontSize="small"/>
+                    </IconButton>
+                    </InputAdornment>,
+                }}
             />
           </Grid>
           <Grid item xs />
@@ -173,11 +195,11 @@ class ProjektListe extends Component {
             </>
           }
         </Grid>
-        {projektarten.length > 0 && projekte.length > 0 && personen.length > 0 ?
+        {projektarten.length > 0 && personen.length > 0 && filteredProjekte.length > 0 ?
           <>
         <Button className={classes.ects} variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent', }}>5 ECTS</Button>
         {       
-          projekte
+          filteredProjekte
           .filter(projekt => projekt.getArt()===1)
           .map(projekt => 
           <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
@@ -187,7 +209,7 @@ class ProjektListe extends Component {
         } 
         <Button className={classes.ects} variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent', }}>10 ECTS</Button>
         {        
-          projekte
+          filteredProjekte
           .filter(projekt => projekt.getArt()===2)
           .map(projekt => 
           <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
@@ -197,7 +219,7 @@ class ProjektListe extends Component {
         } 
         <Button className={classes.ects} variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent', }}>20 ECTS</Button>
         {
-          projekte
+          filteredProjekte
           .filter(projekt => projekt.getArt()===3)
           .map(projekt => 
           <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
