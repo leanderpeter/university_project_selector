@@ -230,6 +230,11 @@ class ProjektAdministration(object):
         """Semester löschen"""
         with SemesterMapper() as mapper:
             return mapper.delete(id)
+    
+    def get_semester_of_student(self, id):
+        """Alle Semester eines Studenten auslesen, in der er eine Teilnahme hat"""
+        with SemesterMapper() as mapper:
+            return mapper.find_semester_of_student(id)
 
     def get_alle_module(self):
         """Alle Module auslesen"""
@@ -293,6 +298,11 @@ class ProjektAdministration(object):
         """ Alle Teilnamen eines Moduls in einem bestimmten Semester auslesen"""
         with TeilnahmeMapper() as mapper:
             return mapper.find_by_modul_und_semester(modul_id, semester_id)
+
+    def get_teilnahmen_by_semester(self, student_id, semester_id): 
+        """ Alle Teilnamen eines Studenten in einem bestimmten Semester auslesen"""
+        with TeilnahmeMapper() as mapper:
+            return mapper.find_by_semester(student_id, semester_id)
 
     def get_teilnahmen_by_projekt_id(self, id):
         """ Alle Teilnamen eines bestimmten Projekts auslesen"""
