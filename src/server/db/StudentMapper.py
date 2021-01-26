@@ -6,16 +6,17 @@ from server.bo.Student import Student
 
 
 class StudentMapper(Mapper):
-    '''bidriectional functions for manipulating db-structures or objects'''
-
+    """Mapper-Klasse, die Student Objekte auf der relationealen Datenbank abbildet.
+    Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt
+    """
     def __init__(self):
         super().__init__()
 
     def find_all(self):
-        '''
-        reading all students objects in the system (DB)
-        return: Student objects
-        '''
+        """Auslesen aller Studenten aus der Datenbank
+
+        :return Alle Studenten-Objekte im System
+        """
 
         result = []
 
@@ -48,6 +49,12 @@ class StudentMapper(Mapper):
         pass
 
     def find_by_google_user_id(self, google_user_id):
+        """Suchen eines Studenten nach der übergebenen Google User ID. 
+
+        :param google_user_id Google User ID eines Studenten aus der Datenbank
+        :return Student-Objekt, welche mit der Google User ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
         result = None
 
         cursor = self._connection.cursor()
@@ -76,6 +83,12 @@ class StudentMapper(Mapper):
         return result
 
     def find_by_id(self, id):
+        """Suchen eines Studenten nach der übergebenen ID. 
+
+        :param id Primärschlüsselattribut eines Studenten aus der Datenbank
+        :return Student-Objekt, welche mit der ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
         result = None
 
         cursor = self._connection.cursor()
@@ -104,13 +117,12 @@ class StudentMapper(Mapper):
         return result
 
     def insert(self, student):
-        """Insert a user object in the DB
+        """Einfügen eines Studenten Objekts in die DB
 
-        Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
-        berichtigt.
+        Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft 
 
-        :param user das zu speichernde Objekt
-        :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
+        :param studeten das zu speichernde Student Objekt
+        :return das bereits übergebene Student-Objekt mit aktualisierten Daten (id)
         """
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM studenten ")
@@ -136,10 +148,11 @@ class StudentMapper(Mapper):
         return student
 
     def update(self, student):
-        '''
-        function to rewrite in the DB 
+        """Überschreiben / Aktualisieren eines Student-Objekts in der DB
 
-        '''
+        :param student -> Student-Objekt
+        :return aktualisiertes Student-Objekt
+        """
         cursor = self._connection.cursor()
 
         command = "UPDATE studenten " + "SET name=%s, email=%s, rolle=%s, kuerzel=%s, mat_nr=%s WHERE google_user_id=%s"
@@ -151,6 +164,11 @@ class StudentMapper(Mapper):
         cursor.close()
 
     def updateByUserId(self, student):
+         """Überschreiben / Aktualisieren eines Student-Objekts in der DB
+
+        :param student -> Student-Objekt
+        :return aktualisiertes Student-Objekt
+        """
 
         cursor = self._connection.cursor()
 
@@ -163,9 +181,10 @@ class StudentMapper(Mapper):
         cursor.close()
 
     def delete(self, student):
-        '''
-        delete an object from the database
-        '''
+        """Löschen der Daten eines Studenten aus der Datenbank
+
+        :param student -> Student-Objekt
+        """
         cursor = self._connection.cursor()
 
         command = "DELETE FROM studenten WHERE id={}".format(student.get_id())
@@ -175,9 +194,10 @@ class StudentMapper(Mapper):
         cursor.close()
 
     def deleteByID(self, userID):
-        '''
-        delete an object from the database
-        '''
+        """Löschen der Daten eines Studenten aus der Datenbank
+
+        :param student -> Student-Objekt
+        """
         cursor = self._connection.cursor()
 
         command = "DELETE FROM studenten WHERE id={}".format(userID)

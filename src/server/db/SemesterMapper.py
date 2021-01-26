@@ -5,11 +5,18 @@ from server.db.Mapper import Mapper
 from server.bo.Semester import Semester
 
 class SemesterMapper(Mapper):
+    """Mapper-Klasse, die Semester-Objekte auf der relationalen DB abbildet.
+    
+    Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt
+    """
     def __init__(self):
         super().__init__()
 
     def find_all(self):
-        """finde alle Semester in der Datenbank"""
+        """Auslesen aller vorhandenen Semester
+
+        :return Eine Sammlung aller Semester-Objekten.
+        """
         result = []
 
         cursor = self._connection.cursor()
@@ -31,6 +38,11 @@ class SemesterMapper(Mapper):
         return result
 
     def find_by_id(self, id):
+        """Eindeutiges Auslesen eines Semesters durch ID
+
+        :param id
+        :return Semester-Objekt, das der übergebenen ID entspricht oder None wenn DB-Tupel nicht vorhanden ist
+        """
         result = None
         
         cursor = self._connection.cursor()
@@ -55,7 +67,11 @@ class SemesterMapper(Mapper):
         return result
 
     def find_semester_of_student(self, id):
-        """finde alle Semester eines Studenten, in welcher er eine Teilnahme hat in der Datenbank"""
+        """
+        finde alle Semester eines Studenten, in welcher er eine Teilnahme hat in der Datenbank
+
+        :param id
+        """
         result = []
 
         cursor = self._connection.cursor()
@@ -83,6 +99,10 @@ class SemesterMapper(Mapper):
     def insert(self, semester):
         '''
         Einfugen eines Semester BO's in die DB
+
+
+        :param semester
+        :return das bereits übergebene Semester Objekt mit aktualisierten Daten
         '''
 
         cursor = self._connection.cursor()
@@ -108,7 +128,12 @@ class SemesterMapper(Mapper):
         return semester
         
     def update(self, semester):
+        """
+        Wiederholtes Schreiben / Aktualisieren eines Semester-Objekts in Datenbank
 
+        :param semester soll in die DB geschrieben werden
+        :return aktualisiertes Semester-Objekt
+        """
         cursor = self._connection.cursor()
 
         command = "UPDATE semester SET name=%s WHERE id=%s"
@@ -123,7 +148,11 @@ class SemesterMapper(Mapper):
         return result        
 
     def delete(self, id):
-        """Delete an object from the DB"""
+         """
+         Löschen der Daten eines Semester-Objekts aus der Datenbank
+
+        :param id
+        """
         cursor = self._connection.cursor()
         
         command = "DELETE FROM semester WHERE id={}".format(id)

@@ -46,6 +46,12 @@ class ModulMapper(Mapper):
         return result
 
     def find_by_projekt_id(self, projekt_id):
+         """Suchen eines Moduls nach der Projekt ID 
+
+        :param projekt_id
+        :return Modul-Objekt, welche mit der projekt ID übereinstimmt
+        """
+
         result = []
         
         cursor = self._connection.cursor()
@@ -69,6 +75,7 @@ class ModulMapper(Mapper):
 
     def find_all(self):
         """Auslesen aller Module aus der Datenbank
+
         :return Eine Sammlung aller Modul-Objekten
         """
         result = []
