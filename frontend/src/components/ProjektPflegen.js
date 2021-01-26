@@ -20,6 +20,7 @@ import ProjektPflegenEintrag from './ProjektPflegenEintrag';
 
 /**
  * dieser Tab wird unter 2 Rollen angezeigt:
+ * 
  * Unter der Rolle Dozent:
  * Rendert die aktuellen sowie abgeschlossenen Projekte vom Dozenten 
  * und die Einträge der Projekte mithilfe der ProjektPflegenEintrag Komponente.
@@ -110,17 +111,17 @@ class ProjektPflegen extends Component {
     //API Anbindung holt alle Projekte im richtigen Zustand vom Backend
     if (this.props.currentPerson.getrolle()==="Admin"){
 			ElectivAPI.getAPI().getProjekteByZustand("in Bewertung")
-      .then(projekteBOs => 
-				this.setState({								    //neuer status wenn fetch komplett
-					projekte: projekteBOs,	
-					loadingInProgress: false,				// deaktiviere ladeindikator
-          error: null,
-				})).catch(e =>
-					this.setState({
-						projekte: [],
-						loadingInProgress: false,
-						error: e
-          }));
+        .then(projekteBOs => 
+          this.setState({								    //neuer status wenn fetch komplett
+            projekte: projekteBOs,	
+            loadingInProgress: false,				// deaktiviere ladeindikator
+            error: null,
+          })).catch(e =>
+            this.setState({
+              projekte: [],
+              loadingInProgress: false,
+              error: e
+            }));
     // setze laden auf wahr
     this.setState({
       loadingInProgress: true,
@@ -287,7 +288,6 @@ class ProjektPflegen extends Component {
           <div className={classes.root}>          
             {/*erster sichtbarer Teil wenn noch kein Projekt ausgewählt wurde*/}
             <Grid className={classes.grid} container spacing={1} display="flex" margin="auto">
-              
               <Grid item sm={2} >
                 <FormControl className={classes.formControl}>
                   <InputLabel id="demo-simple-select-label">Status</InputLabel>
@@ -343,60 +343,57 @@ class ProjektPflegen extends Component {
                   </>
                 }
 
-            {/*wenn ein Projekt ausgewählt wurde*/}
-            
+              {/*wenn ein Projekt ausgewählt wurde*/}
               {currentProjektBO ?
-                    <>
-                    
+                  <>
                     {teilnahmen ?
                         <>
-                        {/*wenn der aktuelle Zustand des Projektes in Bewertung ist*/}
-                        {currentProjektBO.aktueller_zustand === "in Bewertung"?
-                        <>
-                        <Grid item sm={8} align="right">
-                          <Grid item className={classes.grid} >
-                              <Tooltip title='Teilnehmer hinzufügen' placement="left">
-                                <Fab size="medium" align="right" className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
-                                  <AddIcon />
-                                </Fab> 
-                                </Tooltip>
-                          </Grid>
-                        </Grid>
-                        </>
-                          :
-                        <>
-                        </>
-                        
-                      }
+                          {/*wenn der aktuelle Zustand des Projektes in Bewertung ist*/}
+                          {currentProjektBO.aktueller_zustand === "in Bewertung"?
+                            <>
+                              <Grid item sm={8} align="right">
+                                <Grid item className={classes.grid} >
+                                    <Tooltip title='Teilnehmer hinzufügen' placement="left">
+                                      <Fab size="medium" align="right" className={classes.addButton} color="primary" aria-label="add" onClick={this.addStudentButtonClicked}>
+                                        <AddIcon />
+                                      </Fab> 
+                                      </Tooltip>
+                                </Grid>
+                              </Grid>
+                            </>
+                            :
+                            <>
+                            </>
+                          }
                       { teilnahmen.length > 0 ?
                       <>
-                      {/*Tabellen Header Zeileninhalte*/}
-                      <TableContainer className={classes.table} component={Paper}>
-                        <Table aria-label="customized table">
-                          <TableHead>
-                            <StyledTableRow>
-                              <StyledTableCell align="left">Student </StyledTableCell>
-                              <StyledTableCell align="center">Matrikelnr.</StyledTableCell>
-                              <StyledTableCell align="center">Note</StyledTableCell>
-                              <StyledTableCell align="center">Teilnahme</StyledTableCell>
-                            </StyledTableRow>
-                          </TableHead>
-                            <TableBody>
-                              {/*Tabellenzelleninhalte in der ProjektBearbeitenEintrag Komponente*/}
-                              {
-                                teilnahmen.map(teilnahme =>
-                                  <ProjektPflegenEintrag key={teilnahme.getID()} teilnahme = {teilnahme} reloadteilnahmen={this.getTeilnahmenByProjektId} currentProjektBO = {currentProjektBO} currentProjekt = {currentProjekt} />
-                                )
-                              }
-                            </TableBody> 
-                        </Table>
-                      </TableContainer>
+                        {/*Tabellen Header Zeileninhalte*/}
+                        <TableContainer className={classes.table} component={Paper}>
+                          <Table aria-label="customized table">
+                            <TableHead>
+                              <StyledTableRow>
+                                <StyledTableCell align="left">Student </StyledTableCell>
+                                <StyledTableCell align="center">Matrikelnr.</StyledTableCell>
+                                <StyledTableCell align="center">Note</StyledTableCell>
+                                <StyledTableCell align="center">Teilnahme</StyledTableCell>
+                              </StyledTableRow>
+                            </TableHead>
+                              <TableBody>
+                                {/*Tabellenzelleninhalte in der ProjektBearbeitenEintrag Komponente*/}
+                                {
+                                  teilnahmen.map(teilnahme =>
+                                    <ProjektPflegenEintrag key={teilnahme.getID()} teilnahme = {teilnahme} reloadteilnahmen={this.getTeilnahmenByProjektId} currentProjektBO = {currentProjektBO} currentProjekt = {currentProjekt} />
+                                  )
+                                }
+                              </TableBody> 
+                          </Table>
+                        </TableContainer>
                       </>
                       : 
                       <>
-                      <Typography className={classes.warnung}>Dieses Projekt hat keine Teilnahmen</Typography>
+                        <Typography className={classes.warnung}>Dieses Projekt hat keine Teilnahmen</Typography>
                       </>
-                       }
+                      }
 
                       {/*Bewertung abschließen Button wird nur angezeigt wenn das Projekt sich noch in dem Bewertungszustand befindet*/}
                       {currentProjektBO && teilnahmen.length !== 0? 

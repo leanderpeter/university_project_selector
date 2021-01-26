@@ -75,7 +75,7 @@ class TeilnahmeMapper(Mapper):
         return result
 
     def find_projekt_id(self, id):
-
+        """ Findet alle Teilnahmen von einer Projekt ID"""
         result = []
         cursor = self._connection.cursor()
         command = "SELECT lehrangebot FROM teilnahmen WHERE id={}".format(id)
@@ -98,6 +98,12 @@ class TeilnahmeMapper(Mapper):
 
 
     def insert(self, teilnahme):
+        '''
+		Einfugen eines Teilnahme BO's in die DB
+
+		:param teilnahme 
+        :return das bereits übergebene Teilnahme-Objekt mit aktualisierten Daten
+		'''
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM teilnahmen ")
         tuples = cursor.fetchall()
@@ -123,6 +129,11 @@ class TeilnahmeMapper(Mapper):
         return teilnahme
 
     def update(self, teilnahme):
+        """Überschreiben / Aktualisieren eines Teilnahme-Objekts in der DB
+
+        :param teilnahme
+        :return aktualisiertes Teilnahme-Objekt
+        """
 
         cursor = self._connection.cursor()
 
@@ -146,6 +157,12 @@ class TeilnahmeMapper(Mapper):
 
 
     def find_by_modul_und_semester(self, modul_id, semester_id):
+        """Suchen einer Teilnahme nach der übergebenen Modul ID und Semester ID. 
+
+        :param modul_id und semester_id 
+        :return Teilnahme-Objekt, welche mit der Modul ID und Semester ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
         result = []
 
         cursor = self._connection.cursor()

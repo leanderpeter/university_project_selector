@@ -6,17 +6,27 @@ from server.db.Mapper import Mapper
 
 '''
 -------------------------------------------------------------------------------------------------------------------------------
+Für die Weiterentwicklung des Systems mit einer Warteliste entwicklet,
+die aber vorerst noch nicht umgesetzt wurde!
+
+
 Alle funktionen in dieser Klasse muessen neu geschrieben werden. Sie sind lediglich aufgrund zum testen hier.
 
 Diese klasse ist komplett kopiert von ProjektMapper!!
+
 -------------------------------------------------------------------------------------------------------------------------------
 '''
 
 class ProjektWartelisteMapper(Mapper):
+    """
+    Mapper-Klasse, die Projekt Objekte auf der relationealen Datenbank abbildet.
+    Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt
+    """
     def __init__(self):
         super().__init__()
 
     def find_all(self):
+        
 
         result = []
         cursor = self._connection.cursor()

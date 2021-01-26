@@ -59,6 +59,11 @@ class ProjektMapper(Mapper):
         return result
 
     def set_zustand_at_projekt(self, projekt_id, zustand_id):
+        """Überschreiben / Aktualisieren eines Projekt-Objekts in der DB
+
+        :param projekt_id und zustand_id
+        :return aktualisiertes Projekt-Objekt
+        """
         cursor = self._connection.cursor()
         command = "UPDATE projekte SET aktueller_zustand = %s WHERE id = %s"
         data = (zustand_id,projekt_id)
@@ -69,6 +74,9 @@ class ProjektMapper(Mapper):
 
    
     def find_projekte_by_zustand(self, zustand):
+        '''Finde alle Projekte mit gegebenem Zustand
+        :param zustand-> Zustand-String
+        '''
 
         result = []
         cursor = self._connection.cursor()
@@ -90,6 +98,9 @@ class ProjektMapper(Mapper):
         return result
     
     def find_projekte_by_zustand_by_dozent(self, zustand_id,dozent_id):
+        '''Finde alle Projekte mit gegebene Zustand und vom gegebenen Dozenten
+        :param zustand_id und dozent_id
+        '''
 
         result = []
         cursor = self._connection.cursor()
@@ -113,6 +124,9 @@ class ProjektMapper(Mapper):
         return result
 
     def find_projekte_by_zustaende(self, zustand):
+        '''Finde alle Projekte mit gegebenen Zuständen
+        :param zustand -> zustand-String
+        '''
         print(zustand)
         result = []
         cursor = self._connection.cursor()
@@ -139,6 +153,12 @@ class ProjektMapper(Mapper):
 
 
     def find_projekt_by_id(self, id):
+        """Suchen eines Projekts nach der übergebenen ID. 
+
+        :param id Primärschlüsselattribut aus der Datenbank
+        :return Projekt-Objekt, welche mit der ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
         result = None
 
         cursor = self._connection.cursor()
@@ -182,6 +202,11 @@ class ProjektMapper(Mapper):
 
     def create_projekt(self, id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich,
                        anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art):
+        """Einfügen eines Projekt-Objekts in die DB
+
+        :param id, name, max_teilnehmer, beschreibung usw. 
+        :return das bereits übergebene Projekt-Objekt mit aktualisierten Daten
+        """
         projekt = Projekt()
         projekt.set_id(id)
         projekt.set_name(name)
@@ -211,6 +236,11 @@ class ProjektMapper(Mapper):
         pass
 
     def update(self, projekt):
+        """Überschreiben / Aktualisieren eines Projekt-Objekts in der DB
+
+        :param projekt
+        :return aktualisiertes Projekt-Objekt
+        """
         cursor = self._connection.cursor()
 
         command = "UPDATE projekte SET name=%s, max_teilnehmer=%s, beschreibung=%s, betreuer=%s, externer_partner=%s, woechentlich=%s, anzahl_block_vor=%s, anzahl_block_in=%s, praeferierte_block=%s, bes_raum=%s, raum=%s, sprache=%s, dozent=%s, aktueller_zustand=%s, halbjahr=%s, art=%s WHERE id=%s"
@@ -242,6 +272,10 @@ class ProjektMapper(Mapper):
         return result
 
     def delete(self, id):
+        """Löschen der Daten eines Projektes aus der Datenbank
+
+        :param id -> Projekt-Objekt
+        """
         cursor = self._connection.cursor()
 
         command = "DELETE FROM projekte_hat_module WHERE projekt_id={}".format(id)
@@ -252,6 +286,12 @@ class ProjektMapper(Mapper):
         cursor.close()
 
     def count_teilnehmer_by_projekt(self, projektID):
+        """zählen der Teilnehmer in einem Projekt. 
+
+        :param ProjektID 
+        :return Zahl, 
+        None wenn kein Eintrag gefunden wurde
+        """
         cursor = self._connection.cursor()
         command = "SELECT COUNT(*) FROM teilnahmen WHERE lehrangebot={}".format(projektID)
         cursor.execute(command)
@@ -259,9 +299,14 @@ class ProjektMapper(Mapper):
         self._connection.commit()
         cursor.close()
         return countRow[0]
-        #MUSS IN TEILNAHMEMAPPER
 
     def get_teilnehmerId_by_projekt(self, projektID):
+        """Suchen nach den Teilnehmer IDs eines Projekts. 
+
+        :param projektID 
+        :return Teilnehmer ID-Objekte, welche in der Projekt ID übereinstimmend sind,
+                None wenn kein Eintrag gefunden wurde
+        """
         result = []
         cursor = self._connection.cursor()
         command = "SELECT teilnehmer FROM teilnahmen WHERE lehrangebot={}".format(projektID)
@@ -272,7 +317,6 @@ class ProjektMapper(Mapper):
         self._connection.commit()
         cursor.close()
         return result
-        #MUSS IN TEILNAHMEMAPPER
 
     def insert_pending(self, projekt):
         '''
