@@ -261,6 +261,23 @@ class PersonByIDOperationen(Resource):
         return person
 
 
+@electivApp.route('/persona/<string:rolle>')
+@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class PersonByIDOperationen(Resource):
+    @electivApp.marshal_list_with(person)
+    # @secured
+
+    def get(self, rolle):
+        adm = ProjektAdministration()
+        person = adm.get_person_by_rolle(rolle)
+        return person
+
+    def delete(self, person_id):
+        pass
+
+    def put(self, person_id):
+        pass
+
 @electivApp.route('/personen')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonOperationen(Resource):

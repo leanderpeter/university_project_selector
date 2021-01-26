@@ -406,3 +406,10 @@ class ProjektAdministration(object):
         """ Eine Projektart mit einer bestimmten ID auslesen"""
         with ProjektartMapper() as mapper:
             return mapper.find_projektart_by_id(id)
+
+    def get_person_by_rolle(self, rolle):
+        """ Gib alle Personen zurueck mit einer Rolle
+        :param rolle -> String-Objekt
+        """
+        with PersonMapper() as mapper:
+            return mapper.find_by_rolle(rolle)

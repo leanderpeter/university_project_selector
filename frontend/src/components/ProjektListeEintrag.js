@@ -14,6 +14,7 @@ class ProjektListeEintrag extends Component {
         this.state = {
             projekt: props.projekt,
             projektarten: props.projektarten,
+            personen: props.personen,
             showProjektForm: false,
             showProjektDeleteDialog: false,
             teilnahmeButtonDisabled: false,
@@ -110,7 +111,7 @@ class ProjektListeEintrag extends Component {
 
 
 
-        const { classes, expandedState, currentStudent, projektarten} = this.props;
+        const { classes, expandedState, currentStudent, projektarten, personen} = this.props;
         // Use the states projekt
         const { projekt  } = this.state;
 
@@ -124,8 +125,8 @@ class ProjektListeEintrag extends Component {
                     >
                         <Grid container spacing={2} justify='flex-start' alignItems='center'>
                             <Grid item>
-                                <Typography variant='body1'
-                                    className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()} </Typography>
+                            <Typography variant='body1'
+                                className={classes.heading}>{projekt.getname()} bei {personen[projekt.getdozent()].name} </Typography>
                             </Grid>
                             <Grid item xs />
                             <Grid item>

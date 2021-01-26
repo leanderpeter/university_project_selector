@@ -33,7 +33,8 @@ class ProjektListe extends Component {
       loadingInProgress: false,
       expandedProjektID: expandedID,
       showProjekteForm: false,
-      ectsCount: 0
+      ectsCount: 0,
+      personen: []
     };
   }
 
@@ -87,10 +88,31 @@ class ProjektListe extends Component {
     });
   }
 
+  getPPersonen = () => {
+    ElectivAPI.getAPI().getPersons()
+      .then(personBOs =>
+        this.setState({								//neuer status wenn fetch komplett
+          personen: personBOs,
+          loadingInProgress: false,				// deaktiviere ladeindikator
+          error: null,
+        })).catch(e =>
+          this.setState({
+            personen: [],
+            loadingInProgress: false,
+            error: e
+          }));
+    // setze laden auf wahr
+    this.setState({
+      loadingInProgress: true,
+      error: null
+    });
+  }
+
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
   componentDidMount() {
     this.getProjekte();
     this.getProjektarten();
+    this.getPPersonen();
   }
 
   onExpandedStateChange = projekt => {
@@ -113,7 +135,8 @@ class ProjektListe extends Component {
   render() {
 
     const { classes, currentStudent } = this.props;
-    const { projekte, projektFilter, expandedProjektID, loadingInProgress, error, ectsCount, projektarten } = this.state;
+    const { projekte, projektFilter, expandedProjektID, loadingInProgress, error, ectsCount, projektarten, personen } = this.state;
+
 
     return (
       <div className={classes.root}>
@@ -150,7 +173,7 @@ class ProjektListe extends Component {
             </>
           }
         </Grid>
-        {projektarten.length > 0 && projekte.length > 0 ?
+        {projektarten.length > 0 && projekte.length > 0 && personen.length > 0 ?
           <>
         <Button className={classes.ects} variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent', }}>5 ECTS</Button>
         {       
@@ -159,7 +182,7 @@ class ProjektListe extends Component {
           .map(projekt => 
           <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
-              ectsCount={ectsCount} projektarten={projektarten}
+              ectsCount={ectsCount} projektarten={projektarten} personen={personen}
             />)
         } 
         <Button className={classes.ects} variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent', }}>10 ECTS</Button>
@@ -169,7 +192,7 @@ class ProjektListe extends Component {
           .map(projekt => 
           <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
-              ectsCount={ectsCount} projektarten={projektarten}
+              ectsCount={ectsCount} projektarten={projektarten} personen={personen}
             />)
         } 
         <Button className={classes.ects} variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent', }}>20 ECTS</Button>
@@ -179,7 +202,7 @@ class ProjektListe extends Component {
           .map(projekt => 
           <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
-              ectsCount={ectsCount} projektarten={projektarten}
+              ectsCount={ectsCount} projektarten={projektarten} personen={personen}
             />)
         } 
           </>
