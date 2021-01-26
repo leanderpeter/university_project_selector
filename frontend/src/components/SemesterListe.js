@@ -10,7 +10,6 @@ import ClearIcon from '@material-ui/icons/Clear';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 
 import SemesterListeEintrag from './SemesterListeEintrag';
 import SemesterForm from './dialogs/SemesterForm';
@@ -120,7 +119,7 @@ semesterFormClosed = semester => {
   /** Renders the component */
   render() {
     const { classes } = this.props;
-    const {  loadingInProgress, error, semesterFilter, filteredSemester, showDeleteForm, showSemesterForm} = this.state;
+    const {  loadingInProgress, error, semesterFilter, filteredSemester, showSemesterForm} = this.state;
 
     return (
       <div className={classes.root}>
@@ -158,7 +157,7 @@ semesterFormClosed = semester => {
                 }
             </List>
         <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`Semester konnte nicht geladen werden.`} onReload={this.getSemester} />
+        <ContextErrorMessage error={error} contextErrorMsg={`Semester konnten nicht geladen werden.`} onReload={this.getSemester} />
         </Paper>
         <SemesterForm show={showSemesterForm} onClose={this.semesterFormClosed} getSemester= {this.getSemester}/>
       </div>

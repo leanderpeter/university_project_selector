@@ -10,7 +10,6 @@ import ClearIcon from '@material-ui/icons/Clear';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 
 // import ModulListeEintrag from './ModulListeEintrag';
 import ProjektartenForm from './dialogs/ProjektartenForm';
@@ -149,13 +148,9 @@ projektartFormClosed = projektart => {
                 filteredProjektarten.map(projektart => 
                     <ProjektartListeEintrag key={projektart.getID()} projektart = {projektart} show={this.props.show} getProjektart={this.getProjektart}/>)
                 }
-                <ListItem>
-                <LoadingProgress show={loadingInProgress} />
-                <ContextErrorMessage error={error} contextErrorMsg={`Projektartliste konnte nicht geladen werden.`} onReload={null} />
-                </ListItem>
             </List>
         <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`} onReload={this.getProjektart} />
+        <ContextErrorMessage error={error} contextErrorMsg={`Projektartliste konnte nicht geladen werden.`} onReload={this.getProjektart} />
         </Paper>
         <ProjektartenForm show={showProjektartenForm} onClose={this.projektartFormClosed} getProjektart = {this.getProjektart}/>
       </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles, Button, Typography, Grid } from '@material-ui/core';
+import { withStyles, Button, Grid } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';

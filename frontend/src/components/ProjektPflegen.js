@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles, Button, Grid, Typography,Fab,Select,TableFooter,FormControl,MenuItem,Paper,Table,TableRow,TableBody,TableHead,TableCell,TableContainer, InputLabel} from '@material-ui/core';
+import { withStyles, Button, Grid, Typography,Fab,Select,FormControl,
+  MenuItem,Paper,Table,TableRow,TableBody,TableHead,TableCell,TableContainer, InputLabel} from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
 //Icons importieren
-import SaveIcon from '@material-ui/icons/Save';
 import AddIcon from '@material-ui/icons/Add';
-import ArchiveIcon from '@material-ui/icons/Archive';
 
 //import AddStudent Dialog
 import AddStudent from './dialogs/AddStudent';
@@ -305,7 +304,7 @@ class ProjektPflegen extends Component {
                         <Grid item sm={2} >
                           <FormControl className={classes.formControl}>
                             <InputLabel>Projekt </InputLabel>
-                              <Select  className={classes.formControl} className={classes.selectprojekt}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
+                              <Select  className={classes.selectprojekt} value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
                                 {
                                   projekte.map(projekt =>
                                   <MenuItem value={projekt}><em>{projekt.getname()}</em></MenuItem>
@@ -322,7 +321,7 @@ class ProjektPflegen extends Component {
                             <>
                               <FormControl className={classes.formControl}>
                                   <InputLabel>Projekt </InputLabel>
-                                    <Select  className={classes.formControl} className={classes.selectprojekt}  value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
+                                    <Select  className={classes.selectprojekt} value={currentProjektBO}  onChange={this.handleChange(currentProjekt)}>
                                       {
                                       abgeschlosseneProjekte.map(projekt =>
                                       <MenuItem value={projekt}><em>{projekt.getname()} ({semester[projekt.halbjahr - 1].name})</em></MenuItem>
@@ -391,8 +390,6 @@ class ProjektPflegen extends Component {
                               }
                             </TableBody> 
                         </Table>
-                            <LoadingProgress show={loadingInProgress} />
-                            <ContextErrorMessage error={error} contextErrorMsg = {'Projekte bearbeiten konnten nicht geladen werden'} onReload={this.getTeilnahmen} /> 
                       </TableContainer>
                       </>
                       : 
@@ -427,13 +424,17 @@ class ProjektPflegen extends Component {
                     :
                     <>
                       <Typography className={classes.warnung}>Bitte wählen Sie ein Projekt aus</Typography>
-                      <LoadingProgress show={loadingInProgress} />
-                      <ContextErrorMessage error={error} contextErrorMsg={`Projekt konnte nicht geladen werden`} onReload={this.handleReload}/>
                     </>
-                    
                   } 
                   
             </Grid>
+            <LoadingProgress show={loadingInProgress} />
+            <ContextErrorMessage error={error} contextErrorMsg={`Die Projekte oder die Semester konnten nicht geladen werden`} 
+                      onReload={()=>{
+                            this.getProjekte();
+                            this.getAbgeschlosseneProjekte();
+                            this.getSemester();
+                      }} />
             {/*AddStudent Komponente*/}
             <AddStudent show={showAddStudent} currentProjekt={currentProjekt} teilnahmen={teilnahmen} onClose={this.addStudentClosed}/>   
           </div>
@@ -455,6 +456,7 @@ const styles = theme => ({
     warnung: {
       color: theme.palette.secondary.main,
       marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
       width: '100%'
     },
     select:{

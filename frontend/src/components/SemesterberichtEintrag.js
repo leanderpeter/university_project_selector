@@ -225,8 +225,8 @@ class SemesterberichtEintrag extends Component {
 
     /** Renders the component */
     render(){
-        const {classes, teilnahme} = this.props;
-        const { projektZustand, projektID, projektName, ECTS, semester, dozentName, note, loadingInProgress, error } = this.state;
+        const {classes} = this.props;
+        const { projektZustand, projektID, projektName, ECTS, dozentName, note, loadingInProgress, error } = this.state;
 
         return(
           <>

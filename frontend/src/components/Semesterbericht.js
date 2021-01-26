@@ -210,7 +210,7 @@ class Semesterbericht extends Component {
                 <>
                 <Typography className={classes.warnung}> Bitte wählen Sie zunächst ein Semester aus</Typography>
                 <LoadingProgress show={loadingInProgress} />
-                <ContextErrorMessage error={error} contextErrorMsg={`Semester und Module konnten nicht geladen werden`} onReload={this.handleReload}/>
+                <ContextErrorMessage error={error} contextErrorMsg={`Semester konnten nicht geladen werden`} onReload={this.getSemesterOfStudent}/>
                 </>
                 }            
             </div>

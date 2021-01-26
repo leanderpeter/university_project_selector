@@ -30,9 +30,11 @@ class ProjektListeEintrag extends Component {
     teilnahmeButtonClicked = event => {
         event.stopPropagation()
         //Logik fuer Teilnahme Button
-        this.setState({ teilnahmeButtonDisabled: true });
-        this.setState({ teilnahmeAbwaehlenButtonDisabled: false });
-        this.state.projekt.anzahlTeilnehmer = this.state.projekt.anzahlTeilnehmer + 1;
+        this.setState({ 
+            teilnahmeButtonDisabled: true,
+            teilnahmeAbwaehlenButtonDisabled: false,
+        });
+        this.state.projekt.setAnzahlTeilnehmer(this.state.projekt.anzahlTeilnehmer + 1)
         let ects = this.state.projektarten[this.props.projekt.art - 1].ects
         this.props.ectsCountFunc(ects)
         ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
@@ -41,9 +43,11 @@ class ProjektListeEintrag extends Component {
     teilnahmeAbwaehlenButtonClicked = event => {
         event.stopPropagation()
         //Logik fuer Teilnahme Button
-        this.setState({ teilnahmeButtonDisabled: false });
-        this.setState({ teilnahmeAbwaehlenButtonDisabled: true });
-        this.state.projekt.anzahlTeilnehmer = this.state.projekt.anzahlTeilnehmer - 1;
+        this.setState({ 
+            teilnahmeButtonDisabled: false,
+            teilnahmeAbwaehlenButtonDisabled: true,
+        });
+        this.state.projekt.setAnzahlTeilnehmer(this.state.projekt.anzahlTeilnehmer - 1)
         let ects = -this.state.projektarten[this.props.projekt.art - 1].ects
         this.props.ectsCountFunc(ects)
         ElectivAPI.getAPI().deleteTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
@@ -54,6 +58,10 @@ class ProjektListeEintrag extends Component {
 
     getInfosMount = () => {
         if (this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
+            this.setState({ 
+                teilnahmeButtonDisabled: true,
+                teilnahmeAbwaehlenButtonDisabled: false,
+            });
             if (this.props.projektarten.length > 0 && this.props.projekt) {
                 let ects = this.props.projektarten[this.props.projekt.art - 1].ects
                 this.props.ectsCountFunc(ects)
@@ -63,11 +71,13 @@ class ProjektListeEintrag extends Component {
     }
 
     getInfosUpdate = () => {
-        console.log('hallo', this.state.ectsAdded)
         if (this.state.ectsAdded === false) {
             this.setState({ ectsAdded: true })
-
             if (this.props.currentStudent != null && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
+                this.setState({ 
+                    teilnahmeButtonDisabled: true,
+                    teilnahmeAbwaehlenButtonDisabled: false,
+                });
                 if (this.props.projektarten.length > 0 && this.props.projekt) {
                     let ects = this.props.projektarten[this.props.projekt.art - 1].ects
                     this.props.ectsCountFunc(ects)
@@ -103,12 +113,6 @@ class ProjektListeEintrag extends Component {
         const { classes, expandedState, currentStudent, projektarten} = this.props;
         // Use the states projekt
         const { projekt  } = this.state;
-
-
-        if (this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
-            this.state.teilnahmeButtonDisabled = true;
-            this.state.teilnahmeAbwaehlenButtonDisabled = false;
-        }
 
         return (
             <div>

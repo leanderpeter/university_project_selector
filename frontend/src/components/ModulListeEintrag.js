@@ -113,7 +113,7 @@ class ModulListeEintrag extends Component {
             </ListItem>
             <ListItem>
               <LoadingProgress show={loadingInProgress}/>
-              <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getModule} />
+              <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Modul konnte nicht geladen werden'} onReload={this.getModule} />
             </ListItem>
             <Divider/>
             <ModulForm show={showModulForm} modul={modul} onClose={this.modulFormClosed} getModule= {this.getModule}/>
