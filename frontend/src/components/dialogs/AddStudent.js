@@ -51,7 +51,7 @@ class AddStudent extends Component {
                 var studentenids =  studentenvar.map(student=>{
                     return student.id
                 });
-                if (studentenids.indexOf(teilnahmeids[a] != -1)) {
+                if (studentenids.indexOf(teilnahmeids[a] !== -1)) {
                     studentenvar.splice(studentenids.indexOf(teilnahmeids[a]), 1)
                 }
             }

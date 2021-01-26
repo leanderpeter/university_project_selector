@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {withStyles, TextField, InputAdornment, IconButton, Grid, Typography} from '@material-ui/core';
+import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear'
-import {withRouter} from 'react-router-dom';
-import {ElectivAPI} from '../api';
+import { withRouter } from 'react-router-dom';
+import { ElectivAPI } from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
@@ -48,11 +48,11 @@ class ProjektverwaltungListe extends Component {
                     loadingInProgress: false,				// deaktiviere ladeindikator
                     error: null,
                 })).catch(e =>
-            this.setState({
-                projekte: [],
-                loadingInProgress: false,
-                error: e
-            }));
+                    this.setState({
+                        projekte: [],
+                        loadingInProgress: false,
+                        error: e
+                    }));
         // setze laden auf wahr
         this.setState({
             loadingInProgress: true,
@@ -99,7 +99,7 @@ class ProjektverwaltungListe extends Component {
 
     /** Renders the component */
     render() {
-        const {classes, currentStudent} = this.props;
+        const { classes, currentStudent } = this.props;
         const {
             filteredProjekte,
             projektFilter,
@@ -128,13 +128,13 @@ class ProjektverwaltungListe extends Component {
                             InputProps={{
                                 endAdornment: <InputAdornment position='end'>
                                     <IconButton onClick={this.clearFilterFieldButtonClicked}>
-                                        <ClearIcon/>
+                                        <ClearIcon />
                                     </IconButton>
                                 </InputAdornment>,
                             }}
                         />
                     </Grid>
-                    <Grid item xs/>
+                    <Grid item xs />
                     <Grid item>
                     </Grid>
                 </Grid>
@@ -144,15 +144,15 @@ class ProjektverwaltungListe extends Component {
 
                     filteredProjekte.map(projekt =>
                         <ProjektverwaltungListeEintrag key={projekt.getID()} projekt={projekt}
-                                                       expandedState={expandedProjektID === projekt.getID()}
-                                                       onExpandedStateChange={this.onExpandedStateChange}
-                                                       currentStudent={currentStudent}
+                            expandedState={expandedProjektID === projekt.getID()}
+                            onExpandedStateChange={this.onExpandedStateChange}
+                            currentStudent={currentStudent}
                         />)
                 }
-                <LoadingProgress show={loadingInProgress}/>
-                <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`}
-                                     onReload={this.getProjekte}/>
-                <ProjektForm show={showProjekteForm} onClose={this.projektFormClosed}/>
+                <LoadingProgress show={loadingInProgress} />
+                <ContextErrorMessage error={error} contextErrorMsg={`Projekte konnten nicht geladen werden`}
+                    onReload={this.getProjekte} />
+                <ProjektForm show={showProjekteForm} onClose={this.projektFormClosed} />
             </div>
         );
     }

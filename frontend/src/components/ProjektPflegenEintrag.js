@@ -1,32 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles } from '@material-ui/core/styles';
-
-
-
-
+import { withStyles} from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
-
-
 import TableRow from '@material-ui/core/TableRow';
-
-
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
-
-
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 
 
-//Projekt Bearbeiten Datei importieren
+/**
+ * Rendert die Einträge der Projekte (vom Studenten den Namen, die Matrikelnummer, die Note).
+ * Die Teilnahme eines Studenten kann bei einem aktuellen Projekt entfernt werden.
+ * Bei einem abgeschlossenen Projekt kann die Teilnahme eines Studenten nicht mehr entfernt werden.
+ * Die Note kann trotzdem weiterhin nachbearbeitet werden.
+ * 
+ * 
+ */
 
-
-//Css Style Klassen für die Tabellen Zellen
+//Css Style für die Tabellen Zellen
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.primary.main,
@@ -37,22 +33,22 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-//Css Style Klassen für die Tabellen Zeilen
+//Css Style für die Tabellen Zeilen
 const StyledTableRow = withStyles((theme) => ({
   root: {
-    '&:nth-of-type(odd)': {
+    '&:nth-of-type(4n+1)': {
       backgroundColor: theme.palette.action.hover,
     },
   },
 }))(TableRow);
 
-class ProjektBearbeitenEintrag extends Component {
+class ProjektPflegenEintrag extends Component {
 
     constructor(props){
         super(props);
 
+        // Initiert den state
         this.state = {
-            
             teilnahmen : [],
             bewertungen: [],
             studentID: null,
@@ -64,7 +60,7 @@ class ProjektBearbeitenEintrag extends Component {
         };
     }
 
-    //Button um die Teilnahme eines Studenten für das aktuell ausgewählte Projekt zu entfernen
+    //Button um die Teilnahme eines Studenten zu entfernen
     teilnahmeAbwaehlenButtonClicked = event => {
       //Logik fuer Teilnahme abwaehlen Button
       this.setState({teilnahmeAbwaehlenButtonDisabled:true});
@@ -76,11 +72,11 @@ class ProjektBearbeitenEintrag extends Component {
     getStudentByID = () => {
         ElectivAPI.getAPI().getStudentByID(this.props.teilnahme.getteilnehmer())
         .then(studentBO =>
-            this.setState({
+            this.setState({                       //neuer status wenn fetch komplett
               studentID: studentBO.getID(),
               studentName: studentBO.getname(),
               mat_nr:studentBO.getmat_nr(),
-              loadingInProgress: false,
+              loadingInProgress: false,           // deaktiviere ladeindikator
               error: null,
             })).then(()=>{
               
@@ -151,67 +147,78 @@ class ProjektBearbeitenEintrag extends Component {
               await ElectivAPI.getAPI().updateTeilnahme(this.props.teilnahme)
               //this.getBewertung()
     };
-    
+
+    /** Lifecycle Methode, die bei dem Einfügen der Komponente in den Browser DOM aufgerufen wird*/
     componentDidMount() {
       this.getStudentByID();
       this.getBewertung();
       this.getBewertungen();
     }
 
+    /** Rendert die Komponente*/
     render(){
-        const {classes} = this.props;
-        const {bewertungen,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
+        const {classes,currentProjektBO} = this.props;
+        const {bewertungen, studentName, mat_nr, note,  loadingInProgress, error } = this.state;
 
         return(
-              //Tabelleneinträge für die Tabelle in der ProjektBearbeiten.js File
+            //Tabelleneinträge für die Tabelle in der ProjektBearbeiten.js File
+            <>
               <StyledTableRow >
-                <StyledTableCell align="center" component="th" scope="row">{studentName}</StyledTableCell>
+                <StyledTableCell align="left" component="th" scope="row">{studentName}</StyledTableCell>
                 <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
                 <StyledTableCell align="center">
-                {note && bewertungen?
+                {bewertungen?
                     <FormControl className={classes.formControl} >
-                                      <Select value={note } onChange={this.handleChange}  >
-                                          
-                                          {
-                                          bewertungen.map(bewertung =>
-                                          <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
-                                          )
-                                          }
-                                        </Select>  
-
+                            <Select value={note } onChange={this.handleChange}  >
+                                {
+                                bewertungen.map(bewertung =>
+                                <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
+                                )
+                                }
+                            </Select>  
                     </FormControl>                                  
                   :
-                  <FormControl className={classes.formControl}>
-                        
-                          <Select value={note } onChange={this.handleChange}   >
-                              {
-                              bewertungen.map(bewertung =>
-                              <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
-                              )
-                              }
-                          </Select>
-                      
-                  </FormControl>
-                }
-                         
+                    <FormControl className={classes.formControl}>
+                            <Select value={note} >
+                                <MenuItem value={""}><em>Bewertungen nicht geladen</em></MenuItem>
+                            </Select>  
+                    </FormControl>
+                }      
                 </StyledTableCell> 
+
                 <StyledTableCell align="center">
-                  <IconButton className={classes.teilnahmeAbwaehlenButton}  variant="contained"  onClick={this.teilnahmeAbwaehlenButtonClicked}><DeleteIcon /></IconButton>
-                           
-                    
+                  {currentProjektBO.aktueller_zustand === "Bewertung abgeschlossen"?
+                    <>
+                      <IconButton className={classes.teilnahmeAbwaehlenButton}  variant="contained"  onClick={this.teilnahmeAbwaehlenButtonClicked} disabled > <DeleteIcon /></IconButton>
+                    </>
+                    :
+                    <>
+                      <IconButton className={classes.teilnahmeAbwaehlenButton}  variant="contained"  onClick={this.teilnahmeAbwaehlenButtonClicked} > <DeleteIcon /></IconButton>
+                    </>
+                  }  
                 </StyledTableCell>
-                  <LoadingProgress show={loadingInProgress}></LoadingProgress>
-                  <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Projekt konnte nicht geladen werden'} onReload={this.getPerson} />
               </StyledTableRow>
+              <StyledTableRow> 
+              <StyledTableCell colspan="10" className={classes.laden}>
+                <LoadingProgress show={loadingInProgress}></LoadingProgress>
+                <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'}
+                      onReload={()=>{
+                        this.getStudentByID();
+                        this.getBewertung();
+                        this.getBewertungen();
+                  }} />
+              </StyledTableCell>
+            </StyledTableRow>
+          </>
         );
     }
 }
 
-//Css Style Klassen
+//Css Komponent Spezifischer Style 
 const styles = theme => ({
     root: {
-        width: '100%',
-        marginTop: theme.spacing(2),
+      width: '100%',
+      marginTop: theme.spacing(2),
       marginBottom: theme.spacing(2),
       padding: theme.spacing(1),
     },
@@ -224,7 +231,6 @@ const styles = theme => ({
     formControl: {
         margin: theme.spacing(1),
         minWidth: 50,
-        
     },
     button: {
         margin: theme.spacing(1),
@@ -232,10 +238,13 @@ const styles = theme => ({
     selectEmpty: {
       marginTop: theme.spacing(2),
     },
+    laden: {
+      padding: 0
+    }
     });
 
 /** PropTypes */
-ProjektBearbeitenEintrag.propTypes = {
+ProjektPflegenEintrag.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** Projekt to be rendered */
@@ -260,6 +269,4 @@ ProjektBearbeitenEintrag.propTypes = {
   
 
 
-export default withStyles(styles)(ProjektBearbeitenEintrag);
-
-
+export default withStyles(styles)(ProjektPflegenEintrag);

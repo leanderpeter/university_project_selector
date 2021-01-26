@@ -160,7 +160,7 @@ modulFormClosed = modul => {
                 }
             </List>
         <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`Die Module konnten nicht geladen werden.`} onReload={this.getModule}/>
+        <ContextErrorMessage error={error} contextErrorMsg={`Module konnten nicht geladen werden.`} onReload={this.getModule}/>
         </Paper>
         <ModulForm show={showModulForm} onClose={this.modulFormClosed} getModule= {this.getModule}/>
       </div>
