@@ -51,6 +51,9 @@ export default class ElectivAPI {
 	//alle Teilnahmen eines Students anzeigen
 	#getTeilnahmenURL = (id) => `${this.#ElectivServerBaseURL}/teilnahmen/${id}`;
 
+	//Teilnahmen eines Students nach Semester anzeigen
+	#getTeilnahmenBySemesterURL = (student_id, semester_id) => `${this.#ElectivServerBaseURL}/teilnahmenbysemester/${student_id}/${semester_id}`;
+
 	//Alle Teilnahmen einer EDV Nummer für ein bestimmtes Semester
 	#getTeilnahmen_by_modul_und_semesterURL = (modul_id, semester_id) => `${this.#ElectivServerBaseURL}/teilnahmen/${modul_id}/${semester_id}`
   
@@ -59,7 +62,6 @@ export default class ElectivAPI {
 
 	//Teilnahme löschen
 	#deleteTeilnahmeURL = (lehrangebotId,teilnehmerId) => `${this.#ElectivServerBaseURL}/teilnahme?lehrangebotId=${lehrangebotId}&teilnehmerId=${teilnehmerId}`;
-
 
 	//getPerson: id
 	#getPersonURL = (id) => `${this.#ElectivServerBaseURL}/person/${id}`;
@@ -109,7 +111,7 @@ export default class ElectivAPI {
 	//für ein Projekt wählbare Module in DB 'projekte_hat_module' einfügen 
 	#updateProjekte_hat_moduleURL = (projekt_id, module) => `${this.#ElectivServerBaseURL}/projekte_hat_module?projekt_id=${projekt_id}&module=${module}`;
 
-	#updateTeilnahmeURL = (id) => `${this.#ElectivServerBaseURL}/teilnahme2/${id}`;
+	#updateTeilnahmeURL = (id) => `${this.#ElectivServerBaseURL}/teilnahme/${id}`;
 
 	//Alle Semester bekommen
 	#getSemesterURL = () => `${this.#ElectivServerBaseURL}/semester`;
@@ -125,6 +127,9 @@ export default class ElectivAPI {
 
 	//Delete Semester
 	#deleteSemesterURL = (id) => `${this.#ElectivServerBaseURL}/semester?id=${id}`;
+
+	//Alle Semester eines Studenten bekommen
+	#getSemesterOfStudentURL = (id) => `${this.#ElectivServerBaseURL}/semesterofstudent/${id}`
 
 	//Studenten eines Projekts bekommen
 	#getStudentenByProjektIdURL = (id) => `${this.#ElectivServerBaseURL}/student/projekt/${id}`
@@ -372,9 +377,22 @@ export default class ElectivAPI {
 		})
 	}
 
+
+
 	//gibt alle Teilnahmen mit der bestimmten ModulID und SemesterID als BO zurück
 	getTeilnahmen_by_modul_und_semester(modul_id, semester_id){
 		return this.#fetchAdvanced(this.#getTeilnahmen_by_modul_und_semesterURL(modul_id, semester_id)).then((responseJSON) => {
+			let teilnahmeBOs = TeilnahmeBO.fromJSON(responseJSON);
+			console.info(teilnahmeBOs)
+			return new Promise(function (resolve){
+				resolve(teilnahmeBOs)
+			})
+		})
+	}
+
+	//gibt alle Teilnahmen mit der bestimmten SemesterID und StudentID als BO zurück
+	getTeilnahmenBySemester(student_id, semester_id){
+		return this.#fetchAdvanced(this.#getTeilnahmenBySemesterURL(student_id, semester_id)).then((responseJSON) => {
 			let teilnahmeBOs = TeilnahmeBO.fromJSON(responseJSON);
 			console.info(teilnahmeBOs)
 			return new Promise(function (resolve){
@@ -655,6 +673,17 @@ export default class ElectivAPI {
 	//Semester löschen
 	deleteSemester(id){
 		return this.#fetchAdvanced(this.#deleteSemesterURL(id),{method: 'DELETE'})
+	}
+
+	//Alle Semester eines Studenten bekommen, in der er eine Teilnahme hat
+	getSemesterOfStudent(id){
+		return this.#fetchAdvanced(this.#getSemesterOfStudentURL(id)).then((responseJSON) => {
+			let semesterBOs = SemesterBO.fromJSON(responseJSON);
+			console.info(semesterBOs)
+			return new Promise(function (resolve){
+				resolve(semesterBOs)
+			})
+		})
 	}
 
 	//gibt alle Studenten als BO zurück
