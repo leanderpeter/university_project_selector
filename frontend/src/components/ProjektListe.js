@@ -30,7 +30,6 @@ class ProjektListe extends Component {
       filteredProjekte: [],
       projektFilter: '',
       error: null,
-      projektarten: [],
       ausgewaehlteEcts: null,
       loadingInProgress: false,
       expandedProjektID: expandedID,
@@ -47,27 +46,6 @@ class ProjektListe extends Component {
     }, 0);
 
   }
-
-  getProjektart = () => {
-    ElectivAPI.getAPI().getProjektart()
-      .then(projektartBOs =>
-        this.setState({
-          projektarten: projektartBOs,
-          error: null,
-          loadingInProgress: false,
-        })).catch(e =>
-          this.setState({
-            projektarten: ['lel'],
-            error: e,
-            loadingInProgress: false,
-          }));
-    this.setState({
-      error: null,
-      loadingInProgress: true,
-    });
-  }
-
-
 
   //hole alle Projekte vom Backend
   getProjekte = () => {
@@ -90,6 +68,7 @@ class ProjektListe extends Component {
       error: null
     });
   }
+
   getProjektarten = () => {
     ElectivAPI.getAPI().getProjektart()
       .then(projekteartBos =>
@@ -113,7 +92,7 @@ class ProjektListe extends Component {
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
   componentDidMount() {
     this.getProjekte();
-    this.getProjektart();
+    this.getProjektarten();
   }
 
   onExpandedStateChange = projekt => {
@@ -198,7 +177,7 @@ class ProjektListe extends Component {
 
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`}
-          onReload={this.getProjekte, this.getProjektart} />
+          onReload={this.getProjekte, this.getProjektarten} />
 
       </div>
     );
