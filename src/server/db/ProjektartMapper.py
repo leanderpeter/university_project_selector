@@ -14,7 +14,7 @@ class ProjektartMapper(Mapper):
 		super().__init__()
 
 	def find_all(self):
-		 """
+		"""
 		 Auslesen aller Projektarten aus der Datenbank
 
         :return Eine Sammlung aller Projektart-Objekten
@@ -34,7 +34,7 @@ class ProjektartMapper(Mapper):
 		return results
 
 	def create_projektart(self, id, name, ects, sws):
-		 """Einfügen eines Projektart-Objekts in die DB
+		"""Einfügen eines Projektart-Objekts in die DB
 
         :param id, name, ects, sws 
         :return das bereits übergebene Semester-Objekt mit aktualisierten Daten
@@ -49,7 +49,7 @@ class ProjektartMapper(Mapper):
 		return projektart
 
 	def find_projektart_by_id(self, id):
-		 """Suchen einer Projektart nach der übergebenen ID. 
+		"""Suchen einer Projektart nach der übergebenen ID. 
 
         :param id Primärschlüsselattribut aus der Datenbank
         :return Projektart-Objekt, welche mit der ID übereinstimmt,
@@ -126,7 +126,7 @@ class ProjektartMapper(Mapper):
 
 
 	def update(self, projektart):
-		 """Überschreiben / Aktualisieren eines Projektart-Objekts in der DB
+		"""Überschreiben / Aktualisieren eines Projektart-Objekts in der DB
 
         :param projektart
         :return aktualisiertes Projektart-Objekt

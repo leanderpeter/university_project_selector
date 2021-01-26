@@ -164,7 +164,7 @@ class StudentMapper(Mapper):
         cursor.close()
 
     def updateByUserId(self, student):
-         """Überschreiben / Aktualisieren eines Student-Objekts in der DB
+        """Überschreiben / Aktualisieren eines Student-Objekts in der DB
 
         :param student -> Student-Objekt
         :return aktualisiertes Student-Objekt

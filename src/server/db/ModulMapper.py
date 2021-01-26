@@ -46,7 +46,7 @@ class ModulMapper(Mapper):
         return result
 
     def find_by_projekt_id(self, projekt_id):
-         """Suchen eines Moduls nach der Projekt ID 
+        """Suchen eines Moduls nach der Projekt ID 
 
         :param projekt_id
         :return Modul-Objekt, welche mit der projekt ID übereinstimmt

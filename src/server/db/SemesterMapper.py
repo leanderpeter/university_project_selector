@@ -148,7 +148,7 @@ class SemesterMapper(Mapper):
         return result        
 
     def delete(self, id):
-         """
+        """
          Löschen der Daten eines Semester-Objekts aus der Datenbank
 
         :param id
