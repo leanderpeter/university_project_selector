@@ -89,7 +89,7 @@ class StudentListe extends Component {
                         <TextField
                             className={classes.filter}
                             type='text'
-                            label='User suchen'
+                            label='Student suchen'
                             value={userFilter}
                             onChange={this.filterFieldValueChange}
                             InputProps={{

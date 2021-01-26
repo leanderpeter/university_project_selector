@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {withStyles, Button, Grid, FormControl, InputLabel} from '@material-ui/core';
+import { withStyles, Button, Grid, FormControl, InputLabel } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import {ElectivAPI} from '../api';
+import { ElectivAPI } from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
@@ -182,7 +182,7 @@ class ProjektDozentListe extends Component {
 
     /** Renders the component */
     render() {
-        const {classes, currentPerson} = this.props;
+        const { classes, currentPerson } = this.props;
         const {
             filteredProjekte,
             expandedProjektID,
@@ -209,10 +209,10 @@ class ProjektDozentListe extends Component {
 
 
                     </Grid>
-                    <Grid item xs/>
+                    <Grid item xs />
                     <Grid item>
-                        <Button variant='contained' className={classes.button} color='primary' startIcon={<AddIcon/>}
-                                onClick={this.addProjektButtonClicked}>
+                        <Button variant='contained' className={classes.button} color='primary' startIcon={<AddIcon />}
+                            onClick={this.addProjektButtonClicked}>
                             Projekt anlegen
                         </Button>
                     </Grid>
@@ -223,17 +223,17 @@ class ProjektDozentListe extends Component {
 
                     filteredProjekte.map(projekt =>
                         <ProjektDozentListeEintrag key={projekt.getID()} projekt={projekt}
-                                                   expandedState={expandedProjektID === projekt.getID()}
-                                                   onExpandedStateChange={this.onExpandedStateChange}
-                                                   currentPerson={currentPerson} getProjekte={this.getProjekte}
-                                                   projektFormClosed={this.projektFormClosed}
+                            expandedState={expandedProjektID === projekt.getID()}
+                            onExpandedStateChange={this.onExpandedStateChange}
+                            currentPerson={currentPerson} getProjekte={this.getProjekte}
+                            projektFormClosed={this.projektFormClosed}
                         />)
                 }
-                <LoadingProgress show={loadingInProgress}/>
+                <LoadingProgress show={loadingInProgress} />
                 <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`}
-                                     onReload={this.getProjekte}/>
+                    onReload={this.getProjekte} />
                 <ProjektForm show={showProjekteForm} currentPerson={currentPerson} onClose={this.projektFormClosed}
-                             getProjekte={this.getProjekte}/>
+                    getProjekte={this.getProjekte} />
             </div>
         );
     }
