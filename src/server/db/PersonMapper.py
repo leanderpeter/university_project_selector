@@ -192,6 +192,17 @@ class PersonMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+    def find_by_rolle(self, rolle):
+        '''Finde alle Personen mit gegebener Rolle
+        :param rolle -> Rolle-String
+        '''
+        cursor = self._connection.cursor()
+        command = "SELECT id, name, email, google_user_id, rolle FROM personen WHERE rolle={}".format(str(rolle))
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
 
 '''Only for testing purpose'''
 
