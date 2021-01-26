@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {withRouter} from 'react-router-dom';
-import {ElectivAPI} from '../api';
+import { withRouter } from 'react-router-dom';
+import { ElectivAPI } from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
-import {withStyles, IconButton, InputAdornment, TextField, Paper, Grid} from '@material-ui/core';
+import { withStyles, IconButton, InputAdornment, TextField, Paper, Grid } from '@material-ui/core';
 import LoadingProgress from './dialogs/LoadingProgress';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -38,12 +38,12 @@ class UserListe extends Component {
                     error: null,
                     loadingInProgress: false,
                 })).catch(e =>
-            this.setState({
-                user: [],
-                filteredUser: [],
-                error: e,
-                loadingInProgress: false,
-            }));
+                    this.setState({
+                        user: [],
+                        filteredUser: [],
+                        error: e,
+                        loadingInProgress: false,
+                    }));
         this.setState({
             error: null,
             loadingInProgress: true,
@@ -78,8 +78,8 @@ class UserListe extends Component {
 
     /** Renders the component */
     render() {
-        const {classes} = this.props;
-        const {loadingInProgress, error, filteredUser, userFilter} = this.state;
+        const { classes } = this.props;
+        const { loadingInProgress, error, filteredUser, userFilter } = this.state;
 
         return (
             <div className={classes.root}>
@@ -95,7 +95,7 @@ class UserListe extends Component {
                             InputProps={{
                                 endAdornment: <InputAdornment position='end'>
                                     <IconButton onClick={this.clearFilterFieldButtonClicked}>
-                                        <ClearIcon fontSize="small"/>
+                                        <ClearIcon fontSize="small" />
                                     </IconButton>
                                 </InputAdornment>,
                             }}
@@ -107,17 +107,17 @@ class UserListe extends Component {
                         {
                             filteredUser.map(user =>
                                 <UserListeEintrag key={user.getID()} user={user} show={this.props.show}
-                                                  getUser={this.getUser}/>)
+                                    getUser={this.getUser} />)
                         }
                         <ListItem>
-                            <LoadingProgress show={loadingInProgress}/>
+                            <LoadingProgress show={loadingInProgress} />
                             <ContextErrorMessage error={error}
-                                                 contextErrorMsg={`Userliste konnte nicht geladen werden.`}
-                                                 onReload={null}/>
+                                contextErrorMsg={`Userliste konnte nicht geladen werden.`}
+                                onReload={null} />
                         </ListItem>
                     </List>
-                    <LoadingProgress show={loadingInProgress}/>
-                    <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`}/>
+                    <LoadingProgress show={loadingInProgress} />
+                    <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`} />
                 </Paper>
 
             </div>

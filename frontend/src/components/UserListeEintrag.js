@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
 import ListItem from '@material-ui/core/ListItem';
-import {Typography, IconButton, Grid, Tooltip} from '@material-ui/core';
+import { Typography, IconButton, Grid, Tooltip } from '@material-ui/core';
 
 import EditIcon from '@material-ui/icons/Edit';
 import Divider from '@material-ui/core/Divider';
@@ -52,8 +52,8 @@ class UserListeEintrag extends Component {
 
 
     render() {
-        const {classes, user} = this.props;
-        const {showUserForm, error, loadingInProgress} = this.state;
+        const { classes, user } = this.props;
+        const { showUserForm, error, loadingInProgress } = this.state;
 
         return (
             <div>
@@ -68,24 +68,24 @@ class UserListeEintrag extends Component {
                         <Grid item xs={3}>
                             <Typography>{user.email}</Typography>
                         </Grid>
-                        <Grid item xs/>
+                        <Grid item xs />
                         <Grid item>
                         </Grid>
                         <Tooltip title='Bearbeiten' placement="bottom">
                             <IconButton className={classes.bearbeitenButton} variant='contained'
-                                        onClick={this.bearbeitenButtonClicked}>
-                                <EditIcon/>
+                                onClick={this.bearbeitenButtonClicked}>
+                                <EditIcon />
                             </IconButton>
                         </Tooltip>
                     </Grid>
                 </ListItem>
                 <ListItem>
-                    <LoadingProgress show={loadingInProgress}/>
+                    <LoadingProgress show={loadingInProgress} />
                     <ContextErrorMessage error={error} contextErrorMsg={'Der User konnte nicht geladen werden'}
-                                         onReload={this.getUser}/>
+                        onReload={this.getUser} />
                 </ListItem>
-                <Divider/>
-                <UserForm show={showUserForm} user={user} onClose={this.userFormClosed} getModule={this.getUser}/>
+                <Divider />
+                <UserForm show={showUserForm} user={user} onClose={this.userFormClosed} getModule={this.getUser} />
             </div>
         );
     }
