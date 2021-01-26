@@ -143,7 +143,7 @@ class ProjektListe extends Component {
           <Grid item xs />
           {currentStudent ?
             <Grid item className={classes.ectsCount}>
-              <Button variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent', }}>Anzahl ECTS: {ectsCount}</Button>
+              <Button variant="outlined" color="primary" className={classes.buttonEcts} disableRipple style={{ backgroundColor: 'transparent', }}>Anzahl ECTS: {ectsCount}</Button>
             </Grid>
             :
             <>
@@ -214,12 +214,15 @@ const styles = theme => ({
   },
   ectsCount: {
     marginBottom: theme.spacing(1),
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   ects:{
-    marginLeft: theme.spacing(1),
     marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
+    width: '100%'
+  },
+  buttonEcts:{
+    minWidth: 155
   }
 });
 
