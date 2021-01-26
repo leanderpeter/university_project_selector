@@ -38,6 +38,26 @@ class ProjektverwaltungListe extends Component {
         };
     }
 
+    //Suche-Funktion zum Suchen von Projekt
+    filterFieldValueChange= event => {
+        const value = event.target.value.toLowerCase();
+        this.setState({
+            filteredProjekte: this.state.projekte.filter(projekt => {
+                let nameContainsValue = projekt.getname().toLowerCase().includes(value);
+                return nameContainsValue;
+            }),
+            projektFilter: value
+        });
+    }
+
+    //Suche leeren
+    clearFilterFieldButtonClicked = () => {
+        this.setState({
+            filteredProjekte: [...this.state.projekte],
+            projektFilter: ''
+        });
+    }
+
     //hole alle Projekte vom Backend
     getProjekte = () => {
         ElectivAPI.getAPI().getProjekteByZustand("Neu")
@@ -50,6 +70,7 @@ class ProjektverwaltungListe extends Component {
                 })).catch(e =>
                     this.setState({
                         projekte: [],
+                        filteredProjekte: [],
                         loadingInProgress: false,
                         error: e
                     }));
