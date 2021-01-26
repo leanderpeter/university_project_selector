@@ -61,10 +61,10 @@ class StudentListeEintrag extends Component {
                 <ListItem className={classes.root}>
                     <Grid container alignItems="center" spacing={2}>
                         <Grid item>
-                            <Typography>{user.mat_nr}</Typography>
-                        </Grid>
-                        <Grid item xs={2}>
                             <Typography>{user.name}</Typography>
+                        </Grid>
+                        <Grid item>
+                            <Typography>{user.mat_nr}</Typography>
                         </Grid>
                         <Grid item xs/>
                         <Grid item>
@@ -79,7 +79,7 @@ class StudentListeEintrag extends Component {
                 </ListItem>
                 <ListItem>
                     <LoadingProgress show={loadingInProgress}/>
-                    <ContextErrorMessage error={error} contextErrorMsg={'Student konnte nicht geladen werden'}
+                    <ContextErrorMessage error={error} contextErrorMsg={'Der User konnte nicht geladen werden'}
                                          onReload={this.getUser}/>
                 </ListItem>
                 <Divider/>

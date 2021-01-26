@@ -154,9 +154,9 @@ class NotenlisteEintrag extends Component {
         return(
           <>
               <StyledTableRow key={this.props.teilnahme.id}>
-                <StyledTableCell className={classes.student}>{studentName}</StyledTableCell>
-                <StyledTableCell align="center" className={classes.mat_nr}>{mat_nr}</StyledTableCell> 
-                <StyledTableCell align="center">{dozentName}</StyledTableCell>
+                <StyledTableCell component="th" scope="row">{studentName}</StyledTableCell>
+                <StyledTableCell align="left">{mat_nr}</StyledTableCell> 
+                <StyledTableCell align="left">{dozentName}</StyledTableCell>
                 <StyledTableCell align="center">{note}</StyledTableCell> 
               </StyledTableRow>
               <StyledTableRow> 
@@ -173,23 +173,17 @@ class NotenlisteEintrag extends Component {
 /** Component specific styles */
 const styles = theme => ({
     root: {
-      width: '100%',
-      marginTop: theme.spacing(2),
+        width: '100%',
+        marginTop: theme.spacing(2),
       marginBottom: theme.spacing(2),
       padding: theme.spacing(1),
     },
     table: {
-      minWidth: 700,
-    },
-    laden: {
-      padding: 0
+        minWidth: 700,
       },
-    mat_nr: {
-      width: 150      
-    },
-    student: {
-      width: 300
-    }
+    laden: {
+        padding: 0
+      }
     });
 
 /** PropTypes */

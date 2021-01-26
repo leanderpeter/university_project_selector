@@ -372,9 +372,10 @@ class TeilnahmeOperationen(Resource):
         projektAdministration = ProjektAdministration()
         projektAdministration.create_teilnahme(lehrangebotId, teilnehmerId)
 
-@electivApp.route('/teilnahme/<int:id>')
+"""Wieso teilnahme2? Mach doch einfach /teilnahme/<int:id>"""
+@electivApp.route('/teilnahme2/<int:id>')
 @electivApp.response(500, 'Something went wrong')
-class TeilnahmeByIdOperationen(Resource):
+class Teilnahme2Operationen(Resource):
     def get(self, teilname_id):
         pass
 
@@ -400,36 +401,10 @@ class TeilnahmeByIdOperationen(Resource):
 class TeilnahmenByModulundSemesterOperationen(Resource):
     @electivApp.marshal_list_with(teilnahme)
 
-    @secured
     def get(self, modul_id, semester_id):
         adm = ProjektAdministration()
         teilnahmen = adm.get_teilnahmen_by_modul_und_semester(modul_id, semester_id)
         return teilnahmen
-
-
-@electivApp.route('/teilnahmenbysemester/<int:student_id>/<int:semester_id>')
-@electivApp.response(500, 'Something went wrong')
-class TeilnahmenBySemesterOperationen(Resource):
-    @electivApp.marshal_list_with(teilnahme)
-
-    @secured
-    def get(self, student_id, semester_id):
-        adm = ProjektAdministration()
-        teilnahmen = adm.get_teilnahmen_by_semester(student_id, semester_id)
-        print(teilnahmen, 'heeee')
-        return teilnahmen
-
-
-@electivApp.route('/semesterofstudent/<int:id>')
-@electivApp.response(500, 'Something went wrong')
-class SemesterOfStudentOperationen(Resource):
-    @electivApp.marshal_list_with(semester)
-
-    @secured
-    def get(self, id):
-        adm = ProjektAdministration()
-        semester = adm.get_semester_of_student(id)
-        return semester
 
 @electivApp.route('/bewertung/<int:id>')
 @electivApp.response(500, 'Something went wrong')

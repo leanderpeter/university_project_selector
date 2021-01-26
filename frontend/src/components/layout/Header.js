@@ -6,14 +6,8 @@ import ProfileDropDown from '../dialogs/ProfileDropDown';
 import { withRouter } from 'react-router-dom';
 
 /**
- * 
- * Zeigt den Header mit den verfügbaren Navigations Tabs.
- * Je nach Rolle (Student, Dozent, Admin) sind andere Tabs zum auswählen verfügbar.
- * 
- * @see See Material-UIs [Tabs](https://material-ui.com/components/tabs/)
- * @see See Material-UIs [Paper](https://material-ui.com/components/paper/)
- * 
- * @author Leander Peter github.com/leander_peter
+
+@author Leander Peter github.com/leander_peter
 
 **/
 
@@ -33,7 +27,7 @@ class Header extends Component {
 			tabindex: newIndex
 		})
 	};
-	// Rendert Komponente
+	// Render component
 	render() {
     const { classes, user, currentStudent, currentPerson } = this.props;
 		return (
@@ -53,10 +47,9 @@ class Header extends Component {
                 <>
                 <Paper variant='outlined'>
                 <Tabs indicatorColor='secondary' textColor='secondary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}>
-                  <Tab label='Projektwahl' component={RouterLink} to={`/projekte`} />
-                  <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'}/>
-                  <Tab label="Semesterbericht" component={RouterLink} to={'/semesterbericht'}/>
-                  <Tab label='About' component={RouterLink} to={`/about`} />
+                <Tab label='Projektwahl' component={RouterLink} to={`/projekte`} />
+                <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'}/>
+                <Tab label='About' component={RouterLink} to={`/about`} />
                 </Tabs>
                 </Paper>
                 </>
@@ -69,7 +62,7 @@ class Header extends Component {
                   <Paper variant='outlined'>
                   <Tabs indicatorColor='secondary' textColor='secondary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
                   <Tab label='Wahl' component={RouterLink} to={`/projekte`} />
-                  <Tab label='Projektpflege' component={RouterLink} to={`/projektpflegen`} />
+                  <Tab label='Projektpflege' component={RouterLink} to={`/projektbearbeiten`} />
                   <Tab label='Projektverwaltung' component={RouterLink} to={`/projekteDozent`} />
                   <Tab label='About' component={RouterLink} to={`/about`} />
                   </Tabs>
@@ -82,7 +75,7 @@ class Header extends Component {
                   <Paper variant='outlined'>
                   <Tabs indicatorColor='secondary' textColor='secondary' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
                   <Tab className={classes.tab} label='Wahl' component={RouterLink} to={`/projekte`} />
-                  <Tab className={classes.tab} label='Pflege' component={RouterLink} to={`/projektpflegen`} />
+                  <Tab className={classes.tab} label='Pflege' component={RouterLink} to={`/projektbearbeiten`} />
                   <Tab className={classes.tab} label='Verwaltung' component={RouterLink} to={`/projekteDozent`} />
                   <Tab className={classes.tab} label='Prüfung' component={RouterLink} to={`/projektverwaltung`} />
                   <Tab className={classes.tab} label="Notenliste" component={RouterLink} to={'/notenliste'}/>

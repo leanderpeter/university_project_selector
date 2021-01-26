@@ -6,14 +6,12 @@ import 'firebase/auth'; //Firebase module
 import Header from './components/layout/Header';
 import ProjektListe from './components/ProjektListe';
 import ProjektDozentListe from './components/ProjektDozentListe';
-  
 // import Electivs from '/components/Electivs';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import MeineProjekte from './components/MeineProjekte';
-import Semesterbericht from './components/Semesterbericht';
-import ProjektPflegen from './components/ProjektPflegen';
+import ProjektBearbeiten from './components/ProjektBearbeiten';
 import Notenliste from './components/Notenliste';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
@@ -199,16 +197,12 @@ class App extends React.Component {
                   <Route path='/projektverwaltung' component={ProjektverwaltungListe}>
                     <ProjektverwaltungListe currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
-                  <Route path='/projektpflegen' component={ProjektPflegen}>
-                    <ProjektPflegen currentStudent={currentStudent} currentPerson= {currentPerson}/>
+                  <Route path='/projektbearbeiten' component={ProjektBearbeiten}>
+                    <ProjektBearbeiten currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                   
                   <Route path='/meineprojekte' component={MeineProjekte}>
-                    <MeineProjekte currentStudent={currentStudent} />
-                  </Route>
-
-                  <Route path='/semesterbericht' component={Semesterbericht}>
-                    <Semesterbericht currentStudent={currentStudent}/>
+                    <MeineProjekte currentStudent={currentStudent} currentPerson= {currentPerson}/>
                   </Route>
                   
                   <Route path='/notenliste' component={Notenliste}>
