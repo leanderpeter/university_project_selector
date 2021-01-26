@@ -150,7 +150,7 @@ class ProjektverwaltungListe extends Component {
                         />)
                 }
                 <LoadingProgress show={loadingInProgress} />
-                <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`}
+                <ContextErrorMessage error={error} contextErrorMsg={`Projekte konnten nicht geladen werden`}
                     onReload={this.getProjekte} />
                 <ProjektForm show={showProjekteForm} onClose={this.projektFormClosed} />
             </div>

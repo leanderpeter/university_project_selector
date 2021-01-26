@@ -1,30 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ElectivAPI from '../api/ElectivAPI';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import SaveIcon from '@material-ui/icons/Save';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
+import { withStyles} from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
-import TableFooter from '@material-ui/core/TableFooter';
-import StudentBO from '../api/StudentBO'
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import {  Grid, Typography  } from '@material-ui/core';
 
-//ProjektPflegen Komponente importieren
-import ProjektPflegen from './ProjektPflegen';
 
 /**
  * Rendert die Einträge der Projekte (vom Studenten den Namen, die Matrikelnummer, die Note).
@@ -49,7 +36,7 @@ const StyledTableCell = withStyles((theme) => ({
 //Css Style für die Tabellen Zeilen
 const StyledTableRow = withStyles((theme) => ({
   root: {
-    '&:nth-of-type(odd)': {
+    '&:nth-of-type(4n+1)': {
       backgroundColor: theme.palette.action.hover,
     },
   },
@@ -170,16 +157,17 @@ class ProjektPflegenEintrag extends Component {
 
     /** Rendert die Komponente*/
     render(){
-        const {classes,currentProjekt,currentProjektBO} = this.props;
-        const {bewertungen,studentID,studentName, mat_nr, note,  loadingInProgress, error } = this.state;
+        const {classes,currentProjektBO} = this.props;
+        const {bewertungen, studentName, mat_nr, note,  loadingInProgress, error } = this.state;
 
         return(
-              //Tabelleneinträge für die Tabelle in der ProjektBearbeiten.js File
+            //Tabelleneinträge für die Tabelle in der ProjektBearbeiten.js File
+            <>
               <StyledTableRow >
                 <StyledTableCell align="left" component="th" scope="row">{studentName}</StyledTableCell>
                 <StyledTableCell align="center">{mat_nr}</StyledTableCell> 
                 <StyledTableCell align="center">
-                {note && bewertungen?
+                {bewertungen?
                     <FormControl className={classes.formControl} >
                             <Select value={note } onChange={this.handleChange}  >
                                 {
@@ -191,12 +179,8 @@ class ProjektPflegenEintrag extends Component {
                     </FormControl>                                  
                   :
                     <FormControl className={classes.formControl}>
-                            <Select value={note } onChange={this.handleChange}   >
-                                {
-                                bewertungen.map(bewertung =>
-                                <MenuItem value={bewertung.getID()}><em>{bewertung.getnote()}</em></MenuItem>
-                                )
-                                }
+                            <Select value={note} >
+                                <MenuItem value={""}><em>Bewertungen nicht geladen</em></MenuItem>
                             </Select>  
                     </FormControl>
                 }      
@@ -213,9 +197,19 @@ class ProjektPflegenEintrag extends Component {
                     </>
                   }  
                 </StyledTableCell>
-                  <LoadingProgress show={loadingInProgress}></LoadingProgress>
-                  <ContextErrorMessage error={error} contextErrorMsg = {'Dieses Projekt konnte nicht geladen werden'} onReload={this.getPerson} />
               </StyledTableRow>
+              <StyledTableRow> 
+              <StyledTableCell colspan="10" className={classes.laden}>
+                <LoadingProgress show={loadingInProgress}></LoadingProgress>
+                <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'}
+                      onReload={()=>{
+                        this.getStudentByID();
+                        this.getBewertung();
+                        this.getBewertungen();
+                  }} />
+              </StyledTableCell>
+            </StyledTableRow>
+          </>
         );
     }
 }
@@ -223,8 +217,8 @@ class ProjektPflegenEintrag extends Component {
 //Css Komponent Spezifischer Style 
 const styles = theme => ({
     root: {
-        width: '100%',
-        marginTop: theme.spacing(2),
+      width: '100%',
+      marginTop: theme.spacing(2),
       marginBottom: theme.spacing(2),
       padding: theme.spacing(1),
     },
@@ -237,7 +231,6 @@ const styles = theme => ({
     formControl: {
         margin: theme.spacing(1),
         minWidth: 50,
-        
     },
     button: {
         margin: theme.spacing(1),
@@ -245,6 +238,9 @@ const styles = theme => ({
     selectEmpty: {
       marginTop: theme.spacing(2),
     },
+    laden: {
+      padding: 0
+    }
     });
 
 /** PropTypes */

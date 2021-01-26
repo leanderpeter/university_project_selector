@@ -6,7 +6,6 @@ import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import { withStyles, IconButton, InputAdornment, TextField, Paper, Grid } from '@material-ui/core';
 import LoadingProgress from './dialogs/LoadingProgress';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import ClearIcon from '@material-ui/icons/Clear';
 
 import UserListeEintrag from './UserListeEintrag';
@@ -109,15 +108,9 @@ class UserListe extends Component {
                                 <UserListeEintrag key={user.getID()} user={user} show={this.props.show}
                                     getUser={this.getUser} />)
                         }
-                        <ListItem>
-                            <LoadingProgress show={loadingInProgress} />
-                            <ContextErrorMessage error={error}
-                                contextErrorMsg={`Userliste konnte nicht geladen werden.`}
-                                onReload={null} />
-                        </ListItem>
                     </List>
                     <LoadingProgress show={loadingInProgress} />
-                    <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`} />
+                    <ContextErrorMessage error={error} contextErrorMsg={`Userliste konnte nicht geladen werden.`} onReload={this.getUser} />
                 </Paper>
 
             </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography, Button, FormControl, InputLabel, Select, MenuItem, Card } from '@material-ui/core';
+import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography, Button} from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear'
 import { withRouter } from 'react-router-dom';
 import { ElectivAPI } from '../api';
@@ -27,7 +27,6 @@ class ProjektListe extends Component {
     this.state = {
       projekte: [],
       projektarten: [],
-      filteredProjekte: [],
       projektFilter: '',
       error: null,
       ausgewaehlteEcts: null,
@@ -53,7 +52,6 @@ class ProjektListe extends Component {
       .then(projekteBOs =>
         this.setState({								//neuer status wenn fetch komplett
           projekte: projekteBOs,
-          filteredProjekte: [...projekteBOs],		//speicher eine kopie
           loadingInProgress: false,				// deaktiviere ladeindikator
           error: null,
         })).catch(e =>
@@ -115,9 +113,7 @@ class ProjektListe extends Component {
   render() {
 
     const { classes, currentStudent } = this.props;
-    const { filteredProjekte, projektFilter, expandedProjektID, loadingInProgress, error, ectsCount, projektarten } = this.state;
-
-    console.log(this.state.projektarten)
+    const { projekte, projektFilter, expandedProjektID, loadingInProgress, error, ectsCount, projektarten } = this.state;
 
     return (
       <div className={classes.root}>
@@ -154,37 +150,37 @@ class ProjektListe extends Component {
             </>
           }
         </Grid>
-        {projektarten.length > 0 && filteredProjekte.length > 0 ?
+        {projektarten.length > 0 && projekte.length > 0 ?
           <>
         <Button className={classes.ects} variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent', }}>5 ECTS</Button>
-        {
-          // Show the list of ProjektListeEintrag components
-          // Do not use strict comparison, since expandedProjektID maybe a string if given from the URL parameters        
-          filteredProjekte.map(projekt => {
-            if (projekt.getArt()==1) {
-             return( <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
+        {       
+          projekte
+          .filter(projekt => projekt.getArt()===1)
+          .map(projekt => 
+          <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
               ectsCount={ectsCount} projektarten={projektarten}
-            />)}})
+            />)
         } 
         <Button className={classes.ects} variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent', }}>10 ECTS</Button>
         {        
-          filteredProjekte.map(projekt => {
-            if (projekt.getArt()==2) {
-             return( <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
+          projekte
+          .filter(projekt => projekt.getArt()===2)
+          .map(projekt => 
+          <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
               ectsCount={ectsCount} projektarten={projektarten}
-            />)}})
+            />)
         } 
         <Button className={classes.ects} variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent', }}>20 ECTS</Button>
         {
-                
-          filteredProjekte.map(projekt => {
-            if (projekt.getArt()==3) {
-             return( <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
+          projekte
+          .filter(projekt => projekt.getArt()===3)
+          .map(projekt => 
+          <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
               onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
-              ectsCount={ectsCount}  projektarten={projektarten} 
-            />)}})
+              ectsCount={ectsCount} projektarten={projektarten}
+            />)
         } 
           </>
           :
@@ -196,7 +192,10 @@ class ProjektListe extends Component {
 
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`The list of Projects could not be loaded.`}
-          onReload={this.getProjekte, this.getProjektarten} />
+          onReload={()=>{
+            this.getProjekte();
+            this.getProjektarten();
+            }} />
 
       </div>
     );

@@ -103,7 +103,7 @@ class ProjektartListeEintrag extends Component {
             </ListItem>
             <ListItem>
               <LoadingProgress show={loadingInProgress}/>
-              <ContextErrorMessage error={error} contextErrorMsg = {'Diese Teilnahme konnte nicht geladen werden'} onReload={this.getProjektart} />
+              <ContextErrorMessage error={error} contextErrorMsg = {'Diese Projektart konnte nicht geladen werden'} onReload={this.getProjektart} />
             </ListItem>
             <Divider/>
             <ProjektartenForm show={showProjektartForm} projektart={projektart} onClose={this.projektartFormClosed} getProjektart= {this.getProjektart}/>

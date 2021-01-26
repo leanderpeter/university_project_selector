@@ -33,11 +33,10 @@ class ProjektForm extends Component {
 
 		let nm = '', mt = null, bs = '', bt = '', ep = '',wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '';
 		let boolvor = false, boolin = false, boolpraef = false;
+		var hj = null, pa = null;
 		if (props.projekt){
-			var  hj = 0, pa = 0;
-		}
-		else{
-			var hj = null, pa = null;
+			hj = 0;
+			pa = 0;
 		}
 		
 
@@ -492,10 +491,8 @@ class ProjektForm extends Component {
 			beschreibungEdited,
 
 			betreuer,
-			betreuerValidationFailed,
 
 			externer_partner,
-			externer_partnerValidationFailed,
 
 			woechentlich,
 
