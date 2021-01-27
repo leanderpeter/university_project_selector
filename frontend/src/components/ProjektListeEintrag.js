@@ -141,7 +141,7 @@ class ProjektListeEintrag extends Component {
                         <Grid container spacing={2} justify='flex-start' alignItems='center'>
                             <Grid item>
                             <Typography variant='body1'
-                                className={classes.heading}>{projekt.getname()} bei {personen[projekt.getdozent()].name} </Typography>
+                                className={classes.heading}>{projekt.getname()} bei {personen[projekt.getdozent()-1].name} </Typography>
                             </Grid>
                             <Grid item xs />
                             <Grid item>
