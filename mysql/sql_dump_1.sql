@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `electivApp`.`semester` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `electivapp`.`projektarten`
+-- Table `electivApp`.`projektarten`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `electivApp`.`projektarten` (
   `id` INT NOT NULL,
