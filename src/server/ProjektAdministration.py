@@ -137,21 +137,10 @@ class ProjektAdministration(object):
         with ProjektMapper() as mapper:
             return mapper.find_projekt_by_id(projekt_id)
 
-    def get_projekt_by_zus(self):
-        """Alle Projekte mit dem Zustand "Neu" auslesen"""
-        with ProjektMapper() as mapper:
-            return mapper.find_granted() 
-
     def get_projekte(self):
         """Alle Projekte auslesen"""
         with ProjektMapper() as mapper:
-            return mapper.find_all()
-    
-        
-    def get_projekte_by_zustand(self, zustand_id):
-        """Alle Projekte mit einem bestimmten Zustand auslesen"""
-        with ProjektMapper() as mapper:
-            return mapper.find_projekte_by_zustand(zustand_id)
+            return mapper.find_all()  
 
     def get_projekte_by_zustand_by_dozent(self, zustand_id, dozent_id):
         """Alle Projekte eines bestimmten Dozenten mit einem bestimmten Zustand auslesen"""
