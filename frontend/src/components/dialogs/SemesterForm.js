@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, IconButton, Dialog, DialogContent, DialogContentText,
-     DialogTitle, DialogActions, TextField } from '@material-ui/core';
+import {
+    withStyles, Button, IconButton, Dialog, DialogContent, DialogContentText,
+    DialogTitle, DialogActions, TextField
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
@@ -17,7 +19,7 @@ import { ElectivAPI, SemesterBO } from '../../api';
 
 class SemesterForm extends Component {
 
-	constructor(props) {
+    constructor(props) {
         super(props);
 
         //gebe einen leeren status
@@ -44,17 +46,17 @@ class SemesterForm extends Component {
             this.props.getSemester()
             this.setState(this.baseState);
             this.props.onClose(semester); //Aufrufen parent in Backend
-		}).catch(e => 
-			this.setState({
-				addingInProgress: false,
-				addingError: e
-			})
-			);
-		// Ladeanimation einblenden
-		this.setState({
-			addingProgress: true,
-			addingError: null
-		});
+        }).catch(e =>
+            this.setState({
+                addingInProgress: false,
+                addingError: e
+            })
+        );
+        // Ladeanimation einblenden
+        this.setState({
+            addingProgress: true,
+            addingError: null
+        });
     }
 
     // API Anbindung um das Semester über das Backend in der Datenbank upzudaten
@@ -65,39 +67,39 @@ class SemesterForm extends Component {
             this.props.getSemester()
             this.setState(this.baseState);
             this.props.onClose(semester); //Aufrufen parent in backend
-		}).catch(e => 
-			this.setState({
-				updatingInProgress: false,
-				updatingError: e
-			})
-			);
-		// Ladeanimation einblenden
-		this.setState({
-			updatingInProgress: true,
-			updatingError: null
-		});
+        }).catch(e =>
+            this.setState({
+                updatingInProgress: false,
+                updatingError: e
+            })
+        );
+        // Ladeanimation einblenden
+        this.setState({
+            updatingInProgress: true,
+            updatingError: null
+        });
     }
 
     // Validierung der Textfeldaenderungen um einheitlicher Format des Semesters zu speichern
-	textFieldValueChange = (event) => {
-		const value = event.target.value;
+    textFieldValueChange = (event) => {
+        const value = event.target.value;
         const re = /(^SS[0-9]{2}$)|(^WS[0-9]{2}\/[0-9]{2}$)/;
 
-		let error = false;
-		if (value.trim().length === 0) {
-			error = true;
-		}
-		if (re.test(event.target.value) === false) {
-			error = true;
-		}
+        let error = false;
+        if (value.trim().length === 0) {
+            error = true;
+        }
+        if (re.test(event.target.value) === false) {
+            error = true;
+        }
 
-		this.setState({
-			[event.target.id]: event.target.value,
-			[event.target.id + 'ValidationFailed']: error,
-			[event.target.id + 'Edited']: true
-		});
+        this.setState({
+            [event.target.id]: event.target.value,
+            [event.target.id + 'ValidationFailed']: error,
+            [event.target.id + 'Edited']: true
+        });
     }
-    
+
     //Infos das zu bearbeutenden Semester laden
     getInfos = () => {
         if (this.props.semester) {
@@ -105,87 +107,87 @@ class SemesterForm extends Component {
             this.setState({
                 name: name,
             })
-		}
+        }
     }
 
     //wird aufgerufen, wenn das Dialog geschlossen wird
     handleClose = () => {
-		this.setState(this.baseState);
-		this.props.onClose(null);
+        this.setState(this.baseState);
+        this.props.onClose(null);
     }
 
     /** Renders the component */
     render() {
-		const { classes, show, semester } = this.props;
-        const {             
-            name, 
-            nameValidationFailed, 
-            nameEdited, 
+        const { classes, show, semester } = this.props;
+        const {
+            name,
+            nameValidationFailed,
+            nameEdited,
 
             addingInProgress,
-            addingError, 
+            addingError,
             updatingInProgress,
-            updatingError,  } = this.state;
-        
-        let title = '';
-		let header = '';
+            updatingError, } = this.state;
 
-		if (semester) {
-			// Semester objekt true, somit ein edit
-			title = `Semester "${semester.name}" bearbeiten`;
-			header = 'Bitte Format SS** oder WS**/** verwenden';
-		} else {
-			title = 'Neues Semester erstellen';
-			header = 'Bitte Format SS** oder WS**/** verwenden';
-		}
+        let title = '';
+        let header = '';
+
+        if (semester) {
+            // Semester objekt true, somit ein edit
+            title = `Semester "${semester.name}" bearbeiten`;
+            header = 'Bitte Format SS** oder WS**/** verwenden';
+        } else {
+            title = 'Neues Semester erstellen';
+            header = 'Bitte Format SS** oder WS**/** verwenden';
+        }
 
         return (
             show ?
                 <Dialog open={show} onEnter={this.getInfos} onClose={this.handleClose} maxWidth='xs' fullWidth>
                     <DialogTitle className={classes.dialogtitle}>{title}
                         <IconButton className={classes.closeButton} onClick={this.handleClose}>
-                        <CloseIcon />
+                            <CloseIcon />
                         </IconButton>
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                        {header}
+                            {header}
                         </DialogContentText>
 
                         <form className={classes.root} noValidate autoComplete='off'>
 
-                        <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='small' id='name' label='Semester' variant="outlined" value={name}
-                        onChange={this.textFieldValueChange} error={nameValidationFailed}  />
+                            <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='small' id='name' label='Semester' variant="outlined" value={name}
+                                onChange={this.textFieldValueChange} error={nameValidationFailed} />
 
                         </form>
                         <LoadingProgress show={addingInProgress || updatingInProgress} />
                         {
-                        // Show error message in dependency of semester prop
-                        semester ?
-                            <ContextErrorMessage error={updatingError} contextErrorMsg={`Semester ${semester.getID()} could not be updated.`} onReload={this.updateSemester} />
-                            :
-                            <ContextErrorMessage error={addingError} contextErrorMsg={`The Semester could not be added.`} onReload={this.addSemester} />
+                            // Show error message in dependency of semester prop
+                            semester ?
+                                <ContextErrorMessage error={updatingError} contextErrorMsg={`Semester ${semester.getID()} could not be updated.`} onReload={this.updateSemester} />
+                                :
+                                <ContextErrorMessage error={addingError} contextErrorMsg={`The Semester could not be added.`} onReload={this.addSemester} />
                         }
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClose} color='secondary'>
-                        Abbrechen
+                            Abbrechen
                         </Button>
                         {
-                        // If a Semester is given, show an speichern (update) button, else an hinzufügen button
-                        semester ?
-                        <Button disabled={nameValidationFailed } variant='contained' onClick={this.updateSemester} color='primary'>
-                            Speichern
+                            // If a Semester is given, show an speichern (update) button, else an hinzufügen button
+                            semester ?
+                                <Button disabled={nameValidationFailed} variant='contained' onClick={this.updateSemester} color='primary'>
+                                    Speichern
                         </Button>
-                        : 
-                        <Button disabled={nameValidationFailed || !nameEdited }  
-                            variant='contained' onClick={this.addSemester} color='primary'>
-                            Hinzufügen
+                                :
+                                <Button disabled={nameValidationFailed || !nameEdited}
+                                    variant='contained' onClick={this.addSemester} color='primary'>
+                                    Hinzufügen
                         </Button>
                         }
                     </DialogActions>
                 </Dialog>
-            : null
+                : null
         );
     }
 }
@@ -193,27 +195,27 @@ class SemesterForm extends Component {
 /** Component specific styles */
 const styles = theme => ({
     root: {
-      width: '100%',
+        width: '100%',
     },
     closeButton: {
-      position: 'absolute',
-      right: theme.spacing(1),
-      top: theme.spacing(1),
-      color: theme.palette.grey[500],
+        position: 'absolute',
+        right: theme.spacing(1),
+        top: theme.spacing(1),
+        color: theme.palette.grey[500],
     },
     textfield: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1)
     }
-  });
-  
-  /** PropTypes */
-  SemesterForm.propTypes = {
+});
+
+/** PropTypes */
+SemesterForm.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** If true, the form is rendered */
     show: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-  }
-  
-  export default withStyles(styles)(SemesterForm);
+}
+
+export default withStyles(styles)(SemesterForm);

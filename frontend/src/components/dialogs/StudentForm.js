@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
     withStyles, Button, IconButton, Dialog, DialogContent, DialogContentText,
@@ -8,7 +8,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
 
-import {ElectivAPI} from '../../api';
+import { ElectivAPI } from '../../api';
 
 
 /**
@@ -119,7 +119,7 @@ class StudentForm extends Component {
 
     /** Rendert die Komponente */
     render() {
-        const {classes, show, user} = this.props;
+        const { classes, show, user } = this.props;
         const {
             name,
             nameValidationFailed,
@@ -138,7 +138,7 @@ class StudentForm extends Component {
                 <Dialog open={show} onEnter={this.getInfos} onClose={this.handleClose} maxWidth='xs' fullWidth>
                     <DialogTitle className={classes.dialogtitle}>{title}
                         <IconButton className={classes.closeButton} onClick={this.handleClose}>
-                            <CloseIcon/>
+                            <CloseIcon />
                         </IconButton>
                     </DialogTitle>
                     <DialogContent>
@@ -149,19 +149,19 @@ class StudentForm extends Component {
                         <form className={classes.root} noValidate autoComplete='off'>
 
                             <TextField className={classes.textfield} autoFocus type='text' required fullWidth
-                                       margin='small' id='name' label='Name' variant="outlined" value={name}
-                                       onChange={this.textFieldValueChange} error={nameValidationFailed}/>
+                                margin='small' id='name' label='Name' variant="outlined" value={name}
+                                onChange={this.textFieldValueChange} error={nameValidationFailed} />
 
                             <TextField className={classes.textfield} type='text' required fullWidth margin='small'
-                                       id='mat_nr' label='Matrikelnummer' variant="outlined" value={mat_nr}
-                                       onChange={this.numberValueChange} error={mat_nrValidationFailed}/>
+                                id='mat_nr' label='Matrikelnummer' variant="outlined" value={mat_nr}
+                                onChange={this.numberValueChange} error={mat_nrValidationFailed} />
                         </form>
-                        <LoadingProgress show={addingInProgress || updatingInProgress}/>
+                        <LoadingProgress show={addingInProgress || updatingInProgress} />
                         {
 
                             <ContextErrorMessage error={updatingError}
-                                                 contextErrorMsg={`The User ${user.getID()} could not be updated.`}
-                                                 onReload={this.updateUser}/>
+                                contextErrorMsg={`The User ${user.getID()} could not be updated.`}
+                                onReload={this.updateUser} />
 
                         }
                     </DialogContent>
@@ -172,7 +172,7 @@ class StudentForm extends Component {
                         {
                             // If a Projekt is given, show an update button, else an add button
                             <Button disabled={nameValidationFailed || mat_nrValidationFailed} variant='contained'
-                                    onClick={this.updateUser} color='primary'>
+                                onClick={this.updateUser} color='primary'>
                                 Speichern
                             </Button>
 
