@@ -23,6 +23,7 @@ class ProjektListe extends Component {
     if (this.props.location.expandProjekt) {
       expandedID = this.props.location.expandProjekt.getID();
     }
+
     //gebe einen leeren status
     this.state = {
       projekte: [],
@@ -39,6 +40,7 @@ class ProjektListe extends Component {
     };
   }
 
+  // ECTS counter funktion. Erhaelt die ects und addiert diese bei Aufruf zu ectsCount im state
   ectsCountFunc = (ects) => {
     setTimeout(() => {
       this.setState({
@@ -92,6 +94,7 @@ class ProjektListe extends Component {
     });
   }
 
+  // Holt alle Projektarten vom Backend mit GET Methode
   getProjektarten = () => {
     ElectivAPI.getAPI().getProjektart()
       .then(projekteartBos =>
@@ -112,6 +115,7 @@ class ProjektListe extends Component {
     });
   }
 
+  // Holt alle Personen vom Backend
   getPPersonen = () => {
     ElectivAPI.getAPI().getPersons()
       .then(personBOs =>
@@ -139,6 +143,7 @@ class ProjektListe extends Component {
     this.getPPersonen();
   }
 
+  // Funktion fuer die Projektklappen oeffnung und den einhergehenden State change
   onExpandedStateChange = projekt => {
     //  Zum anfang Projekt Eintrag = null
     let newID = null;

@@ -59,16 +59,18 @@ class ProjektverwaltungListeEintrag extends Component {
         }
     }
 
+    // API Anbindung um alle Projektarten vom Backend zu bekommen 
     getProjektart = () => {
         ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
             this.setState({
                 projektarten: projektartBOs
             })).catch(e =>
                 this.setState({
-                    //projektarten: []
+                    projektarten: []
                 }));
     }
 
+    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getProjektart();
     }
