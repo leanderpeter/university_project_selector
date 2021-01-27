@@ -232,21 +232,8 @@ const styles = theme => ({
 ProjektListeEintrag.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
-    /** The CustomerBO to be rendered */
-    customer: PropTypes.object.isRequired,
-    /** The state of this ProjektListeEintrag. If true the customer is shown with its accounts */
     expandedState: PropTypes.bool.isRequired,
-    /** The handler responsible for handle expanded state changes (exanding/collapsing) of this ProjektListeEintrag
-     *
-     * Signature: onExpandedStateChange(CustomerBO customer)
-     */
     onExpandedStateChange: PropTypes.func.isRequired,
-    /**
-     *  Event Handler function which is called after a sucessfull delete of this customer.
-     *
-     * Signature: onCustomerDelete(CustomerBO customer)
-     */
-    onCustomerDeleted: PropTypes.func.isRequired
 }
 
 export default withStyles(styles)(ProjektListeEintrag);

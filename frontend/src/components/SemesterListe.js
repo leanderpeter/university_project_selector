@@ -156,8 +156,8 @@ semesterFormClosed = semester => {
                     <SemesterListeEintrag key={semester.getID()} semester = {semester} show={this.props.show} getSemester={this.getSemester}/>)
                 }
             </List>
-        <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`Semester konnten nicht geladen werden.`} onReload={this.getSemester} />
+          <LoadingProgress show={loadingInProgress} />
+          <ContextErrorMessage error={error} contextErrorMsg={`Semester konnten nicht geladen werden.`} onReload={this.getSemester} />
         </Paper>
         <SemesterForm show={showSemesterForm} onClose={this.semesterFormClosed} getSemester= {this.getSemester}/>
       </div>

@@ -56,9 +56,9 @@ class Administration extends Component {
               <Tab label='Projektarten' component={RouterLink} to={`/administration/projektarten`} />
               <Tab label='Studenten' component={RouterLink} to={`/administration/student`} />
               <Tab label='User' component={RouterLink} to={`/administration/user`} />
-        </Tabs>
-        <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`}  />
+          </Tabs>
+          <LoadingProgress show={loadingInProgress} />
+          <ContextErrorMessage error={error} contextErrorMsg={`Die Seite konnte nicht geladen werden.`}  />
         </Paper>
       </div>
     );

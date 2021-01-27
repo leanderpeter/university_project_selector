@@ -159,8 +159,8 @@ modulFormClosed = modul => {
                     <ModulListeEintrag key={modul.getID()} modul = {modul} show={this.props.show} getModule={this.getModule}/>)
                 }
             </List>
-        <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`Module konnten nicht geladen werden.`} onReload={this.getModule}/>
+          <LoadingProgress show={loadingInProgress} />
+          <ContextErrorMessage error={error} contextErrorMsg={`Module konnten nicht geladen werden.`} onReload={this.getModule}/>
         </Paper>
         <ModulForm show={showModulForm} onClose={this.modulFormClosed} getModule= {this.getModule}/>
       </div>

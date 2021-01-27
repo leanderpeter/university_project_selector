@@ -103,15 +103,15 @@ class ProjektartListeEintrag extends Component {
                     <Grid item xs/>
                     <Grid item>
                     <Tooltip title='Bearbeiten' placement="bottom">
-                    <IconButton  className={classes.bearbeitenButton} variant='contained' onClick={this.bearbeitenButtonClicked}>
-                        <EditIcon />
-                    </IconButton>
+                      <IconButton  className={classes.bearbeitenButton} variant='contained' onClick={this.bearbeitenButtonClicked}>
+                          <EditIcon />
+                      </IconButton>
                     </Tooltip>
                     </Grid>
                     <Grid item>
-                    <Tooltip title='Löschen' placement="bottom">
-                        <IconButton className={classes.projektDeleteButton}  variant="contained"  onClick={this.projektartDeleteButtonClicked}><DeleteIcon /></IconButton>
-                    </Tooltip>
+                      <Tooltip title='Löschen' placement="bottom">
+                          <IconButton className={classes.projektDeleteButton}  variant="contained"  onClick={this.projektartDeleteButtonClicked}><DeleteIcon /></IconButton>
+                      </Tooltip>
                     </Grid>
                     </Grid>
             </ListItem>

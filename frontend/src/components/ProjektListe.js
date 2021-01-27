@@ -174,8 +174,8 @@ class ProjektListe extends Component {
               Filter Projekliste nach Namen:
               </Typography>
           </Grid>
-          <Grid item xs={4}>
-          <TextField
+        <Grid item xs={4}>
+        <TextField
                 className={classes.filter}
                 type='text'
                 label=''
@@ -189,8 +189,8 @@ class ProjektListe extends Component {
                     </InputAdornment>,
                 }}
             />
-          </Grid>
-          <Grid item xs />
+        </Grid>
+        <Grid item xs />
           {currentStudent ?
             <Grid item className={classes.ectsCount}>
               <Button variant="outlined" color="primary" className={classes.buttonEcts} disableRipple style={{ backgroundColor: 'transparent', }}>Anzahl ECTS: {ectsCount}</Button>

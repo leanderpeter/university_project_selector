@@ -95,17 +95,17 @@ class SemesterListeEintrag extends Component {
                     <Grid item xs/>
                     <Grid item>
                     <Tooltip title='Bearbeiten' placement="bottom">
-                    <IconButton  className={classes.bearbeitenButton} variant='contained' onClick={this.bearbeitenButtonClicked}>
-                        <EditIcon />
-                    </IconButton>
+                      <IconButton  className={classes.bearbeitenButton} variant='contained' onClick={this.bearbeitenButtonClicked}>
+                          <EditIcon />
+                      </IconButton>
                     </Tooltip>
                     </Grid>
                     <Grid item>
-                    <Tooltip title='Löschen' placement="bottom">
-                        <IconButton variant="contained"  onClick={this.semesterDeleteButtonClicked}><DeleteIcon /></IconButton>
-                    </Tooltip>
+                      <Tooltip title='Löschen' placement="bottom">
+                          <IconButton variant="contained"  onClick={this.semesterDeleteButtonClicked}><DeleteIcon /></IconButton>
+                      </Tooltip>
                     </Grid>
-                    </Grid>
+                  </Grid>
             </ListItem>
             <ListItem>
               <LoadingProgress show={loadingInProgress}/>

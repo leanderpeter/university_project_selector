@@ -133,9 +133,9 @@ class UserForm extends Component {
                         <LoadingProgress show={addingInProgress || updatingInProgress} />
                         {
 
-                            <ContextErrorMessage error={updatingError}
-                                contextErrorMsg={`The User ${user.getID()} could not be updated.`}
-                                onReload={this.updateUser} />
+                        <ContextErrorMessage error={updatingError}
+                        contextErrorMsg={`The User ${user.getID()} could not be updated.`}
+                        onReload={this.updateUser} />
 
                         }
                     </DialogContent>

@@ -781,18 +781,18 @@ class ProjektForm extends Component {
 					<DialogActions>
 						<Button onClick={this.handleClose} color='secondary'>
 							Abbrechen
-            </Button>
+            			</Button>
 						{
 							// If a Projekt is given, show an update button, else an add button
 							projekt ?
 								<Button disabled={nameValidationFailed || max_teilnehmerValidationFailed || beschreibungValidationFailed} variant='contained' onClick={this.updateProjekt} color='primary'>
 									Speichern
-              </Button>
+              					</Button>
 								:
 								<Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited || beschreibungValidationFailed || !beschreibungEdited || !halbjahrEdited || !artEdited || !moduleEdited}
 									variant='contained' onClick={this.addProjekt} color='primary'>
 									Hinzufügen
-             </Button>
+             					</Button>
 						}
 					</DialogActions>
 				</Dialog>

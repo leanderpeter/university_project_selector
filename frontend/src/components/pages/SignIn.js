@@ -108,45 +108,45 @@ import {Card, Button, Grid, Typography, withStyles, Paper, FormControl, InputLab
 
 		return <div>
 				<Paper>
-				<Card>
-				<Typography className={classes.root} align='center' variant='h6'>Willkommen zur HDM Wahlfach App</Typography>
-				<Grid container justify='center'>
-					<Grid item>
-						<FormControl className={classes.formControl}>
-							<InputLabel>Rolle</InputLabel>
-								<Select required onChange={this.handleChange}>
-									<MenuItem value='Student'>Student</MenuItem>
-									<MenuItem value='Dozent'>Dozent</MenuItem>
-									<MenuItem value='Admin'>Admin</MenuItem>
-								</Select>
-						</FormControl>
-						<form className={classes.form} autoComplete="off">
-  							<TextField id="name" label="Name" error={nameValidationFailed} onChange = {this.textFieldValueChange}/>
-						</form>
-						{ rolle === 'Student' ?
-						<>
-						<form className={classes.form} autoComplete="off">
-							<TextField id="kuerzel" label="Kürzel" error={kuerzelValidationFailed} onChange = {this.textFieldValueChange}/>
-				  		</form>
-						<form className={classes.form} autoComplete="off">
-						<TextField id="mat_nr" label="Matrikelnummer" error={mat_nrValidationFailed} onChange = {this.numberValueChange}/>
-					 	</form>
-						</>
-						:
-						<></>
-						}
-					</Grid>
-				</Grid>
-				<Typography className={classes.root} align='center'>Für die Nutzung der weiteren Funktionen müssen Sie sich authentifizieren.</Typography>
-				<Grid container justify='center'>
-					<Grid item>
-						<Button style={{marginBottom:"2em"}}variant='contained' color='primary' onClick={this.handleSignInButtonClicked}
-						 disabled = { !rolleEdited || nameValidationFailed || !nameEdited || kuerzelValidationFailed || !kuerzelEdited || mat_nrValidationFailed || !mat_nrEdited}>
-							Anmelden
-      					</Button>
-					</Grid>
-				</Grid>
-				</Card>
+					<Card>
+						<Typography className={classes.root} align='center' variant='h6'>Willkommen zur HDM Wahlfach App</Typography>
+						<Grid container justify='center'>
+							<Grid item>
+								<FormControl className={classes.formControl}>
+									<InputLabel>Rolle</InputLabel>
+										<Select required onChange={this.handleChange}>
+											<MenuItem value='Student'>Student</MenuItem>
+											<MenuItem value='Dozent'>Dozent</MenuItem>
+											<MenuItem value='Admin'>Admin</MenuItem>
+										</Select>
+								</FormControl>
+								<form className={classes.form} autoComplete="off">
+									<TextField id="name" label="Name" error={nameValidationFailed} onChange = {this.textFieldValueChange}/>
+								</form>
+								{ rolle === 'Student' ?
+								<>
+								<form className={classes.form} autoComplete="off">
+									<TextField id="kuerzel" label="Kürzel" error={kuerzelValidationFailed} onChange = {this.textFieldValueChange}/>
+								</form>
+								<form className={classes.form} autoComplete="off">
+								<TextField id="mat_nr" label="Matrikelnummer" error={mat_nrValidationFailed} onChange = {this.numberValueChange}/>
+								</form>
+								</>
+								:
+								<></>
+								}
+							</Grid>
+						</Grid>
+						<Typography className={classes.root} align='center'>Für die Nutzung der weiteren Funktionen müssen Sie sich authentifizieren.</Typography>
+						<Grid container justify='center'>
+							<Grid item>
+								<Button style={{marginBottom:"2em"}}variant='contained' color='primary' onClick={this.handleSignInButtonClicked}
+								disabled = { !rolleEdited || nameValidationFailed || !nameEdited || kuerzelValidationFailed || !kuerzelEdited || mat_nrValidationFailed || !mat_nrEdited}>
+									Anmelden
+								</Button>
+							</Grid>
+						</Grid>
+					</Card>
 				</Paper>
 			</div>
 	}

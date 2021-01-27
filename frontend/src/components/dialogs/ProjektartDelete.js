@@ -59,7 +59,7 @@ class ProjektartDelete extends Component {
           <DialogContent>
             <DialogContentText>
               Wenn Sie die Projektart <b>"{projektart.name}"</b> löschen möchten, drücken Sie auf "JA".
-                  </DialogContentText>
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">

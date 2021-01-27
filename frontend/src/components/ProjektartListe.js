@@ -152,8 +152,8 @@ projektartFormClosed = projektart => {
                     <ProjektartListeEintrag key={projektart.getID()} projektart = {projektart} show={this.props.show} getProjektart={this.getProjektart}/>)
                 }
             </List>
-        <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`Projektartliste konnte nicht geladen werden.`} onReload={this.getProjektart} />
+          <LoadingProgress show={loadingInProgress} />
+          <ContextErrorMessage error={error} contextErrorMsg={`Projektartliste konnte nicht geladen werden.`} onReload={this.getProjektart} />
         </Paper>
         <ProjektartenForm show={showProjektartenForm} onClose={this.projektartFormClosed} getProjektart = {this.getProjektart}/>
       </div>

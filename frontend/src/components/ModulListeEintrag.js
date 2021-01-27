@@ -99,15 +99,15 @@ class ModulListeEintrag extends Component {
                     <Grid item xs/>
                     <Grid item>
                     <Tooltip title='Bearbeiten' placement="bottom">
-                    <IconButton  className={classes.bearbeitenButton} variant='contained' onClick={this.bearbeitenButtonClicked}>
-                        <EditIcon />
-                    </IconButton>
+                      <IconButton  className={classes.bearbeitenButton} variant='contained' onClick={this.bearbeitenButtonClicked}>
+                          <EditIcon />
+                      </IconButton>
                     </Tooltip>
                     </Grid>
                     <Grid item>
-                    <Tooltip title='Löschen' placement="bottom">
-                        <IconButton variant="contained"  onClick={this.modulDeleteButtonClicked}><DeleteIcon /></IconButton>
-                    </Tooltip>
+                      <Tooltip title='Löschen' placement="bottom">
+                          <IconButton variant="contained"  onClick={this.modulDeleteButtonClicked}><DeleteIcon /></IconButton>
+                      </Tooltip>
                     </Grid>
                     </Grid>
             </ListItem>

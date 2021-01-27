@@ -13,8 +13,7 @@ import { withRouter } from 'react-router-dom';
  * @see See Material-UIs [Tabs](https://material-ui.com/components/tabs/)
  * @see See Material-UIs [Paper](https://material-ui.com/components/paper/)
  * 
- * @author Leander Peter github.com/leander_peter
-
+ * 
 **/
 
 class Header extends Component {
@@ -52,12 +51,12 @@ class Header extends Component {
               {currentStudent ?
                 <>
                 <Paper variant='outlined'>
-                <Tabs indicatorColor='secondary' textColor='secondary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}>
-                  <Tab label='Projektwahl' component={RouterLink} to={`/projekte`} />
-                  <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'}/>
-                  <Tab label="Semesterbericht" component={RouterLink} to={'/semesterbericht'}/>
-                  <Tab label='About' component={RouterLink} to={`/about`} />
-                </Tabs>
+                  <Tabs indicatorColor='secondary' textColor='secondary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}>
+                    <Tab label='Projektwahl' component={RouterLink} to={`/projekte`} />
+                    <Tab label="Meine Projekte" component={RouterLink} to={'/meineprojekte'}/>
+                    <Tab label="Semesterbericht" component={RouterLink} to={'/semesterbericht'}/>
+                    <Tab label='About' component={RouterLink} to={`/about`} />
+                  </Tabs>
                 </Paper>
                 </>
                 :null
@@ -67,12 +66,12 @@ class Header extends Component {
                   {currentPerson.rolle === "Dozent"?
                   <>
                   <Paper variant='outlined'>
-                  <Tabs indicatorColor='secondary' textColor='secondary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
-                  <Tab label='Wahl' component={RouterLink} to={`/projekte`} />
-                  <Tab label='Projektpflege' component={RouterLink} to={`/projektpflegen`} />
-                  <Tab label='Projektverwaltung' component={RouterLink} to={`/projekteDozent`} />
-                  <Tab label='About' component={RouterLink} to={`/about`} />
-                  </Tabs>
+                    <Tabs indicatorColor='secondary' textColor='secondary' variant='fullWidth' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
+                      <Tab label='Wahl' component={RouterLink} to={`/projekte`} />
+                      <Tab label='Projektpflege' component={RouterLink} to={`/projektpflegen`} />
+                      <Tab label='Projektverwaltung' component={RouterLink} to={`/projekteDozent`} />
+                      <Tab label='About' component={RouterLink} to={`/about`} />
+                    </Tabs>
                   </Paper>
                   </>
                   :null
@@ -80,14 +79,14 @@ class Header extends Component {
                   {currentPerson.rolle === "Admin"?
                   <>
                   <Paper variant='outlined'>
-                  <Tabs indicatorColor='secondary' textColor='secondary' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
-                  <Tab className={classes.tab} label='Wahl' component={RouterLink} to={`/projekte`} />
-                  <Tab className={classes.tab} label='Pflege' component={RouterLink} to={`/projektpflegen`} />
-                  <Tab className={classes.tab} label='Verwaltung' component={RouterLink} to={`/projekteDozent`} />
-                  <Tab className={classes.tab} label='Prüfung' component={RouterLink} to={`/projektverwaltung`} />
-                  <Tab className={classes.tab} label="Notenliste" component={RouterLink} to={'/notenliste'}/>
-                  <Tab className={classes.tab} label='Administration' component={RouterLink} to={`/administration/semester`} />
-                  </Tabs>
+                    <Tabs indicatorColor='secondary' textColor='secondary' centered value={this.state.tabindex} onChange={this.handleTabChange}  >
+                      <Tab className={classes.tab} label='Wahl' component={RouterLink} to={`/projekte`} />
+                      <Tab className={classes.tab} label='Pflege' component={RouterLink} to={`/projektpflegen`} />
+                      <Tab className={classes.tab} label='Verwaltung' component={RouterLink} to={`/projekteDozent`} />
+                      <Tab className={classes.tab} label='Prüfung' component={RouterLink} to={`/projektverwaltung`} />
+                      <Tab className={classes.tab} label="Notenliste" component={RouterLink} to={'/notenliste'}/>
+                      <Tab className={classes.tab} label='Administration' component={RouterLink} to={`/administration/semester`} />
+                    </Tabs>
                   </Paper>
                   </>
                   :null
