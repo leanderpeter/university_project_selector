@@ -124,8 +124,9 @@ class ProjektListeOperationen(Resource):
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
         zus = "Neu"
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
-        projekte = adm.get_projekte_by_zustand('"{}"'.format(zus))
+        projekte = adm.get_projekte_by_zustaende('"{}"'.format(zus))
         return projekte
+
 
 @electivApp.route('/projekte/zustand/<string:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
