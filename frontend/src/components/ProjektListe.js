@@ -50,7 +50,7 @@ class ProjektListe extends Component {
 
   }
 
-  //Suche-Funktion zum Suchen von Projekten
+/*   //Suche-Funktion zum Suchen von Projekten
   filterFieldValueChange= event => {
     const value = event.target.value.toLowerCase();
     this.setState({
@@ -68,7 +68,7 @@ class ProjektListe extends Component {
         filteredProjekte: [...this.state.projekte],
         projektFilter: ''
     });
-  }
+  } */
 
 
   //hole alle Projekte vom Backend
@@ -169,7 +169,7 @@ class ProjektListe extends Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={1} className={classes.grid} justify='flex-start' alignItems='center'>
-          <Grid item className={classes.projektFilter}>
+          {/* <Grid item className={classes.projektFilter}>
             <Typography>
               Filter Projekliste nach Namen:
               </Typography>
@@ -189,8 +189,8 @@ class ProjektListe extends Component {
                     </InputAdornment>,
                 }}
             />
-        </Grid>
-        <Grid item xs />
+          </Grid> */}
+          <Grid item xs />
           {currentStudent ?
             <Grid item className={classes.ectsCount}>
               <Button variant="outlined" color="primary" className={classes.buttonEcts} disableRipple style={{ backgroundColor: 'transparent', }}>Anzahl ECTS: {ectsCount}</Button>
