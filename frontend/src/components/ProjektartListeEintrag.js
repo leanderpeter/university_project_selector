@@ -14,6 +14,14 @@ import Divider from '@material-ui/core/Divider';
 import ProjektartenForm from './dialogs/ProjektartenForm';
 import ProjektartDelete from './dialogs/ProjektartDelete';
 
+/**
+ * Es wird ein einzelnes Projektarten mit allen notwendigen Informationen angezeigt
+ * Außerdem lassen sich Projektarteneinträge löschen und bearbeiten
+ * 
+ * @see See [ProjektartDelete](#projektartdelte)
+ * @see See [ProjektartForm](#projektartform)
+ */
+
 
 
 
@@ -22,6 +30,7 @@ class ProjektartListeEintrag extends Component {
     constructor(props){
         super(props);
 
+        //initiiere einen leeren state
         this.state = {
             showProjektartForm: false,
             showProjektartDelete: false,
@@ -30,10 +39,12 @@ class ProjektartListeEintrag extends Component {
         };
     }
 
+    //ruft die getModule Funktion in den Props auf
     getProjektart = () => {
       this.props.getProjektart();
     }
 
+    //Wird aufgerufen, wenn das Dialog-Fenster Projektartform geschlossen wird
     projektartFormClosed = (projektart) => {
       if (projektart){
         this.setState({
@@ -47,6 +58,7 @@ class ProjektartListeEintrag extends Component {
       }
     }
   
+    //Öffnet das Dialog-Fenster ProjekartForm, wenn der Button geklickt wurde
     bearbeitenButtonClicked = event => {
       event.stopPropagation();
       this.setState({
@@ -54,6 +66,7 @@ class ProjektartListeEintrag extends Component {
       });
     }
     
+     //Öffnet das Dialog-Fenster ProjektartDelete, wenn der Button geklickt wurde
     projektartDeleteButtonClicked =  event => {
       event.stopPropagation();
       this.setState({
@@ -61,6 +74,7 @@ class ProjektartListeEintrag extends Component {
       });
     }
   
+    //Wird aufgerufen, wenn das Dialog-Fenster ProjektartDelete geschlossen wird
     projektartDeleteClosed = () => {
         this.setState({
           showProjektartDelete: false
@@ -68,7 +82,7 @@ class ProjektartListeEintrag extends Component {
         this.getProjektart();
     }
 
-
+    /** Rendert die Komponente */
     render(){
         const {classes, projektart} = this.props;
         const { showProjektartForm, showProjektartDelete,  error, loadingInProgress } = this.state;

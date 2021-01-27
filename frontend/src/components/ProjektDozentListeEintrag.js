@@ -43,10 +43,12 @@ class ProjektDozentListeEintrag extends Component {
         */
     }
 
+    //ruft die getProjekte() Funktion in den Props auf
     getProjekte = () => {
         this.props.getProjekte();
     }
 
+    //Wird aufgerufen, wenn das Dialog-Fenster ProjektForm geschlossen wird
     projektFormClosed = (projekt) => {
         if (projekt) {
             this.setState({
@@ -61,6 +63,7 @@ class ProjektDozentListeEintrag extends Component {
         this.props.projektFormClosed()
     }
 
+    //Öffnet das Dialog-Fenster ProjektForm, wenn der Button geklickt wurde
     bearbeitenButtonClicked = event => {
         event.stopPropagation();
         this.setState({
@@ -68,6 +71,7 @@ class ProjektDozentListeEintrag extends Component {
         });
     }
 
+    //Öffnet das Dialog-Fenster ProjektDelete, wenn der Button geklickt wurde
     projektDeleteButtonClicked = event => {
         event.stopPropagation();
         this.setState({
@@ -75,22 +79,25 @@ class ProjektDozentListeEintrag extends Component {
         });
     }
 
+    //Wird aufgerufen, wenn das Dialog-Fenster ProjektDelete geschlossen wird
     projektDeleteClosed = () => {
         this.setState({
             showProjektDeleteDialog: false
         });
     }
 
+    // Holt alle Projektarten vom Backend mit GET Methode
     getProjektart = () => {
         ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
             this.setState({
                 projektarten: projektartBOs
             })).catch(e =>
                 this.setState({
-                    //projektarten: []
+                    projektarten: []
                 }));
     }
 
+    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getProjektart();
     }

@@ -6,9 +6,17 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import { ElectivAPI } from '../api';
 
+/**
+ * Es wird ein Projekt angezeigt was darauffolgend in die ProjektListe eingefuegt wird.
+ * 
+ * @see See [ProjektListe](#projektliste)
+ * 
+ * 
+ */
 
 class ProjektListeEintrag extends Component {
 
+    //gebe einen leeren status
     constructor(props) {
         super(props);
         this.state = {
@@ -28,6 +36,8 @@ class ProjektListeEintrag extends Component {
         this.props.onExpandedStateChange(this.props.projekt);
     }
 
+    // Bei Aufruf wird die Anzahl der Teilnehmer um 1 Person erhoeht sowie eine Teilnahme im Backend fuer den current
+    // student hinterlegt. Gleichzeitig wird die ectsCountFunc aufgrufen um ects zu loggen
     teilnahmeButtonClicked = event => {
         event.stopPropagation()
         //Logik fuer Teilnahme Button
@@ -41,6 +51,8 @@ class ProjektListeEintrag extends Component {
         ElectivAPI.getAPI().setTeilnahme(this.props.projekt.id, this.props.currentStudent.id);
     }
 
+    // Bei Aufruf werden im Projekt die maximalen Teilnehmer um -1 reduziert sowie die teilnahme im backend fuer den current
+    // student entfernt. Gleichzeitig wird der Teilnahme Button aktiviert
     teilnahmeAbwaehlenButtonClicked = event => {
         event.stopPropagation()
         //Logik fuer Teilnahme Button
@@ -56,7 +68,7 @@ class ProjektListeEintrag extends Component {
     }
 
 
-
+    // 
     getInfosMount = () => {
         if (this.props.currentStudent != null && !this.state.teilnahmeChanged && this.props.projekt.teilnehmerListe.indexOf(this.props.currentStudent.id) > -1) {
             this.setState({ 
@@ -71,6 +83,7 @@ class ProjektListeEintrag extends Component {
         }
     }
 
+    //
     getInfosUpdate = () => {
         if (this.state.ectsAdded === false) {
             this.setState({ ectsAdded: true })
@@ -88,10 +101,12 @@ class ProjektListeEintrag extends Component {
         }
     }
 
+    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getInfosMount();
     }
 
+    
     componentWillUnmount() {
         this.setState({
             ectsAdded: false

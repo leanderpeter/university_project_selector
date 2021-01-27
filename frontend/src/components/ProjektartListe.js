@@ -36,6 +36,7 @@ class ProjektartListe extends Component {
     };
   }
 
+  // Add Button - Oeffnet den Projektarten hinzufuegen Dialog
   addButtonClicked = event => {
     event.stopPropagation();
     this.setState({
@@ -43,6 +44,7 @@ class ProjektartListe extends Component {
     });
   }
 
+  //Suche-Funktion zum Suchen von Projektarten
   filterFieldValueChange= event => {
     const value = event.target.value.toLowerCase();
     this.setState({
@@ -54,6 +56,7 @@ class ProjektartListe extends Component {
     });
 }
 
+//Suche leeren
 clearFilterFieldButtonClicked = () => {
     this.setState({
         filteredProjektarten: [...this.state.projektarten],
@@ -61,6 +64,7 @@ clearFilterFieldButtonClicked = () => {
     });
 }
 
+//wird aufgerufen, wenn Dialog Fenster geschloßen wird
 projektartFormClosed = projektart => {
     this.getProjektart();
     if (projektart) {

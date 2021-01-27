@@ -101,7 +101,7 @@ class ProjektverwaltungListe extends Component {
 
     }
 
-
+    //wird aufgerufen, wenn Dialog Fenster geschloßen wird
     projektFormClosed = projekt => {
         if (projekt) {
             const newProjektList = [...this.state.projekte, projekt];
