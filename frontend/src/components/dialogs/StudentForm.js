@@ -11,10 +11,18 @@ import LoadingProgress from './LoadingProgress';
 import {ElectivAPI} from '../../api';
 
 
+/**
+ * Es wird ein Dialog mit einem Formular dargestellt, mit welchem man Studenten bearbeiten kann
+ *
+ * @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
+ *
+ */
 class StudentForm extends Component {
 
     constructor(props) {
         super(props);
+
+        //initiiere einen leeren state
         this.state = {
             name: '',
             nameValidationFailed: false,
@@ -33,6 +41,7 @@ class StudentForm extends Component {
         this.baseState = this.state;
     }
 
+    // API Anbindung um den Studenten upzudaten
     updateUser = () => {
         let user = this.props.user;
         user.name = this.state.name
@@ -65,6 +74,7 @@ class StudentForm extends Component {
         this.setStateValueChange(event, error);
     }
 
+    //Setzen der Werte aus der Validierung
     setStateValueChange(event, error) {
         this.setState({
             [event.target.id]: event.target.value,
@@ -73,6 +83,7 @@ class StudentForm extends Component {
         });
     }
 
+    // Validierung der Textfeldaenderungen nur numerische Werte
     numberValueChange = (event) => {
         const value = event.target.value;
         const re = /^[0-9]{1,10}$/;
@@ -87,6 +98,7 @@ class StudentForm extends Component {
         this.setStateValueChange(event, error);
     }
 
+    //Infos des zu bearbeitenden Studenten laden
     getInfos = () => {
         if (this.props.user) {
             let name = this.props.user.name;
@@ -99,12 +111,13 @@ class StudentForm extends Component {
     }
 
 
+    //Setzen des Status, bei schließen des Dialogs
     handleClose = () => {
         this.setState(this.baseState);
         this.props.onClose(null);
     }
 
-
+    /** Rendert die Komponente */
     render() {
         const {classes, show, user} = this.props;
         const {

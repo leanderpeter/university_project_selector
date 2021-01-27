@@ -10,11 +10,18 @@ import LoadingProgress from './LoadingProgress';
 
 import {ElectivAPI} from '../../api';
 
-
+/**
+ * Es wird ein Dialog mit einem Formular dargestellt, mit welchem man User bearbeiten kann
+ *
+ * @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
+ *
+ */
 class UserForm extends Component {
 
     constructor(props) {
         super(props);
+
+        //initiiere einen leeren state
         this.state = {
             name: '',
             nameValidationFailed: false,
@@ -30,6 +37,7 @@ class UserForm extends Component {
         this.baseState = this.state;
     }
 
+// API Anbindung um den User upzudaten
     updateUser = () => {
         let user = this.props.user;
         user.name = this.state.name
@@ -65,6 +73,7 @@ class UserForm extends Component {
         });
     }
 
+    //Infos des zu bearbeitenden Studenten laden
     getInfos = () => {
         if (this.props.user) {
             let name = this.props.user.name;
@@ -76,7 +85,7 @@ class UserForm extends Component {
         }
     }
 
-
+    //Setzen des Status, bei schließen des Dialogs
     handleClose = () => {
         this.setState(this.baseState);
         this.props.onClose(null);
