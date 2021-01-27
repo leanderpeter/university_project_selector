@@ -40,11 +40,11 @@ class ProfileDropDown extends Component {
   }
 
   /** 
-	 * Handles the click event of the sign in button and uses the firebase.auth() component to sign in.
-	 * 
-	 * @see See Google [firebase.auth](https://firebase.google.com/docs/reference/js/firebase.auth.Auth)
-	 * @see See Google [firebase.auth().signOut](https://firebase.google.com/docs/reference/js/firebase.auth.Auth#signout)
-	 */
+   * Handles the click event of the sign in button and uses the firebase.auth() component to sign in.
+   * 
+   * @see See Google [firebase.auth](https://firebase.google.com/docs/reference/js/firebase.auth.Auth)
+   * @see See Google [firebase.auth().signOut](https://firebase.google.com/docs/reference/js/firebase.auth.Auth#signout)
+   */
   handleSignOutButtonClicked = () => {
     firebase.auth().signOut();
   }

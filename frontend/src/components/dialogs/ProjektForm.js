@@ -31,14 +31,14 @@ class ProjektForm extends Component {
 	constructor(props) {
 		super(props);
 
-		let nm = '', mt = null, bs = '', bt = '', ep = '',wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '';
+		let nm = '', mt = null, bs = '', bt = '', ep = '', wt = false, av = 0, ai = 0, pb = '', br = false, rm = '', sp = 'deutsch', dz = '', at = '', tl = '';
 		let boolvor = false, boolin = false, boolpraef = false;
 		var hj = null, pa = null;
-		if (props.projekt){
+		if (props.projekt) {
 			hj = 0;
 			pa = 0;
 		}
-		
+
 
 		//initiiere den state
 		this.state = {
@@ -131,14 +131,14 @@ class ProjektForm extends Component {
 	}
 
 	// API Anbindung um das Projekt über das Backend in die Datenbank hinzuzufügen
-	addProjekt =  () => {
+	addProjekt = () => {
 		let newProjekt = new ProjektBO(
 			0,
 			this.state.name,
-			this.state.max_teilnehmer, 
-			this.state.beschreibung, 
-			this.state.betreuer, 
-			this.state.externer_partner, 
+			this.state.max_teilnehmer,
+			this.state.beschreibung,
+			this.state.betreuer,
+			this.state.externer_partner,
 			this.state.woechentlich,
 			this.state.anzahl_block_vor,
 			this.state.anzahl_block_in,
@@ -152,22 +152,23 @@ class ProjektForm extends Component {
 			this.state.art,
 			this.state.anzahlTeilnehmer,
 			this.state.teilnehmerListe,
-			);
+		);
 		// ProjektBO über die API in die DBhinzufügen	
 		ElectivAPI.getAPI().addProjekt(newProjekt).then(projekt => {
 			this.props.getProjekte();
 			//Wählbare Module enes Projekts über die API in die DB hinzufügen
-			ElectivAPI.getAPI().postProjekte_hat_module(projekt.id, JSON.stringify(this.state.modulwahl))}).then(projekt => {
+			ElectivAPI.getAPI().postProjekte_hat_module(projekt.id, JSON.stringify(this.state.modulwahl))
+		}).then(projekt => {
 			// Backend erfolgreich
 			// reinitialisierung fuer ein neues leere Projekt
 			this.setState(this.baseState);
 			this.props.onClose(projekt); //Aufrufen parent in backend
-		}).catch(e => 
+		}).catch(e =>
 			this.setState({
 				updatingInProgress: false,
 				updatingError: e
 			})
-			);
+		);
 		// Ladeanimation einblenden
 		this.setState({
 			updatingInProgress: true,
@@ -181,7 +182,7 @@ class ProjektForm extends Component {
 		projekt.setname(this.state.name);
 		projekt.setmax_teilnehmer(this.state.max_teilnehmer);
 		projekt.setbeschreibung(this.state.beschreibung);
-		projekt.setbetreuer(this.state.betreuer );
+		projekt.setbetreuer(this.state.betreuer);
 		projekt.setexterner_partner(this.state.externer_partner);
 		projekt.setwoechentlich(this.state.woechentlich);
 		projekt.setanzahl_block_vor(this.state.anzahl_block_vor);
@@ -199,17 +200,18 @@ class ProjektForm extends Component {
 		ElectivAPI.getAPI().updateProjekt(projekt).then(projekt => {
 			this.props.getProjekte();
 			//Wählbare Module enes Projekts über die API in die DB hinzufügen
-			ElectivAPI.getAPI().updateProjekte_hat_module(projekt.id, JSON.stringify(this.state.modulwahl))}).then(projekt => {
+			ElectivAPI.getAPI().updateProjekte_hat_module(projekt.id, JSON.stringify(this.state.modulwahl))
+		}).then(projekt => {
 			// Backend erfolgreich
 			// reinitialisierung fuer ein neues leere Projekt
 			this.setState(this.baseState);
 			this.props.onClose(projekt); //Aufrufen parent in backend
-		}).catch(e => 
+		}).catch(e =>
 			this.setState({
 				updatingInProgress: false,
 				updatingError: e
 			})
-			);
+		);
 		// Ladeanimation einblenden
 		this.setState({
 			updatingInProgress: true,
@@ -239,14 +241,14 @@ class ProjektForm extends Component {
 		let boolvor = false;
 		let boolin = false;
 		let boolpraef = false;
-		if(av !== null && av > 0){
-			boolvor = true 
+		if (av !== null && av > 0) {
+			boolvor = true
 		}
-		if(ai !== null && ai > 0){
-			boolin = true 
+		if (ai !== null && ai > 0) {
+			boolin = true
 		}
-		if(pb !== null && pb !== ''){
-			boolpraef = true 
+		if (pb !== null && pb !== '') {
+			boolpraef = true
 		}
 		this.setState({
 			name: nm,
@@ -325,17 +327,17 @@ class ProjektForm extends Component {
 	// API Anbindung um alle Semester über das Backend aus der Datenbank zu laden
 	getSemester = () => {
 		ElectivAPI.getAPI().getSemester()
-		.then(semesterBOs =>
-			this.setState({
-				semester: semesterBOs,
-				error: null,
-				loadingInProgress: false,
-			})).catch(e =>
+			.then(semesterBOs =>
 				this.setState({
-					semester: [],
-					error: e,
+					semester: semesterBOs,
+					error: null,
 					loadingInProgress: false,
-				}));
+				})).catch(e =>
+					this.setState({
+						semester: [],
+						error: e,
+						loadingInProgress: false,
+					}));
 		this.setState({
 			error: null,
 			loadingInProgress: true,
@@ -346,54 +348,55 @@ class ProjektForm extends Component {
 	// API Anbindung um alle Projektarten über das Backend aus der Datenbank zu laden
 	getProjektart = () => {
 		ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
-		  this.setState({
-			projektarten: projektartBOs
-		  })).then(()=>{
-			  console.log(this.state.projektarten)
+			this.setState({
+				projektarten: projektartBOs
+			})).then(() => {
+				console.log(this.state.projektarten)
 
-		  }) 
-			.catch(e => 
-		this.setState({
-		  projektarten: []
-		}));
-	  }
+			})
+			.catch(e =>
+				this.setState({
+					projektarten: []
+				}));
+	}
 
 
 	// API Anbindung um alle Module vom Backend zu bekommen 
-    getModule = () => {
-      ElectivAPI.getAPI().getModule()
-      .then(modulBOs =>
-          this.setState({
-              module: modulBOs,
-              error: null,
-              loadingInProgress: false,
-          })).catch(e =>
-              this.setState({
-                  module: [],
-                  error: e,
-                  loadingInProgress: false,
-              }));
-      this.setState({
-          error: null,
-          loadingInProgress: true,
-          loadingTeilnahmeError: null
-      });
-  }
-	  
-  	// API Anbindung um alle Module eines zu bearbeitenden Projekts über das Backend aus der Datenbank zu laden
+	getModule = () => {
+		ElectivAPI.getAPI().getModule()
+			.then(modulBOs =>
+				this.setState({
+					module: modulBOs,
+					error: null,
+					loadingInProgress: false,
+				})).catch(e =>
+					this.setState({
+						module: [],
+						error: e,
+						loadingInProgress: false,
+					}));
+		this.setState({
+			error: null,
+			loadingInProgress: true,
+			loadingTeilnahmeError: null
+		});
+	}
+
+	// API Anbindung um alle Module eines zu bearbeitenden Projekts über das Backend aus der Datenbank zu laden
 	getModule_by_projekt_id = () => {
 		ElectivAPI.getAPI().getModule_by_projekt_id(this.props.projekt.id)
-		.then(modulBOs => {
-			let modulIDs = [];
-			modulBOs.forEach(modul=>{
-				modulIDs.push(modul.id)
+			.then(modulBOs => {
+				let modulIDs = [];
+				modulBOs.forEach(modul => {
+					modulIDs.push(modul.id)
+				})
+				this.setState({
+					modulwahlBOs: modulBOs,
+					modulwahl: modulIDs,
+					error: null,
+					loadingInProgress: false,
+				})
 			})
-			this.setState({
-				modulwahlBOs: modulBOs,
-				modulwahl: modulIDs,
-				error: null,
-				loadingInProgress: false,
-			})})
 			.catch(e =>
 				this.setState({
 					modulwahlBOs: [],
@@ -410,13 +413,13 @@ class ProjektForm extends Component {
 	// Änderungen des Dropdown Menüs für Semester
 	handleSemesterChange = (semester) => {
 		this.setState({
-		  halbjahr: semester.target.value,
-		  halbjahrEdited: true
+			halbjahr: semester.target.value,
+			halbjahrEdited: true
 		})
 		setTimeout(() => {
-			console.log('Ausgewählte Semester ID:',this.state.halbjahr)   
-		  }, 0);
-	  };
+			console.log('Ausgewählte Semester ID:', this.state.halbjahr)
+		}, 0);
+	};
 
 	// Änderungen des Dropdown Menüs für Projektarten
 	handleArtChange = (projektart) => {
@@ -425,10 +428,10 @@ class ProjektForm extends Component {
 			artEdited: true
 		})
 		setTimeout(() => {
-			console.log('Ausgewählte Projektart ID:',this.state.art)
-		  }, 0);
-	  };
-	  
+			console.log('Ausgewählte Projektart ID:', this.state.art)
+		}, 0);
+	};
+
 	// Änderungen des Dropdown Menüs für Module
 	handleModulChange = (event) => {
 		this.setState({
@@ -437,15 +440,15 @@ class ProjektForm extends Component {
 		});
 		setTimeout(() => {
 			this.modulwahlChange();
-		  }, 0);
+		}, 0);
 	}
 
 	// Wenn Änderungen an der Modulwahl vorgenommen werden müssen diese mit den IDS der ModulBOS abgeglichen werden
 	modulwahlChange = () => {
-		console.log('Ausgewählte ModulIDs:',this.state.modulwahl)
+		console.log('Ausgewählte ModulIDs:', this.state.modulwahl)
 		var modulBOs = [];
-		this.state.modulwahl.forEach(id=>{
-			this.state.module.forEach(modul=>{
+		this.state.modulwahl.forEach(id => {
+			this.state.module.forEach(modul => {
 				if (id === modul.getID()) {
 					modulBOs.push(modul)
 				}
@@ -523,7 +526,7 @@ class ProjektForm extends Component {
 			semester,
 			halbjahr,
 			halbjahrEdited,
-			
+
 			projektarten,
 			art,
 			artEdited,
@@ -547,315 +550,315 @@ class ProjektForm extends Component {
 		}
 
 		return (
-      show ?
-        <Dialog open={show} onEnter={this.getInfos} onClose={this.handleClose} maxWidth='sm'>
-          <DialogTitle id='form-dialog-title'>{title}
-            <IconButton className={classes.closeButton} onClick={this.handleClose}>
-              <CloseIcon />
-            </IconButton>
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {header}
-            </DialogContentText>
-            <form className={classes.root} noValidate autoComplete='off'>
-				<TextField autoFocus type='text' required fullWidth margin='normal' id='name' label='Projektname' variant="outlined" value={name}
-				onChange={this.textFieldValueChange} error={nameValidationFailed} 
-				helperText={nameValidationFailed ? 'Bitte geben Sie einen Projektnamen an' : ' '} />
-				<TextField className={classes.max_teilnehmer} type='text' required margin='normal' id='max_teilnehmer' label='Maximale Teilnehmeranzahl' variant="outlined" value={max_teilnehmer}
-				onChange={this.numberValueChange} error={max_teilnehmerValidationFailed}
-				helperText={max_teilnehmerValidationFailed ? 'Bitte eine Anzahl eingeben' : ' '} />
-				
-				<FormControl component="fieldset">
-					<RadioGroup  className={classes.radio} row aria-label="position" value= {sprache} defaultValue="deutsch" onChange={this.radioValueChange}>
-						<FormControlLabel
-						value="deutsch" 
-						control={<Radio color="primary" />}
-						label="deutsch"
-						labelPlacement="top"
-						/>
-						<FormControlLabel
-						value="englisch"
-						control={<Radio color="primary" />}
-						label="englisch"
-						labelPlacement="top"
-						/>
-					</RadioGroup>
-				</FormControl>
-				<br/>
-				{
-            	semester ?
-				<FormControl required variant="outlined" className={classes.formControl}>
-				<InputLabel>Semester</InputLabel> 
-					<Select  value = {halbjahr} label="Semester" onChange={this.handleSemesterChange}>
-					{
-					semester.map(semester =>
-					<MenuItem value={semester.getID()}><em>{semester.getname()}</em></MenuItem>
-					)
-					}
-					</Select>                                                                
-				</FormControl>                                  
-				:
-				<FormControl required variant="outlined" className={classes.formControl}>
-				<InputLabel>Semester</InputLabel>
-					<Select value="" label="Semester">
-					<MenuItem value=""><em>Semester noch nicht geladen</em></MenuItem>
-					</Select>
-				</FormControl>
-				}
-				
-				{
-            	projektarten ?
-				<FormControl required variant="outlined" className={classes.formControlpa}>
-				<InputLabel>Projektart</InputLabel> 
-					<Select  value = {art} label="Projektart" onChange={this.handleArtChange}>
-					{
-					projektarten.map(projektart =>
-					<MenuItem value={projektart.getID()}><em>{projektart.getname()}</em></MenuItem>
-					)
-					}
-					</Select>                                                                
-				</FormControl>                                  
-				:
-				<FormControl required variant="outlined" className={classes.formControl}>
-				<InputLabel>Projektart</InputLabel>
-					<Select value={art} label="Projektart">
-					<MenuItem value=""><em>Projektarten noch nicht geladen</em></MenuItem>
-					</Select>
-				</FormControl>
-				}
-				<br/>
-				{
-            	module ?
-				<FormControl required variant="outlined" className={classes.formControlmo}>
-				<InputLabel>Anrechenbare Module</InputLabel> 
-					<Select 
-					required
-					value = {modulwahl} 
-					multiple label="Anrechenbare Module" 
-					onChange={this.handleModulChange}
-					renderValue={() => (
-						<div className={classes.chips}>
-						  {modulwahlBOs.map((value) => (
-							<Chip key={value} label={value.name} className={classes.chip} />
-						  ))}
-						</div>
-					  )}>
-					{
-					module.map(modul =>
-						<MenuItem key={modul.getID()} value={modul.getID()}>
-							{<Checkbox checked={modulwahl.indexOf(modul.getID()) > -1} />}
-							<ListItemText>{modul.getname()} ({modul.getEdv_nr()})</ListItemText>
-						</MenuItem>
-					)
-					}
-					</Select>                                                                
-				</FormControl>                                  
-				:
-				<FormControl required variant="outlined" className={classes.formControlmo}>
-				<InputLabel>Anrechenbare Module</InputLabel> 
-					<Select 
-					value = ""
-					multiple label="Anrechenbare Module">
-						<MenuItem key="" value="">
-							Module nicht geladen
-						</MenuItem>
-					</Select>                                                                
-				</FormControl>
-				}
-				<br/>
+			show ?
+				<Dialog open={show} onEnter={this.getInfos} onClose={this.handleClose} maxWidth='sm'>
+					<DialogTitle id='form-dialog-title'>{title}
+						<IconButton className={classes.closeButton} onClick={this.handleClose}>
+							<CloseIcon />
+						</IconButton>
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText>
+							{header}
+						</DialogContentText>
+						<form className={classes.root} noValidate autoComplete='off'>
+							<TextField autoFocus type='text' required fullWidth margin='normal' id='name' label='Projektname' variant="outlined" value={name}
+								onChange={this.textFieldValueChange} error={nameValidationFailed}
+								helperText={nameValidationFailed ? 'Bitte geben Sie einen Projektnamen an' : ' '} />
+							<TextField className={classes.max_teilnehmer} type='text' required margin='normal' id='max_teilnehmer' label='Maximale Teilnehmeranzahl' variant="outlined" value={max_teilnehmer}
+								onChange={this.numberValueChange} error={max_teilnehmerValidationFailed}
+								helperText={max_teilnehmerValidationFailed ? 'Bitte eine Anzahl eingeben' : ' '} />
 
-				<FormGroup row>
-				<FormControlLabel control={
-					<Checkbox
-						checked={woechentlich}
-						onChange={this.checkboxValueChange}
-						id="woechentlich"
-						color="primary"
-					/>
-					}
-					label="Wöchentliche Termine"
-					labelPlacement="end"
-				/>
-				</FormGroup>
-				<FormGroup row>
-				<FormControlLabel control={
-					<Checkbox
-						checked={bes_raum}
-						onChange={this.checkboxValueChange}
-						id="bes_raum"
-						color="primary"
-					/>
-					}
-					label="Besonderer Raum notwendig"
-					labelPlacement="end"
-				/>
-				</FormGroup>
-				{ bes_raum === true || bes_raum === 1 ?
-					<TextField type='text' required fullWidth margin='normal' id='raum' label='Raum' variant="outlined" value={raum}
-					onChange={this.textFieldValueChange} error={raumValidationFailed}
-					helperText={raumValidationFailed ? 'Dieses Feld darf nicht leer sein' : ' '} />
-				:
-				<></>
-				}
-				<FormGroup row>
-				<FormControlLabel control={
-					<Checkbox
-						checked={boolBlock_vor}
-						onChange={this.checkboxValueChange}
-						id="boolBlock_vor"
-						color="primary"
-					/>
-					}
-					label="Blocktage vor Beginn der Vorlesungszeit"
-					labelPlacement="end"
-				/>
-				</FormGroup>
-				{ boolBlock_vor === true ?
-					<TextField type='text' required fullWidth margin='normal' id='anzahl_block_vor' label='Anzahl Blocktage'variant="outlined"  value={anzahl_block_vor}
-					onChange={this.numberValueChange} error={anzahl_block_vorValidationFailed}
-					helperText={anzahl_block_vorValidationFailed ? 'Dieses Feld darf nicht leer sein' : ' '} />
-				:
-				<></>
-				}
-				<FormGroup row>
-				<FormControlLabel control={
-					<Checkbox
-						checked={boolBlock_in}
-						onChange={this.checkboxValueChange}
-						id="boolBlock_in"
-						color="primary"
-					/>
-					}
-					label="Blocktage in der Prüfungszeit"
-					labelPlacement="end"
-				/>
-				</FormGroup>
-				{ boolBlock_in === true ?
-					<TextField type='text' required fullWidth margin='normal' id='anzahl_block_in' label='Anzahl Blocktage'variant="outlined"  value={anzahl_block_in}
-					onChange={this.numberValueChange} error={anzahl_block_inValidationFailed}
-					helperText={anzahl_block_inValidationFailed ? 'Dieses Feld darf nicht leer sein' : ' '} />
-				:
-				<></>
-				}
-				<FormGroup row>
-				<FormControlLabel control={
-					<Checkbox
-						checked={boolBlockpraef}
-						onChange={this.checkboxValueChange}
-						id="boolBlockpraef"
-						color="primary"
-					/>
-					}
-					label="Blocktage (Samstage) in der Vorlesungszeit"
-					labelPlacement="end"
-				/>
-				</FormGroup>
-				{ boolBlockpraef === true ?
-					<TextField type='text' required fullWidth margin='normal' id='praeferierte_block' label='Präferierte Tage' variant="outlined" value={praeferierte_block}
-					onChange={this.textFieldValueChange} error={praeferierte_blockValidationFailed}
-					helperText={praeferierte_blockValidationFailed ? 'Dieses Feld darf nicht leer sein' : ' '} />
-				:
-				<></>
-				}
-				<TextField type='text' fullWidth margin='normal' id='betreuer' label='Betreuer' variant="outlined" value={betreuer}
-				onChange={this.textFieldValueChange}/>
-				<TextField type='text' fullWidth margin='normal' id='externer_partner' label='Externe Partner' variant="outlined" value={externer_partner}
-				onChange={this.textFieldValueChange} />
-				<TextField type='text' required fullWidth margin='normal' id='beschreibung' label='Projektbeschreibung' multiline rows= {4} variant="outlined" value={beschreibung}
-				onChange={this.textFieldValueChange} error={beschreibungValidationFailed}
-				helperText={beschreibungValidationFailed ? 'Bitte geben Sie eine Beschreibung ein' : ' '} />
-            </form>
-            <LoadingProgress show={addingInProgress || updatingInProgress} />
-            {
-              // Show error message in dependency of projekt prop
-              projekt ?
-                <ContextErrorMessage error={updatingError} contextErrorMsg={`The projekt ${projekt.getID()} could not be updated.`} onReload={this.updateProjekt} />
-                :
-                <ContextErrorMessage error={addingError} contextErrorMsg={`The Projekt could not be added.`} onReload={this.addProjekt} />
-            }
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color='secondary'>
-              Abbrechen
+							<FormControl component="fieldset">
+								<RadioGroup className={classes.radio} row aria-label="position" value={sprache} defaultValue="deutsch" onChange={this.radioValueChange}>
+									<FormControlLabel
+										value="deutsch"
+										control={<Radio color="primary" />}
+										label="deutsch"
+										labelPlacement="top"
+									/>
+									<FormControlLabel
+										value="englisch"
+										control={<Radio color="primary" />}
+										label="englisch"
+										labelPlacement="top"
+									/>
+								</RadioGroup>
+							</FormControl>
+							<br />
+							{
+								semester ?
+									<FormControl required variant="outlined" className={classes.formControl}>
+										<InputLabel>Semester</InputLabel>
+										<Select value={halbjahr} label="Semester" onChange={this.handleSemesterChange}>
+											{
+												semester.map(semester =>
+													<MenuItem value={semester.getID()}><em>{semester.getname()}</em></MenuItem>
+												)
+											}
+										</Select>
+									</FormControl>
+									:
+									<FormControl required variant="outlined" className={classes.formControl}>
+										<InputLabel>Semester</InputLabel>
+										<Select value="" label="Semester">
+											<MenuItem value=""><em>Semester noch nicht geladen</em></MenuItem>
+										</Select>
+									</FormControl>
+							}
+
+							{
+								projektarten ?
+									<FormControl required variant="outlined" className={classes.formControlpa}>
+										<InputLabel>Projektart</InputLabel>
+										<Select value={art} label="Projektart" onChange={this.handleArtChange}>
+											{
+												projektarten.map(projektart =>
+													<MenuItem value={projektart.getID()}><em>{projektart.getname()}</em></MenuItem>
+												)
+											}
+										</Select>
+									</FormControl>
+									:
+									<FormControl required variant="outlined" className={classes.formControl}>
+										<InputLabel>Projektart</InputLabel>
+										<Select value={art} label="Projektart">
+											<MenuItem value=""><em>Projektarten noch nicht geladen</em></MenuItem>
+										</Select>
+									</FormControl>
+							}
+							<br />
+							{
+								module ?
+									<FormControl required variant="outlined" className={classes.formControlmo}>
+										<InputLabel>Anrechenbare Module</InputLabel>
+										<Select
+											required
+											value={modulwahl}
+											multiple label="Anrechenbare Module"
+											onChange={this.handleModulChange}
+											renderValue={() => (
+												<div className={classes.chips}>
+													{modulwahlBOs.map((value) => (
+														<Chip key={value} label={value.name} className={classes.chip} />
+													))}
+												</div>
+											)}>
+											{
+												module.map(modul =>
+													<MenuItem key={modul.getID()} value={modul.getID()}>
+														{<Checkbox checked={modulwahl.indexOf(modul.getID()) > -1} />}
+														<ListItemText>{modul.getname()} ({modul.getEdv_nr()})</ListItemText>
+													</MenuItem>
+												)
+											}
+										</Select>
+									</FormControl>
+									:
+									<FormControl required variant="outlined" className={classes.formControlmo}>
+										<InputLabel>Anrechenbare Module</InputLabel>
+										<Select
+											value=""
+											multiple label="Anrechenbare Module">
+											<MenuItem key="" value="">
+												Module nicht geladen
+						</MenuItem>
+										</Select>
+									</FormControl>
+							}
+							<br />
+
+							<FormGroup row>
+								<FormControlLabel control={
+									<Checkbox
+										checked={woechentlich}
+										onChange={this.checkboxValueChange}
+										id="woechentlich"
+										color="primary"
+									/>
+								}
+									label="Wöchentliche Termine"
+									labelPlacement="end"
+								/>
+							</FormGroup>
+							<FormGroup row>
+								<FormControlLabel control={
+									<Checkbox
+										checked={bes_raum}
+										onChange={this.checkboxValueChange}
+										id="bes_raum"
+										color="primary"
+									/>
+								}
+									label="Besonderer Raum notwendig"
+									labelPlacement="end"
+								/>
+							</FormGroup>
+							{bes_raum === true || bes_raum === 1 ?
+								<TextField type='text' required fullWidth margin='normal' id='raum' label='Raum' variant="outlined" value={raum}
+									onChange={this.textFieldValueChange} error={raumValidationFailed}
+									helperText={raumValidationFailed ? 'Dieses Feld darf nicht leer sein' : ' '} />
+								:
+								<></>
+							}
+							<FormGroup row>
+								<FormControlLabel control={
+									<Checkbox
+										checked={boolBlock_vor}
+										onChange={this.checkboxValueChange}
+										id="boolBlock_vor"
+										color="primary"
+									/>
+								}
+									label="Blocktage vor Beginn der Vorlesungszeit"
+									labelPlacement="end"
+								/>
+							</FormGroup>
+							{boolBlock_vor === true ?
+								<TextField type='text' required fullWidth margin='normal' id='anzahl_block_vor' label='Anzahl Blocktage' variant="outlined" value={anzahl_block_vor}
+									onChange={this.numberValueChange} error={anzahl_block_vorValidationFailed}
+									helperText={anzahl_block_vorValidationFailed ? 'Dieses Feld darf nicht leer sein' : ' '} />
+								:
+								<></>
+							}
+							<FormGroup row>
+								<FormControlLabel control={
+									<Checkbox
+										checked={boolBlock_in}
+										onChange={this.checkboxValueChange}
+										id="boolBlock_in"
+										color="primary"
+									/>
+								}
+									label="Blocktage in der Prüfungszeit"
+									labelPlacement="end"
+								/>
+							</FormGroup>
+							{boolBlock_in === true ?
+								<TextField type='text' required fullWidth margin='normal' id='anzahl_block_in' label='Anzahl Blocktage' variant="outlined" value={anzahl_block_in}
+									onChange={this.numberValueChange} error={anzahl_block_inValidationFailed}
+									helperText={anzahl_block_inValidationFailed ? 'Dieses Feld darf nicht leer sein' : ' '} />
+								:
+								<></>
+							}
+							<FormGroup row>
+								<FormControlLabel control={
+									<Checkbox
+										checked={boolBlockpraef}
+										onChange={this.checkboxValueChange}
+										id="boolBlockpraef"
+										color="primary"
+									/>
+								}
+									label="Blocktage (Samstage) in der Vorlesungszeit"
+									labelPlacement="end"
+								/>
+							</FormGroup>
+							{boolBlockpraef === true ?
+								<TextField type='text' required fullWidth margin='normal' id='praeferierte_block' label='Präferierte Tage' variant="outlined" value={praeferierte_block}
+									onChange={this.textFieldValueChange} error={praeferierte_blockValidationFailed}
+									helperText={praeferierte_blockValidationFailed ? 'Dieses Feld darf nicht leer sein' : ' '} />
+								:
+								<></>
+							}
+							<TextField type='text' fullWidth margin='normal' id='betreuer' label='Betreuer' variant="outlined" value={betreuer}
+								onChange={this.textFieldValueChange} />
+							<TextField type='text' fullWidth margin='normal' id='externer_partner' label='Externe Partner' variant="outlined" value={externer_partner}
+								onChange={this.textFieldValueChange} />
+							<TextField type='text' required fullWidth margin='normal' id='beschreibung' label='Projektbeschreibung' multiline rows={4} variant="outlined" value={beschreibung}
+								onChange={this.textFieldValueChange} error={beschreibungValidationFailed}
+								helperText={beschreibungValidationFailed ? 'Bitte geben Sie eine Beschreibung ein' : ' '} />
+						</form>
+						<LoadingProgress show={addingInProgress || updatingInProgress} />
+						{
+							// Show error message in dependency of projekt prop
+							projekt ?
+								<ContextErrorMessage error={updatingError} contextErrorMsg={`The projekt ${projekt.getID()} could not be updated.`} onReload={this.updateProjekt} />
+								:
+								<ContextErrorMessage error={addingError} contextErrorMsg={`The Projekt could not be added.`} onReload={this.addProjekt} />
+						}
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={this.handleClose} color='secondary'>
+							Abbrechen
             </Button>
-            {
-              // If a Projekt is given, show an update button, else an add button
-              projekt ?
-                <Button disabled={nameValidationFailed || max_teilnehmerValidationFailed || beschreibungValidationFailed} variant='contained' onClick={this.updateProjekt} color='primary'>
-                  Speichern
+						{
+							// If a Projekt is given, show an update button, else an add button
+							projekt ?
+								<Button disabled={nameValidationFailed || max_teilnehmerValidationFailed || beschreibungValidationFailed} variant='contained' onClick={this.updateProjekt} color='primary'>
+									Speichern
               </Button>
-			: 
-			<Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited || beschreibungValidationFailed || !beschreibungEdited ||!halbjahrEdited || !artEdited || !moduleEdited}  
-				variant='contained' onClick={this.addProjekt} color='primary'>
-                  Hinzufügen
+								:
+								<Button disabled={nameValidationFailed || !nameEdited || max_teilnehmerValidationFailed || !max_teilnehmerEdited || beschreibungValidationFailed || !beschreibungEdited || !halbjahrEdited || !artEdited || !moduleEdited}
+									variant='contained' onClick={this.addProjekt} color='primary'>
+									Hinzufügen
              </Button>
-            }
-          </DialogActions>
-        </Dialog>
-        : null
-    );
-  }
+						}
+					</DialogActions>
+				</Dialog>
+				: null
+		);
+	}
 }
 
 /** Component specific styles */
 const styles = theme => ({
-  root: {
-    width: '100%',
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-  max_teilnehmer: {
-	  width: 250,
-	  marginRight: theme.spacing(2)
-  },
-  formControl: {
-	minWidth: 170,
-	marginBottom: theme.spacing(1),
-  },
-  formControlpa: {
-	minWidth: 240,
-	marginBottom: theme.spacing(1),
-	marginLeft: theme.spacing(3)
-  },
-  formControlmo: {
-	width: 435,
-	marginTop: theme.spacing(2),
-	marginBottom: theme.spacing(2),
-  },
-  radio: {
-	marginTop: theme.spacing(2)
-  },
-  chips: {
-	  display: 'flex',
-	  flexWrap: 'wrap'
-  },
-  chip: {
-	  margin: 2
-  }
+	root: {
+		width: '100%',
+	},
+	closeButton: {
+		position: 'absolute',
+		right: theme.spacing(1),
+		top: theme.spacing(1),
+		color: theme.palette.grey[500],
+	},
+	max_teilnehmer: {
+		width: 250,
+		marginRight: theme.spacing(2)
+	},
+	formControl: {
+		minWidth: 170,
+		marginBottom: theme.spacing(1),
+	},
+	formControlpa: {
+		minWidth: 240,
+		marginBottom: theme.spacing(1),
+		marginLeft: theme.spacing(3)
+	},
+	formControlmo: {
+		width: 435,
+		marginTop: theme.spacing(2),
+		marginBottom: theme.spacing(2),
+	},
+	radio: {
+		marginTop: theme.spacing(2)
+	},
+	chips: {
+		display: 'flex',
+		flexWrap: 'wrap'
+	},
+	chip: {
+		margin: 2
+	}
 });
 
 
 
 /** PropTypes */
 ProjektForm.propTypes = {
-  /** @ignore */
-  classes: PropTypes.object.isRequired,
-  /** The ProjektBO's to be edited */
-  projekt: PropTypes.object,
-  /** If true, the form is rendered */
-  show: PropTypes.bool.isRequired,
-  /**  
-   * Handler function which is called, when the dialog is closed.
-   * Sends the edited or created projektBO's as parameter or null, if cancel was pressed.
-   *  
-   * Signature: onClose(ProjektBO's projekt);
-   */
-  onClose: PropTypes.func.isRequired,
+	/** @ignore */
+	classes: PropTypes.object.isRequired,
+	/** The ProjektBO's to be edited */
+	projekt: PropTypes.object,
+	/** If true, the form is rendered */
+	show: PropTypes.bool.isRequired,
+	/**  
+	 * Handler function which is called, when the dialog is closed.
+	 * Sends the edited or created projektBO's as parameter or null, if cancel was pressed.
+	 *  
+	 * Signature: onClose(ProjektBO's projekt);
+	 */
+	onClose: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(ProjektForm);

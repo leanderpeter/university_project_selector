@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, IconButton, Dialog, DialogContent, DialogContentText,
-     DialogTitle, DialogActions, TextField } from '@material-ui/core';
+import {
+    withStyles, Button, IconButton, Dialog, DialogContent, DialogContentText,
+    DialogTitle, DialogActions, TextField
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
@@ -11,7 +13,7 @@ import { ElectivAPI, ProjektartBO } from '../../api';
 
 class ProjektartenForm extends Component {
 
-	constructor(props) {
+    constructor(props) {
         super(props);
         this.state = {
             name: '',
@@ -45,17 +47,17 @@ class ProjektartenForm extends Component {
             this.props.getProjektart()
             this.setState(this.baseState);
             this.props.onClose(projektart); //Aufrufen parent in backend
-		}).catch(e => 
-			this.setState({
-				addingInProgress: false,
-				addingError: e
-			})
-			);
-		// Ladeanimation einblenden
-		this.setState({
-			addingProgress: true,
-			addingError: null
-		});
+        }).catch(e =>
+            this.setState({
+                addingInProgress: false,
+                addingError: e
+            })
+        );
+        // Ladeanimation einblenden
+        this.setState({
+            addingProgress: true,
+            addingError: null
+        });
     }
 
     updateProjektart = () => {
@@ -67,105 +69,105 @@ class ProjektartenForm extends Component {
             this.props.getProjektart()
             this.setState(this.baseState);
             this.props.onClose(projektart); //Aufrufen parent in backend
-		}).catch(e => 
-			this.setState({
-				updatingInProgress: false,
-				updatingError: e
-			})
-			);
-		// Ladeanimation einblenden
-		this.setState({
-			updatingInProgress: true,
-			updatingError: null
-		});
+        }).catch(e =>
+            this.setState({
+                updatingInProgress: false,
+                updatingError: e
+            })
+        );
+        // Ladeanimation einblenden
+        this.setState({
+            updatingInProgress: true,
+            updatingError: null
+        });
     }
 
-    	// Validierung der Textfeldaenderungen 
-	textFieldValueChange = (event) => {
-		const value = event.target.value;
+    // Validierung der Textfeldaenderungen 
+    textFieldValueChange = (event) => {
+        const value = event.target.value;
 
-		let error = false;
-		if (value.trim().length === 0) {
-			error = true;
-		}
-		this.setState({
-			[event.target.id]: event.target.value,
-			[event.target.id + 'ValidationFailed']: error,
-			[event.target.id + 'Edited']: true
-		});
-	}
+        let error = false;
+        if (value.trim().length === 0) {
+            error = true;
+        }
+        this.setState({
+            [event.target.id]: event.target.value,
+            [event.target.id + 'ValidationFailed']: error,
+            [event.target.id + 'Edited']: true
+        });
+    }
 
-	numberValueChange = (event) => {
-		const value = event.target.value;
+    numberValueChange = (event) => {
+        const value = event.target.value;
         const re = /^[0-9]{1,10}$/;
 
-		let error = false;
-		if (value.trim().length === 0) {
-			error = true;
-		}
-		if (re.test(event.target.value) === false) {
-			error = true;
-		}
+        let error = false;
+        if (value.trim().length === 0) {
+            error = true;
+        }
+        if (re.test(event.target.value) === false) {
+            error = true;
+        }
 
-		this.setState({
-			[event.target.id]: event.target.value,
-			[event.target.id + 'ValidationFailed']: error,
-			[event.target.id + 'Edited']: true
-		});
+        this.setState({
+            [event.target.id]: event.target.value,
+            [event.target.id + 'ValidationFailed']: error,
+            [event.target.id + 'Edited']: true
+        });
     }
-    
+
     getInfos = () => {
         if (this.props.projektart) {
             let name = this.props.projektart.getname();
-		    let ects = this.props.projektart.get_ects();
+            let ects = this.props.projektart.get_ects();
             let sws = this.props.projektart.get_sws();
             this.setState({
                 name: name,
                 ects: ects,
                 sws: sws,
             })
-		}
+        }
     }
 
 
     handleClose = () => {
-		this.setState(this.baseState);
-		this.props.onClose(null);
+        this.setState(this.baseState);
+        this.props.onClose(null);
     }
 
 
-    
-    render() {
-		const { classes, show, projektart } = this.props;
-        const {             
-            name, 
-            nameValidationFailed, 
-            nameEdited, 
-            
-            ects, 
-            ectsValidationFailed, 
-            ectsEdited, 
 
-            sws, 
-            swsValidationFailed, 
-            swsEdited, 
+    render() {
+        const { classes, show, projektart } = this.props;
+        const {
+            name,
+            nameValidationFailed,
+            nameEdited,
+
+            ects,
+            ectsValidationFailed,
+            ectsEdited,
+
+            sws,
+            swsValidationFailed,
+            swsEdited,
 
             addingInProgress,
-            addingError, 
+            addingError,
             updatingInProgress,
-            updatingError,  } = this.state;
-        
-        let title = '';
-		let header = '';
+            updatingError, } = this.state;
 
-		if (projektart) {
-			// Projekt objekt true, somit ein edit
-			title = `Projektart "${projektart.name}" bearbeiten`;
-			header = 'Neue Projektart Daten einfügen';
-		} else {
-			title = 'Erstelle eine neue Projektart';
-			header = 'Projektart Daten einfügen';
-		}
+        let title = '';
+        let header = '';
+
+        if (projektart) {
+            // Projekt objekt true, somit ein edit
+            title = `Projektart "${projektart.name}" bearbeiten`;
+            header = 'Neue Projektart Daten einfügen';
+        } else {
+            title = 'Erstelle eine neue Projektart';
+            header = 'Projektart Daten einfügen';
+        }
 
 
         return (
@@ -173,54 +175,54 @@ class ProjektartenForm extends Component {
                 <Dialog open={show} onEnter={this.getInfos} onClose={this.handleClose} maxWidth='xs' fullWidth>
                     <DialogTitle className={classes.dialogtitle}>{title}
                         <IconButton className={classes.closeButton} onClick={this.handleClose}>
-                        <CloseIcon />
+                            <CloseIcon />
                         </IconButton>
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                        {header}
+                            {header}
                         </DialogContentText>
 
                         <form className={classes.root} noValidate autoComplete='off'>
 
-                        <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='small' id='name' label='Projektartname' variant="outlined" value={name}
-                        onChange={this.textFieldValueChange} error={nameValidationFailed}  />
+                            <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='small' id='name' label='Projektartname' variant="outlined" value={name}
+                                onChange={this.textFieldValueChange} error={nameValidationFailed} />
 
-                        <TextField className={classes.textfield} type='text' required fullWidth margin='small' id='ects' label='ECTS' variant="outlined" value={ects}
-                        onChange={this.numberValueChange} error={ectsValidationFailed} />
+                            <TextField className={classes.textfield} type='text' required fullWidth margin='small' id='ects' label='ECTS' variant="outlined" value={ects}
+                                onChange={this.numberValueChange} error={ectsValidationFailed} />
 
-                        <TextField className={classes.textfield} type='text' required fullWidth margin='small' id='sws' label='SWS' variant="outlined" value={sws}
-                        onChange={this.numberValueChange} error={swsValidationFailed} />
+                            <TextField className={classes.textfield} type='text' required fullWidth margin='small' id='sws' label='SWS' variant="outlined" value={sws}
+                                onChange={this.numberValueChange} error={swsValidationFailed} />
 
                         </form>
                         <LoadingProgress show={addingInProgress || updatingInProgress} />
                         {
-                        // Show error message in dependency of Projektart prop
-                        projektart ?
-                            <ContextErrorMessage error={updatingError} contextErrorMsg={`The Projektart ${projektart.getID()} could not be updated.`} onReload={this.updateProjektart} />
-                            :
-                            <ContextErrorMessage error={addingError} contextErrorMsg={`The Projektart could not be added.`} onReload={this.addProjektart} />
+                            // Show error message in dependency of Projektart prop
+                            projektart ?
+                                <ContextErrorMessage error={updatingError} contextErrorMsg={`The Projektart ${projektart.getID()} could not be updated.`} onReload={this.updateProjektart} />
+                                :
+                                <ContextErrorMessage error={addingError} contextErrorMsg={`The Projektart could not be added.`} onReload={this.addProjektart} />
                         }
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClose} color='secondary'>
-                        Abbrechen
+                            Abbrechen
                         </Button>
                         {
-                        // If a Projekt is given, show an update button, else an add button
-                        projektart ?
-                        <Button disabled={nameValidationFailed || ectsValidationFailed  || swsValidationFailed} variant='contained' onClick={this.updateProjektart} color='primary'>
-                            Speichern
+                            // If a Projekt is given, show an update button, else an add button
+                            projektart ?
+                                <Button disabled={nameValidationFailed || ectsValidationFailed || swsValidationFailed} variant='contained' onClick={this.updateProjektart} color='primary'>
+                                    Speichern
                         </Button>
-                        : 
-                        <Button disabled={nameValidationFailed || !nameEdited || ectsValidationFailed || !ectsEdited || swsValidationFailed || !swsEdited}  
-                            variant='contained' onClick={this.addProjektart} color='primary'>
-                            Hinzufügen
+                                :
+                                <Button disabled={nameValidationFailed || !nameEdited || ectsValidationFailed || !ectsEdited || swsValidationFailed || !swsEdited}
+                                    variant='contained' onClick={this.addProjektart} color='primary'>
+                                    Hinzufügen
                         </Button>
                         }
                     </DialogActions>
                 </Dialog>
-            : null
+                : null
         );
     }
 }
@@ -228,22 +230,22 @@ class ProjektartenForm extends Component {
 /** Component specific styles */
 const styles = theme => ({
     root: {
-      width: '100%',
+        width: '100%',
     },
     closeButton: {
-      position: 'absolute',
-      right: theme.spacing(1),
-      top: theme.spacing(1),
-      color: theme.palette.grey[500],
+        position: 'absolute',
+        right: theme.spacing(1),
+        top: theme.spacing(1),
+        color: theme.palette.grey[500],
     },
     textfield: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1)
     }
-  });
-  
-  /** PropTypes */
-  ProjektartenForm.propTypes = {
+});
+
+/** PropTypes */
+ProjektartenForm.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** If true, the form is rendered */
@@ -255,6 +257,6 @@ const styles = theme => ({
      * Signature: onClose(ProjektBO's projekt);
      */
     onClose: PropTypes.func.isRequired,
-  }
-  
-  export default withStyles(styles)(ProjektartenForm);
+}
+
+export default withStyles(styles)(ProjektartenForm);
