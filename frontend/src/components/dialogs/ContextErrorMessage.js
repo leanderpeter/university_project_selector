@@ -54,7 +54,7 @@ const styles = theme => ({
   }
 });
 
-/** PropTypes */ 
+/** PropTypes */
 ContextErrorMessage.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,

@@ -24,7 +24,7 @@ import AddStudentEintrag from './AddStudentEintrag';
 
 class AddStudent extends Component {
 
-	constructor(props) {
+    constructor(props) {
         super(props);
 
         //gebe einen leeren status
@@ -39,46 +39,46 @@ class AddStudent extends Component {
 
     // API Anbindung um alle Studenten vom Backend zu bekommen 
     // Wenn ein Student (eine Teilnahme) schon an dem Projekt teilnimmt, wird diese nicht angezeigt
-    getStudenten=()=>{
+    getStudenten = () => {
         ElectivAPI.getAPI().getStudenten()
-        .then(studentBOs=>{
-            var teilnahmeids = this.props.teilnahmen.map(teilnahme=>{
-                return teilnahme.teilnehmer
-            });
-            studentenvar = studentBOs
-            var a;
-            for (a in teilnahmeids){
-                var studentenids =  studentenvar.map(student=>{
-                    return student.id
+            .then(studentBOs => {
+                var teilnahmeids = this.props.teilnahmen.map(teilnahme => {
+                    return teilnahme.teilnehmer
                 });
-                if (studentenids.indexOf(teilnahmeids[a] !== -1)) {
-                    studentenvar.splice(studentenids.indexOf(teilnahmeids[a]), 1)
+                studentenvar = studentBOs
+                var a;
+                for (a in teilnahmeids) {
+                    var studentenids = studentenvar.map(student => {
+                        return student.id
+                    });
+                    if (studentenids.indexOf(teilnahmeids[a] !== -1)) {
+                        studentenvar.splice(studentenids.indexOf(teilnahmeids[a]), 1)
+                    }
                 }
-            }
-        })
-        .then(() =>     
-            this.setState({
-                studenten: studentenvar,
-                filteredStudenten: [...studentenvar],
-                error: null,
-                loadingInProgress: false,
-            })).catch(e =>
+            })
+            .then(() =>
                 this.setState({
-                    student: [],
-                    filteredStudenten: [],
-                    error: e,
+                    studenten: studentenvar,
+                    filteredStudenten: [...studentenvar],
+                    error: null,
                     loadingInProgress: false,
-                }));
-            this.setState({
-                error: null,
-                loadingInProgress: true,
-                loadingProjekteError: null
-            });
-      }
+                })).catch(e =>
+                    this.setState({
+                        student: [],
+                        filteredStudenten: [],
+                        error: e,
+                        loadingInProgress: false,
+                    }));
+        this.setState({
+            error: null,
+            loadingInProgress: true,
+            loadingProjekteError: null
+        });
+    }
 
     //wird aufgerufen, wenn das Dialog geschlossen wird
     handleClose = () => {
-		this.props.onClose(null);
+        this.props.onClose(null);
     }
 
     //wird aufgerufen, wenn das Dialog geöffnet wird
@@ -87,7 +87,7 @@ class AddStudent extends Component {
     }
 
     //Suche-Funktion zum Suchen nach Studentenname oder Matrikelnummer
-    filterFieldValueChange= event => {
+    filterFieldValueChange = event => {
         const value = event.target.value.toLowerCase();
         this.setState({
             filteredStudenten: this.state.studenten.filter(student => {
@@ -107,22 +107,22 @@ class AddStudent extends Component {
         });
     }
 
-    
+
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
-      }
-    
+    }
+
     /** Renders the component */
     render() {
-		const { classes, show, currentProjekt } = this.props;
+        const { classes, show, currentProjekt } = this.props;
         const { filteredStudenten, studentFilter, error, loadingInProgress } = this.state;
-        
+
         return (
             show ?
                 <Dialog open={show} onEntered={this.handleOpen} onClose={this.handleClose} maxWidth='xs' fullWidth>
                     <DialogTitle className={classes.dialogtitle}>Student hinzufügen
                         <IconButton className={classes.closeButton} onClick={this.handleClose}>
-                        <CloseIcon />
+                            <CloseIcon />
                         </IconButton>
                     </DialogTitle>
                     <TextField
@@ -134,26 +134,26 @@ class AddStudent extends Component {
                         onChange={this.filterFieldValueChange}
                         InputProps={{
                             endAdornment: <InputAdornment position='end'>
-                            <IconButton onClick={this.clearFilterFieldButtonClicked}>
-                                <ClearIcon fontSize="small"/>
-                            </IconButton>
+                                <IconButton onClick={this.clearFilterFieldButtonClicked}>
+                                    <ClearIcon fontSize="small" />
+                                </IconButton>
                             </InputAdornment>,
                         }}
                     />
-                            <List className={classes.root}>
-                                  {
-                                  filteredStudenten.map(student => 
-                                    <AddStudentEintrag key={student.getID()} student = {student} currentProjekt={currentProjekt}
+                    <List className={classes.root}>
+                        {
+                            filteredStudenten.map(student =>
+                                <AddStudentEintrag key={student.getID()} student={student} currentProjekt={currentProjekt}
                                     show={this.props.show}
                                 />)
-                                  } 
-                                <ListItem>
-                                <LoadingProgress show={loadingInProgress} />
-                                <ContextErrorMessage error={error} contextErrorMsg={`Studenten konnten nicht geladen werden.`} onReload={this.getStudenten} />
-                                </ListItem>
-                            </List>
+                        }
+                        <ListItem>
+                            <LoadingProgress show={loadingInProgress} />
+                            <ContextErrorMessage error={error} contextErrorMsg={`Studenten konnten nicht geladen werden.`} onReload={this.getStudenten} />
+                        </ListItem>
+                    </List>
                 </Dialog>
-            : null
+                : null
         );
     }
 }
@@ -163,13 +163,13 @@ var studentenvar;
 /** Component specific styles */
 const styles = theme => ({
     root: {
-      width: '100%',
+        width: '100%',
     },
     closeButton: {
-      position: 'absolute',
-      right: theme.spacing(1),
-      top: theme.spacing(1),
-      color: theme.palette.grey[500],
+        position: 'absolute',
+        right: theme.spacing(1),
+        top: theme.spacing(1),
+        color: theme.palette.grey[500],
     },
     filter: {
         margin: theme.spacing(2),
@@ -179,15 +179,15 @@ const styles = theme => ({
     dialogtitle: {
         paddingLeft: theme.spacing(2)
     }
-  });
-  
-  /** PropTypes */
-  AddStudent.propTypes = {
+});
+
+/** PropTypes */
+AddStudent.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** If true, the form is rendered */
     show: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-  }
-  
-  export default withStyles(styles)(AddStudent);
+}
+
+export default withStyles(styles)(AddStudent);
