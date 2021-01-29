@@ -167,7 +167,7 @@ class TeilnahmeMapper(Mapper):
 
         cursor = self._connection.cursor()
 
-        command = "SELECT electivapp.teilnahmen.id, electivapp.teilnahmen.lehrangebot, electivapp.teilnahmen.teilnehmer, electivapp.teilnahmen.anrechnung, electivapp.teilnahmen.resultat FROM electivapp.teilnahmen INNER JOIN electivapp.projekte ON electivapp.teilnahmen.lehrangebot = electivapp.projekte.id WHERE electivapp.teilnahmen.anrechnung = %s AND electivapp.projekte.halbjahr = %s"
+        command = "SELECT teilnahmen.id, teilnahmen.lehrangebot, teilnahmen.teilnehmer, teilnahmen.anrechnung, teilnahmen.resultat FROM teilnahmen INNER JOIN projekte ON teilnahmen.lehrangebot = projekte.id WHERE teilnahmen.anrechnung = %s AND projekte.halbjahr = %s"
         data = (modul_id, semester_id)
         cursor.execute(command, data)
         tuples = cursor.fetchall()
