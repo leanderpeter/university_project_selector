@@ -34,7 +34,8 @@ class ProjektverwaltungListe extends Component {
             error: null,
             loadingInProgress: false,
             expandedProjektID: expandedID,
-            showProjekteForm: false
+            showProjekteForm: false,
+            projektarten: []
         };
     }
 
@@ -81,9 +82,21 @@ class ProjektverwaltungListe extends Component {
         });
     }
 
+    // API Anbindung um alle Projektarten vom Backend zu bekommen 
+    getProjektart = () => {
+        ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
+            this.setState({
+                projektarten: projektartBOs
+            })).catch(e =>
+                this.setState({
+                    projektarten: []
+                }));
+    }
+
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getProjekte();
+        this.getProjektart();
     }
 
     onExpandedStateChange = projekt => {
@@ -127,7 +140,8 @@ class ProjektverwaltungListe extends Component {
             expandedProjektID,
             loadingInProgress,
             error,
-            showProjekteForm
+            showProjekteForm,
+            projektarten
         } = this.state;
 
         return (
@@ -167,7 +181,7 @@ class ProjektverwaltungListe extends Component {
                         <ProjektverwaltungListeEintrag key={projekt.getID()} projekt={projekt}
                             expandedState={expandedProjektID === projekt.getID()}
                             onExpandedStateChange={this.onExpandedStateChange}
-                            currentStudent={currentStudent}
+                            currentStudent={currentStudent} projektarten={projektarten}
                         />)
                 }
                 <LoadingProgress show={loadingInProgress} />

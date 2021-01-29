@@ -19,7 +19,8 @@ class ProjektverwaltungListeEintrag extends Component {
             projekt: props.projekt,
             projektarten: [],
             showProjektForm: false,
-            showProjektDeleteDialog: false
+            showProjektDeleteDialog: false,
+            dozentName: ""
         };
     }
 
@@ -59,28 +60,38 @@ class ProjektverwaltungListeEintrag extends Component {
         }
     }
 
-    // API Anbindung um alle Projektarten vom Backend zu bekommen 
-    getProjektart = () => {
-        ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
+    // API Anbindung um Dozent vom Backend zu bekommen 
+    getPerson = () => {
+        ElectivAPI.getAPI().getPerson(this.state.projekt.dozent)
+        .then(personBO =>
             this.setState({
-                projektarten: projektartBOs
-            })).catch(e =>
+                dozentName: personBO.getname(),
+                error: null,
+                loadingInProgress: false,
+            }))
+            .catch(e =>
                 this.setState({
-                    projektarten: []
+                    dozentName: null,
+                    error: e,
+                    loadingInProgress: false,
                 }));
-    }
+        this.setState({
+            error: null,
+            loadingInProgress: true
+        });
+      }
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
-        this.getProjektart();
+        this.getPerson();
     }
 
 
     /** Renders the component */
     render() {
-        const { classes, expandedState } = this.props;
+        const { classes, expandedState, projektarten } = this.props;
         // Use the states projekt
-        const { projekt, projektarten, showProjektForm } = this.state;
+        const { projekt, showProjektForm, dozentName } = this.state;
 
 
         return (
@@ -94,7 +105,7 @@ class ProjektverwaltungListeEintrag extends Component {
                         <Grid container spacing={1} justify='flex-start' alignItems='center'>
                             <Grid item>
                                 <Typography variant='body1'
-                                    className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()} </Typography>
+                                    className={classes.heading}>{projekt.getname()} bei {dozentName} </Typography>
                                 <Typography variant='body1' color={'success.main'}>
                                 </Typography>
                             </Grid>

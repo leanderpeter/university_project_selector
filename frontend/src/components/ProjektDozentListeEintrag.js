@@ -28,6 +28,7 @@ class ProjektDozentListeEintrag extends Component {
             projektarten: [],
             showProjektForm: false,
             showProjektDeleteDialog: false,
+            dozentName: ""
         };
     }
 
@@ -86,28 +87,39 @@ class ProjektDozentListeEintrag extends Component {
         });
     }
 
-    // Holt alle Projektarten vom Backend mit GET Methode
-    getProjektart = () => {
-        ElectivAPI.getAPI().getProjektart().then(projektartBOs =>
+
+    // API Anbindung um Dozent vom Backend zu bekommen 
+    getPerson = () => {
+        ElectivAPI.getAPI().getPerson(this.state.projekt.dozent)
+        .then(personBO =>
             this.setState({
-                projektarten: projektartBOs
-            })).catch(e =>
+                dozentName: personBO.getname(),
+                error: null,
+                loadingInProgress: false,
+            }))
+            .catch(e =>
                 this.setState({
-                    projektarten: []
+                    dozentName: null,
+                    error: e,
+                    loadingInProgress: false,
                 }));
-    }
+        this.setState({
+            error: null,
+            loadingInProgress: true
+        });
+      }
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
-        this.getProjektart();
+        this.getPerson();
     }
 
 
     /** Renders the component */
     render() {
-        const { classes, expandedState } = this.props;
+        const { classes, expandedState, projektarten } = this.props;
         // Use the states projekt
-        const { projekt, projektarten, showProjektForm, showProjektDeleteDialog } = this.state;
+        const { projekt, showProjektForm, showProjektDeleteDialog, dozentName } = this.state;
 
 
         return (
@@ -121,7 +133,7 @@ class ProjektDozentListeEintrag extends Component {
                         <Grid container spacing={1} justify='flex-start' alignItems='center'>
                             <Grid item>
                                 <Typography variant='body1'
-                                    className={classes.heading}>{projekt.getname()} bei {projekt.getbetreuer()}
+                                    className={classes.heading}>{projekt.getname()} bei {dozentName}
                                 </Typography>
                             </Grid>
                             <Grid item xs />
