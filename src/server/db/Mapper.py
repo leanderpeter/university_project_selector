@@ -19,9 +19,9 @@ class Mapper(AbstractContextManager, ABC):
             Die App befindet sich somit im **Production Mode** und zwar im *Standard Environment*.
             Hierbei handelt es sich also um die Verbindung zwischen Google App Engine und Cloud SQL."""
 
-            self._connection = connector.connect(user='demo', password='demo',
-                                                 unix_socket='/cloudsql/python-bankprojekt-thies:europe-west3:bank-db-thies',
-                                                 database='bankproject')
+            self._connection = connector.connect(user='root', password='root',
+                                                 unix_socket='/cloudsql/wahlfachapp:europe-west3:wahlfachdb',
+                                                 database='electivApp')
         else:
             """Wenn wir hier ankommen, dann handelt sich offenbar um die Ausführung des Codes in einer lokalen Umgebung,
             also auf einem Local Development Server. Hierbei stellen wir eine einfache Verbindung zu einer lokal

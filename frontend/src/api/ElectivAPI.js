@@ -19,6 +19,9 @@ export default class ElectivAPI {
 	// Lokales Python backend
 	#ElectivServerBaseURL = '/electivApp';
 
+	// Lokales Python backend
+	//#ElectivServerBaseURL = 'https://wahlfachapp.oa.r.appspot.com/electivApp';
+
 	//Projekte anzeigen fuer Student
 	#getProjekteURL = () => `${this.#ElectivServerBaseURL}/projekte`;
 	#getProjekteByZustandURL = (id) => `${this.#ElectivServerBaseURL}/projekte/zustand/${id}`;
@@ -171,7 +174,7 @@ export default class ElectivAPI {
 	/*
 	Gibt einen Error zuruck auf JSON Basis. fetch() gibt keine Errors wie 404 oder 500 zuruck. Deshaltb die func fetchAdvanced 
 	*/
-	#fetchAdvanced = (url, init) => fetch(url, init)
+	#fetchAdvanced = (url, init) => fetch(url, init, {credentials: 'include'})
 		.then(res => {
 			//fetch() gibt keine Errors wie 404 oder 500 zuruck
 			if (!res.ok) {

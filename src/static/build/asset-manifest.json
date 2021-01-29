@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.js": "/static/build/static/js/main.bf5c2229.chunk.js",
+    "main.js.map": "/static/build/static/js/main.bf5c2229.chunk.js.map",
+    "runtime-main.js": "/static/build/static/js/runtime-main.de0968ea.js",
+    "runtime-main.js.map": "/static/build/static/js/runtime-main.de0968ea.js.map",
+    "static/js/2.9a8c1e32.chunk.js": "/static/build/static/js/2.9a8c1e32.chunk.js",
+    "static/js/2.9a8c1e32.chunk.js.map": "/static/build/static/js/2.9a8c1e32.chunk.js.map",
+    "index.html": "/static/build/index.html",
+    "precache-manifest.9a75f3fa2a32c24920c45e155f783abe.js": "/static/build/precache-manifest.9a75f3fa2a32c24920c45e155f783abe.js",
+    "service-worker.js": "/static/build/service-worker.js",
+    "static/js/2.9a8c1e32.chunk.js.LICENSE.txt": "/static/build/static/js/2.9a8c1e32.chunk.js.LICENSE.txt",
+    "static/media/Alex.jpg": "/static/build/static/media/Alex.7a99dc3b.jpg",
+    "static/media/Daria.jpg": "/static/build/static/media/Daria.57ac10fa.jpg",
+    "static/media/Jannik.jpg": "/static/build/static/media/Jannik.faf59a7d.jpg",
+    "static/media/Leander.jpg": "/static/build/static/media/Leander.562d57ad.jpg",
+    "static/media/Raphael.jpg": "/static/build/static/media/Raphael.0fe03bd1.jpg",
+    "static/media/pascal.jpg": "/static/build/static/media/pascal.3da9eb9b.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.de0968ea.js",
+    "static/js/2.9a8c1e32.chunk.js",
+    "static/js/main.bf5c2229.chunk.js"
+  ]
+}

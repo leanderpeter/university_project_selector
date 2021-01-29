@@ -32,6 +32,7 @@ def secured(function):
         name = request.cookies.get("name")
         kuerzel = request.cookies.get("kuerzel")
         mat_nr = request.cookies.get("mat_nr")
+        print("cookies:", request.cookies)
 
         error_message = None
         claims = None
@@ -51,8 +52,8 @@ def secured(function):
                     adm = ProjektAdministration()
 
                     google_user_id = claims.get("user_id")
-                    # print(google_user_id)
                     email = claims.get("email")
+
                     if rolle == "Student":
                         student = adm.get_student_by_google_user_id(google_user_id)
                         if student is not None:

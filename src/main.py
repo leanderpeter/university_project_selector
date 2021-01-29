@@ -28,7 +28,8 @@ class NullableInteger(fields.Integer):
 """Flask wird hiermit instanziert"""
 app = Flask(__name__)
 
-CORS(app, resources=r'/electivApp/*')
+CORS(app, support_credentials=True, resources={r'/electivApp/*': {"origins": "*"}})
+
 
 api = Api(app, version='1.0', title='electivApp API',
           description='Web App for choosing electiv subjects for the university')
@@ -514,7 +515,6 @@ class ModulByProjektIDOperationen(Resource):
 @electivApp.response(500, 'Something went wrong')
 class ModulOperationen(Resource):
     @electivApp.marshal_list_with(modul)
-    @secured
     def get(self):
         """Auslesen aller Module-Objekte.
 
