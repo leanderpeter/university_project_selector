@@ -32,7 +32,6 @@ def secured(function):
         name = request.cookies.get("name")
         kuerzel = request.cookies.get("kuerzel")
         mat_nr = request.cookies.get("mat_nr")
-        print("cookies:", request.cookies)
 
         error_message = None
         claims = None

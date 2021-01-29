@@ -77,10 +77,9 @@ class ProjektListe extends Component {
 
   //hole alle Projekte vom Backend
   getProjekte = () => {
-    
+
     ElectivAPI.getAPI().getProjekteByZustand('Wahlfreigabe')
       .then(projekteBOs =>{
-
         var aktuelleWahl = projekteBOs.length > 0
         this.setState({								//neuer status wenn fetch komplett
           aktuelleWahl: aktuelleWahl,
@@ -186,29 +185,31 @@ class ProjektListe extends Component {
       expandedProjektID: newID,
     });
   }
+
   wahlFreigeben(){
     var neuerZustand = 'Wahlfreigabe'
     if(this.state.aktuelleWahl){
       neuerZustand = 'in Bewertung' 
-    
-    for ( var i=0; i<this.state.projekte.length; i++){
-      this.state.projekte[i].setAktuellerZustand(neuerZustand)
-      ElectivAPI.getAPI().setZustandAtProjekt(this.state.projekte[i].getID(),neuerZustand)
-    }}
-    else{ for ( var i=0; i<this.state.genehmigteProjekte.length; i++){
-      this.state.genehmigteProjekte[i].setAktuellerZustand(neuerZustand)
-      ElectivAPI.getAPI().setZustandAtProjekt(this.state.genehmigteProjekte[i].getID(),neuerZustand)
-
+      for ( var i=0; i<this.state.projekte.length; i++){
+        this.state.projekte[i].setAktuellerZustand(neuerZustand)
+        ElectivAPI.getAPI().setZustandAtProjekt(this.state.projekte[i].getID(),neuerZustand)
+      }
     }
-  } this.getProjekte()
-    
+    else{
+      for (var i=0; i<this.state.genehmigteProjekte.length; i++){
+        this.state.genehmigteProjekte[i].setAktuellerZustand(neuerZustand)
+        ElectivAPI.getAPI().setZustandAtProjekt(this.state.genehmigteProjekte[i].getID(), neuerZustand)
+      }
+    } 
+    this.getProjekte();
+    this.getGenehmigteProjekte();
   }
 
 
   /** Renders the component */
   render() {
 
-    const { classes, currentStudent } = this.props;
+    const { classes, currentStudent, currentPerson } = this.props;
     const { aktuelleWahl, projekte, projektFilter, filteredProjekte, expandedProjektID, loadingInProgress, error, ectsCount, projektarten, personen } = this.state;
 
     return (
@@ -241,13 +242,22 @@ class ProjektListe extends Component {
               <Button variant="outlined" color="primary" className={classes.buttonEcts} disableRipple style={{ backgroundColor: 'transparent', }}>Anzahl ECTS: {ectsCount}</Button>
             </Grid>
             :
-            <>{aktuelleWahl ?
-            <Button className={classes.wahlFreigeben} variant="contained" color="secondary" onClick= {this.wahlFreigeben} >Wahl beenden</Button>
-            :
-            <Button className={classes.wahlFreigeben} variant="contained" color="primary" onClick= {this.wahlFreigeben} >Wahl freigeben</Button>
-
-            
-            } </>
+            <></>
+          }
+          { currentPerson ?
+            <>
+            { currentPerson.rolle === "Admin"?
+            <>
+              {aktuelleWahl ?
+              <Button className={classes.wahlFreigeben} variant="contained" color="secondary" onClick= {this.wahlFreigeben} >Wahl beenden</Button>
+              :
+              <Button className={classes.wahlFreigeben} variant="contained" color="primary" onClick= {this.wahlFreigeben} >Wahl freigeben</Button>
+              } 
+            </>
+            :null
+            }
+            </>
+            :null
           }
         </Grid>
         {projektarten.length > 0 && personen.length > 0 && filteredProjekte.length > 0 ?
@@ -286,9 +296,8 @@ class ProjektListe extends Component {
           </>
           :
           <>
-            <Typography>Daten noch nicht geladen</Typography>
+            <Typography>Die Wahl hat noch nicht begonnen</Typography>
           </>
-
         }
 
         <LoadingProgress show={loadingInProgress} />
