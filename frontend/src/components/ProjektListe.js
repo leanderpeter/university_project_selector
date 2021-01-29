@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+<<<<<<< HEAD
 import {withStyles, TextField, InputAdornment, IconButton, Grid, Typography, Button} from '@material-ui/core';
+=======
+import { withStyles, TextField, InputAdornment, IconButton, Grid, Typography, Button, formatMs} from '@material-ui/core';
+>>>>>>> status_inWahl
 import ClearIcon from '@material-ui/icons/Clear'
 import {withRouter} from 'react-router-dom';
 import {ElectivAPI} from '../api';
@@ -24,6 +28,7 @@ class ProjektListe extends Component {
             expandedID = this.props.location.expandProjekt.getID();
         }
 
+<<<<<<< HEAD
         //gebe einen leeren status
         this.state = {
             projekte: [],
@@ -39,6 +44,27 @@ class ProjektListe extends Component {
             personen: []
         };
     }
+=======
+    //gebe einen leeren status
+    this.state = {
+      projekte: [],
+      projektarten: [],
+      filteredProjekte: [],
+      projektFilter: '',
+      error: null,
+      ausgewaehlteEcts: null,
+      loadingInProgress: false,
+      expandedProjektID: expandedID,
+      showProjekteForm: false,
+      ectsCount: 0,
+      personen: [],
+      aktuelleWahl: false,
+      genehmigteProjekte: [],
+      
+    };
+    this.wahlFreigeben = this.wahlFreigeben.bind(this)
+  }
+>>>>>>> status_inWahl
 
     // ECTS counter funktion. Erhaelt die ects und addiert diese bei Aufruf zu ectsCount im state
     ectsCountFunc = (ects) => {
@@ -71,6 +97,7 @@ class ProjektListe extends Component {
       } */
 
 
+<<<<<<< HEAD
     //hole alle Projekte vom Backend
     getProjekte = () => {
         ElectivAPI.getAPI().getProjekteByZustand("Genehmigt")
@@ -93,6 +120,54 @@ class ProjektListe extends Component {
             error: null
         });
     }
+=======
+  //hole alle Projekte vom Backend
+  getProjekte = () => {
+    
+    ElectivAPI.getAPI().getProjekteByZustand('Wahlfreigabe')
+      .then(projekteBOs =>{
+
+        var aktuelleWahl = projekteBOs.length > 0
+        this.setState({								//neuer status wenn fetch komplett
+          aktuelleWahl: aktuelleWahl,
+          projekte: projekteBOs,
+          filteredProjekte: [...projekteBOs],
+          loadingInProgress: false,				// deaktiviere ladeindikator
+          error: null,
+        })}).catch(e =>
+          this.setState({
+            projekte: [],
+            filteredProjekte: [],
+            loadingInProgress: false,
+            error: e
+          }));
+    // setze laden auf wahr
+    this.setState({
+      loadingInProgress: true,
+      error: null
+    });
+  }
+  getGenehmigteProjekte = () => {
+    
+    ElectivAPI.getAPI().getProjekteByZustand('Genehmigt')
+      .then(projekteBOs =>{
+        this.setState({								//neuer status wenn fetch komplett
+          genehmigteProjekte: projekteBOs,
+          loadingInProgress: false,				// deaktiviere ladeindikator
+          error: null,
+        })}).catch(e =>
+          this.setState({
+            genehmigteProjekte: [],
+            loadingInProgress: false,
+            error: e
+          }));
+    // setze laden auf wahr
+    this.setState({
+      loadingInProgress: true,
+      error: null
+    });
+  }
+>>>>>>> status_inWahl
 
     // Holt alle Projektarten vom Backend mit GET Methode
     getProjektarten = () => {
@@ -136,12 +211,22 @@ class ProjektListe extends Component {
         });
     }
 
+<<<<<<< HEAD
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getProjekte();
         this.getProjektarten();
         this.getPPersonen();
     }
+=======
+  // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
+  componentDidMount() {
+    this.getProjekte();
+    this.getProjektarten();
+    this.getPPersonen();
+    this.getGenehmigteProjekte();
+  }
+>>>>>>> status_inWahl
 
     // Funktion fuer die Projektklappen oeffnung und den einhergehenden State change
     onExpandedStateChange = projekt => {
@@ -157,11 +242,36 @@ class ProjektListe extends Component {
             expandedProjektID: newID,
         });
     }
+<<<<<<< HEAD
+=======
+    this.setState({
+      expandedProjektID: newID,
+    });
+  }
+  wahlFreigeben(){
+    var neuerZustand = 'Wahlfreigabe'
+    if(this.state.aktuelleWahl){
+      neuerZustand = 'in Bewertung' 
+    
+    for ( var i=0; i<this.state.projekte.length; i++){
+      this.state.projekte[i].setAktuellerZustand(neuerZustand)
+      ElectivAPI.getAPI().setZustandAtProjekt(this.state.projekte[i].getID(),neuerZustand)
+    }}
+    else{ for ( var i=0; i<this.state.genehmigteProjekte.length; i++){
+      this.state.genehmigteProjekte[i].setAktuellerZustand(neuerZustand)
+      ElectivAPI.getAPI().setZustandAtProjekt(this.state.genehmigteProjekte[i].getID(),neuerZustand)
+
+    }
+  } this.getProjekte()
+    
+  }
+>>>>>>> status_inWahl
 
 
     /** Renders the component */
     render() {
 
+<<<<<<< HEAD
         const {classes, currentStudent} = this.props;
         const {
             projekte,
@@ -174,6 +284,10 @@ class ProjektListe extends Component {
             projektarten,
             personen
         } = this.state;
+=======
+    const { classes, currentStudent } = this.props;
+    const { aktuelleWahl, projekte, projektFilter, filteredProjekte, expandedProjektID, loadingInProgress, error, ectsCount, projektarten, personen } = this.state;
+>>>>>>> status_inWahl
 
         return (
             <div className={classes.root}>
@@ -199,6 +313,7 @@ class ProjektListe extends Component {
                 }}
             />
           </Grid> */}
+<<<<<<< HEAD
                     <Grid item xs/>
                     {currentStudent ?
                         <Grid item className={classes.ectsCount}>
@@ -262,6 +377,61 @@ class ProjektListe extends Component {
                     <>
                         <Typography>Daten noch nicht geladen</Typography>
                     </>
+=======
+          <Grid item xs />
+          {currentStudent ?
+            <Grid item className={classes.ectsCount}>
+              <Button variant="outlined" color="primary" className={classes.buttonEcts} disableRipple style={{ backgroundColor: 'transparent', }}>Anzahl ECTS: {ectsCount}</Button>
+            </Grid>
+            :
+            <>{aktuelleWahl ?
+            <Button className={classes.wahlFreigeben} variant="contained" color="secondary" onClick= {this.wahlFreigeben} >Wahl beenden</Button>
+            :
+            <Button className={classes.wahlFreigeben} variant="contained" color="primary" onClick= {this.wahlFreigeben} >Wahl freigeben</Button>
+
+            
+            } </>
+          }
+        </Grid>
+        {projektarten.length > 0 && personen.length > 0 && filteredProjekte.length > 0 ?
+          <>
+          
+        <Button className={classes.ects} variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent', }}>5 ECTS</Button>
+        {       
+          filteredProjekte
+          .filter(projekt => projekt.getArt()===1)
+          .map(projekt => 
+          <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
+              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
+              ectsCount={ectsCount} projektarten={projektarten} personen={personen}
+            />)
+        } 
+        <Button className={classes.ects} variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent', }}>10 ECTS</Button>
+        {        
+          filteredProjekte
+          .filter(projekt => projekt.getArt()===2)
+          .map(projekt => 
+          <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
+              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
+              ectsCount={ectsCount} projektarten={projektarten} personen={personen}
+            />)
+        } 
+        <Button className={classes.ects} variant="outlined" color="primary" disableRipple style={{ backgroundColor: 'transparent', }}>20 ECTS</Button>
+        {
+          filteredProjekte
+          .filter(projekt => projekt.getArt()===3)
+          .map(projekt => 
+          <ProjektListeEintrag key={projekt.getID()} projekt={projekt} expandedState={expandedProjektID === projekt.getID()}
+              onExpandedStateChange={this.onExpandedStateChange} currentStudent={currentStudent} ectsCountFunc={this.ectsCountFunc}
+              ectsCount={ectsCount} projektarten={projektarten} personen={personen}
+            />)
+        } 
+          </>
+          :
+          <>
+            <Typography>Daten noch nicht geladen</Typography>
+          </>
+>>>>>>> status_inWahl
 
                 }
 
@@ -279,6 +449,7 @@ class ProjektListe extends Component {
 
 /** Component specific styles */
 const styles = theme => ({
+<<<<<<< HEAD
     root: {
         width: '100%',
     },
@@ -299,6 +470,37 @@ const styles = theme => ({
     buttonEcts: {
         minWidth: 155
     }
+=======
+  root: {
+    width: '100%',
+  },
+  grid: {
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(1),
+    marginLeft: theme.spacing(1)
+  },
+  ectsCount: {
+    marginBottom: theme.spacing(1),
+    marginRight: theme.spacing(2),
+  },
+  ects:{
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    width: '100%'
+  },
+  buttonEcts:{
+    minWidth: 155
+  },
+  wahlFreigeben:{
+    minWidth: 155,
+    marginRight: theme.spacing(2),
+    
+  }
+  
+  
+  
+
+>>>>>>> status_inWahl
 });
 
 /** PropTypes */

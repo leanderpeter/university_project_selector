@@ -28,7 +28,7 @@ export default class ElectivAPI {
 	#setZustandAtProjekt = (projektId, zustandId) => `${this.#ElectivServerBaseURL}/projekte/zustand?projektId=${projektId}&zustandId=${zustandId}`;
 	#addProjekteURL = () => `${this.#ElectivServerBaseURL}/projekte`;
 	#getProjekteByIDURL = (id) => `${this.#ElectivServerBaseURL}/projekte/${id}`;
-
+	
 	//Projekt löschen
 	#deleteProjektURL = (id) => `${this.#ElectivServerBaseURL}/projekt/${id}`;
 
