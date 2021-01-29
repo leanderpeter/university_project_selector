@@ -242,9 +242,9 @@ class ProjektListe extends Component {
             </Grid>
             :
             <>{aktuelleWahl ?
-            <Button className={classes.wahlFreigeben} variant="outlined" color="primary" onClick= {this.wahlFreigeben} style={{ backgroundColor:'' }}>Wahl beenden</Button>
+            <Button className={classes.wahlFreigeben} variant="contained" color="secondary" onClick= {this.wahlFreigeben} >Wahl beenden</Button>
             :
-            <Button className={classes.wahlFreigeben} variant="outlined" color="primary" onClick= {this.wahlFreigeben} style={{ backgroundColor:'' }}>Wahl freigeben</Button>
+            <Button className={classes.wahlFreigeben} variant="contained" color="primary" onClick= {this.wahlFreigeben} >Wahl freigeben</Button>
 
             
             } </>
@@ -328,7 +328,7 @@ const styles = theme => ({
   wahlFreigeben:{
     minWidth: 155,
     marginRight: theme.spacing(2),
-    color: 'darkred'
+    
   }
   
   
