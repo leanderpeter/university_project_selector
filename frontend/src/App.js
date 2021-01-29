@@ -184,7 +184,7 @@ class App extends React.Component {
           
             {
               // is the user signed in?
-              currentUser ?
+              currentUser && (currentStudent || currentPerson) ?
                 <>
                   <Redirect from='/' to='projekte' />
                   <Route path='/projekte' component ={ProjektListe}>

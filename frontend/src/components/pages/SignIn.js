@@ -100,7 +100,6 @@ import {Card, Button, Grid, Typography, withStyles, Paper, FormControl, InputLab
 		});
 	}
 
-
 	// rendert die  Komponente SignIn Seite
 	render() {
 		const {rolle, rolleEdited, nameValidationFailed, nameEdited, kuerzelValidationFailed, kuerzelEdited, mat_nrValidationFailed, mat_nrEdited} = this.state;
@@ -120,15 +119,15 @@ import {Card, Button, Grid, Typography, withStyles, Paper, FormControl, InputLab
 											<MenuItem value='Admin'>Admin</MenuItem>
 										</Select>
 								</FormControl>
-								<form className={classes.form} autoComplete="off">
+								<form className={classes.form} autoComplete="on">
 									<TextField id="name" label="Name" error={nameValidationFailed} onChange = {this.textFieldValueChange}/>
 								</form>
 								{ rolle === 'Student' ?
 								<>
-								<form className={classes.form} autoComplete="off">
+								<form className={classes.form} autoComplete="on">
 									<TextField id="kuerzel" label="Kürzel" error={kuerzelValidationFailed} onChange = {this.textFieldValueChange}/>
 								</form>
-								<form className={classes.form} autoComplete="off">
+								<form className={classes.form} autoComplete="on">
 								<TextField id="mat_nr" label="Matrikelnummer" error={mat_nrValidationFailed} onChange = {this.numberValueChange}/>
 								</form>
 								</>
