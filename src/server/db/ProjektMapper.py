@@ -317,11 +317,6 @@ class ProjektMapper(Mapper):
         self._connection.commit()
         cursor.close()
         return result
-    
-    def projekte_zur_Wahl_freigeben(self,id):
-        cursor = self._connection.cursor()
-        command = "UPDATE electivApp.projekte SET aktueller_zustand = 'Wahlfreigabe' WHERE (id = {});".format(id)
-        cursor.execute(command)
 
     def insert_pending(self, projekt):
         '''
@@ -368,4 +363,6 @@ class ProjektMapper(Mapper):
 
 if (__name__ == "__main__"):
     with ProjektMapper() as mapper:
-       mapper.projekte_zur_Wahl_freigeben()
+        result = mapper.find_all()
+        for p in result:
+            print(p)

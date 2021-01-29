@@ -173,10 +173,6 @@ class ProjektAdministration(object):
         with ProjektWartelisteMapper() as mapper:
             return mapper.find_all()
 
-    def projekte_zur_Wahl_freigeben(self,id):
-        with ProjektMapper() as mapper:
-            return mapper.projekte_zur_Wahl_freigeben(id)
-
     def get_projekt_teilnehmer(self, ):
         pass
 
