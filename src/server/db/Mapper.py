@@ -21,7 +21,7 @@ class Mapper(AbstractContextManager, ABC):
 
             self._connection = connector.connect(user='root', password='root',
                                                  unix_socket='/cloudsql/wahlfachapp:europe-west3:wahlfachdb',
-                                                 database='electivApp')
+                                                 database='electivapp')
         else:
             """Wenn wir hier ankommen, dann handelt sich offenbar um die Ausführung des Codes in einer lokalen Umgebung,
             also auf einem Local Development Server. Hierbei stellen wir eine einfache Verbindung zu einer lokal
@@ -29,7 +29,7 @@ class Mapper(AbstractContextManager, ABC):
 
             self._connection = connector.connect(user='TestNutzer', password='P@s$w0rd123!',
                                                  host='127.0.0.1',
-                                                 database='electivApp')
+                                                 database='electivapp')
 
         return self
 
