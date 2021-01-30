@@ -37,7 +37,7 @@ CREATE TABLE `bewertungen` (
 
 LOCK TABLES `bewertungen` WRITE;
 /*!40000 ALTER TABLE `bewertungen` DISABLE KEYS */;
-INSERT INTO `bewertungen` VALUES (1,1.0),(2,1.7),(3,2.0),(4,3.0),(5,4.0),(6,5.0);
+INSERT INTO `bewertungen` VALUES (1,1.0),(2,1.3),(3,1.7),(4,2.0),(5,2.3),(6,2.7),(7,3.0),(8,3.3),(9,3.7),(10,4.0),(11,4.3),(12,4.7),(13,5.0);
 /*!40000 ALTER TABLE `bewertungen` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,7 +62,7 @@ CREATE TABLE `module` (
 
 LOCK TABLES `module` WRITE;
 /*!40000 ALTER TABLE `module` DISABLE KEYS */;
-INSERT INTO `module` VALUES (1,'SW Projekt',338079),(2,'Interdisziplinäres Projekt',387662),(3,'HansWurst Modult',481907),(4,'Affen Modul',331341),(5,'Marketing',333312);
+INSERT INTO `module` VALUES (1,'Software-Praktikum',335138),(2,'Wirschaftsinformatik',335121),(3,'Geschäftsprozesse',335128),(4,'Data Science',335136),(5,'Programmieren',335123);
 /*!40000 ALTER TABLE `module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,7 +89,7 @@ CREATE TABLE `personen` (
 
 LOCK TABLES `personen` WRITE;
 /*!40000 ALTER TABLE `personen` DISABLE KEYS */;
-INSERT INTO `personen` VALUES (1,'Prof. Dr. Thies','thies@hdm.de','','Dozent'),(2,'Prof. Dr. Kunz','kunz@mail.de','','Dozent'),(3,'lhljln','giengerpascal30@gmail.com','yL06YecixZbWL63by89xQweXzc33','Dozent');
+INSERT INTO `personen` VALUES (1,'Prof. Dr. Thies','thies@hdm.de','','Dozent'),(2,'Prof. Dr. Kunz','kunz@mail.de','','Dozent');
 /*!40000 ALTER TABLE `personen` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -115,7 +115,7 @@ CREATE TABLE `projektarten` (
 
 LOCK TABLES `projektarten` WRITE;
 /*!40000 ALTER TABLE `projektarten` DISABLE KEYS */;
-INSERT INTO `projektarten` VALUES (1,'Fachspezifisches Projek',5,3),(2,'Interdisziplinäres Projekt',10,5),(3,'Transdisziplinäres Projekt',20,10);
+INSERT INTO `projektarten` VALUES (1,'Fachspezifisches Projekt',5,3),(2,'Interdisziplinäres Projekt',10,5),(3,'Transdisziplinäres Projekt',20,10);
 /*!40000 ALTER TABLE `projektarten` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,7 +160,15 @@ CREATE TABLE `projekte` (
 
 LOCK TABLES `projekte` WRITE;
 /*!40000 ALTER TABLE `projekte` DISABLE KEYS */;
-INSERT INTO `projekte` VALUES (3,'Marketing for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',2,'Genehmigt',3,2),(4,'Programmieren for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Genehmigt',2,3),(5,'BWL for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Genehmigt',3,1),(6,'Rechnungswesen for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Genehmigt',2,2),(7,'UX for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Genehmigt',3,3),(8,'Datenbanken for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Genehmigt',2,1),(9,'Web Technologie for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Genehmigt',3,2),(10,'Datenschutz for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Neu',2,3),(1232,'Sofware for Monkeys',30,'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch',3,'in Bewertung',2,1);
+INSERT INTO `projekte` VALUES (1,'Marketing for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',2,'Genehmigt',3,2),
+(2,'Programmieren for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Genehmigt',2,3),
+(3,'BWL for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Genehmigt',3,1),
+(4,'Rechnungswesen for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Genehmigt',2,2),
+(5,'UX for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Genehmigt',3,3),
+(6,'Datenbanken for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Genehmigt',2,1),
+(7,'Web Technologie for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Genehmigt',3,2),
+(8,'Datenschutz for Monkeys',30,'Die Ziele von Marketing-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Hansa Wurst','hft',1,0,0,'bla',0,'S003','deutsch',1,'Neu',2,3),
+(9,'Sofware for Monkeys',30,'Die Ziele von Software-Engineering sind die Reduktion der Problemkomplexität.','Prof. Dr. Peter Thies','hft',1,0,0,'bla',0,'S003','deutsch',3,'in Bewertung',2,1);
 /*!40000 ALTER TABLE `projekte` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,7 +196,7 @@ CREATE TABLE `projekte_hat_module` (
 
 LOCK TABLES `projekte_hat_module` WRITE;
 /*!40000 ALTER TABLE `projekte_hat_module` DISABLE KEYS */;
-INSERT INTO `projekte_hat_module` VALUES (1232,1);
+INSERT INTO `projekte_hat_module` VALUES (1,1);
 /*!40000 ALTER TABLE `projekte_hat_module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -276,7 +284,7 @@ CREATE TABLE `teilnahmen` (
 
 LOCK TABLES `teilnahmen` WRITE;
 /*!40000 ALTER TABLE `teilnahmen` DISABLE KEYS */;
-INSERT INTO `teilnahmen` VALUES (1,1232,1,1,1),(2,1232,1,1,1),(3,1232,1,1,2);
+INSERT INTO `teilnahmen` VALUES (1,1,1,1,1);
 /*!40000 ALTER TABLE `teilnahmen` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
