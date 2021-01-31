@@ -109,7 +109,7 @@ semester = api.inherit('Semester', nbo, {
 })
 
 
-    
+'''
 @electivApp.route('/projekte')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProjektListeOperationen(Resource):
@@ -121,13 +121,15 @@ class ProjektListeOperationen(Resource):
 
         Sollten keine Projekte-Objekte verfügbar sein, so wird eine
         leere Sequenz zurückgegeben."""
+
+        print()
         adm = ProjektAdministration()
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
         zus = "Neu"
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
         projekte = adm.get_projekte_by_zustaende('"{}"'.format(zus))
         return projekte
-
+'''
 
 @electivApp.route('/projekte/zustand/<string:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -141,9 +143,27 @@ class Projektverwaltungoperation(Resource):
         result = []
         adm = ProjektAdministration()
         projekte = adm.get_projekte()
-        for p in projekte:
-            if id == p.get_aktueller_zustand():
-                result.append(p)
+
+        if id == "Neu":
+            for p in projekte:
+                if p.is_in_state(Projekt.Z_NEU):
+                    result.append(p)
+        elif id == "Genehmigt":
+            for p in projekte:
+                if p.is_in_state(Projekt.Z_GENEHMIGT):
+                    result.append(p)
+        elif id == "In Bewertung":
+            for p in projekte:
+                if p.is_in_state(Projekt.Z_IN_BEWERTUNG):
+                    result.append(p)
+        elif id == "Abgeschlossen":
+            for p in projekte:
+                if p.is_in_state(Projekt.Z_ABGESCHLOSSEN):
+                    result.append(p)
+        elif id == "Wahlfreigabe":
+            for p in projekte:
+                if p.is_in_state(Projekt.Z_WAHLFREIGABE):
+                    result.append(p)
 
         return result
 
@@ -166,12 +186,30 @@ class Projektverwaltungzustandoperation(Resource):
     
     @secured
     def put(self):       
-        """Update Zustand ID für eine bestimmte Projekt ID"""
+
         projektId = request.args.get("projektId")
         zustandId = request.args.get("zustandId")
         adm = ProjektAdministration()
-        projekte = adm.set_zustand_at_projekt(projektId,zustandId)
-        return projekte
+        projekte = adm.get_projekte()
+        print(zustandId)
+
+        for p in projekte:
+            if p.get_id() == int(projektId):
+                if zustandId == "Wahlfreigabe":
+                    p.set_aktueller_zustand(Projekt.Z_WAHLFREIGABE)
+                elif zustandId == "in Bewertung":
+                    p.set_aktueller_zustand(Projekt.Z_IN_BEWERTUNG)
+                elif zustandId == "Neu":
+                    p.set_aktueller_zustand(Projekt.Z_NEU)
+                elif zustandId == "Genehmigt":
+                    p.set_aktueller_zustand(Projekt.Z_GENEHMIGT)
+                elif zustandId == "Abgeschlossen":
+                    p.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
+                elif zustandId == "Abgelehnt":
+                    p.set_aktueller_zustand(Projekt.Z_ABGELEHNT)
+                adm.save_projekt(p)
+                return p
+
 
 @electivApp.route('/projekt/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -683,6 +721,7 @@ class ProjektGenehmigungOperation(Resource):
     @secured
     def get(self):
         adm = ProjektAdministration()
+        print("BINDA-1")
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
         zus = "Neu"
         #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
@@ -696,9 +735,6 @@ class ProjektGenehmigungOperation(Resource):
     @electivApp.expect(projekt)
     @secured
     def post(self):
-        '''
-        Einfugen eines Projekts im zustand pending. 
-        '''
         adm = ProjektAdministration()
         proposal = Projekt.from_dict(api.payload)
 
@@ -713,9 +749,6 @@ class ProjektGenehmigungOperation(Resource):
     @electivApp.expect(projekt)
     @secured
     def put(self):
-        '''
-        Einfugen eines Projekts im zustand pending. 
-        '''
         adm = ProjektAdministration()
         projekt = Projekt.from_dict(api.payload)
 
@@ -724,6 +757,7 @@ class ProjektGenehmigungOperation(Resource):
             return response, 200
         else:
             return '', 500
+
 
 @electivApp.route('/projektart')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
