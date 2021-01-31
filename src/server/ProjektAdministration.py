@@ -163,10 +163,6 @@ class ProjektAdministration(object):
         with ProjektMapper() as mapper:
             return mapper.find_all()
 
-    def get_granted_projekte(self):
-        """Alle Projekte im Zustand genehmigt auslesen"""
-        with ProjektMapper() as mapper:
-            return mapper.find_granted()
 
     def get_alle_pending_projekte(self):
         """Alle Projekte im Zustand Neu auslesen"""

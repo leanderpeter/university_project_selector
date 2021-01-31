@@ -30,33 +30,27 @@ class ProjektMapper(Mapper):
             projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
                                           raum, sprache, dozent, aktueller_zustand, halbjahr, art)
+            if aktueller_zustand == "Neu":
+                projekt.set_aktueller_zustand(Projekt.Z_NEU)
+            elif aktueller_zustand == "Genehmigt":
+                projekt.set_aktueller_zustand(Projekt.Z_GENEHMIGT)
+            elif aktueller_zustand == "In Bewertung":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
+            elif aktueller_zustand == "Wahlfreigabe":
+                projekt.set_aktueller_zustand(Projekt.Z_WAHLFREIGABE)
+            elif aktueller_zustand == "Abgeschlossen":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
+            elif aktueller_zustand == "Abgelehnt":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGELEHNT)
+            
             result.append(projekt)
+
 
         self._connection.commit()
         cursor.close()
 
         return result
 
-    def find_granted(self):
-
-        result = []
-        granted = 'Neu'
-        cursor = self._connection.cursor()
-        cursor.execute(
-            "SELECT id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art from projekte WHERE aktueller_zustand={}".format(granted))
-        tuples = cursor.fetchall()
-
-        for (id, name, max_teilnehmer, beschreibung, betreuer, externer_partner, woechentlich, anzahl_block_vor,
-             anzahl_block_in, praeferierte_block, bes_raum, raum, sprache, dozent, aktueller_zustand, halbjahr, art) in tuples:
-            projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
-                                          woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
-                                          raum, sprache, dozent, aktueller_zustand, halbjahr, art)
-            result.append(projekt)
-
-        self._connection.commit()
-        cursor.close()
-
-        return result
 
     def set_zustand_at_projekt(self, projekt_id, zustand_id):
         """Überschreiben / Aktualisieren eines Projekt-Objekts in der DB
@@ -91,6 +85,19 @@ class ProjektMapper(Mapper):
             projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
                                           raum, sprache, dozent, aktueller_zustand, halbjahr, art)
+            if zustand == "Neu":
+                projekt.set_aktueller_zustand(Projekt.Z_NEU)
+            elif zustand == "Genehmigt":
+                projekt.set_aktueller_zustand(Projekt.Z_GENEHMIGT)
+            elif zustand == "In Bewertung":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
+            elif zustand == "Wahlfreigabe":
+                projekt.set_aktueller_zustand(Projekt.Z_WAHLFREIGABE)
+            elif zustand == "Abgeschlossen":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
+            elif aktueller_zustand == "Abgelehnt":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGELEHNT)
+
             result.append(projekt)
         self._connection.commit()
         cursor.close()
@@ -116,6 +123,19 @@ class ProjektMapper(Mapper):
             projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
                                           raum, sprache, dozent, aktueller_zustand, halbjahr, art)
+            if zustand_id == "Neu":
+                projekt.set_aktueller_zustand(Projekt.Z_NEU)
+            elif zustand_id == "Genehmigt":
+                projekt.set_aktueller_zustand(Projekt.Z_GENEHMIGT)
+            elif zustand_id == "In Bewertung":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
+            elif zustand_id == "Wahlfreigabe":
+                projekt.set_aktueller_zustand(Projekt.Z_WAHLFREIGABE)
+            elif zustand_id == "Abgeschlossen":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
+            elif aktueller_zustand == "Abgelehnt":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGELEHNT)
+
             result.append(projekt)
 
         self._connection.commit()
@@ -142,6 +162,19 @@ class ProjektMapper(Mapper):
             projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
                                           raum, sprache, dozent, aktueller_zustand, halbjahr, art)
+            if zustand == "Neu":
+                projekt.set_aktueller_zustand(Projekt.Z_NEU)
+            elif zustand == "Genehmigt":
+                projekt.set_aktueller_zustand(Projekt.Z_GENEHMIGT)
+            elif zustand == "In Bewertung":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
+            elif zustand == "Wahlfreigabe":
+                projekt.set_aktueller_zustand(Projekt.Z_WAHLFREIGABE)
+            elif zustand == "Abgeschlossen":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
+            elif aktueller_zustand == "Abgelehnt":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGELEHNT)
+
             result.append(projekt)
 
         self._connection.commit()
@@ -189,6 +222,20 @@ class ProjektMapper(Mapper):
             projekt.set_art(art)
             projekt.set_anzahlTeilnehmer(self.count_teilnehmer_by_projekt(id))
             projekt.set_teilnehmerListe(self.get_teilnehmerId_by_projekt(id))
+            
+            if aktueller_zustand == "Neu":
+                projekt.set_aktueller_zustand(Projekt.Z_NEU)
+            elif aktueller_zustand == "Genehmigt":
+                projekt.set_aktueller_zustand(Projekt.Z_GENEHMIGT)
+            elif aktueller_zustand == "In Bewertung":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
+            elif aktueller_zustand == "Wahlfreigabe":
+                projekt.set_aktueller_zustand(Projekt.Z_WAHLFREIGABE)
+            elif aktueller_zustand == "Abgeschlossen":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
+            elif aktueller_zustand == "Abgelehnt":
+                projekt.set_aktueller_zustand(Projekt.Z_ABGELEHNT)
+
             result = projekt
         
         except IndexError:
