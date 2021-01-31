@@ -144,6 +144,8 @@ class Projektverwaltungoperation(Resource):
         adm = ProjektAdministration()
         projekte = adm.get_projekte()
 
+        print("Das ist ID: ", id)
+
         if id == "Neu":
             for p in projekte:
                 if p.is_in_state(Projekt.Z_NEU):
@@ -152,7 +154,7 @@ class Projektverwaltungoperation(Resource):
             for p in projekte:
                 if p.is_in_state(Projekt.Z_GENEHMIGT):
                     result.append(p)
-        elif id == "In Bewertung":
+        elif id == "in Bewertung":
             for p in projekte:
                 if p.is_in_state(Projekt.Z_IN_BEWERTUNG):
                     result.append(p)
@@ -164,7 +166,12 @@ class Projektverwaltungoperation(Resource):
             for p in projekte:
                 if p.is_in_state(Projekt.Z_WAHLFREIGABE):
                     result.append(p)
-
+        elif id == "Abgelehnt":
+            for p in projekte:
+                if p.is_in_state(Projekt.Z_ABGELEHNT):
+                    result.append(p)
+                    
+        # print("ERG: ", result)
         return result
 
 @electivApp.route('/projekte/zustand/<string:zustand_id>/dozent/<int:dozent_id>')
@@ -175,9 +182,13 @@ class ProjektByZustandByDozentoperation(Resource):
     def get(self, zustand_id, dozent_id):
         """Auslesen eines Projekte-Objekts mit einem bestimmten Zustand und für einen bestimmten Dozent
         """
+        result = []
         adm = ProjektAdministration()
-        projekte = adm.get_projekte_by_zustand_by_dozent(zustand_id,dozent_id)
-        return projekte
+        projekte = adm.get_projekte()
+        for p in projekte:
+            if str(p.get_aktueller_zustand()) == zustand_id and p.get_dozent() == dozent_id:
+                result.append(p)
+        return result
 
 @electivApp.route('/projekte/zustand')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -191,7 +202,7 @@ class Projektverwaltungzustandoperation(Resource):
         zustandId = request.args.get("zustandId")
         adm = ProjektAdministration()
         projekte = adm.get_projekte()
-        print(zustandId)
+        print("Das ist der Muell: ", zustandId)
 
         for p in projekte:
             if p.get_id() == int(projektId):
@@ -207,6 +218,7 @@ class Projektverwaltungzustandoperation(Resource):
                     p.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
                 elif zustandId == "Abgelehnt":
                     p.set_aktueller_zustand(Projekt.Z_ABGELEHNT)
+
                 adm.save_projekt(p)
                 return p
 

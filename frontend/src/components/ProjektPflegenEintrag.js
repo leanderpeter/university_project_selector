@@ -184,7 +184,7 @@ class ProjektPflegenEintrag extends Component {
                 </StyledTableCell> 
 
                 <StyledTableCell align="center">
-                  {currentProjektBO.aktueller_zustand === "Bewertung abgeschlossen"?
+                  {currentProjektBO.aktueller_zustand === "Abgeschlossen"?
                     <>
                       <IconButton className={classes.teilnahmeAbwaehlenButton}  variant="contained"  onClick={this.teilnahmeAbwaehlenButtonClicked} disabled > <DeleteIcon /></IconButton>
                     </>
