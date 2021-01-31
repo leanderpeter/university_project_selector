@@ -241,7 +241,7 @@ class MeineProjekteEintrag extends Component {
                   <StyledTableCell align="center">{ECTS}</StyledTableCell>
                   <StyledTableCell align="center">{semester}</StyledTableCell>
                   <StyledTableCell align="center">{dozentName}</StyledTableCell> 
-                  { projektZustand === 'Bewertung abgeschlossen' ?
+                  { projektZustand === 'Abgeschlossen' ?
                   <StyledTableCell align="center">{note}</StyledTableCell>
                   :
                   <StyledTableCell align="center"></StyledTableCell> 

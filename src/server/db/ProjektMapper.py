@@ -104,7 +104,7 @@ class ProjektMapper(Mapper):
 
         return result
     
-    def find_projekte_by_zustand_by_dozent(self, zustand_id,dozent_id):
+    def find_projekte_by_zustand_by_dozent(self, zustand_id, dozent_id):
         '''Finde alle Projekte mit gegebene Zustand und vom gegebenen Dozenten
         :param zustand_id und dozent_id
         '''
@@ -123,21 +123,24 @@ class ProjektMapper(Mapper):
             projekt = self.create_projekt(id, name, max_teilnehmer, beschreibung, betreuer, externer_partner,
                                           woechentlich, anzahl_block_vor, anzahl_block_in, praeferierte_block, bes_raum,
                                           raum, sprache, dozent, aktueller_zustand, halbjahr, art)
-            if zustand_id == "Neu":
+            
+            if aktueller_zustand == "Neu":
                 projekt.set_aktueller_zustand(Projekt.Z_NEU)
-            elif zustand_id == "Genehmigt":
+            elif aktueller_zustand == "Genehmigt":
                 projekt.set_aktueller_zustand(Projekt.Z_GENEHMIGT)
-            elif zustand_id == "In Bewertung":
+            elif aktueller_zustand == "in Bewertung":
                 projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
-            elif zustand_id == "Wahlfreigabe":
+            elif aktueller_zustand == "Wahlfreigabe":
                 projekt.set_aktueller_zustand(Projekt.Z_WAHLFREIGABE)
-            elif zustand_id == "Abgeschlossen":
+            elif aktueller_zustand == "Abgeschlossen":
                 projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
             elif aktueller_zustand == "Abgelehnt":
                 projekt.set_aktueller_zustand(Projekt.Z_ABGELEHNT)
 
-            result.append(projekt)
 
+
+            result.append(projekt)
+            
         self._connection.commit()
         cursor.close()
 

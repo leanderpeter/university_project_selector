@@ -234,7 +234,7 @@ class SemesterberichtEintrag extends Component {
                   <StyledTableCell align="left" className={classes.projekt}>{projektName}</StyledTableCell>
                   <StyledTableCell align="center" className={classes.dozent}>{dozentName}</StyledTableCell> 
                   <StyledTableCell align="center">{ECTS}</StyledTableCell>
-                  { projektZustand === 'Bewertung abgeschlossen' ?
+                  { projektZustand === 'Abgeschlossen' ?
                   <StyledTableCell align="center">{note}</StyledTableCell>
                   :
                   <StyledTableCell align="center"></StyledTableCell> 
