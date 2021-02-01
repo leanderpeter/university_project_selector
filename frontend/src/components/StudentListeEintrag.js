@@ -11,12 +11,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import Divider from '@material-ui/core/Divider';
 
 
-import UserForm from './dialogs/StudentForm';
+import StudentForm from './dialogs/StudentForm';
 
 /**
  * Es wird ein einzelner Student angezeigt
  *
- * @see See [UserForm](#userform)
+ * @see See [StudentForm](#studentform)
  *
  * Außerdem lassen sich Studenteneinträge bearbeiten
  *
@@ -34,7 +34,7 @@ class StudentListeEintrag extends Component {
         };
     }
 
-
+    //Gibt den aktuellen User zurück
     getUser = () => {
         this.props.getUser();
     }
@@ -93,7 +93,7 @@ class StudentListeEintrag extends Component {
                                          onReload={this.getUser}/>
                 </ListItem>
                 <Divider/>
-                <UserForm show={showUserForm} user={user} onClose={this.userFormClosed} getModule={this.getUser}/>
+                <StudentForm show={showUserForm} user={user} onClose={this.userFormClosed} getModule={this.getUser}/>
             </div>
         );
     }
