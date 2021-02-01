@@ -34,8 +34,8 @@ class ProjektMapper(Mapper):
                 projekt.set_aktueller_zustand(Projekt.Z_NEU)
             elif aktueller_zustand == "Genehmigt":
                 projekt.set_aktueller_zustand(Projekt.Z_GENEHMIGT)
-            elif aktueller_zustand == "In Bewertung":
-                projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
+            elif aktueller_zustand == "in Bewertung":
+                projekt.set_aktueller_zustand(Projekt.Z_IN_BEWERTUNG)
             elif aktueller_zustand == "Wahlfreigabe":
                 projekt.set_aktueller_zustand(Projekt.Z_WAHLFREIGABE)
             elif aktueller_zustand == "Abgeschlossen":
@@ -89,7 +89,7 @@ class ProjektMapper(Mapper):
                 projekt.set_aktueller_zustand(Projekt.Z_NEU)
             elif zustand == "Genehmigt":
                 projekt.set_aktueller_zustand(Projekt.Z_GENEHMIGT)
-            elif zustand == "In Bewertung":
+            elif zustand == "in Bewertung":
                 projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
             elif zustand == "Wahlfreigabe":
                 projekt.set_aktueller_zustand(Projekt.Z_WAHLFREIGABE)
@@ -169,7 +169,7 @@ class ProjektMapper(Mapper):
                 projekt.set_aktueller_zustand(Projekt.Z_NEU)
             elif zustand == "Genehmigt":
                 projekt.set_aktueller_zustand(Projekt.Z_GENEHMIGT)
-            elif zustand == "In Bewertung":
+            elif zustand == "in Bewertung":
                 projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
             elif zustand == "Wahlfreigabe":
                 projekt.set_aktueller_zustand(Projekt.Z_WAHLFREIGABE)
@@ -230,7 +230,7 @@ class ProjektMapper(Mapper):
                 projekt.set_aktueller_zustand(Projekt.Z_NEU)
             elif aktueller_zustand == "Genehmigt":
                 projekt.set_aktueller_zustand(Projekt.Z_GENEHMIGT)
-            elif aktueller_zustand == "In Bewertung":
+            elif aktueller_zustand == "in Bewertung":
                 projekt.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
             elif aktueller_zustand == "Wahlfreigabe":
                 projekt.set_aktueller_zustand(Projekt.Z_WAHLFREIGABE)

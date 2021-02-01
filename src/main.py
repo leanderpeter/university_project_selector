@@ -144,34 +144,32 @@ class Projektverwaltungoperation(Resource):
         adm = ProjektAdministration()
         projekte = adm.get_projekte()
 
-        print("Das ist ID: ", id)
-
         if id == "Neu":
             for p in projekte:
                 if p.is_in_state(Projekt.Z_NEU):
                     result.append(p)
         elif id == "Genehmigt":
-            for p in projekte:
-                if p.is_in_state(Projekt.Z_GENEHMIGT):
-                    result.append(p)
+            for r in projekte:
+                if r.is_in_state(Projekt.Z_GENEHMIGT):
+                    result.append(r)
         elif id == "in Bewertung":
-            for p in projekte:
-                if p.is_in_state(Projekt.Z_IN_BEWERTUNG):
-                    result.append(p)
+            for s in projekte:
+                if s.is_in_state(Projekt.Z_IN_BEWERTUNG):
+                    result.append(s)
         elif id == "Abgeschlossen":
-            for p in projekte:
-                if p.is_in_state(Projekt.Z_ABGESCHLOSSEN):
-                    result.append(p)
+            for y in projekte:
+                print(y.get_aktueller_zustand())
+                if y.is_in_state(Projekt.Z_ABGESCHLOSSEN):
+                    result.append(y)
         elif id == "Wahlfreigabe":
-            for p in projekte:
-                if p.is_in_state(Projekt.Z_WAHLFREIGABE):
-                    result.append(p)
+            for i in projekte:
+                if i.is_in_state(Projekt.Z_WAHLFREIGABE):
+                    result.append(i)
         elif id == "Abgelehnt":
-            for p in projekte:
-                if p.is_in_state(Projekt.Z_ABGELEHNT):
-                    result.append(p)
-                    
-        # print("ERG: ", result)
+            for n in projekte:
+                if n.is_in_state(Projekt.Z_ABGELEHNT):
+                    result.append(n)
+
         return result
 
 @electivApp.route('/projekte/zustand/<string:zustand_id>/dozent/<int:dozent_id>')
@@ -195,14 +193,14 @@ class ProjektByZustandByDozentoperation(Resource):
 class Projektverwaltungzustandoperation(Resource):
     @electivApp.marshal_list_with(projekt)
     
-    @secured
+    # @secured
     def put(self):       
 
         projektId = request.args.get("projektId")
         zustandId = request.args.get("zustandId")
         adm = ProjektAdministration()
         projekte = adm.get_projekte()
-        print("Das ist der Muell: ", zustandId)
+        
 
         for p in projekte:
             if p.get_id() == int(projektId):
