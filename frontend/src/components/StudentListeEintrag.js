@@ -13,12 +13,20 @@ import Divider from '@material-ui/core/Divider';
 
 import UserForm from './dialogs/StudentForm';
 
-
+/**
+ * Es wird ein einzelner Student angezeigt
+ *
+ * @see See [UserForm](#userform)
+ *
+ * Außerdem lassen sich Studenteneinträge bearbeiten
+ *
+ */
 class StudentListeEintrag extends Component {
 
     constructor(props) {
         super(props);
 
+        //gebe einen leeren status
         this.state = {
             showUserForm: false,
             error: null,
@@ -26,11 +34,12 @@ class StudentListeEintrag extends Component {
         };
     }
 
+
     getUser = () => {
         this.props.getUser();
     }
 
-
+    //Wird aufgerufen, wenn der Button Bearbeiten geklickt wird
     bearbeitenButtonClicked = event => {
         event.stopPropagation();
         this.setState({
@@ -38,6 +47,7 @@ class StudentListeEintrag extends Component {
         });
     }
 
+    //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
     userFormClosed = (user) => {
         if (user) {
             this.setState({
@@ -51,7 +61,7 @@ class StudentListeEintrag extends Component {
         }
     }
 
-
+    //Renders the component
     render() {
         const {classes, user} = this.props;
         const {showUserForm, error, loadingInProgress} = this.state;
