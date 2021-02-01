@@ -109,28 +109,6 @@ semester = api.inherit('Semester', nbo, {
 })
 
 
-'''
-@electivApp.route('/projekte')
-@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class ProjektListeOperationen(Resource):
-    @electivApp.marshal_list_with(projekt)
-   
-    @secured
-    def get(self):
-        """Auslesen aller Projekte-Objekte mit Zustand NEU.
-
-        Sollten keine Projekte-Objekte verfügbar sein, so wird eine
-        leere Sequenz zurückgegeben."""
-
-        print()
-        adm = ProjektAdministration()
-        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
-        zus = "Neu"
-        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
-        projekte = adm.get_projekte_by_zustaende('"{}"'.format(zus))
-        return projekte
-'''
-
 @electivApp.route('/projekte/zustand/<string:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class Projektverwaltungoperation(Resource):
@@ -158,7 +136,6 @@ class Projektverwaltungoperation(Resource):
                     result.append(s)
         elif id == "Abgeschlossen":
             for y in projekte:
-                print(y.get_aktueller_zustand())
                 if y.is_in_state(Projekt.Z_ABGESCHLOSSEN):
                     result.append(y)
         elif id == "Wahlfreigabe":
@@ -731,10 +708,6 @@ class ProjektGenehmigungOperation(Resource):
     @secured
     def get(self):
         adm = ProjektAdministration()
-        print("BINDA-1")
-        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
-        zus = "Neu"
-        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
         projekte = adm.get_projekte_by_zustaende('"Neu","Abgelehnt"')
         return projekte
 
