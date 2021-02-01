@@ -26,8 +26,6 @@ class ProjektWartelisteMapper(Mapper):
         super().__init__()
 
     def find_all(self):
-        
-
         result = []
         cursor = self._connection.cursor()
         cursor.execute(
@@ -108,7 +106,7 @@ class ProjektWartelisteMapper(Mapper):
             projekt.get_anzahlTeilnehmer(),
             projekt.get_teilnehmerListe()
             )
-        print(projekt)
+
         cursor.execute(command, data)
         self._connection.commit()
         cursor.close()

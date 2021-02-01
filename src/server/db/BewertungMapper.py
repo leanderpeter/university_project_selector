@@ -53,7 +53,6 @@ class BewertungMapper(Mapper):
         
         cursor.execute("SELECT * from bewertungen")
         tuples = cursor.fetchall()
-        print(tuples)
 
         for (id,note) in tuples:
             bewertung = Bewertung()
