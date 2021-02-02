@@ -16,7 +16,6 @@ from .db.StudentMapper import StudentMapper
 from .db.TeilnahmeMapper import TeilnahmeMapper
 from .db.BewertungMapper import BewertungMapper
 from .db.ProjektMapper import ProjektMapper
-from .db.ProjektWartelisteMapper import ProjektWartelisteMapper
 from .bo.Teilnahme import Teilnahme
 from .db.ModulMapper import ModulMapper
 from .db.SemesterMapper import SemesterMapper
@@ -163,11 +162,6 @@ class ProjektAdministration(object):
         with ProjektMapper() as mapper:
             return mapper.find_all()
 
-
-    def get_alle_pending_projekte(self):
-        """Alle Projekte im Zustand Neu auslesen"""
-        with ProjektWartelisteMapper() as mapper:
-            return mapper.find_all()
 
     def get_projekt_teilnehmer(self, ):
         pass
