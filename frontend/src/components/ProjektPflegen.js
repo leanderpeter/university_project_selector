@@ -134,7 +134,7 @@ class ProjektPflegen extends Component {
     //Funtion unter der Rolle des Dozenten 
     //API Anbindung holt alle Projekte im richtigen Zustand, vom jeweiligen Dozenten vom Backend
     if (this.props.currentPerson.getrolle()==="Dozent"){
-      ElectivAPI.getAPI().getProjekteByZustandByDozent("Bewertung abgeschlossen",this.props.currentPerson.getID())
+      ElectivAPI.getAPI().getProjekteByZustandByDozent("Abgeschlossen",this.props.currentPerson.getID())
         .then(projekteBOs =>
           this.setState({								//neuer status wenn fetch komplett
             abgeschlosseneProjekte: projekteBOs, 
@@ -155,7 +155,7 @@ class ProjektPflegen extends Component {
     //Funtion unter der Rolle des Admin  
     //API Anbindung holt alle Projekte im richtigen Zustand vom Backend
     if (this.props.currentPerson.getrolle()==="Admin"){
-      ElectivAPI.getAPI().getProjekteByZustand("Bewertung abgeschlossen")
+      ElectivAPI.getAPI().getProjekteByZustand("Abgeschlossen")
       .then(projekteBOs => 
         this.setState({								//neuer status wenn fetch komplett
           abgeschlosseneProjekte: projekteBOs,	
@@ -223,7 +223,7 @@ class ProjektPflegen extends Component {
   //bei Klick von dem Button: Bewertung abgeben, wird der Zustand des Projektes in den nächsten Zustand versetzt
   bewertungAbgeschlossenButtonClicked = event => {
     //Logik fuer bewertung abgeschlossen Button
-    ElectivAPI.getAPI().setZustandAtProjekt(this.state.currentProjekt, "Bewertung abgeschlossen").then(()=>{
+    ElectivAPI.getAPI().setZustandAtProjekt(this.state.currentProjekt, "Abgeschlossen").then(()=>{
       this.getProjekte()
       this.getAbgeschlosseneProjekte()
       this.setState({

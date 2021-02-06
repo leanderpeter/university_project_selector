@@ -16,8 +16,10 @@ class Projekt(NamedBusinessObject, Automat):
 
     Z_NEU = Zustand("Neu")
     Z_GENEHMIGT = Zustand("Genehmigt")
-    Z_IN_BEWERTUNG = Zustand("In Bewertung")
+    Z_IN_BEWERTUNG = Zustand("in Bewertung")
     Z_ABGESCHLOSSEN = Zustand("Abgeschlossen")
+    Z_WAHLFREIGABE = Zustand("Wahlfreigabe")
+    Z_ABGELEHNT = Zustand("Abgelehnt")
 
     def __init__(self):
         super().__init__()

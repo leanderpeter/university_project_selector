@@ -109,26 +109,6 @@ semester = api.inherit('Semester', nbo, {
 })
 
 
-    
-@electivApp.route('/projekte')
-@electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class ProjektListeOperationen(Resource):
-    @electivApp.marshal_list_with(projekt)
-   
-    @secured
-    def get(self):
-        """Auslesen aller Projekte-Objekte mit Zustand NEU.
-
-        Sollten keine Projekte-Objekte verfügbar sein, so wird eine
-        leere Sequenz zurückgegeben."""
-        adm = ProjektAdministration()
-        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
-        zus = "Neu"
-        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
-        projekte = adm.get_projekte_by_zustaende('"{}"'.format(zus))
-        return projekte
-
-
 @electivApp.route('/projekte/zustand/<string:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class Projektverwaltungoperation(Resource):
@@ -141,9 +121,31 @@ class Projektverwaltungoperation(Resource):
         result = []
         adm = ProjektAdministration()
         projekte = adm.get_projekte()
-        for p in projekte:
-            if id == p.get_aktueller_zustand():
-                result.append(p)
+
+        if id == "Neu":
+            for p in projekte:
+                if p.is_in_state(Projekt.Z_NEU):
+                    result.append(p)
+        elif id == "Genehmigt":
+            for r in projekte:
+                if r.is_in_state(Projekt.Z_GENEHMIGT):
+                    result.append(r)
+        elif id == "in Bewertung":
+            for s in projekte:
+                if s.is_in_state(Projekt.Z_IN_BEWERTUNG):
+                    result.append(s)
+        elif id == "Abgeschlossen":
+            for y in projekte:
+                if y.is_in_state(Projekt.Z_ABGESCHLOSSEN):
+                    result.append(y)
+        elif id == "Wahlfreigabe":
+            for i in projekte:
+                if i.is_in_state(Projekt.Z_WAHLFREIGABE):
+                    result.append(i)
+        elif id == "Abgelehnt":
+            for n in projekte:
+                if n.is_in_state(Projekt.Z_ABGELEHNT):
+                    result.append(n)
 
         return result
 
@@ -155,23 +157,46 @@ class ProjektByZustandByDozentoperation(Resource):
     def get(self, zustand_id, dozent_id):
         """Auslesen eines Projekte-Objekts mit einem bestimmten Zustand und für einen bestimmten Dozent
         """
+        result = []
         adm = ProjektAdministration()
-        projekte = adm.get_projekte_by_zustand_by_dozent(zustand_id,dozent_id)
-        return projekte
+        projekte = adm.get_projekte()
+        for p in projekte:
+            if str(p.get_aktueller_zustand()) == zustand_id and p.get_dozent() == dozent_id:
+                result.append(p)
+        return result
 
 @electivApp.route('/projekte/zustand')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class Projektverwaltungzustandoperation(Resource):
     @electivApp.marshal_list_with(projekt)
     
-    @secured
+    # @secured
     def put(self):       
-        """Update Zustand ID für eine bestimmte Projekt ID"""
+
         projektId = request.args.get("projektId")
         zustandId = request.args.get("zustandId")
         adm = ProjektAdministration()
-        projekte = adm.set_zustand_at_projekt(projektId,zustandId)
-        return projekte
+        projekte = adm.get_projekte()
+        
+
+        for p in projekte:
+            if p.get_id() == int(projektId):
+                if zustandId == "Wahlfreigabe":
+                    p.set_aktueller_zustand(Projekt.Z_WAHLFREIGABE)
+                elif zustandId == "in Bewertung":
+                    p.set_aktueller_zustand(Projekt.Z_IN_BEWERTUNG)
+                elif zustandId == "Neu":
+                    p.set_aktueller_zustand(Projekt.Z_NEU)
+                elif zustandId == "Genehmigt":
+                    p.set_aktueller_zustand(Projekt.Z_GENEHMIGT)
+                elif zustandId == "Abgeschlossen":
+                    p.set_aktueller_zustand(Projekt.Z_ABGESCHLOSSEN)
+                elif zustandId == "Abgelehnt":
+                    p.set_aktueller_zustand(Projekt.Z_ABGELEHNT)
+
+                adm.save_projekt(p)
+                return p
+
 
 @electivApp.route('/projekt/<int:id>')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -683,9 +708,6 @@ class ProjektGenehmigungOperation(Resource):
     @secured
     def get(self):
         adm = ProjektAdministration()
-        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
-        zus = "Neu"
-        #--------------------------------------------------------------------------- AUF .FORMAT('"{}"') ACHTEN!
         projekte = adm.get_projekte_by_zustaende('"Neu","Abgelehnt"')
         return projekte
 
@@ -696,9 +718,6 @@ class ProjektGenehmigungOperation(Resource):
     @electivApp.expect(projekt)
     @secured
     def post(self):
-        '''
-        Einfugen eines Projekts im zustand pending. 
-        '''
         adm = ProjektAdministration()
         proposal = Projekt.from_dict(api.payload)
 
@@ -713,9 +732,6 @@ class ProjektGenehmigungOperation(Resource):
     @electivApp.expect(projekt)
     @secured
     def put(self):
-        '''
-        Einfugen eines Projekts im zustand pending. 
-        '''
         adm = ProjektAdministration()
         projekt = Projekt.from_dict(api.payload)
 
@@ -724,6 +740,7 @@ class ProjektGenehmigungOperation(Resource):
             return response, 200
         else:
             return '', 500
+
 
 @electivApp.route('/projektart')
 @electivApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')

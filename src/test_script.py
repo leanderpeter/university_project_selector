@@ -19,3 +19,6 @@ print(projekt.get_aktueller_zustand())
 
 if projekt.is_in_state(Projekt.Z_GENEHMIGT):
 	print("Noch besser!")
+
+projekt.set_aktueller_zustand("Alt")
+projekt.
