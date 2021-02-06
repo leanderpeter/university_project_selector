@@ -1,31 +1,15 @@
-'''
-All important imports ***
-'''
 from flask import request
 from google.auth.transport import requests
 import google.oauth2.id_token
 from server.ProjektAdministration import ProjektAdministration
 
-'''
-*** All important imports
-'''
-
 
 def secured(function):
-    '''
-    NOT THE FINAL SECURITY DECORATOR
-    USAGE ONLY TO SHOWCASE FIREBASE AUTH VIA GOOGLE
-
-    later the security decorator should be updated to grant access for diffrent user roles
-    Dozent == 2
-    admin == 1
-    student == 0
-    '''
     firebase_request_adapter = requests.Request()
 
     def wrapper(*args, **kwargs):
         '''
-        Here firebase receives the token that the frontend has 'sendet'/saved in cookies
+        Hier werden alle in Cookies, welche in der Anmeldung vergeben werden, abgefragt
         '''
         id_token = request.cookies.get("token")
         rolle = request.cookies.get("rolle")
@@ -39,11 +23,7 @@ def secured(function):
 
         if id_token:
             try:
-                # Verify the token against the Firebase Auth API. This example
-                # verifies the token on each page load. For improved performance,
-                # some applications may wish to cache results in an encrypted
-                # session store (see for instance
-                # http://flask.pocoo.org/docs/1.0/quickstart/#sessions).
+                #hier wird der firebase token verifiziert
                 claims = google.oauth2.id_token.verify_firebase_token(
                     id_token, firebase_request_adapter
                 )
@@ -52,13 +32,13 @@ def secured(function):
 
                     google_user_id = claims.get("user_id")
                     email = claims.get("email")
-
+                    #wenn die Rolle Student gewählt wurde, wird ein Student erstellt oder aktualisiert
                     if rolle == "Student":
                         student = adm.get_student_by_google_user_id(google_user_id)
                         if student is not None:
                             ''' 
-                            User is already in the system but some variation in the variables have occured.
-                            To prevent corrupt data or errors we update the data from the user.
+                            Der Student befindet sich bereits in der Datenbank.
+                            Demnach wird das Student BO aktualisiert
                             '''
                             student.set_name(name)
                             student.set_email(email)
@@ -67,15 +47,17 @@ def secured(function):
                             adm.save_student(student)
                         else:
                             '''
-                            System dont know the user -> user object is created and saved into the DB
+                            Das System kennt den Studenten nicht.
+                            Es wird ein neuer Student angelegt
                             '''
                             student = adm.create_student(name, email, google_user_id, kuerzel, mat_nr)
+                    #wenn eine andere Rolle gewählt wurde wird hierfür die Klasse Person verwendet
                     else:
                         person = adm.get_person_by_google_user_id(google_user_id)
                         if person is not None:
                                 ''' 
-                                User is already in the system but some variation in the variables have occured.
-                                To prevent corrupt data or errors we update the data from the user.
+                                Die Person befindet sich bereits in der Datenbank.
+                                Demnach wird das Person BO aktualisiert
                                 '''
                                 person.set_name(name)
                                 person.set_email(email)
@@ -83,7 +65,8 @@ def secured(function):
                                 adm.save_person(person)
                         else:
                             '''
-                            System dont know the user -> user object is created and saved into the DB
+                            Das System kennt die Person nicht.
+                            Es wird eine neue Person angelegt
                             '''
                             person = adm.create_person(name, email, google_user_id, rolle)
 
