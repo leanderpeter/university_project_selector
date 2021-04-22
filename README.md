@@ -5,9 +5,10 @@ If you want to start this project in your local environment make sure you run th
 
 1. pull branch "dev_local".
 2. install /mysql/sql_dump_1.sql on local mysql server
-3. run /src/main.py
-4. run npm install in /frontend
-5. run npm start in /frontend
+3. install /dependencies.txt for python environment 
+4. run /src/main.py
+5. run npm install in /frontend
+6. run npm start in /frontend
 
 
 ## Intro
