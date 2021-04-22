@@ -3,7 +3,7 @@
 ## Developing on localhost
 If you want to start this project in your local environment make sure you run the following pre requirements
 
-1. pull branch "local_dev".
+1. pull branch "dev_local".
 2. install /mysql/sql_dump_1.sql on local mysql server
 3. run /src/main.py
 4. run npm install in /frontend
