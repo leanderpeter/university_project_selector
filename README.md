@@ -1,5 +1,14 @@
 # WahlfachApp
 
+## Developing on localhost
+If you want to start this project in your local environment make sure you run the following pre requirements
+
+1. pull branch "local_dev".
+2. install /mysql/sql_dump_1.sql on local mysql server
+3. run /src/main.py
+4. run npm install in /frontend
+5. run npm start in /frontend
+
 
 ## Intro
 Wahlfach App ist ein Full Stack Webapplikation. Hierbei können mehrere Rollen, (Studenten, Dozenten und Admins) Projekte erstellen, verwalten und wählen. Das System ist aufgeteilt in Präsentationsschicht, Serviceschicht, Business Logik Schicht und Datenbank Schicht. Als Speicher in der Datenbank Schicht dient eine relationale MySQL Datenbank welche über ein Python Backend angesprochen wird. Hierbei kommt das [mysql connector package](https://dev.mysql.com/doc/connector-python/en/) zum einsatz. Um die Wartbarkeit zu erhöhen wird in allen Schichten auf Business Objekt Klassen zurückgegriffen. Business Logik anfragen werden im Backend in der Business Logik Schicht verarbeitet. Der Service Layer stellt die Resourcen mithilfe eines [Flask Web Server](https://flask.palletsprojects.com/en/1.1.x/) zur verfügung. Abgesichert werden die einzelnen Methoden durch einen Security Decorator mit dem [google-auth](https://google-auth.readthedocs.io/en/latest/) package.
